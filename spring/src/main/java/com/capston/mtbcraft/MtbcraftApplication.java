@@ -1,4 +1,4 @@
-package com.spring.dec30;
+package com.capston.mtbcraft;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,5 +9,4 @@ public class MtbcraftApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MtbcraftApplication.class, args);
 	}
-
 }

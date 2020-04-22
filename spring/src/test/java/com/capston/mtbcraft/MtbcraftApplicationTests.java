@@ -1,4 +1,4 @@
-package com.spring.dec30;
+package com.capston.mtbcraft;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
