@@ -2,35 +2,18 @@ package com.capston.mtbcraft.domain;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
-
-@Entity
-@Table
 public class Rider {
-	@Column
 	private String r_id;
-	@Column
 	private String r_pw;
-	@Column
 	private String r_name;
-	@Column
 	private String r_nickname;
-	@Column
 	private Date r_birth;
-	@Column
 	private String r_phone;
-	@Column
 	private String r_addr;
-	@Column
 	private String r_addr2;
-	@Column
 	private String r_image;
-	@Column
 	private int r_gender;
-	@Column
 	private int r_badge;
 	
 	public String getR_id() {
