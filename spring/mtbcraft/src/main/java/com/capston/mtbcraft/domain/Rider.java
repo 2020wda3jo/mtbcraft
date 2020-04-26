@@ -29,6 +29,8 @@ public class Rider {
 	private String r_addr2;
 	@Column
 	private int r_badge;
+	@Column
+	private String r_image;
 	public String getR_id() {
 		return r_id;
 	}
@@ -95,7 +97,6 @@ public class Rider {
 	public void setR_image(String r_image) {
 		this.r_image = r_image;
 	}
-	@Column
-	private String r_image;
+	
 	
 }
