@@ -53,7 +53,7 @@ public class RidingController {
 		System.out.println(result);
 		System.out.println(courseId);
 		System.out.println(courseImage);
-		return "/riding/course/my/search";
+		return "/riding/course/search";
 	}
 		
 	//코스 인원모집
@@ -66,7 +66,7 @@ public class RidingController {
 		System.out.println(time);
 		System.out.println(member);
 		System.out.println(content);
-		return "/riding/course/my/member";
+		return "/riding/course/member";
 	}
 				
 	//코스 스크랩
@@ -75,6 +75,6 @@ public class RidingController {
 		System.out.println(result);
 		System.out.println(courseId);
 		System.out.println(courseImage);
-		return "/riding/course/my/scrap";
+		return "/riding/course/scrap";
 	}	
 }

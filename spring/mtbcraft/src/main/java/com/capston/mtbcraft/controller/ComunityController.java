@@ -15,7 +15,7 @@ public class ComunityController {
 
 	// 커뮤니티 클럽
 	@RequestMapping(value = "/comunity/club", method = RequestMethod.GET)
-	public String comunityclub(int result, int club_num, String b[]) {
+	public String comunityclub() {
 
 		return "/comunity/club";
 	}
@@ -68,7 +68,7 @@ public class ComunityController {
 		return "/community/sns";
 	}
 
-	// 클럽 캘린더 POST
+	// SNS
 	@RequestMapping(value = "/community/sns", method = RequestMethod.POST)
 	public String snspost(int result, String B_area, String B_title, String B_content, String B_file) {
 		return "/community/sns";

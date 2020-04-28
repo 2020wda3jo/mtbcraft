@@ -1,0 +1,94 @@
+<head th:fragment="header">
+<title>MTB CRAFT</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="/css/common.css" />
+<!-- 부트스트랩 -->
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/carousel.css" rel="stylesheet">
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="https://han3283.cafe24.com/js/lightslider/js/lightslider.js"></script>
+	<script
+	src="/js/common.js"></script>
+
+
+</head>
+<body>
+	<header>
+		<div id="navi_line"></div>
+		<div id="header_in">
+			<div id="nav_t">로그인</div>
+			<div id="logo">
+				<a href="/"><img src="/imgs/logo.png" alt="logo" title="logo" /></a>
+			</div>
+			<div id="menu">
+				<ul class="dropdown dropdown-horizontal">
+					<li><a href="#">소개</a></li>
+					<li><a href="/riding/course" class="dir">라이딩</a>
+						<ul>
+							<li class="first"><a href="/riding/course" class="dir">코스</a>
+								<ul>
+									<li class="first"><a href="/riding/course">내 코스 관리</a>
+										<ul>
+											<li class="first"><a href="/riding/course/my/share">코스공유</a></li>
+											<li class="first"><a href="/riding/course/scrap">스크랩 코스</a></li>
+											<li class="first"><a href="/riding/myreview">코스 및 리뷰보기</a></li>
+										</ul></li>
+								</ul></li>
+							<li><span class="/riding/course/search">코스검색</span></li>
+						</ul></li>
+					<li id="n-shows"><a href="/comunity/comunity" class="dir">커뮤니티</a>
+						<ul>
+							<li class="first"><a href="/comunity/club"><strong>클럽</strong></a></li>
+							<li><a href="/community/sns">SNS</a></li>
+							<li><a href="/community/trade">중고거래</a></li>
+						</ul></li>
+					<li id="n-news"><a href="/entertainment/competitions" class="dir">언터테인먼트</a>
+						<ul>
+							<li class="first"><a href="/entertainment/competitions">경쟁전</a></li>
+							<li><a href="/entertainment/missions"> 미션</a></li>
+						</ul></li>
+					<li id="n-movies"><span class="dir">정비</span>
+						<ul>
+							<li class="first"><a href="./" class="dir">일반회원</a>
+								<ul>
+									<li class="first"><a href="./">가이드</a></li>
+									<li><a href="./">정비소 검색</a></li>
+									<li><a href="./">신청 및 문의하기</a></li>
+									<li><a href="./">후기</a></li>
+								</ul></li>
+							<li><a href="./" class="dir">정비소 회원</a>
+								<ul>
+									<li class="first"><a href="./">신청현황</a></li>
+									<li><a href="./">문의 답변</a></li>
+
+								</ul></li>
+						</ul></li>
+
+					<li id="n-movies"><span class="dir">마이페이지</span>
+						<ul>
+							<li class="first"><a href="./" class="dir">정보수정</a></li>
+							<li class="first"><a href="./" class="dir">일반회원</a>
+								<ul>
+									<li><a href="./" class="dir">라이딩</a>
+										<ul>
+											<li class="first"><span class="dir">기록보기 및 분석</span></li>
+											<li class="first"><span class="dir">배지설정</span></li>
+											<li class="first"><span class="dir">활동내역</span></li>
+										</ul></li>
+								</ul></li>
+							<li><a href="./" class="dir">정비소 회원</a>
+								<ul>
+									<li class="first"><span class="dir">정비</span></li>
+									<li class="first"><span class="dir">정비소 관리</span></li>
+								</ul></li>
+						</ul></li>
+				</ul>
+
+
+			</div>
+
+		</div>
+
+	</header>
