@@ -62,12 +62,13 @@ public class ComunityController {
 		return "/community/club/myclub/calender";
 	}
 
-	// 클럽 캘린더
-	@RequestMapping(value = "/community/sns", method = RequestMethod.GET)
-	public String snsget(int result, String B[]) {
+	//  SNS
+	@RequestMapping(value = "/community/sns")
+	public String snsget() {
 		return "/community/sns";
 	}
 
+		
 	// SNS
 	@RequestMapping(value = "/community/sns", method = RequestMethod.POST)
 	public String snspost(int result, String B_area, String B_title, String B_content, String B_file) {
@@ -75,9 +76,9 @@ public class ComunityController {
 	}
 
 	// 중고거래 GET
-	@RequestMapping(value = "/community/trade", method = RequestMethod.GET)
-	public String tradeget(int result, String B[]) {
-		return "/community/sns";
+	@RequestMapping(value = "/community/trade")
+	public String tradeget() {
+		return "/community/trade";
 	}
 
 	// 중고거래 POST
