@@ -3,22 +3,72 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="/css/common.css" />
 <!-- 부트스트랩 -->
-<link href="/css/bootstrap.min.css" rel="stylesheet">
-<link href="/css/carousel.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
 
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script src="https://han3283.cafe24.com/js/lightslider/js/lightslider.js"></script>
-	<script
-	src="/js/common.js"></script>
-
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script src="/js/jquery.smoothwheel.js"></script>
+<script	src="/js/common.js"></script>
 
 </head>
 <body>
+<div class="join_frm2" id="login_2">
+<form action="/timemarket_front/page/member/login_ok.do" method="post">
+	<div id="in_box" class="idpw_box">
+			<input type="text" name="userid" id="userid" maxlength="20" placeholder="사용자 아이디" required />
+			<input type="password" name="userpw" id="userpw" maxlength="20" placeholder="사용자 비밀번호" required/>
+		</div>
+		<span id="idpw_find"><a href="#">아이디나 비밀번호를 잊어버리셨나요?</a></span>
+		<span id="join_mem"><a href="#">회원가입</a></span>
+			<div id="log_box_bot">
+				<button type="submit" id="">LOGIN</button>
+			</div>
+		</form>
+</div>
+<div id="join_frm">
+	<form action="/timemarket_front/page/member/join_ok.do" method="post">
+		<div id="frm_con">
+			<ul>
+				<li>아이디</li>
+				<li><input type="text" id="userid" name="userid" title="아이디" value="" class="check"/></li>
+				<li id="id_check"><button type="button" id="juck">중복체크</button><span id="ick">※ 아이디를 체크합니다</span></li>
+			</ul>
+			<ul>
+				<li>비밀번호</li>
+				<li><input type="password" name="userpw" id="userpw" value="" required /></li>
+			</ul>
+			<ul>
+				<li>전화번호</li>
+				<li>
+					<input type="text" name="phone" id="phone" value=""  required size="5" maxlength="5" />-
+					<input type="text" name="phone2" id="phone2" value="" required size="5" maxlength="5"/>-
+					<input type="text" name="phone3" id="phone3" value=""  required size="5" maxlength="5" />
+				</li>
+			</ul>
+			<ul>
+				<li>이름</li>
+				<li><input type="text" name="username" id="username" value=""  required size="5" maxlength="5" /></li>
+			</ul>
+			<ul>
+				<li>이메일</li>
+				<li><input type="text" name="useremail" id="useremail" value=""  required />@<select id="useremail2" name="useremail2"><option value="naver.com">naver.com</option><option value="daum.net">daum.net</option><option value="nate.com">nate.com</option></select></li>
+			</ul>
+		</div>
+		<div id="join_bbb">
+			<ul>
+				<li><input type="submit" id="mem_bt" value="회원가입"  /></li>
+				<li><input type="reset" value="다시쓰기" /></li>
+			</ul>
+		</div>
+	</form>
+</div>
 	<header>
 		<div id="navi_line"></div>
 		<div id="header_in">
-			<div id="nav_t">로그인</div>
+			<div id="nav_t" class="login_bottom2">로그인</div>
 			<div id="logo">
 				<a href="/"><img src="/imgs/logo.png" alt="logo" title="logo" /></a>
 			</div>
@@ -51,37 +101,37 @@
 						</ul></li>
 					<li id="n-movies"><span class="dir">정비</span>
 						<ul>
-							<li class="first"><a href="./" class="dir">일반회원</a>
+							<li class="first"><a href="" class="dir">일반회원</a>
 								<ul>
-									<li class="first"><a href="./">가이드</a></li>
-									<li><a href="./">정비소 검색</a></li>
-									<li><a href="./">신청 및 문의하기</a></li>
-									<li><a href="./">후기</a></li>
+									<li class="first"><a href="/repair/guide">가이드</a></li>
+									<li><a href="/repair/search">정비소 검색</a></li>
+									<li><a href="/repair/service/apply">신청 및 문의하기</a></li>
+									<li><a href="/repair/review">후기</a></li>
 								</ul></li>
 							<li><a href="./" class="dir">정비소 회원</a>
 								<ul>
-									<li class="first"><a href="./">신청현황</a></li>
-									<li><a href="./">문의 답변</a></li>
+									<li class="first"><a href="/repair/service/s/apply">신청현황</a></li>
+									<li><a href="/repair/service/s/qna">문의 답변</a></li>
 
 								</ul></li>
 						</ul></li>
 
 					<li id="n-movies"><span class="dir">마이페이지</span>
 						<ul>
-							<li class="first"><a href="./" class="dir">정보수정</a></li>
-							<li class="first"><a href="./" class="dir">일반회원</a>
+							<li class="first"><a href="/mypage/member/change" class="dir">정보수정</a></li>
+							<li class="first"><a href="/mypage/member/change" class="dir">일반회원</a>
 								<ul>
 									<li><a href="./" class="dir">라이딩</a>
 										<ul>
-											<li class="first"><span class="dir">기록보기 및 분석</span></li>
-											<li class="first"><span class="dir">배지설정</span></li>
-											<li class="first"><span class="dir">활동내역</span></li>
+											<li class="first"><span class="dir"><a href="/mypage/member/record">기록보기 및 분석</a></span></li>
+											<li class="first"><span class="dir"><a href="/mypage/member/badge">배지설정</a></span></li>
+											<li class="first"><span class="dir"><a href="/mypage/member/board">활동내역</a></span></li>
 										</ul></li>
 								</ul></li>
 							<li><a href="./" class="dir">정비소 회원</a>
 								<ul>
-									<li class="first"><span class="dir">정비</span></li>
-									<li class="first"><span class="dir">정비소 관리</span></li>
+									<li class="first"><span class="dir"><a href="/mypage/shop">정비</a></span></li>
+									<li class="first"><span class="dir"><a href="/mypage/shop/apply">정비소 관리</a></span></li>
 								</ul></li>
 						</ul></li>
 				</ul>
