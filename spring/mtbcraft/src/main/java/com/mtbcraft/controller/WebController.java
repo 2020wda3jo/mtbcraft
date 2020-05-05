@@ -8,8 +8,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class WebController {
 	@RequestMapping("/index")
-	@ResponseBody
 	public String index() {
 		return "index";
+	}
+	@RequestMapping("/intro")
+	public String intro() {
+		return "/intro";
+	}
+	@RequestMapping("/update")
+	public String updateintro() {
+		return "/update";
 	}
 }

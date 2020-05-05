@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 @Configuration
-@MapperScan(basePackages = "com.capston.mtbcraft.dao")
+@MapperScan(basePackages = "com.mtbcraft.dao")
 public class DataAccessConfig {
 
     @Bean

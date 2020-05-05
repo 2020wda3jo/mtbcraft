@@ -1,5 +1,4 @@
-package com.mtbcraft.controller;
-//package com.capston.mtbcraft.controller;
+//package com.mtbcraft.controller;
 //
 //import org.springframework.stereotype.Controller;
 //import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,21 +1,18 @@
 
 /* jqueryui modal 관련*/
 $(function(){
-	$(".login_bottom2").click(function(){
-		$(".join_frm2").dialog({
+	$("#nav_t").click(function(){
+		$("#login_frm").dialog({
 			title:"로그인",
 			width:480,
 			modal:true,
 		});
 	});
 	
-	$("#join_mem").click(function(){
-		$("#join_frm").dialog({
-			title:"회원가입",
-			width:700,
-			modal:true,
+		$("#datepicker").datepicker({
+			 changeYear:true,
+			  changeMonth:true
 		});
-	});
 });
 
 

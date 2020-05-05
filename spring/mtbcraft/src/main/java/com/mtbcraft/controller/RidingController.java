@@ -76,5 +76,12 @@ public class RidingController {
 		System.out.println(courseId);
 		System.out.println(courseImage);
 		return "/riding/course/scrap";
-	}	
+	}
+	
+	//인원모집
+	@RequestMapping(value="/riding/comeon", method=RequestMethod.GET)
+	public String comeon() {
+		
+		return "/riding/comeon";
+	}
 }
