@@ -557,7 +557,6 @@ img {
 	height: 500px;
 	position: relative;
 	font: 50px 'malgun gothic';
-	
 }
 
 #f33 {
@@ -571,14 +570,10 @@ img {
 footer {
 	background: #eaeaea;
 	height:70px;
+	margin-top:70px;
 }
 
-
-
-
-
 #copyright {
-	
 	text-align: left;
 	padding-left:50px;
 	padding-top:30px;
