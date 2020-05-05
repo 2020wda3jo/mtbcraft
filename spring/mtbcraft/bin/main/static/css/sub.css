@@ -1,0 +1,43 @@
+@charset "UTF-8";
+#member_sel {
+	width:500px;
+	height:200px;
+	margin-top:50px;
+}
+
+#member_sel_box {
+	margin-top: 50px;
+	text-align: center;
+	width: 1200px;
+	position: relative;
+	font: 50px 'malgun gothic';
+}
+
+#general_mem{
+	width:200px;
+	height:200px;
+	border:solid 2px ;
+	background:url("/imgs/general_icon.jpg") no-repeat;
+	background-size: 70%;
+	background-position:50% 0%;
+	text-align:center;
+	padding-top:150px;
+	float:left;
+}
+
+#repair_mem{
+	width:200px;
+	height:200px;
+	border:solid 2px ;
+	background:url("/imgs/repair_icon.jpg") no-repeat;
+	background-size: 70%;
+	background-position:50% 0%;
+	text-align:center;
+	padding-top:150px;
+	float:right;
+}
+
+#join_form{
+	width:1000px;
+	margin-top:30px;
+}
