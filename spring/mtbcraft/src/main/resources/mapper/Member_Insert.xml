@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mtbcraft.dao.MemberDao">
-	<select id="memberInsert" resultType="com.mtbcraft.model.Member">
+<mapper namespace="com.mtbcraft.mapper.MemberMapper">
+	<select id="memberInsert" resultType="com.mtbcraft.dto.Member">
 		insert into rider(r_id, r_pw, r_name, r_nickname, r_birth, r_phone, r_gender, r_addr, r_addr2, r_image, r_type) 
 		values (#{r_id,jdbcType=VARCHAR}, #{r_pw,jdbcType=VARCHAR}, #{r_name,jdbcType=VARCHAR}, #{r_nickname,jdbcType=VARCHAR}, #{r_birth,jdbcType=DATE}, #{r_phone,jdbcType=VARCHAR}, #{r_gender,jdbcType=VARCHAR}, #{r_addr,jdbcType=VARCHAR}, #{r_addr2,jdbcType=VARCHAR}, #{r_image}, #{r_type,jdbcType=INTEGER})
 	</select>

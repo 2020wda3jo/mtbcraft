@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import com.mtbcraft.model.Member;
+
+import com.mtbcraft.dto.Member;
 import com.mtbcraft.service.MemberService;
 @Controller
 public class MemberController {

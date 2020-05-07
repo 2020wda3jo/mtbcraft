@@ -26,7 +26,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
-@MapperScan(basePackages = "com.mtbcraft.dao")
+@MapperScan(basePackages = "com.mtbcraft.mapper")
 public class DataAccessConfig {
 
    @Autowired

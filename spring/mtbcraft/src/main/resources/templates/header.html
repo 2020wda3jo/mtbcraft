@@ -20,24 +20,17 @@
 	<header>
 		<div id="navi_line"></div>
 		<div id="header_in">
-			
-			<!--  로그인한 상태라면 이름과, logout 버튼 출력      -->
     <div th:if="${#authorization.expr('isAuthenticated()')}">
         <div id="nav_t_login">
         	<ul>
         		<li><b><span th:text="${#authentication.name}"></span>님 안라~</b></li>
         		<li>
-        		<form action="/logout" method="post">
-		        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-					<div ><input type="submit" value="Logout" style="backgroundLwhite; border:0;"></div>
-			</form>
-			
-        		
+        			<form action="/logout" method="post">
+		        		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+						<input type="submit" value="Logout" style="backgroundLwhite; border:0;">
+					</form>
         		</li>
         	</ul>
-        <span ></span>
-        
-	        
 		</div>
     </div>
 <!--  로그인한 상태가 아니라면 login 버튼 출력  -->

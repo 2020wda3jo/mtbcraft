@@ -1,12 +1,12 @@
-package com.mtbcraft.dao;
+package com.mtbcraft.mapper;
 
 import org.springframework.stereotype.Repository;
 
-import com.mtbcraft.model.Login;
-import com.mtbcraft.model.Member;
+import com.mtbcraft.dto.Login;
+import com.mtbcraft.dto.Member;
 
-@Repository("com.mtbcraft.dao")
-public interface MemberDao {
+@Repository("com.mtbcraft.mapper")
+public interface MemberMapper {
 
 //회원가입 작성
 	public String memberInsert(Member member) throws Exception;

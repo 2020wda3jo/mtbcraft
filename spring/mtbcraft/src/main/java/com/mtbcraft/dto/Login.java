@@ -1,4 +1,4 @@
-package com.mtbcraft.model;
+package com.mtbcraft.dto;
 
 import java.util.Collection;
 

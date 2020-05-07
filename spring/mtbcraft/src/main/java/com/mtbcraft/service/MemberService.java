@@ -5,15 +5,15 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.mtbcraft.dao.MemberDao;
-import com.mtbcraft.model.Login;
-import com.mtbcraft.model.Member;
+import com.mtbcraft.dto.Login;
+import com.mtbcraft.dto.Member;
+import com.mtbcraft.mapper.MemberMapper;
 
 
 @Service
 public class MemberService {
-	@Resource(name="com.mtbcraft.dao")
-	MemberDao memberMapper;
+	@Resource(name="com.mtbcraft.mapper")
+	MemberMapper memberMapper;
 	
 	
 	public String memberInsert(Member member) throws Exception {

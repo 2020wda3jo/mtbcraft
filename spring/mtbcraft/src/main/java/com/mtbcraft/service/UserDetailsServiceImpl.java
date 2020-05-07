@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
-import com.mtbcraft.model.Login;
+import com.mtbcraft.dto.Login;
 import com.mtbcraft.repository.UserJpaRepository;
 
 
