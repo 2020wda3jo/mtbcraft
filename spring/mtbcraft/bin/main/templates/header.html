@@ -2,7 +2,7 @@
 <title>MTB CRAFT</title>
 <meta charset="UTF-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<link rel="stylesheet" type="text/css" href="/css/common.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
 <link rel="stylesheet" type="text/css" href="/css/sub.css" />
 <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap-grid.min.css" />
 <link href="/css/bootstrap/style.css" rel="stylesheet">
@@ -17,26 +17,36 @@
 
 </head>
 <body onload="openWin()">
-<div class="join_frm2" id="login_frm">
-<form action="/timemarket_front/page/member/login_ok.do" method="post">
-	<div id="in_box" class="idpw_box">
-			<input type="text" name="userid" id="userid" maxlength="20" placeholder="사용자 아이디" required />
-			<input type="password" name="userpw" id="userpw" maxlength="20" placeholder="사용자 비밀번호" required/>
-		</div>
-		<span id="idpw_find"><a href="#">아이디나 비밀번호를 잊어버리셨나요?</a></span>
-		<span id="join_mem"><a href="/member/join_select">회원가입</a></span>
-			<div id="log_box_bot">
-				<button type="submit" id="">LOGIN</button>
-			</div>
-		</form>
-</div>
-
 	<header>
-	
-	
 		<div id="navi_line"></div>
 		<div id="header_in">
-			<div id="nav_t" class="login_bottom2">로그인</div>
+			
+			<!--  로그인한 상태라면 이름과, logout 버튼 출력      -->
+    <div th:if="${#authorization.expr('isAuthenticated()')}">
+        <div id="nav_t_login">
+        	<ul>
+        		<li><b><span th:text="${#authentication.name}"></span>님 안라~</b></li>
+        		<li>
+        		<form action="/logout" method="post">
+		        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+					<div ><input type="submit" value="Logout" style="backgroundLwhite; border:0;"></div>
+			</form>
+			
+        		
+        		</li>
+        	</ul>
+        <span ></span>
+        
+	        
+		</div>
+    </div>
+<!--  로그인한 상태가 아니라면 login 버튼 출력  -->
+    <div th:unless="${#authorization.expr('isAuthenticated()')}">
+        <div id="nav_t"><a th:href="@{/login}">LOGIN</a></div>
+    </div>
+    
+    
+			
 			<div id="logo">
 				<a href="/"><img src="/imgs/logo.png" alt="logo" title="logo" /></a>
 			</div>
@@ -82,9 +92,6 @@
             </li>
             </ul>
           </nav><!-- .nav-menu -->
-			
-			 
-          
 		</div>
 		<script src="/js/main.js"></script>
 	</header>

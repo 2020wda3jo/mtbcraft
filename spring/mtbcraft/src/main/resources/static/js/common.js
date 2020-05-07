@@ -1,13 +1,13 @@
 
 /* jqueryui modal 관련*/
 $(function(){
-	$("#nav_t").click(function(){
-		$("#login_frm").dialog({
-			title:"로그인",
-			width:480,
-			modal:true,
-		});
-	});
+//	$("#nav_t").click(function(){
+//		$("#login_frm").dialog({
+//			title:"로그인",
+//			width:480,
+//			modal:true,
+//		});
+//	});
 	
 		$("#datepicker").datepicker({
 			 changeYear:true,

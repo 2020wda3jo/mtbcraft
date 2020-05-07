@@ -18,6 +18,8 @@ public class Member{
 	private String r_badge = "0";
 	private String r_image; //실제파일
 	private String r_type;
+	
+	private String roleName;//권한 이름
 	public String getR_id() {
 		return r_id;
 	}
@@ -90,6 +92,14 @@ public class Member{
 	public void setR_type(String r_type) {
 		this.r_type = r_type;
 	}
+	public String getRoleName() {
+		return roleName;
+	}
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	
 	
 	
 	

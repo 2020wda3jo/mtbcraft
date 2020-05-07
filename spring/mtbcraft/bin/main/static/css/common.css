@@ -63,57 +63,10 @@ header {
 	background-attachment: fixed;
 }
 
-.join_frm2 {
-	display:none;
+#login_form {
+	width:500px;
+	margin-top:30px;
 }
-
-#join_frm {
-	display:none;
-	
-	}
-#join_frm  #frm_con ul:first-child{
-	border-top:solid 1px #ccc;
-	}
-#join_frm  #frm_con ul{
-	clear:left;
-	float:left;
-	width:100%;
-	border-bottom:solid 1px #ccc;
-	}
-#join_frm  #frm_con ul li{
-	float:left;
-	padding-top:15px;
-	padding-bottom:15px;
-	padding-right:15px;
-	}
-#join_frm  #frm_con ul li:first-child{
-	float:left;
-	width:15%;
-	text-align:right;
-	margin-right:10px;
-	border-right:solid 1px #ccc;
-	background-color:#8ad7f2;
-	}
-#join_frm  #frm_con ul li input[type="text"]{
-	border:solid 1px #ccc;
-	}
-#join_frm  #frm_con ul li input[type="password"]{
-	border:solid 1px #ccc;
-	}
-#join_bbb{
-	float:left;
-	}
-#join_bbb > ul > li{
-	float:left;
-	}
-#join_bbb > ul > li input{
-	padding:10px 20px;
-	background-color:#66b8e1;
-	border:solid 1px #096797;
-	color:#fff; margin-right:5px;
-	margin-top:10px;
-	float:right;
-	}
 #in_box {
 	text-align: center;
 	margin-top:15px;
@@ -129,8 +82,8 @@ header {
 #idpw_find {
 	position: absolute;
 	font-size:14px;
-	margin-left:30px;
-	margin-top:30px; 
+	margin-left:50px;
+	margin-top:20px; 
 	color:#2E9AFE;
 }
 #idpw_find a{
@@ -139,26 +92,24 @@ header {
 #join_mem{
 	position: absolute;
 	font-size:14px;
-	margin-left:370px;
-	margin-top:30px;
+	margin-left:390px;
+	margin-top:20px;
 	color:#2E9AFE;
 }
 #join_mem a{
 	color:#2E9AFE;
 }
 #log_box_bot button {
-	width:420px;
+	width:400px;
 	height:60px;
 	background:#258663;
 	text-align: center;
 	color:white;
 	font-size: 26px;
 	border: 0;
-	margin-top:83px;
-	margin-left: 10px;
+	margin-top:60px;
+	margin-left: 50px;
 }
-
-
 
 /* Slideshow container */
 img {

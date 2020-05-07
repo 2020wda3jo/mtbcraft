@@ -1,30 +1,21 @@
 package com.mtbcraft.controller;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import com.mtbcraft.model.Member;
-import org.apache.commons.io.FileUtils;
 import com.mtbcraft.service.MemberService;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-
 @Controller
 public class MemberController {
 	
 	@Autowired
 	MemberService memberService;
+
 
 	// 회원가입 종류 선택
 	@RequestMapping(value = "/member/join_select", method = RequestMethod.GET)
@@ -79,43 +70,8 @@ public class MemberController {
 		
 		return "redirect:/";
 	}
-	
-	// 도로명 주소
-		@RequestMapping(value = "/member/general_join/address_popup", method = RequestMethod.GET)
-		public String address_popup(HttpServletRequest request) throws Exception{
-			
-			String inputYn = request.getParameter("inputYn");
-			String roadFullAddr = request.getParameter("roadFullAddr");
-			String roadAddrPart1 = request.getParameter("roadAddrPart1");
-			String roadAddrPart2 = request.getParameter("roadAddrPart2");
-			String engAddr = request.getParameter("engAddr");
-			String jibunAddr = request.getParameter("jibunAddr");
-			String zipNo = request.getParameter("zipNo");
-			String addrDetail = request.getParameter("addrDetail");
-			String admCd = request.getParameter("admCd");
-			String rnMgtSn = request.getParameter("rnMgtSn");
-			String bdMgtSn = request.getParameter("bdMgtSn");
-			String detBdNmList = request.getParameter("detBdNmList"); 
-			
-			
-			
-			String bdNm = request.getParameter("bdNm");
-			String bdKdcd = request.getParameter("bdKdcd");
-			String siNm = request.getParameter("siNm");
-			String sggNm = request.getParameter("sggNm");
-			String emdNm = request.getParameter("emdNm");
-			String liNm = request.getParameter("liNm");
-			String rn = request.getParameter("rn");
-			String udrtYn = request.getParameter("udrtYn");
-			String buldMnnm = request.getParameter("buldMnnm");
-			String buldSlno = request.getParameter("buldSlno");
-			String mtYn = request.getParameter("mtYn");
-			String lnbrMnnm = request.getParameter("lnbrMnnm");
-			String lnbrSlno = request.getParameter("lnbrSlno");
-			String emdNo = request.getParameter("emdNo");
-			
-			return "/member/address_popup";
-		}
+
+
 	// 아이디 중복 체크
 	@RequestMapping(value = "/member/id_check", method = RequestMethod.POST)
 	public String idCheck(int result, String userid) {
@@ -141,20 +97,9 @@ public class MemberController {
 	}
 
 	// 로그인
-	@RequestMapping(value = "/member/login", method = RequestMethod.GET)
-	public String loginGet(int result) {
-		return "/member/login";
+	@RequestMapping("/login")
+	public String loginPost() throws Exception {
+		return "/login";
 	}
 
-	// 로그인
-	@RequestMapping(value = "/member/login", method = RequestMethod.POST)
-	public String loginPost(int result, String userid, String password) {
-		return "/member/login";
-	}
-
-	// 로그아웃
-	@RequestMapping(value = "/member/logout", method = RequestMethod.POST)
-	public String logout(int result, String userid) {
-		return "/member/logout";
-	}
 }
