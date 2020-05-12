@@ -2,4 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header"></head>
 <div id="sub_img"></div>
+<div id="ridingRecords">
+</div>
+<script>
+	$(document).ready(function() {
+		var userId = $("#nav_t_login ul li b span").html();
+		var records;
+		$.ajax({
+
+			url : "/riding/check/?rr_rider=" + userId, // 제이슨오브젝트값을 가져옴
+
+			dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
+
+			cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
+
+			success : function(data) {
+				for(var record in data){
+					for(var key in record){
+						alert(key+" : "+record[key]);
+					}
+				}
+				alert("성공!");
+				
+			}
+
+		});
+	});
+</script>
+
+
+
 <footer th:replace="footer"></footer>

@@ -5,5 +5,10 @@
 		insert into rider(r_id, r_pw, r_name, r_nickname, r_birth, r_phone, r_gender, r_addr, r_addr2, r_image, r_type) 
 		values (#{r_id,jdbcType=VARCHAR}, #{r_pw,jdbcType=VARCHAR}, #{r_name,jdbcType=VARCHAR}, #{r_nickname,jdbcType=VARCHAR}, #{r_birth,jdbcType=DATE}, #{r_phone,jdbcType=VARCHAR}, #{r_gender,jdbcType=VARCHAR}, #{r_addr,jdbcType=VARCHAR}, #{r_addr2,jdbcType=VARCHAR}, #{r_image}, #{r_type,jdbcType=INTEGER})
 	</select>
+	
+	<!-- 현재 기록 하나만 받아오나 실제 구현에는 기록배열을 가져와야함 -->
+	<select id="getRidingRecord" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
+		select * from riding_record where rr_rider = #{rr_rider}
+	</select>
 </mapper>
 

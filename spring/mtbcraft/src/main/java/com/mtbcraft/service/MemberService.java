@@ -1,19 +1,25 @@
 package com.mtbcraft.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.Member;
+import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.mapper.MemberMapper;
 
 
 @Service
+@Transactional
 public class MemberService {
 	@Resource(name="com.mtbcraft.mapper")
-	MemberMapper memberMapper;
+	@Autowired
+	private MemberMapper memberMapper;
 	
 	
 	public String memberInsert(Member member) throws Exception {
@@ -22,5 +28,9 @@ public class MemberService {
 	
 	public String memberLogin(Login login) throws Exception {
 		return memberMapper.memberLogin(login);
+	}
+	
+	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
+		return memberMapper.getRidingRecord(rr_rider);
 	}
 }
