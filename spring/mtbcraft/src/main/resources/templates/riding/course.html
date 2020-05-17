@@ -2,30 +2,118 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header"></head>
 <div id="sub_img"></div>
+<button id="getCourse">등록된 코스 조회</button>
+<button id="getUserRidingRecord">주행 기록 조회</button>
+<button id="getScrapCourse">스크랩한 코스 조회</button>
+<button id="getDangerousArea">등록된 위험 지역 조회</button>
+<hr>
 <div id="ridingRecords">우흥</div>
 <script>
 	$(document).ready(function() {
 		var userId = $("#nav_t_login ul li b span").html();
-		var records = "<ul>";
-		$.ajax({
-			url : "/riding/check/?rr_rider=" + userId, // 제이슨오브젝트값을 가져옴
-			dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
-			cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
-			success : function(data) {
-				for(var i in data){
-					for(var key in data[i]){
-						records+= "<li>"+key+" : "+data[i][key]+"</li>";
+		
+		$("#getUserRidingRecord").click(function(){
+			$.ajax({
+				url : "/riding/check/?rr_rider=" + userId, // 제이슨오브젝트값을 가져옴
+				dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
+				cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
+				success : function(data) {
+					var records = "<h3>"+userId+"님의 주행기록</h3><hr>";
+					for(var i in data){
+						records+="<ul>";
+						for(var key in data[i]){
+							records+= "<li>"+key+" : "+data[i][key]+"</li>";
+						}
+						records+="</ul><hr>";
 					}
-					records+="</ul><ul>";
+					
+					$("#ridingRecords").html(records);
+					alert("로그인한 사용자 주행 기록 조회 완료");				
 				}
-				records+="</ul>";
-				$("#ridingRecords").html(records);
-				alert("마무리");				
-			}
-
+			});
+		});
+		
+		$("#getScrapCourse").click(function(){
+			$.ajax({
+				url : "/riding/scrap/check/?rr_rider="+userId, 
+				dataType : "json", 
+				cache : false, 
+				success : function(data) {
+					var records = "<h3>"+userId+"님의 스크랩 코스 정보</h3><hr>";
+					for(var i in data){
+						records+="<ul>";
+						for(var key in data[i]){
+							records+= "<li>"+key+" : "+data[i][key]+"</li>";
+						}
+						records+="</ul><hr>";
+					}
+					
+					$("#ridingRecords").html(records);
+					alert("로그인한 사용자 스크랩 코스 조회 완료");				
+				}
+			});
+		});
+		
+		$("#getCourse").click(function(){
+			$.ajax({
+				url : "/riding/course/check", 
+				dataType : "json", 
+				cache : false, 
+				success : function(data) {
+					var records = "<h3>현재 서버에 등록된 코스</h3><hr>";
+					for(var i in data){
+						records+="<ul>";
+						for(var key in data[i]){
+							records+= "<li>"+key+" : "+data[i][key]+"</li>";
+						}
+						records+="</ul><hr>";
+					}
+					
+					$("#ridingRecords").html(records);
+					alert("등록된 코스 조회 완료");				
+				}
+			});
+		});
+		
+		$("#getDangerousArea").click(function(){
+			var records = "<h3>현재 서버에 등록된 위험지역</h3><hr>";
+			$.ajax({
+				url : "/riding/DA/checkA", 
+				dataType : "json", 
+				cache : false,
+				success : function(data) {
+					for(var i in data){
+						records+="<ul>";
+						for(var key in data[i]){
+							records+= "<li>"+key+" : "+data[i][key]+"</li>";
+						}
+						records+="</ul><hr>";
+					}
+					$.ajax({
+						url : "/riding/DA/check/?rr_rider="+userId, 
+						dataType : "json", 
+						cache : false, 
+						success : function(data) {
+							records += "<h3>현재 사용자가 등록된 위험지역</h3><hr>";
+							for(var i in data){
+								records+="<ul>";
+								for(var key in data[i]){
+									records+= "<li>"+key+" : "+data[i][key]+"</li>";
+								}
+								records+="</ul><hr>";
+							}
+							$("#ridingRecords").html(records);
+						}
+					});
+				}
+			});
+			alert("등록된 위험 지역 조회 완료");
 		});
 	});
 </script>
+
+
+
 
 
 

@@ -1,9 +1,5 @@
 package com.mtbcraft.dto;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class Member{
 	
 	private String r_id;

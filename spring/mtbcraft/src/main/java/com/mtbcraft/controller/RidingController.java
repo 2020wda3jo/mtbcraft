@@ -4,39 +4,55 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.RidingRecord;
-import com.mtbcraft.mapper.MemberMapper;
+import com.mtbcraft.service.MemberService;
 
 @Controller
 public class RidingController {
-	// 코스 메뉴
-//	@RequestMapping("/riding/course")
-//	public String coursepost() {
-//		return "/riding/course";
-//	}
-
-	// 코스 메뉴테스트
 	@Autowired
-	private MemberMapper memberMapper;
+	private MemberService memberService;
 
+	// 코스 메뉴 진입
 	@RequestMapping("/riding/course")
-	public String course(){
+	public String course() {
 		return "/riding/course";
-		
 	}
-	@RequestMapping(value="/riding/check", method = RequestMethod.GET)
-	public @ResponseBody
-	List<RidingRecord> getRidingRecord(String rr_rider) throws Exception{
-		return memberMapper.getRidingRecord(rr_rider);
-		
+
+	// 사용자 주행 기록 조회
+	@RequestMapping(value = "/riding/check", method = RequestMethod.GET)
+	public @ResponseBody List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
+		return memberService.getRidingRecord(rr_rider);
 	}
-	
+
+	// 코스 조회
+	@RequestMapping(value = "/riding/course/check", method = RequestMethod.GET)
+	public @ResponseBody List<Course> getCourse() throws Exception {
+		return memberService.getCourse();
+	}
+
+	// 사용자 스크랩 코스 조회
+	@RequestMapping(value = "/riding/scrap/check", method = RequestMethod.GET)
+	public @ResponseBody List<Course> getScrapCourse(String rr_rider) throws Exception {
+		return memberService.getScrapCourse(rr_rider);
+	}
+
+	// 위험 지역 조회
+	@RequestMapping(value = "/riding/DA/checkA", method = RequestMethod.GET)
+	public @ResponseBody List<DangerousArea> getDangerousArea() throws Exception {
+		return memberService.getDangerousArea();
+	}
+
+	// 사용자 등록 위험 지역 조회
+	@RequestMapping(value = "/riding/DA/check", method = RequestMethod.GET)
+	public @ResponseBody List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception {
+		return memberService.getUserDangerousArea(rr_rider);
+	}
 
 	// 내 코스 공유
 	@RequestMapping(value = "/riding/course/my/share", method = RequestMethod.GET)

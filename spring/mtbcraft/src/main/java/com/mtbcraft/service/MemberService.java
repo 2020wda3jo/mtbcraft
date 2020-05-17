@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.Member;
 import com.mtbcraft.dto.RidingRecord;
@@ -32,5 +34,21 @@ public class MemberService {
 	
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
 		return memberMapper.getRidingRecord(rr_rider);
+	}
+	
+	public List<Course> getCourse() throws Exception{
+		return memberMapper.getCourse();
+	}
+	
+	public List<Course> getScrapCourse(String rr_rider) throws Exception{
+		return memberMapper.getScrapCourse(rr_rider);
+	}
+	
+	public List<DangerousArea> getDangerousArea() throws Exception{
+		return memberMapper.getDangerousArea();
+	}
+	
+	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception{
+		return memberMapper.getUserDangerousArea(rr_rider);
 	}
 }
