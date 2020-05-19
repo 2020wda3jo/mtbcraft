@@ -31,9 +31,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.logoutSuccessUrl("/")
 		.invalidateHttpSession(true)
 		.and()
-		.csrf()
-		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		;
+		.csrf();
+		//api이후의 주소들은 csrf토큰검사를 패쓰한다
+		http.csrf().ignoringAntMatchers("/api/**");
+		//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+		
 		}
 
 	public AuthenticationSuccessHandler successHandler() {
