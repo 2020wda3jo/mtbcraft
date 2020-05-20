@@ -1,13 +1,6 @@
 package com.mtbcraft.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.RidingRecord;
-import com.mtbcraft.dto.VisionDto;
 import com.mtbcraft.service.MemberService;
 
-import java.sql.Timestamp;
 @Controller
 public class RidingController {
 	@Autowired
@@ -36,26 +27,6 @@ public class RidingController {
 	@RequestMapping(value = "/riding/check", method = RequestMethod.GET)
 	public @ResponseBody List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
 		return memberService.getRidingRecord(rr_rider);
-	}
-	
-	//주행기록 등록(안드로이드)
-	
-	
-	@RequestMapping(value = "/api/upload")
-	@ResponseBody
-	public Map<String, String> insertriding(HttpServletRequest request) throws Exception {
-		
-		//안드로이드로부터 받은 데이터
-		System.out.println(request.getParameter("title"));
-        System.out.println(request.getParameter("memo"));
-        
-        //안드로이드에게 전달하는 데이터
-        Map<String, String> result = new HashMap<String, String>();
-        result.put("data1", "된다?");
-        result.put("data2", "고롷췌");
-        
-        return result;
-
 	}
 
 	// 코스 조회

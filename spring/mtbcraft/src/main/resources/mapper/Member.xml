@@ -27,5 +27,13 @@
 	<select id="getUserDangerousArea" parameterType="String" resultType="com.mtbcraft.dto.DangerousArea">
 		select * from DANGEROUS_AREA where DA_RIDER = #{rr_rider}
 	</select>
+  
+   <insert id="writeDao">
+   	insert into MARKET_VISION (num, day, content) values (vision_seq.nextval, #{param1}, #{param2})
+   </insert>
+   
+   <delete id="deleteDao">
+   	delete from MARKET_VISION where num = #{param1}
+   </delete>
 </mapper>
 

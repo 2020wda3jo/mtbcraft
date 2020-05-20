@@ -8,6 +8,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <h2>로그인</h2>
 <form th:action="@{/login}" method="post">
 	<div id="in_box" class="idpw_box">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
 			<input type="text" name="username" id="userid" maxlength="20" placeholder="사용자 아이디" required />
 			<input type="password" name="password" id="userpw" maxlength="20" placeholder="사용자 비밀번호" required/>
 		</div>

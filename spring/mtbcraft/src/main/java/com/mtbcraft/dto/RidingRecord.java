@@ -1,53 +1,23 @@
 package com.mtbcraft.dto;
 
-import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "riding_record")
+
 public class RidingRecord {
-	@Id
-	@Column
-	private int rr_num;
-	@Column
 	private String rr_rider;
-	@Column
-	private Timestamp rr_date;
-	@Column
 	private int rr_distance;
-	@Column
 	private int rr_topspeed;
-	@Column
 	private int rr_avgspeed;
-	@Column
 	private int rr_high;
-	@Column
 	private String rr_gpx;
-	@Column
 	private int rr_open;
-	@Column
-	private String rr_time;
-	
-	public int getRr_num() {
-		return rr_num;
-	}
-	public void setRr_num(int rr_num) {
-		this.rr_num = rr_num;
-	}
+	private int rr_breaktime;
+	private int rr_time;
+	private String rr_area;
 	public String getRr_rider() {
 		return rr_rider;
 	}
 	public void setRr_rider(String rr_rider) {
 		this.rr_rider = rr_rider;
-	}
-	public Timestamp getRr_date() {
-		return rr_date;
-	}
-	public void setRr_date(Timestamp rr_date) {
-		this.rr_date = rr_date;
 	}
 	public int getRr_distance() {
 		return rr_distance;
@@ -85,10 +55,27 @@ public class RidingRecord {
 	public void setRr_open(int rr_open) {
 		this.rr_open = rr_open;
 	}
-	public String getRr_time() {
+	public int getRr_breaktime() {
+		return rr_breaktime;
+	}
+	public void setRr_breaktime(int rr_breaktime) {
+		this.rr_breaktime = rr_breaktime;
+	}
+	public int getRr_time() {
 		return rr_time;
 	}
-	public void setRr_time(String rr_time) {
+	public void setRr_time(int rr_time) {
 		this.rr_time = rr_time;
 	}
+	public String getRr_area() {
+		return rr_area;
+	}
+	public void setRr_area(String rr_area) {
+		this.rr_area = rr_area;
+	}
+	
+	
+
+
 }
+	

@@ -1,5 +1,6 @@
 package com.mtbcraft.mapper;
 
+
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,7 @@ public interface MemberMapper {
 	public String memberInsert(Member member) throws Exception;
 	public String memberLogin(Login login) throws Exception;
 	
+	
 	//라이딩기록검색
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception;
 	
@@ -31,5 +33,5 @@ public interface MemberMapper {
 
 	//사용자가 등록한 스크랩 코스 조회
 	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception;
-
+	
 }
