@@ -27,17 +27,17 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.2.6.RELEASE'
 	
 	runtimeOnly 'com.oracle.ojdbc:ojdbc8'
-	compile 'com.oracle:ojdbc6:11.2.0.3'
+	// compile 'com.oracle:ojdbc6:11.2.0.3' 오류를 발생시켜 제외해봄
 	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	
 	// https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
-compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.1.2'
+	compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.1.2'
 	// https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl
-compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'
+	compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.13'
 	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
