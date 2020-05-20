@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrf();
 		//api이후의 주소들은 csrf토큰검사를 패쓰한다
 		http.csrf().ignoringAntMatchers("/api/**");
+		http.csrf().ignoringAntMatchers("/riding/**");
 		//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 		
 		}

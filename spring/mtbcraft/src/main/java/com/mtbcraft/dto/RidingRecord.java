@@ -1,18 +1,41 @@
 package com.mtbcraft.dto;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-
+@Entity
 public class RidingRecord {
+	@Id
+	@Column
+	private int rr_num;
+	@Column
 	private String rr_rider;
+	@Column
 	private int rr_distance;
+	@Column
 	private int rr_topspeed;
+	@Column
 	private int rr_avgspeed;
+	@Column
 	private int rr_high;
+	@Column
 	private String rr_gpx;
+	@Column
 	private int rr_open;
+	@Column
 	private int rr_breaktime;
+	@Column
 	private int rr_time;
+	@Column
 	private String rr_area;
+	
+	public int getRr_num() {
+		return rr_num;
+	}
+	public void setRr_num(int rr_num) {
+		this.rr_num = rr_num;
+	}
 	public String getRr_rider() {
 		return rr_rider;
 	}
