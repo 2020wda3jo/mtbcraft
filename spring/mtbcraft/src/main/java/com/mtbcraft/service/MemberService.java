@@ -35,6 +35,9 @@ public class MemberService {
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
 		return memberMapper.getRidingRecord(rr_rider);
 	}
+	public void updateRidingRecord(int rr_num, int rr_open) throws Exception{
+		memberMapper.updateRidingRecord(rr_num, rr_open);
+	}
 	
 	public List<Course> getCourse() throws Exception{
 		return memberMapper.getCourse();
@@ -42,6 +45,12 @@ public class MemberService {
 	
 	public List<Course> getScrapCourse(String rr_rider) throws Exception{
 		return memberMapper.getScrapCourse(rr_rider);
+	}
+	public void postScrapCourse(String ss_rider, int ss_course){
+		memberMapper.postScrapCourse(ss_rider, ss_course);
+	}
+	public void deleteScrapCourse(String ss_rider, int ss_course) throws Exception{
+		memberMapper.deleteScrapCourse(ss_rider, ss_course);
 	}
 	
 	public List<DangerousArea> getDangerousArea() throws Exception{

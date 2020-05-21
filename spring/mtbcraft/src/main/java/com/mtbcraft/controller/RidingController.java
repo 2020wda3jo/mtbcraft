@@ -1,8 +1,10 @@
 package com.mtbcraft.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.MemberService;
 
 @Controller
@@ -29,6 +32,16 @@ public class RidingController {
 		return memberService.getRidingRecord(rr_rider);
 	}
 
+	// 사용자 주행 기록 공개비공개
+	@RequestMapping(value = "/riding/update", method = RequestMethod.GET)
+	public String updateRidingRecord(int rr_num, int rr_open) throws Exception {
+		System.out.print(rr_num + "의 현재 OPEN 상태 " + rr_open + "에서");
+		rr_open = rr_open == 1 ? 0 : 1;
+		System.out.print(rr_open + "상태로 전환합니다.\n");
+		memberService.updateRidingRecord(rr_num, rr_open);
+		return "/riding/course";
+	}
+
 	// 코스 조회
 	@RequestMapping(value = "/riding/course/check", method = RequestMethod.GET)
 	public @ResponseBody List<Course> getCourse() throws Exception {
@@ -39,6 +52,30 @@ public class RidingController {
 	@RequestMapping(value = "/riding/scrap/check", method = RequestMethod.GET)
 	public @ResponseBody List<Course> getScrapCourse(String rr_rider) throws Exception {
 		return memberService.getScrapCourse(rr_rider);
+	}
+
+	// 사용자 스크랩 코스 등록
+	@RequestMapping(value = "/riding/scrap/check", method = RequestMethod.POST)
+	@ResponseBody
+	public String postScrapCourse(@RequestBody Scrap_Status ss) {
+		String ss_rider = ss.getSs_rider();
+		int ss_course = ss.getSs_course();
+		try {
+			memberService.postScrapCourse(ss_rider, ss_course);
+			System.out.println("사용자 " + ss_rider + "이 " + ss_course + "코스를 스크랩합니다.");
+			return "success";
+		} catch (Exception e) {
+			System.out.println("사용자 " + ss_rider + "은 이미" + ss_course + "코스를 스크랩하였습니다.");
+			return "fail";
+		}
+	}
+
+	// 사용자 스크랩 코스 삭제
+	@RequestMapping(value = "/riding/scrap/delete", method = RequestMethod.GET)
+	public String deleteScrapCourse(String ss_rider, int ss_course) throws Exception {
+		System.out.println("사용자 " + ss_rider + "의 스크랩코스 " + ss_course + "를 삭제합니다");
+		memberService.deleteScrapCourse(ss_rider, ss_course);
+		return "/riding/course";
 	}
 
 	// 위험 지역 조회
@@ -110,15 +147,6 @@ public class RidingController {
 		System.out.println(member);
 		System.out.println(content);
 		return "/riding/course/member";
-	}
-
-	// 코스 스크랩
-	@RequestMapping(value = "/riding/course/scrap", method = RequestMethod.POST)
-	public String coursescrap(int result, String courseId, String courseImage) {
-		System.out.println(result);
-		System.out.println(courseId);
-		System.out.println(courseImage);
-		return "/riding/course/scrap";
 	}
 
 	// 인원모집

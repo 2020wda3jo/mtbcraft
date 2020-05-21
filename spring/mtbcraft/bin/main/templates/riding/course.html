@@ -9,8 +9,29 @@
 <hr>
 <div id="ridingRecords">우흥</div>
 <script>
+	var userId;
+	function click_scrap(courseId){
+		 var info = { "ss_rider" : userId, "ss_course" : courseId };
+		 $.ajax({
+			url : "/riding/scrap/check",
+			dataType : "json",
+			type : "post",
+			data : JSON.stringify(info),
+			contentType: "application/json",
+			cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
+			success : function(result) { },
+			error : function(result){
+				if(result["responseText"]=="success"){
+					alert("스크랩하였습니다!");
+				}
+				else{
+					alert("이미 스크랩한 코스입니다!");
+				}
+			}
+		});
+	}
 	$(document).ready(function() {
-		var userId = $("#nav_t_login ul li b span").html();
+		userId = $("#nav_t_login ul li b span").html();
 		
 		$("#getUserRidingRecord").click(function(){
 			$.ajax({
@@ -24,9 +45,15 @@
 						for(var key in data[i]){
 							records+= "<li>"+key+" : "+data[i][key]+"</li>";
 						}
-						records+="</ul><hr>";
+						records += "<form action='/riding/update' method='get'><input type='submit' value=";
+						if(data[i].rr_open==1){
+							records+="'비공개로 전환'>";
+						}else{
+							records+="'공개로 전환'>";
+						}
+						records+="<input type='hidden' name='rr_num' value="+data[i].rr_num+"><input type='hidden' name='rr_open' value="
+						+data[i].rr_open+"></form></ul><hr>";
 					}
-					
 					$("#ridingRecords").html(records);
 					alert("로그인한 사용자 주행 기록 조회 완료");				
 				}
@@ -45,7 +72,9 @@
 						for(var key in data[i]){
 							records+= "<li>"+key+" : "+data[i][key]+"</li>";
 						}
-						records+="</ul><hr>";
+						records += "<form action='/riding/scrap/delete' method='get'><input type='submit' value='삭제'>"
+							+"<input type='hidden' name='ss_course' value="+data[i].c_num+">"
+							+"<input type='hidden' name='ss_rider' value="+userId+"></form></ul><hr>";
 					}
 					
 					$("#ridingRecords").html(records);
@@ -66,7 +95,7 @@
 						for(var key in data[i]){
 							records+= "<li>"+key+" : "+data[i][key]+"</li>";
 						}
-						records+="</ul><hr>";
+						records+="<button id="+data[i].c_num+" onclick='click_scrap(this.id)'>스크랩하기</button></ul><hr>";
 					}
 					
 					$("#ridingRecords").html(records);
