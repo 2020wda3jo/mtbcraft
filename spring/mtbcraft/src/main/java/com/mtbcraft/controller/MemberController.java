@@ -1,11 +1,13 @@
 package com.mtbcraft.controller;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,51 +116,24 @@ public class MemberController {
 	
 	
 	
-	//주행기록 등록(안드로이드)
-			@RequestMapping(value = "/api/upload")
-			@ResponseBody
-			public Map<String, String> insertriding(HttpServletRequest request) throws Exception {
-				
-				RidingRecord record = new RidingRecord();
-				record.setRr_rider(request.getParameter("rr_rider"));
-				record.setRr_distance(Integer.parseInt(request.getParameter("rr_distance")));
-				record.setRr_topspeed(Integer.parseInt(request.getParameter("rr_topspeed")));
-				record.setRr_avgspeed(Integer.parseInt(request.getParameter("rr_avgspeed")));
-				record.setRr_high(Integer.parseInt(request.getParameter("rr_high")));
-				record.setRr_gpx(request.getParameter("rr_gpx"));
-				record.setRr_open(Integer.parseInt(request.getParameter("rr_open")));
-				record.setRr_breaktime(Integer.parseInt(request.getParameter("rr_breaktime")));
-				record.setRr_time(Integer.parseInt(request.getParameter("rr_time")));
-				record.setRr_area(request.getParameter("rr_area"));
-				
-				androidService.insertRecord(record);
-				//안드로이드로부터 받은 데이터
-				System.out.println("rr_rider "+request.getParameter("rr_rider")); //회원아이디
-				System.out.println("rr_distance "+request.getParameter("rr_distance")); // 오늘날짜
-				System.out.println("rr_topspeed "+request.getParameter("rr_topspeed")); // 소요시간
-				System.out.println("rr_avgspeed "+request.getParameter("rr_avgspeed")); //이동거리
-				System.out.println("rr_high "+request.getParameter("rr_high")); //최대속도
-		        System.out.println("rr_gpx "+request.getParameter("rr_gpx")); //평균속도
-		        System.out.println("rr_open "+request.getParameter("rr_open")); //획득고도
-		        System.out.println("rr_breaktime "+request.getParameter("rr_breaktime")); //gpx
-		        System.out.println("rr_time "+request.getParameter("rr_time")); //공개여부
-		        System.out.println("rr_area "+request.getParameter("rr_area")); //획득고도
-		        
-		        //안드로이드에게 전달하는 데이터
-		        Map<String, String> result = new HashMap<String, String>();
-		        result.put("data1", request.getParameter("rr_rider"));
-		        result.put("data2", request.getParameter("rr_distance"));
-		        result.put("data3", request.getParameter("rr_topspeed"));
-		        result.put("data4", request.getParameter("rr_avgspeed"));
-		        result.put("data5", request.getParameter("rr_high"));
-		        result.put("data6", request.getParameter("rr_gpx"));
-		        result.put("data7", request.getParameter("rr_open"));
-		        result.put("data8", request.getParameter("rr_breaktime"));
-		        result.put("data9", request.getParameter("rr_time"));
-		        result.put("data10", request.getParameter("rr_area"));
-		        
-		        return result;
-
+	//주행기록 등록(안드로이드) - >APIController클래스로 이동예정
+			@RequestMapping(value = "/api/get/{rr_rider}")
+			public @ResponseBody List<RidingRecord> getRidingRecord(@PathVariable String rr_rider) throws Exception {
+					//System.out.println(memberService.getRidingRecord(rr_rider));
+			        //return null;
+					
+				return memberService.getRidingRecord(rr_rider);
 			}
+			
+			/*
+			@RequestMapping(value = "/api/get/{rr_rider}")
+			@ResponseBody
+			public Map<String, String> readRecord(HttpServletRequest request, @PathVariable String rr_rider) throws Exception {
+				Map<String, String> result = new HashMap<String, String>();
+				System.out.println(rr_rider);
+		        result.put("data1", request.getParameter("rr_rider"));
+		        
+				return result;
+			}*/
 
 }

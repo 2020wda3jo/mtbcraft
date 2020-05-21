@@ -20,5 +20,10 @@ public class AndroidService {
 	public String insertRecord(RidingRecord record) throws Exception{
 		return androidMapper.insertRecord(record);
 	}
+
+	public String readRecord(String rr_rider) throws Exception{
+		return androidMapper.readRecord(rr_rider);
+		
+	}
 	
 }

@@ -1,4 +1,4 @@
-package com.mtbcraft.model;
+package com.mtbcraft.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
