@@ -60,4 +60,8 @@ public class MemberService {
 	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception{
 		return memberMapper.getUserDangerousArea(rr_rider);
 	}
+	
+	public void postDangerousArea(DangerousArea da) throws Exception {
+		memberMapper.postDangerousArea(da);
+	}
 }

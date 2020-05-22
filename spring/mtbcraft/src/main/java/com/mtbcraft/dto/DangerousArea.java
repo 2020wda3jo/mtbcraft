@@ -14,7 +14,9 @@ public class DangerousArea {
 	@Column
 	private String da_rider;
 	@Column
-	private String da_location;
+	private String da_latitude;
+	@Column
+	private String da_longitude;
 	@Column
 	private String da_addr;
 	@Column
@@ -36,11 +38,17 @@ public class DangerousArea {
 	public void setDa_rider(String da_rider) {
 		this.da_rider = da_rider;
 	}
-	public String getDa_location() {
-		return da_location;
+	public String getDa_latitude() {
+		return da_latitude;
 	}
-	public void setDa_location(String da_location) {
-		this.da_location = da_location;
+	public void setDa_latitude(String da_latitude) {
+		this.da_latitude = da_latitude;
+	}
+	public String getDa_longitude() {
+		return da_longitude;
+	}
+	public void setDa_longitude(String da_longitude) {
+		this.da_longitude = da_longitude;
 	}
 	public String getDa_addr() {
 		return da_addr;
@@ -65,6 +73,10 @@ public class DangerousArea {
 	}
 	public void setDa_content(String da_content) {
 		this.da_content = da_content;
+	}
+	@Override
+	public String toString() {
+		return da_rider+"/"+da_latitude+"/"+da_longitude+"/"+da_addr+"/"+da_content+"/"+da_image;
 	}
 	
 }

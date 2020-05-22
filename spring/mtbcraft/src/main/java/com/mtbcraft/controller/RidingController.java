@@ -89,6 +89,13 @@ public class RidingController {
 	public @ResponseBody List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception {
 		return memberService.getUserDangerousArea(rr_rider);
 	}
+	// 위험지역 등록 신청
+	@RequestMapping(value = "/riding/DA/post", method = RequestMethod.POST)
+	public @ResponseBody String postDangerousArea(@RequestBody DangerousArea da) throws Exception {
+		System.out.println(da.toString());
+		memberService.postDangerousArea(da);
+		return "success";
+	}
 
 	// 내 코스 공유
 	@RequestMapping(value = "/riding/course/my/share", method = RequestMethod.GET)

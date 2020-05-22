@@ -7,33 +7,74 @@
 <button id="getScrapCourse">스크랩한 코스 조회</button>
 <button id="getDangerousArea">등록된 위험 지역 조회</button>
 <hr>
+<div id="map" style="width:100%;height:350px;"></div>
+<div id="dangerousAreaTest">
+	<form action="">
+		<label>위도</label><input type="text" id="DALatitude" name="latitude" size="18">
+		<label>경도</label><input type="text" id="DALongitude" name="longitude" size="18">
+		<label>등록주소</label><input type="text" id="DAaddress" name="address" size="8">
+		<label>한줄평</label><input type="text" id="DAcontent" name="content" size="40">
+		<label>이미지첨부</label><input type="file" id="DAImage" name="file">
+	</form>
+	<button id="postDA">등록신청하기</button>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
+<script>
+	
+</script>
 <div id="ridingRecords">우흥</div>
 <script>
-	var userId;
-	function click_scrap(courseId){
-		 var info = { "ss_rider" : userId, "ss_course" : courseId };
-		 $.ajax({
-			url : "/riding/scrap/check",
-			dataType : "json",
-			type : "post",
-			data : JSON.stringify(info),
-			contentType: "application/json",
-			cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
-			success : function(result) { },
-			error : function(result){
-				if(result["responseText"]=="success"){
-					alert("스크랩하였습니다!");
-				}
-				else{
-					alert("이미 스크랩한 코스입니다!");
-				}
-			}
-		});
-	}
 	$(document).ready(function() {
 		userId = $("#nav_t_login ul li b span").html();
+		$('#dangerousAreaTest').hide();
+		
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(35.89617906303501, 128.62171907592318), // 지도의 중심좌표
+	        level: 3 // 지도의 확대 레벨
+	    };
+	
+	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	
+	// 주소-좌표 변환 객체를 생성합니다
+	var geocoder = new kakao.maps.services.Geocoder();
+	
+	// 지도를 클릭한 위치에 표출할 마커입니다
+	var marker = new kakao.maps.Marker({ 
+	    // 지도 중심좌표에 마커를 생성합니다 
+	    position: map.getCenter() 
+	}); 
+	// 지도에 마커를 표시합니다
+	marker.setMap(map);
+	
+	// 지도에 클릭 이벤트를 등록합니다
+	// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+	kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
+		searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+	        if (status === kakao.maps.services.Status.OK) {
+	        	// 지번 주소정보
+	        	var detailAddr = result[0].address.address_name;
+	        	var addr = detailAddr.split(" ");
+	        	// 시 + 군구
+	        	$("#DAaddress").val(addr[0]+" "+addr[1]);
+			    
+	        	// 클릭한 위도, 경도 정보를 가져옵니다 
+			    var latlng = mouseEvent.latLng; 
+			    // 마커 위치를 클릭한 위치로 옮깁니다
+			    marker.setPosition(latlng);
+			    // 위도,경도정보
+			    $("#DALatitude").val(latlng.getLat());
+			    $("#DALongitude").val(latlng.getLng());
+	    	}
+		});
+	});
+	function searchDetailAddrFromCoords(coords, callback) {
+	    // 좌표로 법정동 상세 주소 정보를 요청합니다
+	    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+	}
 		
 		$("#getUserRidingRecord").click(function(){
+			$('#dangerousAreaTest').hide();
 			$.ajax({
 				url : "/riding/check/?rr_rider=" + userId, // 제이슨오브젝트값을 가져옴
 				dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
@@ -61,6 +102,7 @@
 		});
 		
 		$("#getScrapCourse").click(function(){
+			$('#dangerousAreaTest').hide();
 			$.ajax({
 				url : "/riding/scrap/check/?rr_rider="+userId, 
 				dataType : "json", 
@@ -84,6 +126,7 @@
 		});
 		
 		$("#getCourse").click(function(){
+			$('#dangerousAreaTest').hide();
 			$.ajax({
 				url : "/riding/course/check", 
 				dataType : "json", 
@@ -105,6 +148,7 @@
 		});
 		
 		$("#getDangerousArea").click(function(){
+			$('#dangerousAreaTest').show();
 			var records = "<h3>현재 서버에 등록된 위험지역</h3><hr>";
 			$.ajax({
 				url : "/riding/DA/checkA", 
@@ -138,6 +182,49 @@
 			});
 			alert("등록된 위험 지역 조회 완료");
 		});
+		$('#postDA').click(function(){
+			if(userId==null){
+				alert('로그인한 후에 신청하실 수 있습니다.');
+				return;
+			}
+			alert(userId+"님의 위험지역 등록 시작합니다...");
+			var info = { 
+					"da_rider" : userId,
+					"da_latitude" : $('#DALatitude').val(),
+					"da_longitude" : $('#DALongitude').val(),
+					"da_addr" : $('#DAaddress').val(),
+					"da_content" : $('#DAcontent').val(),
+					"da_image" : $('#DAImage').val()
+			};
+			$.ajax({
+				url : "/riding/DA/post", 
+				dataType : "json",
+				type : "post",
+				data : JSON.stringify(info),
+				contentType: "application/json",
+				cache : false
+			});
+		});
+		function click_scrap(courseId){
+			 var info = { "ss_rider" : userId, "ss_course" : courseId };
+			 $.ajax({
+				url : "/riding/scrap/check",
+				dataType : "json",
+				type : "post",
+				data : JSON.stringify(info),
+				contentType: "application/json",
+				cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
+				success : function(result) { },
+				error : function(result){
+					if(result["responseText"]=="success"){
+						alert("스크랩하였습니다!");
+					}
+					else{
+						alert("이미 스크랩한 코스입니다!");
+					}
+				}
+			});
+		}
 	});
 </script>
 

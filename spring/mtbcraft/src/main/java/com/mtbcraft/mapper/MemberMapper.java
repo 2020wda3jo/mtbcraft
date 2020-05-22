@@ -44,4 +44,6 @@ public interface MemberMapper {
 	//사용자가 등록한 위험 지역 조회
 	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception;
 	
+	// 위험지역 등록 신청
+	public void postDangerousArea(DangerousArea da) throws Exception;
 }
