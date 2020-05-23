@@ -5,11 +5,16 @@
 		insert into rider(r_id,
 		r_pw, r_name, r_nickname, r_birth, r_phone, r_gender, r_addr, r_addr2,
 		r_image, r_type)
-		values (#{r_id,jdbcType=VARCHAR}, #{r_pw,jdbcType=VARCHAR},
-		#{r_name,jdbcType=VARCHAR}, #{r_nickname,jdbcType=VARCHAR},
-		#{r_birth,jdbcType=DATE}, #{r_phone,jdbcType=VARCHAR},
-		#{r_gender,jdbcType=VARCHAR}, #{r_addr,jdbcType=VARCHAR},
-		#{r_addr2,jdbcType=VARCHAR}, #{r_image}, #{r_type,jdbcType=INTEGER})
+		values (#{r_id,jdbcType=VARCHAR},
+		#{r_pw,jdbcType=VARCHAR},
+		#{r_name,jdbcType=VARCHAR},
+		#{r_nickname,jdbcType=VARCHAR},
+		#{r_birth,jdbcType=DATE},
+		#{r_phone,jdbcType=VARCHAR},
+		#{r_gender,jdbcType=VARCHAR},
+		#{r_addr,jdbcType=VARCHAR},
+		#{r_addr2,jdbcType=VARCHAR}, #{r_image},
+		#{r_type,jdbcType=INTEGER})
 	</select>
 
 	<select id="getRidingRecord" parameterType="String"
@@ -63,8 +68,19 @@
 		#{da_addr}, 0, #{da_content}, #{da_longitude}, #{da_image})
 	</insert>
 
+	<delete id="deleteDangerousArea" parameterType="Integer">
+		DELETE
+		DANGEROUS_AREA WHERE DA_NUM=#{da_num}
+	</delete>
+
+	<insert id="postNoDanger"
+		parameterType="com.mtbcraft.dto.No_Danger">
+		INSERT INTO NO_DANGER(ND_NUM, ND_RIDER, ND_CONTENT,
+		ND_IMAGE) values(#{nd_num}, #{nd_rider}, #{nd_content}, #{nd_image})
+	</insert>
 	<insert id="writeDao">
-		insert into MARKET_VISION (num, day, content) values (vision_seq.nextval,
+		insert into MARKET_VISION (num, day, content) values
+		(vision_seq.nextval,
 		#{param1}, #{param2})
 	</insert>
 

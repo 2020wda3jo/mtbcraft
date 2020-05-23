@@ -15,8 +15,17 @@
 		<label>등록주소</label><input type="text" id="DAaddress" name="address" size="8">
 		<label>한줄평</label><input type="text" id="DAcontent" name="content" size="40">
 		<label>이미지첨부</label><input type="file" id="DAImage" name="file">
+		<input type="hidden" id="DANum" name="num">
+		<input type="hidden" id="DARider" name="num">
 	</form>
 	<button id="postDA">등록신청하기</button>
+	<button id="showBox_NODA">해지 신청하기</button>
+</div>
+<div id="box_NODA">
+	<h4>한줄평과 이미지를 첨부해야 해지 신청이 가능합니다.</h4>
+	<label>한줄평</label><input type="text" id="NODAcontent" name="content" size="40">
+	<label>이미지첨부</label><input type="file" id="NODAImage" name="file">
+	<button id="postNODA">해지 신청하기</button>
 </div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
 <script>
@@ -27,6 +36,8 @@
 	$(document).ready(function() {
 		userId = $("#nav_t_login ul li b span").html();
 		$('#dangerousAreaTest').hide();
+		$('#box_NODA').hide();
+		$('#showBox_NODA').hide();
 		
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = { 
@@ -49,7 +60,14 @@
 	
 	// 지도에 클릭 이벤트를 등록합니다
 	// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-	kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
+	kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+		$('#showBox_NODA').hide();
+		$('#postDA').show();
+		$('#DAcontent').val("");
+		$('#DAImage').val("");
+		$('#NODAcontent').val("");
+		$('#NODAImage').val("");
+		$('#box_NODA').hide();
 		searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
 	        if (status === kakao.maps.services.Status.OK) {
 	        	// 지번 주소정보
@@ -149,35 +167,85 @@
 		
 		$("#getDangerousArea").click(function(){
 			$('#dangerousAreaTest').show();
-			var records = "<h3>현재 서버에 등록된 위험지역</h3><hr>";
+			$('#showBox_NODA').hide();
+			// 가져온 위험지역의 da_num 과 위치정보를 담을 리스트 생성
+			var positions = [];
+			var records="";
 			$.ajax({
 				url : "/riding/DA/checkA", 
 				dataType : "json", 
 				cache : false,
 				success : function(data) {
 					for(var i in data){
-						records+="<ul>";
-						for(var key in data[i]){
-							records+= "<li>"+key+" : "+data[i][key]+"</li>";
-						}
-						records+="</ul><hr>";
+						var da = {
+							"da_num" : data[i].da_num,
+							"da_rider" : data[i].da_rider,
+							"da_content" : data[i].da_content,
+							"da_addr" : data[i].da_addr,
+							"da_latlng" : new kakao.maps.LatLng(data[i].da_latitude, data[i].da_longitude)
+						};
+						positions.push(da);
 					}
 					$.ajax({
 						url : "/riding/DA/check/?rr_rider="+userId, 
 						dataType : "json", 
 						cache : false, 
 						success : function(data) {
-							records += "<h3>현재 사용자가 등록된 위험지역</h3><hr>";
+							records += "<h3>현재 사용자가 등록한 위험지역</h3><hr>";
 							for(var i in data){
-								records+="<ul>";
-								for(var key in data[i]){
-									records+= "<li>"+key+" : "+data[i][key]+"</li>";
-								}
-								records+="</ul><hr>";
+								records+="<h5>등록지역 : "+data[i].da_addr+"</h5>";
+								records+="<h5>한줄평 : "+data[i].da_content+"</h5>";
+								records+="<button onclick='deleteMyDA("+data[i].da_num+")'>삭제하기</button><hr>";
 							}
 							$("#ridingRecords").html(records);
 						}
 					});
+					for (var i = 0; i < positions.length; i ++) {
+					    // 마커를 생성합니다
+					    var marker = new kakao.maps.Marker({
+					        map: map, // 마커를 표시할 지도
+					        position: positions[i].da_latlng // 마커의 위치
+					    });
+
+					    // 마커에 표시할 인포윈도우를 생성합니다 
+					    var infowindow = new kakao.maps.InfoWindow({
+					        content: positions[i].da_content // 인포윈도우에 표시할 내용
+					    });
+
+					    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+					    // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+					    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+					    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+					    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+					    kakao.maps.event.addListener(marker, 'click', makeClickListener(positions[i]));
+					    console.log('마크'+i+"번 정보 : "+positions[i].da_num+"/"+positions[i].da_content);
+					}
+
+					// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+					function makeOverListener(map, marker, infowindow) {
+					    return function() {
+					        infowindow.open(map, marker);
+					    };
+					}
+
+					// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+					function makeOutListener(infowindow) {
+					    return function() {
+					        infowindow.close();
+					    };
+					}
+					function makeClickListener(position){
+						return function(){
+							$('#DANum').val(position.da_num);
+							$('#DARider').val(position.da_rider);
+							$('#DALatitude').val(position.da_latlng.getLat());
+							$('#DALongitude').val(position.da_latlng.getLng());
+							$('#DAaddress').val(position.da_addr);
+							$('#DAcontent').val(position.da_content);
+							$('#showBox_NODA').show();
+							$('#postDA').hide();
+						};
+					}
 				}
 			});
 			alert("등록된 위험 지역 조회 완료");
@@ -225,7 +293,62 @@
 				}
 			});
 		}
+		$('#showBox_NODA').click(function(){
+			if(userId == $('#DARider').val()){
+				alert("자신이 등록한 위험지역은 해지신청 없이 삭제 가능합니다.");
+				return;
+			}
+			$('#box_NODA').show();
+		});
+		$('#postNODA').click(function(){
+			if($('#NODAImage').val() == null || $('#NODAImage').val() == "" || $('#NODAcontent').val() == null || $('#NODAcontent').val() == "" ){
+				alert('입력하지않은 항목이 있습니다.');
+				return;
+			}
+			var info = { 
+					"nd_num" : $('#DANum').val(),
+					"nd_rider" : userId,
+					"nd_content" : $('#NODAcontent').val(),
+					"nd_image" : $('#NODAImage').val()
+			};
+			console.log(info);
+			$.ajax({
+				url : "/riding/DA/delete",
+				dataType : "json",
+				type : "POST",
+				data : JSON.stringify(info),
+				contentType: "application/json",
+				cache : false, 
+				complete : function(result){
+					if(result.responseText=="success"){
+						alert('해지 신청하였습니다');
+					} else{
+						alert('이미 해지 신청한 위험 지역입니다.');
+					}
+				}
+			});	
+		});
 	});
+	
+	function deleteMyDA(da_num){
+		var info = { "da_num" : da_num };
+		console.log(info);
+		$.ajax({
+			url : "/riding/DA/delete",
+			dataType : "json",
+			type : "delete",
+			data : JSON.stringify(info),
+			contentType: "application/json",
+			cache : false, 
+			success : function(result) { 
+			},
+			complete : function(){
+				alert('삭제하였습니다.');
+				location.reload();
+			}
+		});		
+	}
+	
 </script>
 
 

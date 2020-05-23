@@ -76,7 +76,7 @@ public class DangerousArea {
 	}
 	@Override
 	public String toString() {
-		return da_rider+"/"+da_latitude+"/"+da_longitude+"/"+da_addr+"/"+da_content+"/"+da_image;
+		return da_num+"/"+da_rider+"/"+da_latitude+"/"+da_longitude+"/"+da_addr+"/"+da_content+"/"+da_image;
 	}
 	
 }
