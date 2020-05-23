@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.MemberService;
@@ -88,6 +89,33 @@ public class RidingController {
 	@RequestMapping(value = "/riding/DA/check", method = RequestMethod.GET)
 	public @ResponseBody List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception {
 		return memberService.getUserDangerousArea(rr_rider);
+	}
+	// 위험지역 등록 신청
+	@RequestMapping(value = "/riding/DA/post", method = RequestMethod.POST)
+	public @ResponseBody String postDangerousArea(@RequestBody DangerousArea da) throws Exception {
+		System.out.println(da.toString());
+		memberService.postDangerousArea(da);
+		return "success";
+	}
+	// 사용자 등록 위험 지역 삭제
+	@RequestMapping(value = "/riding/DA/delete", method = RequestMethod.DELETE)
+	public @ResponseBody String deleteDangerousArea(@RequestBody DangerousArea da) throws Exception {
+		System.out.println(da.toString());
+		memberService.deleteDangerousArea(da.getDa_num());
+		return "success";
+	}
+	// 다른 사용자 등록 위험 지역 해지 신청
+	@RequestMapping(value = "/riding/DA/delete", method = RequestMethod.POST)
+	public @ResponseBody String postNO_DangerousArea(@RequestBody No_Danger nd) throws Exception {
+		System.out.println(nd.getNd_num()+"/"+nd.getNd_rider()+"/"+nd.getNd_content()+"/"+nd.getNd_image());
+		try {
+			memberService.postNoDanger(nd);
+			return "success";
+		} catch (Exception e) {
+			return "fail";
+		}
+		
+		
 	}
 
 	// 내 코스 공유

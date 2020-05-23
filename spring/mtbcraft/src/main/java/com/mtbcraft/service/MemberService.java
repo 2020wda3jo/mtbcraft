@@ -12,6 +12,7 @@ import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.Member;
+import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.mapper.MemberMapper;
 
@@ -59,5 +60,16 @@ public class MemberService {
 	
 	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception{
 		return memberMapper.getUserDangerousArea(rr_rider);
+	}
+	
+	public void postDangerousArea(DangerousArea da) throws Exception {
+		memberMapper.postDangerousArea(da);
+	}
+	public void deleteDangerousArea(int da_num) throws Exception{
+		memberMapper.deleteDangerousArea(da_num);
+	}
+	
+	public void postNoDanger(No_Danger nd) throws Exception{
+		memberMapper.postNoDanger(nd);
 	}
 }

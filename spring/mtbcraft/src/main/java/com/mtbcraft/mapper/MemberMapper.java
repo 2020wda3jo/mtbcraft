@@ -10,6 +10,7 @@ import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.Member;
+import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.RidingRecord;
 
 @Repository("com.mtbcraft.mapper")
@@ -44,4 +45,12 @@ public interface MemberMapper {
 	//사용자가 등록한 위험 지역 조회
 	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception;
 	
+	// 위험지역 등록 신청
+	public void postDangerousArea(DangerousArea da) throws Exception;
+	
+	// 사용자 등록 위험 지역 삭제
+	public void deleteDangerousArea(int da_num) throws Exception;
+	
+	// 다른 사용자 등록 위험 지역 해지 신청
+	public void postNoDanger(No_Danger nd) throws Exception;
 }
