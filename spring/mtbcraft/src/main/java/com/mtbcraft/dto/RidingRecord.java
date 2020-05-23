@@ -1,21 +1,26 @@
 package com.mtbcraft.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class RidingRecord {
 
 	private int rr_num;
 
 	private String rr_rider;
-	private String date;
-	public String getDate() {
-		return date;
+	private Timestamp rr_date;
+	
+	public String getRr_date() {
+		String str = String.valueOf(rr_date); 
+		int index = str.indexOf(".");
+		String result = str.substring(0,index);
+		return result;
 	}
-	public void setDate(String date) {
-		this.date = date;
+	public void setRr_date(Timestamp rr_date) {
+		this.rr_date = rr_date;
 	}
+	
 	private int rr_distance;
 	private int rr_topspeed;
 	private int rr_avgspeed;

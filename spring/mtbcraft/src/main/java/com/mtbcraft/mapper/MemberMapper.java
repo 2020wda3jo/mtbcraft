@@ -24,6 +24,8 @@ public interface MemberMapper {
 	// 사용자 라이딩 기록 검색
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception;
 	
+	// 사용자 라이딩 기록 검색
+		public List<RidingRecord> getRidingRecordDetail(@Param("rr_rider")String rr_rider, @Param("rr_num")String rr_num) throws Exception;
 	// 사용자 라이딩 기록 공개 전환
 	public void updateRidingRecord(@Param("rr_num")int rr_num, @Param("rr_open") int rr_open) throws Exception;
 	

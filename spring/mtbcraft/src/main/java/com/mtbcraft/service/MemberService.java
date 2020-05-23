@@ -36,6 +36,10 @@ public class MemberService {
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
 		return memberMapper.getRidingRecord(rr_rider);
 	}
+	
+	public List<RidingRecord> getRidingRecordDetail(String rr_rider, String rr_num) throws Exception {
+		return memberMapper.getRidingRecordDetail(rr_rider, rr_num);
+	}
 	public void updateRidingRecord(int rr_num, int rr_open) throws Exception{
 		memberMapper.updateRidingRecord(rr_num, rr_open);
 	}
