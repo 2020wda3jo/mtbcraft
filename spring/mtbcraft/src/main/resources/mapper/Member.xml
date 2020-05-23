@@ -7,7 +7,7 @@
 	</select>
 	
 	<select id="getRidingRecord" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
-		select * from riding_record where rr_rider = #{rr_rider}
+		select * from riding_record where rr_rider = #{rr_rider} order by rr_num desc
 	</select>
 	
 	<update id="updateRidingRecord">
