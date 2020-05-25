@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ComunityController {
 	
-	/* 
+	
 	// 커뮤니티
 	@RequestMapping(value = "/community", method = RequestMethod.GET)
 	public String comunity() {
-		
 		return "/community";
 	}
 
@@ -62,7 +61,7 @@ public class ComunityController {
 	public String clubcalender(int result, String CB_num, String CB_name, String CB_image, String CC[]) {
 		return "/community/club/myclub/calender";
 	}
-	*/
+	
 	
 	//  SNS
 	@RequestMapping(value = "/community/sns", method = RequestMethod.GET)
