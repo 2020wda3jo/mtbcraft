@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="header"></head>
+
+<script>
+
+   window.open("update", "진행내역", "width=600, height=500");
+
+  //URL : 팝업 위치, Title : 팝업제목(없을시 ""으로 생략 가능), "width~ : 팝업창의 옵션설정.. 여러가지 설정값이 있다. 설정값은 아래쪽에..
+
+</script>
+<!-- VISUAL IMAGE -->
+<div id="back_img">
+</div>
+
+<!--  
+<div class="slideshow-container">
+
+        <div class="mySlides fade">
+          <div class="numbertext">1 / 3</div>
+          <img src="/imgs/visual.png" alt="visual" title="visual" class="imgback">
+          
+        </div>
+
+        <div class="mySlides fade">
+          <div class="numbertext">2 / 3</div>
+          <img src="/imgs/visual2.png" class="imgback">
+          
+        </div>
+
+        <div class="mySlides fade">
+          <div class="numbertext">3 / 3</div>
+          <img src="/imgs/visual.png" class="imgback">
+         
+        </div>
+
+        </div>
+
+
+<div style="text-align:center">
+          <span class="dot"></span> 
+          <span class="dot"></span> 
+          <span class="dot"></span> 
+        </div>-->
+<!-- VISUAL IMAGE END -->
+
+<!-- content 1 -->
+<section id="content1">
+	안녕하세요!<br />산악 라이딩의 재미를 불어넣는 <br /><br />
+	<span id="f50">MTB CRAFT</span>입니다.
+</section>
+<!--  content 2 -->
+
+<section id="content2" class="left_txt">
+		산악라이딩 코스를 <br />잘 모르시나요?<br />
+		<br />
+		<b>MTB CRAFT에서 즐겨보세요!</b>
+	<div class="left_bt"><a href="/riding/course"><img src="/imgs/riding_bt.png" alt="riding" title="riding" /></a></div>
+	<div id="right_img"><img src="/imgs/map.png" alt="riding" title="riding" /></div>
+</section>
+<!--  content 3 -->
+<section id="content3" class="right_txt">
+		혼자 라이딩하니까<br />심심한가요?<br />
+			<br />
+			<b>다른 사람과 같이 라이딩을 즐겨보세요!</b>
+	<div class="right_bt"><a href="/comunity/club"><img src="/imgs/club_bt.png" alt="riding" title="riding" /></a></div>
+	<div id="left_img"><img src="/imgs/club.png" alt="club" title="club" /></div>
+</section>
+<!--  content 4 -->
+<section id="content4" class="left_txt">
+		라이딩하는데<br />문제가 생겼나요?<br />
+			<br />
+			<b>고품질과 섬세한 정비로 쾌적하게 라이딩하세요!</b>
+	<div class="left_bt"><a href="/riding/course"><img src="/imgs/riding_bt.png" alt="riding" title="riding" /></a></div>
+	<div id="repair_img"><img src="/imgs/repair.png" alt="repair" title="repair" /></div>
+</section>
+
+
+
+
+<div id="app_banner">
+
+	<p id="f33">산악라이딩 대표 애플리케이션</p>
+	<b>MTB CRAFT</b> <br /> <br /> <br />
+	<p id="f25">애플리케이션으로 만나보세요</p>
+	<a href="#"><img src="/imgs/appdown.png" title="appdown"
+		alt="appdown" /></a>
+</div>
+<footer th:replace="footer"></footer>
