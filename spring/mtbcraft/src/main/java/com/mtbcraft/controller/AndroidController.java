@@ -1,14 +1,23 @@
 package com.mtbcraft.controller;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.service.AndroidService;
 import com.mtbcraft.service.MemberService;
@@ -88,5 +97,28 @@ public class AndroidController {
 			@PathVariable(value = "rr_num") String rr_num) throws Exception {
 		System.out.println(memberService.getRidingRecord(rr_rider));
 		return memberService.getRidingRecordDetail(rr_rider, rr_num);
+	}
+	
+	@RequestMapping(value="/androidUpload", method=RequestMethod.POST)
+	public String upload(HttpServletRequest request, MultipartFile file1){
+		try{	
+			String path = "";
+			String fileName="";
+				
+			if(!file1.isEmpty()){ //첨부파일이 존재?
+				fileName=file1.getOriginalFilename();
+				try{
+					//디렉토리 생성
+					new File(path).mkdir();
+					//지정된 업로드 경로로 저장됨
+					file1.transferTo(new File("/"+ fileName));
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "redirect:/";
 	}
 }
