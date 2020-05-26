@@ -16,6 +16,6 @@ public class WebController {
 	}
 	@RequestMapping("/update")
 	public String updateintro() {
-		return "/update";
+		return "update";
 	}
 }
