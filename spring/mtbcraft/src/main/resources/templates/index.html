@@ -11,41 +11,9 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 </script>
 <!-- VISUAL IMAGE -->
-<div id="back_img">
-</div>
-
-<!--  
-<div class="slideshow-container">
-
-        <div class="mySlides fade">
-          <div class="numbertext">1 / 3</div>
-          <img src="/imgs/visual.png" alt="visual" title="visual" class="imgback">
-          
-        </div>
-
-        <div class="mySlides fade">
-          <div class="numbertext">2 / 3</div>
-          <img src="/imgs/visual2.png" class="imgback">
-          
-        </div>
-
-        <div class="mySlides fade">
-          <div class="numbertext">3 / 3</div>
-          <img src="/imgs/visual.png" class="imgback">
-         
-        </div>
-
-        </div>
-
-
-<div style="text-align:center">
-          <span class="dot"></span> 
-          <span class="dot"></span> 
-          <span class="dot"></span> 
-        </div>-->
-<!-- VISUAL IMAGE END -->
-
+<div id="back_img"></div>
 <!-- content 1 -->
+<!--  로그인 이전의 화면 <div th:unless="${#authorization.expr('isAuthenticated()')}">-->
 <section id="content1">
 	안녕하세요!<br />산악 라이딩의 재미를 불어넣는 <br /><br />
 	<span id="f50">MTB CRAFT</span>입니다.
@@ -75,10 +43,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<div class="left_bt"><a href="/riding/course"><img src="/imgs/riding_bt.png" alt="riding" title="riding" /></a></div>
 	<div id="repair_img"><img src="/imgs/repair.png" alt="repair" title="repair" /></div>
 </section>
-
-
-
-
+<!-- content 5 -->
 <div id="app_banner">
 
 	<p id="f33">산악라이딩 대표 애플리케이션</p>
@@ -87,4 +52,47 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<a href="#"><img src="/imgs/appdown.png" title="appdown"
 		alt="appdown" /></a>
 </div>
+<!-- </div> --->
+
+<!--  로그인 이후의 화면 
+<div th:if="${#authorization.expr('isAuthenticated()')}">-->
+	<!-- 최근 라이딩 기록 -->
+	<!--  <section>
+		<div id="le_name">최근 라이딩 기록</div>
+		<div id="ri_more"><a href="">더보기</a></div>
+		<div id="gal_box">
+			<div id="gal_img">
+			</div>
+			<div id="riding_name">
+			</div>
+			<div id="riding_date">
+			</div>
+		</div><!-- gal_box end -->
+	<!--  </section>-->
+	
+	<!-- 내 클럽 최신글
+	<section>
+		<div id="m_club">
+		<div id="le_name">내 클럽 최신글</div>
+			<div id="my_new_img"><img src="" alt="" title=""/></div>
+			<div id="my_club_t">오늘 힘들었어요</div>
+			<div id="my_club_con">안녕하세요 자전거 구동계 청소를 해보려고 하는데요 유튜브에서<br />이것저것 봤는데 좀 더 손쉬운 방법이 없을까 해서요</div>
+			<div id="my_club_img"><img src="" alt="" title=""/></div>
+			<div id="my_club_name">MTBB Club</div>
+		</div>
+	</section>
+	
+	<!-- 정비소 추천 
+	<section>
+		<div id="m_club">
+			<div id="le_name">정비소 추천</div>
+			<div id="select_area">지역선택
+				<select>
+					<option value=""></option>
+				</select>
+			</div>
+			<div id="repair_map"></div>
+		</div>
+	</section>
+</div>-->
 <footer th:replace="footer"></footer>

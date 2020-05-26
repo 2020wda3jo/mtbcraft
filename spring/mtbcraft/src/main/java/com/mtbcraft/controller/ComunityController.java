@@ -22,43 +22,43 @@ public class ComunityController {
 
 	// 커뮤니티 클럽 만들기
 	@RequestMapping(value = "/community/club/create", method = RequestMethod.GET)
-	public String clubcreate(int result) {
+	public String clubcreate() {
 		return "/community/club/create";
 	}
 
 	// 커뮤니티 클럽 가입
 	@RequestMapping(value = "/community/club/join", method = RequestMethod.GET)
-	public String clubjoin(int result, String message) {
+	public String clubjoin() {
 		return "/community/club/join";
 	}
 
 	// 커뮤니티 클럽 가입
 	@RequestMapping(value = "/community/club/join", method = RequestMethod.POST)
-	public String clubjoinpost(int result, String CB_name, String userid) {
+	public String clubjoinpost() {
 		return "/community/club/join";
 	}
 
 	// 클럽 게시판
 	@RequestMapping(value = "/community/club/clubboard", method = RequestMethod.GET)
-	public String clubboard(int result, String CB_name, String b[]) {
+	public String clubboard() {
 		return "/community/club/myclub/clubboard";
 	}
 
 	// 클럽 게시판 검색
 	@RequestMapping(value = "/community/club/myclub/clubboard/search", method = RequestMethod.GET)
-	public String clubcreatepost(int result, String CB_num, String keyword, String type, String b[]) {
+	public String clubcreateget() {
 		return "/community/club/myclub/clubboard/search";
 	}
 
 	// 클럽 게시판 글쓰기
 	@RequestMapping(value = "/community/club/myclub/clubboard/posting", method = RequestMethod.POST)
-	public String clubcreatepost(int result, String B_title, String B_content, String B_file) {
+	public String clubcreatepost() {
 		return "/community/club/myclub/clubboard/posting";
 	}
 
 	// 클럽 캘린더
 	@RequestMapping(value = "/community/club/myclub/calender", method = RequestMethod.GET)
-	public String clubcalender(int result, String CB_num, String CB_name, String CB_image, String CC[]) {
+	public String clubcalender() {
 		return "/community/club/myclub/calender";
 	}
 	
@@ -71,7 +71,7 @@ public class ComunityController {
 		
 	// SNS
 	@RequestMapping(value = "/community/sns", method = RequestMethod.POST)
-	public String snspost(int result, String B_area, String B_title, String B_content, String B_file) {
+	public String snspost() {
 		return "/community/sns";
 	}
 
@@ -83,7 +83,7 @@ public class ComunityController {
 
 	// 중고거래 글쓰기 POST
 	@RequestMapping(value = "/community/trade/posting", method = RequestMethod.POST)
-	public String tradeposting(int result, String B_area, String B_title, String B_file, String price, String date) {
+	public String tradeposting() {
 		return "/community/trade/posting";
 	}
 }

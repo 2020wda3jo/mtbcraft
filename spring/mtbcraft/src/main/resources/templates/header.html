@@ -14,9 +14,8 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/common.js"></script>
-
 </head>
-<body onload="openWin()">
+<body>
 	<header>
 		<div id="navi_line"></div>
 		<div id="header_in">
@@ -37,23 +36,18 @@
     <div th:unless="${#authorization.expr('isAuthenticated()')}">
         <div id="nav_t"><a th:href="@{/login}">LOGIN</a></div>
     </div>
-    
-    
-			
-			<div id="logo">
-				<a href="/"><img src="/imgs/logo.png" alt="logo" title="logo" /></a>
-			</div>
-			
-			<nav class="nav-menu d-none d-lg-block menu_n">
-            <ul>
-              <li class=""><a href="/intro">소개</a></li>
-              <li class="drop-down"><a href="">라이딩</a>
-                <ul>
-                  <li><a href="/riding/course">코스</a></li>
-                  <li class=""><a href="/riding/comeon">인원모집</a></li>
+	<div id="logo">
+		<a href="/"><img src="/imgs/logo.png" alt="logo" title="logo" /></a>
+	</div>
+	<nav class="nav-menu d-none d-lg-block menu_n">
+		<ul>
+			<li class=""><a href="/intro">소개</a></li>
+            <li class="drop-down"><a href="">라이딩</a>
+            	<ul>
+            		<li><a href="/riding/course">코스</a></li>
+            		<li class=""><a href="/riding/comeon">인원모집</a></li>
             	</ul>
             </li>
-            
             <li class="drop-down"><a href="">커뮤니티</a>
                 <ul>
                   <li><a href="/community/club">클럽</a></li>
@@ -83,7 +77,7 @@
                   <li><a href="#">정비소회원</a></li>
             	</ul>
             </li>
-            </ul>
+           </ul>
           </nav><!-- .nav-menu -->
 		</div>
 		<script src="/js/main.js"></script>
