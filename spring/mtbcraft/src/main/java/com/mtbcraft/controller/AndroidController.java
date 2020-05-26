@@ -102,7 +102,7 @@ public class AndroidController {
 	@RequestMapping(value="/android/fileUpload", method=RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1){
 		try{
-			String path = "sftp://ec2-user@13.209.229.237/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/uploads";
+			String path = "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/uploads";
 			String fileName="";
 				
 			if(!file1.isEmpty()){ //첨부파일이 존재?
