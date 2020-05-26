@@ -101,7 +101,7 @@ public class AndroidController {
 	
 	@RequestMapping(value="/android/fileUpload", method=RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1){
-		try{	
+		try{
 			String path = "";
 			String fileName="";
 				

@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/**").permitAll() // 모든 권한을 줌.=로그인 필요 없음.
 		.antMatchers("/files/**").hasRole("USER") // user 권한만 접근 가능.
+        .antMatchers("/android/fileUpload").permitAll()
 		.antMatchers("/logout").permitAll()
 		.anyRequest().authenticated() // 로그인 체크함.
 		.and()
