@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".endActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:columnCount="2"
+        app:layout_constraintBottom_toTopOf="@+id/_dynamic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints,UnknownId">
+
+        <TextView
+            android:layout_gravity="right"
+            android:text="주행거리 "
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/enddis"
+            android:text=" "
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/maxspeedlabel"
+            android:layout_gravity="right"
+            android:text="최대속도"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/endmax"
+            android:text=" "
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/avgspeedlabel"
+            android:layout_gravity="right"
+            android:text="평균속도"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/endavg"
+            android:text=" "
+            android:textSize="25dp" />
+
+
+
+
+        <TextView
+            android:id="@+id/getgodoa"
+            android:layout_gravity="right"
+            android:text="획득고도 "
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/endget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:text=" "
+
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/rest"
+            android:layout_gravity="right"
+            android:text="휴식시간"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/endresttime"
+            android:text=" "
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/ingtime"
+            android:layout_gravity="right"
+            android:text="라이딩 시간 "
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/ending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:text=" "
+
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </GridLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/saveriding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기록저장"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="626dp"
+                tools:ignore="MissingConstraints" />
+
+            <Button
+                android:id="@+id/shareriding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기록공유"
+                tools:layout_editor_absoluteX="31dp"
+                tools:layout_editor_absoluteY="626dp"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <RadioGroup
+                android:id="@+id/selectgroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RadioButton
+                    android:id="@+id/NoOpen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="비공개" />
+
+                <RadioButton
+                    android:id="@+id/ClubOpen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="클럽 공개" />
+
+                <RadioButton
+                    android:id="@+id/FriOpen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="전체 공개" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
