@@ -102,7 +102,7 @@ public class AndroidController {
 	@RequestMapping(value="/android/fileUpload", method=RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1){
 		try{
-			String path = "";
+			String path = "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/uploads";
 			String fileName="";
 				
 			if(!file1.isEmpty()){ //첨부파일이 존재?
@@ -111,7 +111,8 @@ public class AndroidController {
 					//디렉토리 생성
 					new File(path).mkdir();
 					//지정된 업로드 경로로 저장됨
-					file1.transferTo(new File("/"+ fileName));
+					file1.transferTo(new File( path + fileName));
+					
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
