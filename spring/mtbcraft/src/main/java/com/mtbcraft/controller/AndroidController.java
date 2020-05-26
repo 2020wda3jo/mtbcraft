@@ -99,7 +99,7 @@ public class AndroidController {
 		return memberService.getRidingRecordDetail(rr_rider, rr_num);
 	}
 	
-	@RequestMapping(value="/androidUpload", method=RequestMethod.POST)
+	@RequestMapping(value="/api/fileUpload", method=RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1){
 		try{	
 			String path = "";
@@ -119,6 +119,11 @@ public class AndroidController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "redirect:/";
+		return "redirect:/api/index";
+	}
+	
+	@RequestMapping("/api/index")
+	public String testIndex() {
+		return "index";
 	}
 }
