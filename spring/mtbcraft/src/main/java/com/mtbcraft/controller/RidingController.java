@@ -24,7 +24,7 @@ public class RidingController {
 	// 코스 메뉴 진입
 	@RequestMapping("/riding/course")
 	public String course() {
-		return "/riding/course";
+		return "riding/course";	//서버에서 혹시 / 때문에 html문서를 못 찾는게 아닐까하여 지워봄
 	}
 
 	// 사용자 주행 기록 조회
