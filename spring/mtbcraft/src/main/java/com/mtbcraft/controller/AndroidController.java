@@ -118,6 +118,7 @@ public class AndroidController {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
+			return "error403";
 		}
 		return "redirect:/android/index";
 	}
