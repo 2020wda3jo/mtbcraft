@@ -18,4 +18,8 @@ public class WebController {
 	public String updateintro() {
 		return "update";
 	}
+	@RequestMapping("/maintest")
+	public String updateintro2() {
+		return "test";
+	}
 }
