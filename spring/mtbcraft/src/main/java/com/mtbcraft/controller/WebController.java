@@ -22,4 +22,8 @@ public class WebController {
 	public String updateintro2() {
 		return "test";
 	}
+	@RequestMapping("maintest")
+	public String updateintro3() {
+		return "test2";
+	}
 }
