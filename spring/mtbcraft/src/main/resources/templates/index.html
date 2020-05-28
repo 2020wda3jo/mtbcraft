@@ -5,15 +5,19 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <script>
 
-   window.open("./update", "진행내역", "width=600, height=500");
+   window.open("update", "진행내역", "width=600, height=500");
 
   //URL : 팝업 위치, Title : 팝업제목(없을시 ""으로 생략 가능), "width~ : 팝업창의 옵션설정.. 여러가지 설정값이 있다. 설정값은 아래쪽에..
 
 </script>
 <!-- VISUAL IMAGE -->
+<!-- 
+비주얼 슬라이드 추가 예정
+문구 : We are responsible for your riding
+ -->
 <div id="back_img"></div>
 <!-- content 1 -->
-<!--  로그인 이전의 화면 <div th:unless="${#authorization.expr('isAuthenticated()')}">-->
+<div th:unless="${#authorization.expr('isAuthenticated()')}">
 <section id="content1">
 	안녕하세요!<br />산악 라이딩의 재미를 불어넣는 <br /><br />
 	<span id="f50">MTB CRAFT</span>입니다.
@@ -52,47 +56,100 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<a href="#"><img src="/imgs/appdown.png" title="appdown"
 		alt="appdown" /></a>
 </div>
-<!-- </div> --->
+</div>
+<!-- ater user screen --->
+<div th:if="${#authorization.expr('isAuthenticated()')}">
+<!-- 내 서비스 버튼들 -->
+	<section id="select_section">
+		<p>나의 서비스</p>
+		<div id="m_riding_bt"><a href="#rec_riding"><img src="/imgs/m_riding_bt.png" alt="m_riding_bt" title="m_riding_bt" /></a></div>
+		<div id="m_comu_bt"><a href="#m_section2"><img src="/imgs/m_comu_bt.png" alt="m_comu_bt" title="m_comu_bt" /></a></div>
+		<div id="m_repair_bt"><a href="#m_section3"><img src="/imgs/m_repair_bt.png" alt="m_repair_bt" title="m_repair_bt" /></a></div>
 
-<!--  로그인 이후의 화면 
-<div th:if="${#authorization.expr('isAuthenticated()')}">-->
+	</section>
 	<!-- 최근 라이딩 기록 -->
-	<!--  <section>
-		<div id="le_name">최근 라이딩 기록</div>
-		<div id="ri_more"><a href="">더보기</a></div>
-		<div id="gal_box">
-			<div id="gal_img">
-			</div>
-			<div id="riding_name">
-			</div>
-			<div id="riding_date">
-			</div>
-		</div><!-- gal_box end -->
-	<!--  </section>-->
-	
-	<!-- 내 클럽 최신글
-	<section>
-		<div id="m_club">
-		<div id="le_name">내 클럽 최신글</div>
-			<div id="my_new_img"><img src="" alt="" title=""/></div>
-			<div id="my_club_t">오늘 힘들었어요</div>
-			<div id="my_club_con">안녕하세요 자전거 구동계 청소를 해보려고 하는데요 유튜브에서<br />이것저것 봤는데 좀 더 손쉬운 방법이 없을까 해서요</div>
-			<div id="my_club_img"><img src="" alt="" title=""/></div>
-			<div id="my_club_name">MTBB Club</div>
+	 <section id="m_section1">
+		<div class="le_name">최근 라이딩 기록</div>
+		<div class="gal_box">
+			<div class="gal_img"><img src="/imgs/test_ri_img.png" width="400" height="300"/></div>
+			<div class="riding_name">대구 북구</div>
+			<div class="riding_date">2020-05-05</div>
 		</div>
-	</section>
-	
-	<!-- 정비소 추천 
-	<section>
-		<div id="m_club">
-			<div id="le_name">정비소 추천</div>
-			<div id="select_area">지역선택
-				<select>
-					<option value=""></option>
-				</select>
-			</div>
-			<div id="repair_map"></div>
+		
+		<div class="gal_box">
+			<div class="gal_img"><img src="/imgs/test_ri_img.png" width="400" height="300"/></div>
+			<div class="riding_name">대구 북구</div>
+			<div class="riding_date">2020-05-05</div>
 		</div>
+		
+		<div class="gal_box">
+			<div class="gal_img"><img src="/imgs/test_ri_img.png" width="400" height="300"/></div>
+			<div class="riding_name">대구 북구</div>
+			<div class="riding_date">2020-05-05</div>
+		</div>
+		<div id="ri_more_bt">
+		+더보기
+		</div>
+		
 	</section>
-</div>-->
-<footer th:replace="footer"></footer>
+	<!-- 내 클럽 최신글 -->
+	
+	<section id="m_section2">
+		<div id="m_club">
+		<div class="le_name">내 클럽 최신글</div>
+			<div class="community_list">
+				<div class="my_club_info">
+					<div class="my_club_img"><img src="/imgs/club_sample.png" alt="club_sample" title="club_sample" height="100" width="100" /></div>
+						<div class="my_club_name">MTBB Club</div>
+					</div>
+					<div class="my_club_writer">나랑께님</div>
+					<div class="my_club_title">밤에 흐르는~</div>
+					<div class="my_club_con">영진 냥냥이</div>
+					<div class="my_new_img"><img src="/imgs/teest_img.jpg" alt="" title=""/></div>
+				</div>
+				
+				<div class="community_list">
+				<div class="my_club_info">
+					<div class="my_club_img"><img src="/imgs/club_sample.png" alt="club_sample" title="club_sample" height="100" width="100" /></div>
+						<div class="my_club_name">MTBB Club</div>
+					</div>
+					<div class="my_club_writer">나랑께님</div>
+					<div class="my_club_title">밤에 흐르는~</div>
+					<div class="my_club_con">영진 냥냥이</div>
+					<div class="my_new_img"><img src="/imgs/teest_img.jpg" alt="" title=""/></div>
+				</div>
+				
+				<div class="community_list">
+				<div class="my_club_info">
+					<div class="my_club_img"><img src="/imgs/club_sample.png" alt="club_sample" title="club_sample" height="100" width="100" /></div>
+						<div class="my_club_name">MTBB Club</div>
+					</div>
+					<div class="my_club_writer">나랑께님</div>
+					<div class="my_club_title">밤에 흐르는~</div>
+					<div class="my_club_con">영진 냥냥이</div>
+					<div class="my_new_img"><img src="/imgs/teest_img.jpg" alt="" title=""/></div>
+				</div>
+				<div class="community_list">
+					<div id="commu_more"><a href="">+더보기</a></div>
+				</div>
+			</div>
+		</section>
+	
+	<!-- 정비소 추천  -->
+	<section id="m_section3">
+		<div class="le_name">정비소 찾기</div>
+			<div id="repair_sec">
+				<div id="select_area">
+				지역선택
+				<select >
+						<option value="선택">선택</option>
+						<option value=""></option>
+					</select>
+				</div>
+					
+				</div>
+			<div id="repair_map"><h1>MAP INPUT</h1></div>
+
+				</section>
+			</div>
+			<footer th:replace="footer"></footer>
