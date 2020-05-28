@@ -128,7 +128,7 @@ public class AndroidController {
 	@RequestMapping(value="/android/fileUpload", method=RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1){
 		try{
-			String path = "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/uploads";
+			String path = "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
 			String fileName="";
 				
 			if(!file1.isEmpty()){ //첨부파일이 존재?
@@ -144,13 +144,7 @@ public class AndroidController {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			return "error403";
 		}
-		return "redirect:/android/index";
-	}
-	
-	@RequestMapping("/android/index")
-	public String testIndex() {
-		return "index";
+		return "redirect:/";
 	}
 }

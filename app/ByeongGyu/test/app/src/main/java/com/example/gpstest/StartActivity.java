@@ -35,6 +35,7 @@ import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -67,8 +68,11 @@ public class StartActivity extends AppCompatActivity implements
     LinearLayout layout, layout2, layout3, layout4, layout5, layout6, layout7, layout8, m_status, layout9, layout10;
 
     //각종 변수
-    double latitude, lonngitude, getgodo, getSpeed=0, hap = 0, getgodoval = 0, intime=0, avg=0, maX=0;;
+    double latitude, lonngitude, getgodo, getSpeed=0, hap = 0, getgodoval = 0, intime=0, avg=0, maX=0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
     int cnt=0, restcnt = 0;
+    ArrayList<Double> witch_lat = new ArrayList<>();
+    ArrayList<Double> witch_lon = new ArrayList<>();
+    ArrayList<Double> ele = new ArrayList<>();
 
     //휴식시간 계산
     int hour, min, sec;
@@ -170,6 +174,13 @@ public class StartActivity extends AppCompatActivity implements
                 intent.putExtra("ingtime",String.valueOf(timeView.getText())); //경과시간
                 intent.putExtra("endsec",String.valueOf(m_t.getText())); //라이딩 시간(초)
                 intent.putExtra("restsectime",String.valueOf(m_rest.getText())); //휴식시간(초)
+                intent.putExtra("witch_lat", witch_lat); //위도
+                intent.putExtra("witch_lon", witch_lon); //경도
+                intent.putExtra("ele", ele); //고도
+                intent.putExtra("maxLat", maxLat); //최대위도
+                intent.putExtra("minLat", minLat); //최소위도
+                intent.putExtra("maxLon", maxLon); //최대경도
+                intent.putExtra("minLon", minLon); //최소경도
                 startActivity(intent);
                 finish();
             }
@@ -372,6 +383,19 @@ public class StartActivity extends AppCompatActivity implements
         latitude = location.getLatitude();
         lonngitude = location.getLongitude();
 
+        // 위도 경도 정보 배열 저장
+        witch_lat.add(latitude);
+        witch_lon.add(lonngitude);
+
+        // 최대 최소 위도 경도 계산
+        if ( maxLat <  latitude ) maxLat =  latitude;
+        if ( minLat >  latitude ) minLat =  latitude;
+        if ( maxLon < lonngitude ) maxLon = lonngitude;
+        if ( minLon > lonngitude ) minLon = lonngitude;
+
+        // 고도 정보 저장
+        ele.add(location.getAltitude());
+
         MapPolyline polyline = new MapPolyline();
         polyline.setLineColor(Color.argb(128,255,51,0));
 
@@ -401,7 +425,7 @@ public class StartActivity extends AppCompatActivity implements
             mMapView.addPolyline(polyline);
 
             // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
-           MapPointBounds mapPointBounds2 = new MapPointBounds(polyline.getMapPoints());
+            MapPointBounds mapPointBounds2 = new MapPointBounds(polyline.getMapPoints());
             int padding2 = 50; // px
             mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding,2,3));
 
@@ -436,13 +460,13 @@ public class StartActivity extends AppCompatActivity implements
                 m_distance.setText((String.format("%.2f",hap)+"m"));
                 dis.setText(String.format("%.2f",hap));
             }
-                if(hap>1000){
-                    //알림주고
-                    Toast toast = Toast.makeText(getApplicationContext(), hap+"임", Toast.LENGTH_SHORT); toast.show();
-                    //1000을 올려
-                    testhap = (int) (testhap+(hap+1000));
-                }else{ //그럼 hap>2000인데 크지 않으면
-                    //알림X
+            if(hap>1000){
+                //알림주고
+                Toast toast = Toast.makeText(getApplicationContext(), hap+"임", Toast.LENGTH_SHORT); toast.show();
+                //1000을 올려
+                testhap = (int) (testhap+(hap+1000));
+            }else{ //그럼 hap>2000인데 크지 않으면
+                //알림X
 
             }
 

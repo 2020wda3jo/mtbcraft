@@ -124,7 +124,7 @@ public class MemberController {
 	// 로그인폼
 	@RequestMapping("/login")
 	public String loginPost() throws Exception {
-		return "/login";
+		return "login";
 	}
 	
 

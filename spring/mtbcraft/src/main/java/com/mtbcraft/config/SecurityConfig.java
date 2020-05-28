@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().ignoringAntMatchers("/riding/**");
 		http.csrf().ignoringAntMatchers("/android/**");
 		http.csrf().ignoringAntMatchers("/android/login");
+		http.csrf().ignoringAntMatchers("/*/**");
 		//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 		}
 

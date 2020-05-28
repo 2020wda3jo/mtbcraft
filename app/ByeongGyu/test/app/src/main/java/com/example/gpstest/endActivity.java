@@ -14,7 +14,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class endActivity extends AppCompatActivity{
@@ -42,6 +50,13 @@ public class endActivity extends AppCompatActivity{
         IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
         endsec = intent.getStringExtra("endsec"); //라이딩 시간(초)
         restsectime = intent.getStringExtra("restsectime"); //휴식시간(초)
+        ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
+        ArrayList<Double> witch_lon = (ArrayList<Double>)intent.getSerializableExtra("witch_lon");
+        ArrayList<Double> ele = (ArrayList<Double>)intent.getSerializableExtra("ele");
+        double maxLat = intent.getExtras().getDouble("maxLat",0);
+        double maxLon = intent.getExtras().getDouble("maxLon", 0);
+        double minLat = intent.getExtras().getDouble("minLat", 0);
+        double minLon = intent.getExtras().getDouble("minLon", 0);
 
 
         avgsoeed = (TextView) findViewById(R.id.endavg);
@@ -65,6 +80,12 @@ public class endActivity extends AppCompatActivity{
         ingtime.setText(IngTime); //지속시간
         distence.setText(Distence); //이동거리
 
+        // gpx파일 제목을 위해 현재 시간 구하기
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat sdfNow = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String nowTime = sdfNow.format(date);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         NetworkTask2 networkTask = new NetworkTask2();
@@ -84,15 +105,91 @@ public class endActivity extends AppCompatActivity{
                     case "전체 공개":
                         value="2";
                 }
-               open = value;
+                open = value;
             }
         });
+
+
+        // gpx 파일 생성
+        GpxInfo gpxInfoObj = new GpxInfo();
+        gpxInfoObj.setCreator("MTBcraft");
+
+        GpxInfo.metadata metaObj = new GpxInfo.metadata();
+        gpxInfoObj.setMetadata(metaObj);
+
+        metaObj.setDesc("MTBcraft");
+
+        GpxInfo.bounds boundsObj = new GpxInfo.bounds();
+        metaObj.setBounds(boundsObj);
+
+        boundsObj.setMaxLat(maxLat);
+        boundsObj.setMaxLon(maxLon);
+        boundsObj.setMinLat(minLat);
+        boundsObj.setMinLon(minLon);
+
+        GpxInfo.trk trkObj = new GpxInfo.trk();
+        gpxInfoObj.setTrk(trkObj);
+
+        GpxInfo.trkseg trksegObj = new GpxInfo.trkseg();
+        trkObj.setTrkseg(trksegObj);
+
+        List<GpxInfo.trkpt> trkptArray = new ArrayList<GpxInfo.trkpt>();
+
+        for ( int i = 0; i < witch_lat.size() ; i++){
+            GpxInfo.trkpt trkptObj = new GpxInfo.trkpt(witch_lat.get(i), witch_lon.get(i), ele.get(i));
+            trkptArray.add(trkptObj);
+        }
+
+        trksegObj.setTrkptList(trkptArray);
+
+
+        // Create a file to save to and make sure to use the path provided from
+        // getFilesDir().getPath().
+        File xmlFile = new File(getFilesDir().getPath() + "/gpx_" + nowTime + ".gpx");
+
+        // Serialize the Person
+
+        try
+        {
+            Serializer serializer = new Persister();
+            serializer.write(gpxInfoObj, xmlFile);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        // Create a second person object
+        GpxInfo gpxInfoObj2 = null;
+
+        // Deserialize the Person
+        if (xmlFile.exists())
+        {
+            try
+            {
+                Serializer serializer = new Persister();
+                gpxInfoObj2 = serializer.read(GpxInfo.class, xmlFile);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        boolean b = gpxInfoObj.equals(gpxInfoObj2);
+        // 여기까지 gpx파일 생성
+
 
         save.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 try{
+                    SendGPXFile sendObj = new SendGPXFile();
+                    sendObj.setFileName("gpx_" + nowTime + ".gpx");
+                    sendObj.setFilepath(getFilesDir().getPath() + "/");
+                    sendObj.upload();
+
                     NetworkTask2 networkTask = new NetworkTask2();
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("rr_rider", "345");
@@ -100,7 +197,7 @@ public class endActivity extends AppCompatActivity{
                     params.put("rr_topspeed", MaxSpeed);
                     params.put("rr_avgspeed", AvgSpeed);
                     params.put("rr_high",Getgodo);
-                    params.put("rr_gpx", "gpx.gpx");
+                    params.put("rr_gpx", "gpx_" + nowTime + ".gpx");
                     params.put("rr_open", open);
                     params.put("rr_breaktime", restsectime);
                     params.put("rr_time", endsec);
@@ -113,12 +210,13 @@ public class endActivity extends AppCompatActivity{
         });
     }
 
+
     public class NetworkTask2 extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://100.92.32.8:8080/api/upload");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.4:8080/api/upload");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -145,5 +243,3 @@ public class endActivity extends AppCompatActivity{
         }
     }
 }
-
-
