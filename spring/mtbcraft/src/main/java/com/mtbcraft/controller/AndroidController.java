@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.service.AndroidService;
 import com.mtbcraft.service.MemberService;
@@ -31,8 +33,32 @@ public class AndroidController {
 	@Autowired
 	AndroidService androidService;
 
+	//안드로이드 세션로그인
+	@RequestMapping(value="/android/login")
+	@ResponseBody
+	public Map<String, String> login(HttpSession session, HttpServletRequest request) throws Exception{
+		Login login = new Login();
+		login.setUserId(request.getParameter("userid"));
+		login.setUserPw(request.getParameter("userpw"));
+		//androidService.login(login);
+		System.out.println(request.getParameter("userid"));
+		System.out.println(request.getParameter("userpw"));
+		
+		Map<String, String> result = new HashMap<String, String>();
+		session.setAttribute("login", "345");
+		result.put("data1", "");
+		result.put("data2", request.getParameter("rr_distance"));
+		/*if(androidService.login(login) != null) {
+			result.put("sucess", "로그인되었습니다."+"당슨의 아이디는"+login.getUserId());
+		}else {
+			result.put("fail", "로그인에 실패하였습니다.");
+		}*/
+		return result;
+	}
+
 	// 주행기록 등록(안드로이드)
 	@RequestMapping(value = "/api/upload")
+	//주소변경예정 @RequestMapping(value = "/android/recordInsert")
 	@ResponseBody
 	public Map<String, String> insertriding(HttpServletRequest request) throws Exception {
 		RidingRecord record = new RidingRecord();
