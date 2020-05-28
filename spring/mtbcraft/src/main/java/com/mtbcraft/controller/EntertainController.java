@@ -8,14 +8,14 @@ public class EntertainController {
 	//경쟁전
 	@RequestMapping("/entertainment/competitions")
 	public String competitions() {
-		return "/entertainment/competitions";
+		return "entertainment/competitions";
 	}
 	
 	//미션
-		@RequestMapping("/entertainment/missions")
-		public String missions() {
-			return "/entertainment/competitions";
-		}
+	@RequestMapping("/entertainment/missions")
+	public String missions() {
+		return "entertainment/missions";
+	}
 	
 	
 }
