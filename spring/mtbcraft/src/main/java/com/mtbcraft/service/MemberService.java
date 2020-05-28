@@ -24,48 +24,57 @@ public class MemberService {
 	@Autowired
 	private MemberMapper memberMapper;
 	
-	
+	//회원가입 처리
 	public String memberInsert(Member member) throws Exception {
 		return memberMapper.memberInsert(member);
 	}
 	
-	public String memberLogin(Login login) throws Exception {
-		return memberMapper.memberLogin(login);
-	}
-	
+	//주행기록 가져오기
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
 		return memberMapper.getRidingRecord(rr_rider);
 	}
 	
+	//주행기록 상세가져오기
 	public List<RidingRecord> getRidingRecordDetail(String rr_rider, String rr_num) throws Exception {
 		return memberMapper.getRidingRecordDetail(rr_rider, rr_num);
 	}
+	
+	//주행기록 공개여부 업데이트
 	public void updateRidingRecord(int rr_num, int rr_open) throws Exception{
 		memberMapper.updateRidingRecord(rr_num, rr_open);
 	}
 	
+	//코스가져오기
 	public List<Course> getCourse() throws Exception{
 		return memberMapper.getCourse();
 	}
 	
+	//코스스크랩 가져오기
 	public List<Course> getScrapCourse(String rr_rider) throws Exception{
 		return memberMapper.getScrapCourse(rr_rider);
 	}
+	
+	//스크랩하기
 	public void postScrapCourse(String ss_rider, int ss_course){
 		memberMapper.postScrapCourse(ss_rider, ss_course);
 	}
+	
+	//코스스크랩 삭제
 	public void deleteScrapCourse(String ss_rider, int ss_course) throws Exception{
 		memberMapper.deleteScrapCourse(ss_rider, ss_course);
 	}
 	
+	//위험지역 가져오기
 	public List<DangerousArea> getDangerousArea() throws Exception{
 		return memberMapper.getDangerousArea();
 	}
 	
+	//사용자가 등록한 위험지역 가져오기
 	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception{
 		return memberMapper.getUserDangerousArea(rr_rider);
 	}
 	
+	//위험지역 등록
 	public void postDangerousArea(DangerousArea da) throws Exception {
 		memberMapper.postDangerousArea(da);
 	}
@@ -73,6 +82,7 @@ public class MemberService {
 		memberMapper.deleteDangerousArea(da_num);
 	}
 	
+	//위험지역 취소?
 	public void postNoDanger(No_Danger nd) throws Exception{
 		memberMapper.postNoDanger(nd);
 	}
