@@ -114,6 +114,7 @@ public class GpxInfo
 
     @Root
     public static class trkseg {
+
         @ElementList ( inline = true )
         public List<trkpt> trkptList;
 
@@ -128,6 +129,7 @@ public class GpxInfo
 
     @Root
     public static class trkpt {
+
         @Attribute
         private double lat;
 
@@ -137,7 +139,11 @@ public class GpxInfo
         @Element
         private double ele;
 
-        public trkpt ( double lat, double lon, double ele ){
+        public trkpt(){
+
+        }
+
+        public trkpt ( double lat,  double lon,  double ele ){
             this.lat = lat;
             this.lon = lon;
             this.ele = ele;

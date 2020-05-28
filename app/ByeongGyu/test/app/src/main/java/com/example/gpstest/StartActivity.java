@@ -440,8 +440,8 @@ public class StartActivity extends AppCompatActivity implements
                 reststatus.setText("일시정지");
                 sec=restcnt;
                 min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
-                resttime.setText(hour+":"+min+":"+sec);
-                m_rest.setText(restcnt);
+                resttime.setText(String.valueOf(hour+":"+min+":"+sec));
+                m_rest.setText(String.valueOf(restcnt));
             }else{ //그게 아니면 경과시간이 늘어남
                 intime = intime+1;
                 reststatus.setText("열심히^^");
