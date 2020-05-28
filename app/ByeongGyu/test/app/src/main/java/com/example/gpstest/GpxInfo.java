@@ -174,8 +174,8 @@ public class GpxInfo
         }
     }
 
-    public GpxInfo()
-    {
+    public GpxInfo() {
+
     }
 
     public String getCreator() {
