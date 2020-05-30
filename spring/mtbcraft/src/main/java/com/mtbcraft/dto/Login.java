@@ -27,8 +27,4 @@ public class Login  {
 	public void setUserPw(String userPw) {
 		this.userPw = userPw;
 	}
-
-
-   
-   
 }

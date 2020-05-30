@@ -3,7 +3,7 @@
 
 <mapper namespace="com.mtbcraft.mapper.AndroidMapper">
 <!-- 안드로이드 로그인 -->
-	<select id="login" parameterType="String" resultType="com.mtbcraft.dto.Login">
-		select r_id, r_pw from rider where r_id = #{userId} and r_pw= #{userPw}
+	<select id="LoginProcess" parameterType="hashMap" resultType="com.mtbcraft.dto.AnLogin">
+		select r_id, r_pw from rider where r_id = #{r_id} and r_pw = #{r_pw}
 	</select>
 </mapper>

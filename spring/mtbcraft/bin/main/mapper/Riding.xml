@@ -20,8 +20,4 @@
 		)
 	</select>
 	
-	<select id="getRidingRecordDetail" parameterType="Map" resultType="com.mtbcraft.dto.RidingRecord">
-		select * from riding_record where rr_rider = '#{rr_rider}' and rr_num = '#{rr_num}'
-	</select>
-	
 </mapper>

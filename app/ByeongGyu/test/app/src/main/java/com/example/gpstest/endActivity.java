@@ -1,6 +1,8 @@
 package com.example.gpstest;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -11,12 +13,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,13 +34,33 @@ public class endActivity extends AppCompatActivity{
     //DB로 전송하기 위한 변수
     String open;
 
+    //로그인정보 받아오기
+    SharedPreferences auto;
+    String LoginId;
+
+    //형 변환
+    String cha_dis, cha_avg, cha_max;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainend);
 
+        //로그인정보 받아오기
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        LoginId  = auto.getString("LoginId","");
+
         //넘어온 intent값 넣기
         Intent intent = new Intent(this.getIntent());
+
+        cha_dis= intent.getStringExtra("cha_dis"); //이동거리(소수점X)
+        cha_max =  intent.getStringExtra("cha_max"); //최대속도(소수점X)
+        cha_avg = intent.getStringExtra("cha_avg"); //평균속도(소수점X)
+
+
+        cha_dis = intent.getStringExtra("cha_dis");
+        cha_avg = intent.getStringExtra("cha_avg");
+        cha_max = intent.getStringExtra("cha_max");
         Distence = intent.getStringExtra("distence"); //이동거리
         MaxSpeed = intent.getStringExtra("endmax"); //최대속도
         AvgSpeed = intent.getStringExtra("endavg"); //평균속도
@@ -192,10 +211,13 @@ public class endActivity extends AppCompatActivity{
 
                     NetworkTask2 networkTask = new NetworkTask2();
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("rr_rider", "345");
-                    params.put("rr_distance", Distence);
-                    params.put("rr_topspeed", MaxSpeed);
-                    params.put("rr_avgspeed", AvgSpeed);
+
+                  Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec);
+
+                    params.put("rr_rider", LoginId);
+                    params.put("rr_distance", cha_dis);
+                    params.put("rr_topspeed", cha_max);
+                    params.put("rr_avgspeed", cha_avg);
                     params.put("rr_high",Getgodo);
                     params.put("rr_gpx", "gpx_" + nowTime + ".gpx");
                     params.put("rr_open", open);

@@ -11,14 +11,19 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.service.AndroidService;
@@ -32,30 +37,28 @@ public class AndroidController {
 
 	@Autowired
 	AndroidService androidService;
-
+	
 	//안드로이드 세션로그인
-	@RequestMapping(value="/android/login")
-	@ResponseBody
-	public Map<String, String> login(HttpSession session, HttpServletRequest request) throws Exception{
-		Login login = new Login();
-		login.setUserId(request.getParameter("userid"));
-		login.setUserPw(request.getParameter("userpw"));
-		//androidService.login(login);
-		System.out.println(request.getParameter("userid"));
-		System.out.println(request.getParameter("userpw"));
+		@RequestMapping(value ="/android/login" )
+		public @ResponseBody Map<String, String> login(AnLogin login) throws Exception {
+			
+			List<AnLogin> list = androidService.LoginProcess(login);
+			
+			System.out.println("dfdfdf"+list);
+			System.out.println(login.getR_pw());
+			
+			Map<String, String> result = new HashMap<String, String>();
+			
+			if(list.toString()=="[]") {
+				result.put("Status", "로그인실패");
+				return result;
+			}else {
+				result.put("Status", "Ok");
+				result.put("r_id", login.getR_id());
+				return result;
+			}
+		}
 		
-		Map<String, String> result = new HashMap<String, String>();
-		session.setAttribute("login", "345");
-		result.put("data1", "");
-		result.put("data2", request.getParameter("rr_distance"));
-		/*if(androidService.login(login) != null) {
-			result.put("sucess", "로그인되었습니다."+"당슨의 아이디는"+login.getUserId());
-		}else {
-			result.put("fail", "로그인에 실패하였습니다.");
-		}*/
-		return result;
-	}
-
 	// 주행기록 등록(안드로이드)
 	@RequestMapping(value = "/api/upload")
 	//주소변경예정 @RequestMapping(value = "/android/recordInsert")
@@ -122,13 +125,16 @@ public class AndroidController {
 	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable(value = "rr_rider") String rr_rider,
 			@PathVariable(value = "rr_num") String rr_num) throws Exception {
 		System.out.println(memberService.getRidingRecord(rr_rider));
-		return memberService.getRidingRecordDetail(rr_rider, rr_num);
+
+		return null;
 	}
 	
 	@RequestMapping(value="/android/fileUpload", method=RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1){
 		try{
-			String path = "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
+			
+			//String path = "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
+			String path = "/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
 			String fileName="";
 				
 			if(!file1.isEmpty()){ //첨부파일이 존재?
@@ -138,6 +144,7 @@ public class AndroidController {
 					new File(path).mkdir();
 					//지정된 업로드 경로로 저장됨
 					file1.transferTo(new File(path + "/"+ fileName));
+					System.out.println();
 				}catch (Exception e) {
 					e.printStackTrace();
 				}

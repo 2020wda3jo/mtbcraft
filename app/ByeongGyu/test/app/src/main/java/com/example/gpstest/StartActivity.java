@@ -64,7 +64,6 @@ public class StartActivity extends AppCompatActivity implements
     TextView reststatus, nowspeed, avgspeed, maxspeed, godo, dis, timeView, getGodo, resttime, courseinfo;
 
     Thread timeThread = null;
-    Thread timeThread2 = null;
     LinearLayout layout, layout2, layout3, layout4, layout5, layout6, layout7, layout8, m_status, layout9, layout10;
 
     //각종 변수
@@ -80,6 +79,8 @@ public class StartActivity extends AppCompatActivity implements
     //Km당 알림주기 위한 변수
     int gps_cnt, gps_dis;
 
+    //형변환용변수
+    String cha_dis="", cha_max="", cha_avg="";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainstart);
@@ -106,7 +107,6 @@ public class StartActivity extends AppCompatActivity implements
         getGodo = (TextView)findViewById(R.id.getgodo); //획득고도
         resttime = (TextView)findViewById(R.id.resttime);//휴식시간
         courseinfo = (TextView)findViewById(R.id.couse_info);//코스정보
-
         Button button2 = (Button)findViewById(R.id.endriding);
 
         //지도띄우기
@@ -162,28 +162,30 @@ public class StartActivity extends AppCompatActivity implements
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StartActivity.this, endActivity.class);
-                intent.putExtra("distence",String.valueOf(dis.getText())); //이동거리
-                intent.putExtra("endmax",String.valueOf(maxspeed.getText())); //최대속도
-                intent.putExtra("endavg",String.valueOf(avgspeed.getText())); //평균속도
-                intent.putExtra("getgodo",String.valueOf(getGodo.getText())); //획득고도
-                intent.putExtra("resttime",String.valueOf(resttime.getText())); //휴식시간
-                intent.putExtra("ingtime",String.valueOf(timeView.getText())); //경과시간
-                intent.putExtra("endsec",String.valueOf(m_t.getText())); //라이딩 시간(초)
-                intent.putExtra("restsectime",String.valueOf(m_rest.getText())); //휴식시간(초)
-                intent.putExtra("witch_lat", witch_lat); //위도
-                intent.putExtra("witch_lon", witch_lon); //경도
-                intent.putExtra("ele", ele); //고도
-                intent.putExtra("maxLat", maxLat); //최대위도
-                intent.putExtra("minLat", minLat); //최소위도
-                intent.putExtra("maxLon", maxLon); //최대경도
-                intent.putExtra("minLon", minLon); //최소경도
-                startActivity(intent);
-                finish();
-            }
+        button2.setOnClickListener(v -> {
+            Intent intent = new Intent(StartActivity.this, endActivity.class);
+            //형변환한거
+            intent.putExtra("cha_dis",cha_dis); //이동거리(소수점X)
+            intent.putExtra("cha_max",cha_max); //최대속도(소수점X)
+            intent.putExtra("cha_avg",cha_avg); //평균속도(소수점X)
+
+            intent.putExtra("distence",String.valueOf(dis.getText())); //이동거리
+            intent.putExtra("endmax",String.valueOf(maxspeed.getText())); //최대속도
+            intent.putExtra("endavg",String.valueOf(avgspeed.getText())); //평균속도
+            intent.putExtra("getgodo",String.valueOf(getGodo.getText())); //획득고도
+            intent.putExtra("resttime",String.valueOf(resttime.getText())); //휴식시간
+            intent.putExtra("ingtime",String.valueOf(timeView.getText())); //경과시간
+            intent.putExtra("endsec",String.valueOf(m_t.getText())); //라이딩 시간(초)
+            intent.putExtra("restsectime",String.valueOf(m_rest.getText())); //휴식시간(초)
+            intent.putExtra("witch_lat", witch_lat); //위도
+            intent.putExtra("witch_lon", witch_lon); //경도
+            intent.putExtra("ele", ele); //고도
+            intent.putExtra("maxLat", maxLat); //최대위도
+            intent.putExtra("minLat", minLat); //최소위도
+            intent.putExtra("maxLon", maxLon); //최대경도
+            intent.putExtra("minLon", minLon); //최소경도
+            startActivity(intent);
+            finish();
         });
         //권한 체크
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -433,6 +435,7 @@ public class StartActivity extends AppCompatActivity implements
             if(getSpeed > maX){
                 maX = getSpeed;
                 maxspeed.setText(String.format("%.1f", maX));
+                cha_max = String.format("%.0f", maX);
             }
             //만약 속도가 0.1미만이라면 휴식시간이 늘어남(뭔가 이상함)
             if(getSpeed < 0.1){
@@ -450,8 +453,11 @@ public class StartActivity extends AppCompatActivity implements
 
             //이동거리
             hap = hap+mLastlocation.distanceTo(location);
-            int testhap=0;
+            cha_dis = String.format("%.0f",hap);
 
+            int testhap=0;
+            dis.setText(String.format("%.2f",hap));
+            /*
             if(hap>1000){
                 hap = hap/1000;
                 m_distance.setText((String.format("%.1f",hap)+"km"));
@@ -460,6 +466,8 @@ public class StartActivity extends AppCompatActivity implements
                 m_distance.setText((String.format("%.2f",hap)+"m"));
                 dis.setText(String.format("%.2f",hap));
             }
+
+             */
             if(hap>1000){
                 //알림주고
                 Toast toast = Toast.makeText(getApplicationContext(), hap+"임", Toast.LENGTH_SHORT); toast.show();
@@ -469,11 +477,10 @@ public class StartActivity extends AppCompatActivity implements
                 //알림X
 
             }
-
             //평균속도
             avg= hap/cnt;
             avgspeed.setText(String.format("%.1f", Double.parseDouble(String.valueOf(avg))));
-
+            cha_avg = String.format("%.0f", (avg));
 
             //획득고도
             getgodoval = (location.getAltitude()-mLastlocation.getAltitude());
