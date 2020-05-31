@@ -17,19 +17,21 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="8819eab741cd2e061a5bb0e04dbe8a96"/>
-        <activity android:name=".MainActivity">
+        <activity android:name="com.mtbcraft.Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!---액티비티 등록 -->
-        <activity android:name=".LoginAccess" />
-        <activity android:name=".SubActivity" />
-        <activity android:name=".StartActivity"/>
-        <activity android:name=".DetailActivity"/>
-        <activity android:name=".MyReport"/>
-        <activity android:name=".endActivity"/>
+        <activity android:name="com.mtbcraft.network.LoginAccess" />
+        <activity android:name="com.mtbcraft.Activity.SubActivity" />
+        <activity android:name="com.mtbcraft.Activity.StartActivity"/>
+        <activity android:name="com.mtbcraft.Activity.DetailActivity"/>
+        <activity android:name="com.mtbcraft.Activity.MyReport"/>
+        <activity android:name="com.mtbcraft.Activity.endActivity"/>
+        <activity android:name="com.mtbcraft.Activity.CourseList"/>
+        <activity android:name="com.mtbcraft.Activity.CourseDetail"/>
 
     </application>
 

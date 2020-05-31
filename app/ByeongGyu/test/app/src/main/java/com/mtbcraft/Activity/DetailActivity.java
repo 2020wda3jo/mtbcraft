@@ -1,14 +1,24 @@
-package com.example.gpstest;
+package com.mtbcraft.Activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 
+import com.example.gpstest.R;
+import com.google.android.material.navigation.NavigationView;
+import com.mtbcraft.network.HttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,10 +30,52 @@ public class DetailActivity extends AppCompatActivity {
     String rr_num;
     String rr_rider;
     TextView textView1, textView2, textView3, textView4, textView5, textView6;
+    private DrawerLayout mDrawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mydetail);
+
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+
+            int id = menuItem.getItemId();
+            switch (id) {
+                case R.id.nav_home:
+                    Intent intent=new Intent(DetailActivity.this,SubActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.nav_mylist:
+                    Intent intent2=new Intent(DetailActivity.this, MyReport.class);
+                    startActivity(intent2);
+                    break;
+
+                case R.id.nav_alllist:
+                    Toast.makeText(DetailActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.nav_course:
+                    Toast.makeText(DetailActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.nav_myroom:
+                    Toast.makeText(DetailActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    break;
+            }
+            return true;
+        });
 
         textView1 = (TextView)findViewById(R.id.Riding_time);
         textView2 = (TextView)findViewById(R.id.Riding_distance );
@@ -33,8 +85,10 @@ public class DetailActivity extends AppCompatActivity {
         textView6 = (TextView)findViewById(R.id.Riding_max );
 
         Intent intent = new Intent(this.getIntent());
-        rr_num = intent.getStringExtra("rr_num"); //이동거리
+
+        rr_num = intent.getStringExtra("rr_num");
         rr_rider = intent.getStringExtra("rr_rider");
+        Log.d("리포트에서 받은거",rr_num+ rr_rider);
         try {
             GetTask getTask = new GetTask();
             Map<String, String> params = new HashMap<String, String>();
@@ -42,7 +96,7 @@ public class DetailActivity extends AppCompatActivity {
             params.put("rr_rider", rr_rider);
             getTask.execute(params);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -72,10 +126,9 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("디테일 ", s);
+            //Log.d("디테일 ", s);
             try {
-                JSONArray jsonArray = new JSONArray(s);
-                StringBuffer sb = new StringBuffer();
+
                 String tempData = s;
 
                 //json값을 받기위한 변수들
@@ -97,7 +150,6 @@ public class DetailActivity extends AppCompatActivity {
                     avgS = jObject.getString("rr_avgspeed");
                     highS = jObject.getString("rr_high");
                     maxS = jObject.getString("rr_topspeed");
-                    Log.d("test ", test);
                 }
 
                 //주행시간 계산
@@ -110,7 +162,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 int des = Integer.parseInt(disS);
                 float km = (float) (des/1000.0);
-                String total = String.valueOf(km)+"Km";
+                String total = km+"Km";
 
                 textView1.setText(hour+"시간 "+min+"분 "+sec+"초");
                 textView2.setText(total);
@@ -123,5 +175,26 @@ public class DetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

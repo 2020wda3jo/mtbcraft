@@ -56,12 +56,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="라이딩 시간" />
+                        android:text="주소" />
                     <TextView
-                        android:id="@+id/Riding_time"
+                        android:id="@+id/course_add"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="00:00:00"
+                        android:text=""
                         android:layout_gravity="center"
                         tools:ignore="MissingConstraints"
                         tools:layout_editor_absoluteX="133dp"
@@ -84,9 +84,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="휴식시간" />
+                        android:text="거리" />
                     <TextView
-                        android:id="@+id/Riding_rest"
+                        android:id="@+id/course_dis"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="00:00:00"
@@ -110,100 +110,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="최대속도" />
+                        android:text="난이도" />
                     <TextView
-                        android:id="@+id/Riding_max"
+                        android:id="@+id/course_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="00.0km/h"
+                        android:text=""
                         tools:ignore="MissingConstraints"
                         android:layout_gravity="center" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="40dp">
-
-                    <ImageView
-                        android:layout_width="74dp"
-                        android:layout_height="54dp"
-                        android:src="@drawable/avg_speed"
-                        tools:layout_editor_absoluteX="131dp"
-                        tools:layout_editor_absoluteY="407dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="평균속도"
-                        android:layout_gravity="center"/>
-                    <TextView
-                        android:id="@+id/Riding_avg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00.0km/h"
-                        tools:ignore="MissingConstraints"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="40dp">
-
-                    <ImageView
-                        android:layout_width="74dp"
-                        android:layout_height="54dp"
-                        android:src="@drawable/riding_des"
-                        tools:layout_editor_absoluteX="131dp"
-                        tools:layout_editor_absoluteY="407dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="이동거리" />
-                    <TextView
-                        android:id="@+id/Riding_distance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0.0km"
-                        tools:ignore="MissingConstraints"
-                        android:layout_gravity="center"
-                       />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="40dp">
-                    <ImageView
-                        android:layout_width="74dp"
-                        android:layout_height="54dp"
-                        android:src="@drawable/godo"
-                        tools:layout_editor_absoluteX="131dp"
-                        tools:layout_editor_absoluteY="407dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="획득고도" />
-                    <TextView
-                        android:id="@+id/Riding_godo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0.0km"
-                        tools:ignore="MissingConstraints"
-                        android:layout_gravity="center" />
-                </LinearLayout>
-
             </GridLayout>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/scrap_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="스크랩"
+            tools:layout_editor_absoluteX="161dp"
+            tools:layout_editor_absoluteY="301dp"
+            tools:ignore="MissingConstraints" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

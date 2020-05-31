@@ -33,7 +33,7 @@
 	</update>
 
 	<select id="getCourse" resultType="com.mtbcraft.dto.Course">
-		select * from course
+		select * from course order by c_num
 	</select>
 
 	<select id="getScrapCourse" parameterType="String"

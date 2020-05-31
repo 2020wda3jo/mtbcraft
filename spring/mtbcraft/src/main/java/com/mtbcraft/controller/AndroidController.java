@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.service.AndroidService;
@@ -124,9 +125,7 @@ public class AndroidController {
 	@RequestMapping(value = { "/api/get/{rr_rider}/{rr_num}" })
 	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable(value = "rr_rider") String rr_rider,
 			@PathVariable(value = "rr_num") String rr_num) throws Exception {
-		System.out.println(memberService.getRidingRecord(rr_rider));
-
-		return null;
+		return memberService.getRidingRecordDetail(rr_rider, rr_num);
 	}
 	
 	@RequestMapping(value="/android/fileUpload", method=RequestMethod.POST)
@@ -154,4 +153,19 @@ public class AndroidController {
 		}
 		return "redirect:/";
 	}
+	
+	//코스조회
+	// 코스 조회
+		@RequestMapping(value = "/app/riding/course")
+		public @ResponseBody List<Course> getCourse() throws Exception {
+			return memberService.getCourse();
+		}
+		
+	// 코스 조회
+	@RequestMapping(value = "/app/riding/course/{c_num}")
+	public @ResponseBody List<Course> getCourseItem(@PathVariable(value = "c_num") String c_num) throws Exception {
+		System.out.println(c_num);
+		return androidService.getCourseItem(c_num);
+	}
+
 }

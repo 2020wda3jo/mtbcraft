@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".endActivity">
+    tools:context="com.mtbcraft.Activity.endActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -62,9 +62,6 @@
             android:id="@+id/endavg"
             android:text=" "
             android:textSize="25dp" />
-
-
-
 
         <TextView
             android:id="@+id/getgodoa"

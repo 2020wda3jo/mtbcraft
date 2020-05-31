@@ -1,4 +1,4 @@
-package com.example.gpstest;
+package com.mtbcraft.Recycler;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.gpstest.R;
+import com.mtbcraft.Activity.DetailActivity;
+import com.mtbcraft.dto.RidingRecord;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,21 +81,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
         testViewHolder.textView1.setText(itemList.get(position).getRr_date());
         testViewHolder.textView2.setText(hour_s+":"+min+":"+ sec);
         testViewHolder.textView3.setText(total);
-        //testViewHolder.textView4.setText(itemList.get(position).getRr_num());
 
-        testViewHolder.mView.setOnClickListener(new View.OnClickListener(){
+        testViewHolder.mView.setOnClickListener(v -> {
+            Context context = v.getContext();
+            Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(v.getContext(), DetailActivity.class);
+            intent.putExtra("rr_num",itemList.get(position).getRr_num());
+            intent.putExtra("rr_rider",itemList.get(position).getRr_rider());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              v.getContext().startActivity(intent);
 
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                intent.putExtra("rr_num",itemList.get(position).getRr_num());
-                intent.putExtra("rr_rider",itemList.get(position).getRr_rider());
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  v.getContext().startActivity(intent);
-
-            }
         });
     }
 

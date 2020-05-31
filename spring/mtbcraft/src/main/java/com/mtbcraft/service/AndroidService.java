@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.mapper.AndroidMapper;
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 
@@ -34,6 +35,16 @@ public class AndroidService {
 	public String readRecord(String rr_rider) throws Exception{
 		return androidMapper.readRecord(rr_rider);
 	}
+	
+	//코스가져오기
+	public List<Course> getCourse() throws Exception{
+		return androidMapper.getCourse();
+	}
+	
+	//코스상세보기
+		public List<Course> getCourseItem(String c_num) throws Exception{
+			return androidMapper.getCourseItem(c_num);
+		}
 	
 
 }

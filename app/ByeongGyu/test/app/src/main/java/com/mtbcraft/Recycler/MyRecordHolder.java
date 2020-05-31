@@ -1,4 +1,4 @@
-package com.example.gpstest;
+package com.mtbcraft.Recycler;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.gpstest.R;
+import com.mtbcraft.dto.RidingRecord;
 
 public class MyRecordHolder extends RecyclerView.ViewHolder {
     public TextView textView1, textView2, textView3, textView4;

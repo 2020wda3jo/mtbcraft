@@ -1,20 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '29.0.3'
-    dataBinding {
-        enabled = true
-    }
-    viewBinding {
-        enabled = true
-    }
 
     defaultConfig {
 
         applicationId "com.example.gpstest"
         minSdkVersion 23
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -62,6 +56,11 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation files('src/main/jniLibs/simple-xml-2.7.1.jar')
+
+
+    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:design:24.0.0'
+
 }
 
 configurations.all {

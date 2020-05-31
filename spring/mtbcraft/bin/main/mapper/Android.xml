@@ -6,4 +6,8 @@
 	<select id="LoginProcess" parameterType="hashMap" resultType="com.mtbcraft.dto.AnLogin">
 		select r_id, r_pw from rider where r_id = #{r_id} and r_pw = #{r_pw}
 	</select>
+	
+	<select id="getCourseItem" parameterType="String" resultType="com.mtbcraft.dto.Course">
+		select * from course where c_num = #{c_num}
+	</select>
 </mapper>

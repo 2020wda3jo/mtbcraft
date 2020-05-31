@@ -5,19 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="COURSE")
+
 public class Course {
-	@Id
-	@Column
 	private int c_num;
-	@Column
 	private int c_distance;
-	@Column
 	private int c_level;
-	@Column
 	private String c_area;
-	@Column
 	private String c_gpx;
 	
 	public int getC_num() {

@@ -1,4 +1,4 @@
-package com.example.gpstest;
+package com.mtbcraft.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,6 +14,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.gpstest.GpxInfo;
+import com.example.gpstest.R;
+import com.example.gpstest.SendGPXFile;
+import com.mtbcraft.network.HttpClient;
+
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import java.io.File;

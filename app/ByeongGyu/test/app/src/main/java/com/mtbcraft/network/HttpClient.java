@@ -1,4 +1,4 @@
-package com.example.gpstest;
+package com.mtbcraft.network;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

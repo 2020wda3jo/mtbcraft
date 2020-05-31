@@ -1,4 +1,4 @@
-package com.example.gpstest;
+package com.mtbcraft.dto;
 
 import java.text.ParseException;
 

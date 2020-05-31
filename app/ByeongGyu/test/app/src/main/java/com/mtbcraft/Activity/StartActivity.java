@@ -1,4 +1,4 @@
-package com.example.gpstest;
+package com.mtbcraft.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.gpstest.R;
 import com.google.android.material.tabs.TabLayout;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
