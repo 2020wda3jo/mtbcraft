@@ -30,20 +30,17 @@ public class SubActivity extends AppCompatActivity {
         String LoginId = auto.getString("LoginId","");
         Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
 
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(LoginId+"환영합니다");
-
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -53,6 +50,7 @@ public class SubActivity extends AppCompatActivity {
                 case R.id.nav_home:
                     Intent intent=new Intent(SubActivity.this,SubActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(SubActivity.this, MyReport.class);
@@ -65,11 +63,17 @@ public class SubActivity extends AppCompatActivity {
                     break;
 
                 case R.id.nav_course:
-                    Toast.makeText(SubActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Intent intent4=new Intent(SubActivity.this, MyScrap.class);
+                    startActivity(intent4);
                     break;
 
-                case R.id.nav_myroom:
-                    Toast.makeText(SubActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                case R.id.nav_comp:
+                    Intent intent5=new Intent(SubActivity.this, Competition.class);
+                    startActivity(intent5);
+                    break;
+                case R.id.nav_mission:
+                    Intent intent6=new Intent(SubActivity.this, Mission.class);
+                    startActivity(intent6);
                     break;
             }
             return true;

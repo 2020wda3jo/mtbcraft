@@ -27,6 +27,7 @@ import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.AndroidService;
 import com.mtbcraft.service.MemberService;
 
@@ -154,7 +155,6 @@ public class AndroidController {
 		return "redirect:/";
 	}
 	
-	//코스조회
 	// 코스 조회
 		@RequestMapping(value = "/app/riding/course")
 		public @ResponseBody List<Course> getCourse() throws Exception {
@@ -167,5 +167,32 @@ public class AndroidController {
 		System.out.println(c_num);
 		return androidService.getCourseItem(c_num);
 	}
-
+	
+	//코스 스크랩하기
+	@RequestMapping(value = "/app/riding/coursescrap")
+	public @ResponseBody Map<String, String> coursescrap(HttpServletRequest request) throws Exception {
+		Scrap_Status scrap = new Scrap_Status();
+		scrap.setSs_course(Integer.parseInt(request.getParameter("c_num")));
+		scrap.setSs_rider(request.getParameter("r_rider"));
+		androidService.insertScrap(scrap);
+		
+		System.out.println(request.getParameter("c_num"));
+		System.out.println(request.getParameter("r_rider"));
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("Status", "Ok");
+		
+		return result;
+	}
+	
+	// 사용자 스크랩 코스 조회
+	@RequestMapping(value = "/app/riding/scrap/{rr_rider}", method = RequestMethod.GET)
+	public @ResponseBody List<Course> getScrap(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
+		return memberService.getScrapCourse(rr_rider);
+	}
+	
+	// 사용자 스크랩 코스 상세보기
+	@RequestMapping(value = "/app/riding/scrap/{rr_rider}/{ss_course}", method = RequestMethod.GET)
+	public @ResponseBody List<Scrap_Status> getScrapDetail(@PathVariable(value = "rr_rider") String rr_rider, @PathVariable(value = "ss_course") String ss_course) throws Exception {
+		return androidService.getScrapDetail(rr_rider, ss_course);
+	}
 }

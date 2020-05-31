@@ -13,6 +13,7 @@ import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.dto.Scrap_Status;
 
 
 @Service
@@ -42,9 +43,23 @@ public class AndroidService {
 	}
 	
 	//코스상세보기
-		public List<Course> getCourseItem(String c_num) throws Exception{
-			return androidMapper.getCourseItem(c_num);
-		}
+	public List<Course> getCourseItem(String c_num) throws Exception{
+		return androidMapper.getCourseItem(c_num);
+	}
 	
+	//코스 스크랩
+	public String insertScrap(Scrap_Status scrap) throws Exception {
+		return androidMapper.insertScrap(scrap);
+	}
+	
+	//스크랩코스 보기
+	public List<Scrap_Status> getScrap(String rr_rider) throws Exception {
+		return androidMapper.getScrap(rr_rider);
+	}
+	
+	//스크랩코스 상세보기
+	public List<Scrap_Status> getScrapDetail(String rr_rider, String ss_course) throws Exception {
+		return androidMapper.getScrapDetail(rr_rider, ss_course);
+	}
 
 }

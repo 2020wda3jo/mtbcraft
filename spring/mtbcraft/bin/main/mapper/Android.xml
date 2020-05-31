@@ -10,4 +10,19 @@
 	<select id="getCourseItem" parameterType="String" resultType="com.mtbcraft.dto.Course">
 		select * from course where c_num = #{c_num}
 	</select>
+	
+	<select id="insertScrap" parameterType="com.mtbcraft.dto.Scrap_Status">
+		insert into scrap_status
+		(ss_rider, ss_course) values (
+		#{ss_rider},
+		#{ss_course} )
+	</select>
+	
+	<select id="getScrap" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
+		select * from scrap_status where ss_rider = #{ss_rider}
+	</select>
+	
+	<select id="getScrapDetail" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
+		select * from scrap_status where ss_rider= #{ss_rider} and ss_course = #{ss_course}
+	</select>
 </mapper>

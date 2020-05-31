@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CourseDetail extends AppCompatActivity {
-    String c_num;
+    String c_num, gpx;
     TextView textView1, textView2, textView3;
-    Button button;
+    Button button,button2;
     int Sta;
     private DrawerLayout mDrawerLayout;
     @Override
@@ -72,15 +72,22 @@ public class CourseDetail extends AppCompatActivity {
                     break;
 
                 case R.id.nav_alllist:
-                    Toast.makeText(CourseDetail.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Intent intent3=new Intent(CourseDetail.this, CourseList.class);
+                    startActivity(intent3);
                     break;
 
                 case R.id.nav_course:
-                    Toast.makeText(CourseDetail.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Intent intent4=new Intent(CourseDetail.this, MyScrap.class);
+                    startActivity(intent4);
                     break;
 
-                case R.id.nav_myroom:
-                    Toast.makeText(CourseDetail.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                case R.id.nav_comp:
+                    Intent intent5=new Intent(CourseDetail.this, Competition.class);
+                    startActivity(intent5);
+                    break;
+                case R.id.nav_mission:
+                    Intent intent6=new Intent(CourseDetail.this, Mission.class);
+                    startActivity(intent6);
                     break;
             }
             return true;
@@ -90,7 +97,10 @@ public class CourseDetail extends AppCompatActivity {
         textView2 = (TextView)findViewById(R.id.course_dis );
         textView3 = (TextView)findViewById(R.id.course_level );
         button = (Button)findViewById(R.id.scrap_bt);
-
+        button2 = (Button)findViewById(R.id.follow_bt);
+        Intent intent = new Intent(this.getIntent());
+        c_num = intent.getStringExtra("c_num");
+        gpx = intent.getStringExtra("c_gpx");
 
         button.setOnClickListener(v -> {
             ScrapTask scrap = new ScrapTask();
@@ -101,10 +111,11 @@ public class CourseDetail extends AppCompatActivity {
 
         });
 
-        Intent intent = new Intent(this.getIntent());
-        c_num = intent.getStringExtra("c_num");
+        button2.setOnClickListener(v->{
+            Intent intent2=new Intent(CourseDetail.this,FollowStart.class);
+            intent2.putExtra("gpx",gpx);
+        });
 
-        Log.d("리포트에서 받은거",c_num);
         try {
             GetTask getTask = new GetTask();
             Map<String, String> params = new HashMap<String, String>();
@@ -139,31 +150,12 @@ public class CourseDetail extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("디테일 ", s);
             try {
-
-                String tempData = s;
-
-                //json값을 받기위한 변수들
-
-                String c_distance = "";
-                String c_level = "";
-                String c_area = "";
-
-                JSONArray jarray = new JSONArray(tempData);
-                for (int i = 0; i < jarray.length(); i++) {
-                    JSONObject jObject = jarray.getJSONObject(i);
-                    c_distance = jObject.getString("c_distance");
-                    c_level = jObject.getString("c_level");
-                    c_area = jObject.getString("c_area");
-                }
-                Log.d("씨발", c_distance);
-                textView1.setText(c_area);
-                textView2.setText(c_distance);
-                textView3.setText(c_level);
+                //Log.d("스크랩 ", s);
+                Toast.makeText(getApplicationContext(), "스크랩 보관함에 저장되었습니다.", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
-
+                Toast.makeText(getApplicationContext(), "저장에 실패하였습니다", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -171,9 +163,6 @@ public class CourseDetail extends AppCompatActivity {
         public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
             @Override
             protected String doInBackground(Map<String, String>... maps) {
-                if (Sta == 1) {
-
-                }
                 // Http 요청 준비 작업
                 //URL은 현재 자기 아이피번호를 입력해야합니다.
                 HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/course/" + c_num);

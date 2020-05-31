@@ -3,18 +3,15 @@ package com.mtbcraft.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
@@ -60,18 +57,26 @@ public class DetailActivity extends AppCompatActivity {
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(DetailActivity.this, MyReport.class);
                     startActivity(intent2);
+                    finish();
                     break;
 
                 case R.id.nav_alllist:
-                    Toast.makeText(DetailActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Intent intent3=new Intent(DetailActivity.this, CourseList.class);
+                    startActivity(intent3);
                     break;
 
                 case R.id.nav_course:
-                    Toast.makeText(DetailActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Intent intent4=new Intent(DetailActivity.this, MyScrap.class);
+                    startActivity(intent4);
                     break;
 
-                case R.id.nav_myroom:
-                    Toast.makeText(DetailActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                case R.id.nav_comp:
+                    Intent intent5=new Intent(DetailActivity.this, Competition.class);
+                    startActivity(intent5);
+                    break;
+                case R.id.nav_mission:
+                    Intent intent6=new Intent(DetailActivity.this, Mission.class);
+                    startActivity(intent6);
                     break;
             }
             return true;
@@ -88,7 +93,6 @@ public class DetailActivity extends AppCompatActivity {
 
         rr_num = intent.getStringExtra("rr_num");
         rr_rider = intent.getStringExtra("rr_rider");
-        Log.d("리포트에서 받은거",rr_num+ rr_rider);
         try {
             GetTask getTask = new GetTask();
             Map<String, String> params = new HashMap<String, String>();
@@ -108,7 +112,7 @@ public class DetailActivity extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/api/get/"+rr_rider+"/"+rr_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/api/get/"+rr_rider+"/"+rr_num);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

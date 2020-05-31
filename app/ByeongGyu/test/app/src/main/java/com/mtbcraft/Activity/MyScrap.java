@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mtbcraft.Recycler.RecyclerAdapter;
 import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.dto.ScrapStatus;
 import com.mtbcraft.network.HttpClient;
 
 import org.json.JSONArray;
@@ -28,7 +29,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-public class MyReport extends AppCompatActivity  {
+public class MyScrap extends AppCompatActivity  {
     private RecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
     ArrayList<RidingRecord> arrlist = new ArrayList<>();
@@ -57,31 +58,31 @@ public class MyReport extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyReport.this,SubActivity.class);
+                    Intent intent=new Intent(MyScrap.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
-                    Intent intent2=new Intent(MyReport.this, MyReport.class);
+                    Intent intent2=new Intent(MyScrap.this, MyReport.class);
                     startActivity(intent2);
-                    finish();
                     break;
 
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(MyReport.this, CourseList.class);
+                    Intent intent3=new Intent(MyScrap.this, CourseList.class);
                     startActivity(intent3);
                     break;
 
                 case R.id.nav_course:
-                    Intent intent4=new Intent(MyReport.this, MyScrap.class);
+                    Intent intent4=new Intent(MyScrap.this, MyScrap.class);
                     startActivity(intent4);
+                    finish();
                     break;
 
                 case R.id.nav_comp:
-                    Intent intent5=new Intent(MyReport.this, Competition.class);
+                    Intent intent5=new Intent(MyScrap.this, Competition.class);
                     startActivity(intent5);
                     break;
                 case R.id.nav_mission:
-                    Intent intent6=new Intent(MyReport.this, Mission.class);
+                    Intent intent6=new Intent(MyScrap.this, Mission.class);
                     startActivity(intent6);
                     break;
             }
@@ -108,7 +109,7 @@ public class MyReport extends AppCompatActivity  {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/api/get/"+LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/scrap/"+LoginId);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -126,21 +127,21 @@ public class MyReport extends AppCompatActivity  {
 
         @Override
         protected void onPostExecute(String s) {
-           // Log.d("로그: ",s);
+            // Log.d("로그: ",s);
             try{
                 JSONArray jsonArray = new JSONArray(s);
                 StringBuffer sb = new StringBuffer();
                 String tempData = s;
 
                 Gson gson = new Gson();
-                ArrayList<RidingRecord> itemList = new ArrayList<>();
-                RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
+                ArrayList<ScrapStatus> itemList = new ArrayList<>();
+                ScrapStatus[] items = gson.fromJson(tempData, ScrapStatus[].class);
 
-                for(RidingRecord item: items){
+                for(ScrapStatus item: items){
                     itemList.add(item);
                 }
 
-                RecyclerAdapter adapter = new RecyclerAdapter(getApplicationContext(), itemList);
+                //MyScrapAdapter adapter = new RecyclerAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);
             }catch(Exception e){

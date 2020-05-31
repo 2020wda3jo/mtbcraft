@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,22 +56,32 @@ public class CourseList extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseList.this, SubActivity.class);
+                    Intent intent=new Intent(CourseList.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
+                    Intent intent2=new Intent(CourseList.this, MyReport.class);
+                    startActivity(intent2);
                     break;
 
                 case R.id.nav_alllist:
-                    Toast.makeText(CourseList.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Intent intent3=new Intent(CourseList.this, CourseList.class);
+                    startActivity(intent3);
+                    finish();
                     break;
 
                 case R.id.nav_course:
-                    Toast.makeText(CourseList.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                    Intent intent4=new Intent(CourseList.this, MyScrap.class);
+                    startActivity(intent4);
                     break;
 
-                case R.id.nav_myroom:
-                    Toast.makeText(CourseList.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                case R.id.nav_comp:
+                    Intent intent5=new Intent(CourseList.this, Competition.class);
+                    startActivity(intent5);
+                    break;
+                case R.id.nav_mission:
+                    Intent intent6=new Intent(CourseList.this, Mission.class);
+                    startActivity(intent6);
                     break;
             }
             return true;
@@ -97,7 +106,7 @@ public class CourseList extends AppCompatActivity  {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/course");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/course");
             // Parameter 를 전송한다.
 
             //Http 요청 전송
