@@ -134,7 +134,7 @@ public class AndroidController {
 		try{
 			
 			//String path = "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
-			String path = "/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
+			String path = "/home/ec2-user/data/gpx";
 			String fileName="";
 				
 			if(!file1.isEmpty()){ //첨부파일이 존재?
