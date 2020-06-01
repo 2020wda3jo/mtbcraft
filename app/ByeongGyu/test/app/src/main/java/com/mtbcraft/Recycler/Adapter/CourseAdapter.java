@@ -1,4 +1,4 @@
-package com.mtbcraft.Recycler;
+package com.mtbcraft.Recycler.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gpstest.R;
-import com.mtbcraft.Activity.CourseDetail;
+import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.dto.Course;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Course;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,8 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.mtbcraft.Recycler.CourseAdapter;
-import com.mtbcraft.Recycler.RecyclerAdapter;
+import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Mission.Mission;
+import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Activity.Scrap.MyScrap;
+import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Recycler.Adapter.CourseAdapter;
+import com.mtbcraft.Recycler.Adapter.RecyclerAdapter;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.network.HttpClient;
@@ -56,7 +61,7 @@ public class CourseList extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseList.this,SubActivity.class);
+                    Intent intent=new Intent(CourseList.this, SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
@@ -106,7 +111,7 @@ public class CourseList extends AppCompatActivity  {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/course");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/course");
             // Parameter 를 전송한다.
 
             //Http 요청 전송

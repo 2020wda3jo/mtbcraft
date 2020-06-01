@@ -1,4 +1,4 @@
-package com.mtbcraft.Recycler;
+package com.mtbcraft.Recycler.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gpstest.R;
-import com.mtbcraft.Activity.DetailActivity;
+import com.mtbcraft.Activity.Riding.DetailActivity;
 import com.mtbcraft.dto.RidingRecord;
 
 import java.text.ParseException;
@@ -26,7 +26,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
 
     public Context mContext;
     public ArrayList<RidingRecord> itemList;
-    RidingRecord item;
+
 
     public RecyclerAdapter(Context mContext, ArrayList<RidingRecord> itemList) {
         this.mContext = mContext;
@@ -36,7 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
     @NonNull
     @Override
     public MyRecordHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-       // View baseView = View.inflate(mContext, R.layout.activity_myreportitem, null);
+
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_myreportitem , viewGroup,false);
 
         return new MyRecordHolder(v);
@@ -66,9 +66,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
         String total = String.valueOf(km)+"Km";
 
         String hour_s = String.valueOf(hour);
-        String min_s = String.valueOf(min);
-
-
 
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String aaa = itemList.get(position).getRr_date();
@@ -90,18 +87,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
             intent.putExtra("rr_rider",itemList.get(position).getRr_rider());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               v.getContext().startActivity(intent);
-
         });
     }
 
 
     class MyRecordHolder extends RecyclerView.ViewHolder {
-        public TextView textView1, textView2, textView3, textView4;
+        public TextView textView1, textView2, textView3;
         public ImageView imageView;
         public LinearLayout viewClick;
-        public RidingRecord data;
         public final View mView;
-
         public MyRecordHolder( View itemView) {
             super(itemView);
             mView = itemView;

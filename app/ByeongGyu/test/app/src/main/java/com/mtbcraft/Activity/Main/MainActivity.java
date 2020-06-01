@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(intent);
             });
         }else{
-            Intent intent=new Intent(MainActivity.this,SubActivity.class);
+            Intent intent=new Intent(MainActivity.this, SubActivity.class);
             startActivity(intent);
             finish();
         }

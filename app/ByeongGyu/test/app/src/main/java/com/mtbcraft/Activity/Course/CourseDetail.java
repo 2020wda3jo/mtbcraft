@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Course;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,6 +20,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
+import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Riding.FollowStart;
+import com.mtbcraft.Activity.Mission.Mission;
+import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Activity.Scrap.MyScrap;
+import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.network.HttpClient;
 
 import org.json.JSONArray;
@@ -63,7 +69,7 @@ public class CourseDetail extends AppCompatActivity {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseDetail.this,SubActivity.class);
+                    Intent intent=new Intent(CourseDetail.this, SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
@@ -112,7 +118,7 @@ public class CourseDetail extends AppCompatActivity {
         });
 
         button2.setOnClickListener(v->{
-            Intent intent2=new Intent(CourseDetail.this,FollowStart.class);
+            Intent intent2=new Intent(CourseDetail.this, FollowStart.class);
             intent2.putExtra("gpx",gpx);
         });
 
@@ -151,7 +157,6 @@ public class CourseDetail extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             try {
-                //Log.d("스크랩 ", s);
                 Toast.makeText(getApplicationContext(), "스크랩 보관함에 저장되었습니다.", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -165,7 +170,7 @@ public class CourseDetail extends AppCompatActivity {
             protected String doInBackground(Map<String, String>... maps) {
                 // Http 요청 준비 작업
                 //URL은 현재 자기 아이피번호를 입력해야합니다.
-                HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/course/" + c_num);
+                HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/course/"+c_num);
                 // Parameter 를 전송한다.
                 http.addAllParameters(maps[0]);
                 //Http 요청 전송

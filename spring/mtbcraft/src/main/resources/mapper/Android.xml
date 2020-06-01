@@ -7,10 +7,12 @@
 		select r_id, r_pw from rider where r_id = #{r_id} and r_pw = #{r_pw}
 	</select>
 	
+	<!-- 코스 상세 보기 -->
 	<select id="getCourseItem" parameterType="String" resultType="com.mtbcraft.dto.Course">
 		select * from course where c_num = #{c_num}
 	</select>
 	
+	<!-- 코스 스크랩 -->
 	<select id="insertScrap" parameterType="com.mtbcraft.dto.Scrap_Status">
 		insert into scrap_status
 		(ss_rider, ss_course) values (
@@ -18,11 +20,14 @@
 		#{ss_course} )
 	</select>
 	
+	<!-- 내 스크립 리스트 -->
 	<select id="getScrap" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
-		select * from scrap_status where ss_rider = #{ss_rider}
+		select ss_rider, ss_course, c_distance, c_level, c_area from course INNER JOIN
+		scrap_status ON(scrap_status.SS_COURSE = course.C_NUM and scrap_status.SS_RIDER=#{ss_rider} );
 	</select>
 	
+	<!--  내 스크랩 코스 보기 -->
 	<select id="getScrapDetail" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
-		select * from scrap_status where ss_rider= #{ss_rider} and ss_course = #{ss_course}
+		select * from course where c_num = #{c_num}
 	</select>
 </mapper>

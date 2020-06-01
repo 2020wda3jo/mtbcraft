@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Scrap;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,23 +19,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.mtbcraft.Recycler.RecyclerAdapter;
-import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Course.CourseList;
+import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Activity.Mission.Mission;
+import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Recycler.Adapter.MyScrapAdapter;
 import com.mtbcraft.dto.ScrapStatus;
 import com.mtbcraft.network.HttpClient;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 public class MyScrap extends AppCompatActivity  {
-    private RecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
-    ArrayList<RidingRecord> arrlist = new ArrayList<>();
     RecyclerView recyclerView;
     SharedPreferences auto;
     String LoginId;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myreport);
@@ -58,12 +59,13 @@ public class MyScrap extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyScrap.this,SubActivity.class);
+                    Intent intent=new Intent(MyScrap.this, SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(MyScrap.this, MyReport.class);
                     startActivity(intent2);
+                    finish();
                     break;
 
                 case R.id.nav_alllist:
@@ -74,7 +76,6 @@ public class MyScrap extends AppCompatActivity  {
                 case R.id.nav_course:
                     Intent intent4=new Intent(MyScrap.this, MyScrap.class);
                     startActivity(intent4);
-                    finish();
                     break;
 
                 case R.id.nav_comp:
@@ -109,7 +110,7 @@ public class MyScrap extends AppCompatActivity  {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/scrap/"+LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/scrap/"+LoginId);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -129,10 +130,7 @@ public class MyScrap extends AppCompatActivity  {
         protected void onPostExecute(String s) {
             // Log.d("로그: ",s);
             try{
-                JSONArray jsonArray = new JSONArray(s);
-                StringBuffer sb = new StringBuffer();
                 String tempData = s;
-
                 Gson gson = new Gson();
                 ArrayList<ScrapStatus> itemList = new ArrayList<>();
                 ScrapStatus[] items = gson.fromJson(tempData, ScrapStatus[].class);
@@ -141,7 +139,7 @@ public class MyScrap extends AppCompatActivity  {
                     itemList.add(item);
                 }
 
-                //MyScrapAdapter adapter = new RecyclerAdapter(getApplicationContext(), itemList);
+                MyScrapAdapter adapter = new MyScrapAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);
             }catch(Exception e){

@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Riding;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.mtbcraft.Recycler.RecyclerAdapter;
+import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Course.CourseList;
+import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Activity.Mission.Mission;
+import com.mtbcraft.Activity.Scrap.MyScrap;
+import com.mtbcraft.Recycler.Adapter.RecyclerAdapter;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.network.HttpClient;
 
@@ -57,7 +62,7 @@ public class MyReport extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyReport.this,SubActivity.class);
+                    Intent intent=new Intent(MyReport.this, SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:

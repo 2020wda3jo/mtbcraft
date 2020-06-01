@@ -58,7 +58,7 @@ public class AndroidService {
 	}
 	
 	//스크랩코스 상세보기
-	public List<Scrap_Status> getScrapDetail(String rr_rider, String ss_course) throws Exception {
+	public List<Course> getScrapDetail(String rr_rider, String ss_course) throws Exception {
 		return androidMapper.getScrapDetail(rr_rider, ss_course);
 	}
 

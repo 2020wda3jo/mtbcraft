@@ -38,6 +38,6 @@ public interface AndroidMapper {
 	//스크랩 코스 보기
 	public List<Scrap_Status> getScrap(String rr_rider) throws Exception;
 	
-	//스크랩 코스 보기
-	public List<Scrap_Status> getScrapDetail(String rr_rider, String ss_course) throws Exception;
+	//스크랩 코스 상세보기
+	public List<Course> getScrapDetail(String rr_rider, String ss_course) throws Exception;
 }

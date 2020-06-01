@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class FollowStart extends AppCompatActivity implements
+public class StartActivity extends AppCompatActivity implements
         LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     /*GPS관련 설정 들 */
     private static final String LOG_TAG = "StartActivity";
@@ -55,9 +56,6 @@ public class FollowStart extends AppCompatActivity implements
     final static int Run=1;
 
     /*레이아웃 관련*/
-    LinearLayout maView;
-    MapView mMapView;
-
     //뷰에서 상단정보
     TextView m_speed, m_distance, m_time ,m_t, m_rest;
 
@@ -73,6 +71,8 @@ public class FollowStart extends AppCompatActivity implements
     ArrayList<Double> witch_lat = new ArrayList<>();
     ArrayList<Double> witch_lon = new ArrayList<>();
     ArrayList<Double> ele = new ArrayList<>();
+
+    MapView mapView;
 
     //휴식시간 계산
     int hour, min, sec;
@@ -110,11 +110,13 @@ public class FollowStart extends AppCompatActivity implements
         courseinfo = (TextView)findViewById(R.id.couse_info);//코스정보
         Button button2 = (Button)findViewById(R.id.endriding);
 
-        //지도띄우기
-        mMapView = (MapView)findViewById(R.id.map_view);
 
-        mMapView.setCurrentLocationEventListener(this);
-        mMapView.isShowingCurrentLocationMarker();
+        mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+
+        mapView.setCurrentLocationEventListener(this);
+        mapView.isShowingCurrentLocationMarker();
 
         timeThread = new Thread(new timeThread());
         timeThread.start();
@@ -164,7 +166,7 @@ public class FollowStart extends AppCompatActivity implements
         });
 
         button2.setOnClickListener(v -> {
-            Intent intent = new Intent(FollowStart.this, endActivity.class);
+            Intent intent = new Intent(StartActivity.this, endActivity.class);
             //형변환한거
             intent.putExtra("cha_dis",cha_dis); //이동거리(소수점X)
             intent.putExtra("cha_max",cha_max); //최대속도(소수점X)
@@ -185,14 +187,17 @@ public class FollowStart extends AppCompatActivity implements
             intent.putExtra("minLat", minLat); //최소위도
             intent.putExtra("maxLon", maxLon); //최대경도
             intent.putExtra("minLon", minLon); //최소경도
+            intent.putExtra("wido",witch_lat); //위도(지도보여줄거
+            intent.putExtra("kyun",witch_lon); //경도(지도보여줄거)
             startActivity(intent);
             finish();
+
         });
+
         //권한 체크
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (lastKnownLocation != null) {
@@ -203,7 +208,7 @@ public class FollowStart extends AppCompatActivity implements
     private void changeView(int index) {
         switch (index) {
             case 0 :
-                mMapView.setVisibility(View.VISIBLE);
+                mapView.setVisibility(View.VISIBLE);
                 m_status.setVisibility(View.VISIBLE);
                 m_time.setVisibility(View.VISIBLE);
                 layout.setVisibility(View.INVISIBLE);
@@ -217,7 +222,7 @@ public class FollowStart extends AppCompatActivity implements
                 layout9.setVisibility(View.INVISIBLE);
                 break ;
             case 1 :
-                mMapView.setVisibility(View.GONE);
+                mapView.setVisibility(View.GONE);
                 m_status.setVisibility(View.INVISIBLE);
                 m_time.setVisibility(View.INVISIBLE);
                 layout.setVisibility(View.VISIBLE);
@@ -235,8 +240,8 @@ public class FollowStart extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-        mMapView.setShowCurrentLocationMarker(true);
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+        mapView.setShowCurrentLocationMarker(true);
     }
 
     @Override
@@ -290,15 +295,15 @@ public class FollowStart extends AppCompatActivity implements
             if ( check_result ) {
                 Log.d("@@@", "start");
                 //위치 값을 가져올 수 있음
-                mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
             }
             else {
                 // 거부한 퍼미션이 있다면 앱을 사용할 수 없는 이유를 설명해주고 앱을 종료합니다.2 가지 경우가 있습니다.
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])) {
-                    Toast.makeText(FollowStart.this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(StartActivity.this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
                     finish();
                 }else {
-                    Toast.makeText(FollowStart.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(StartActivity.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -309,7 +314,7 @@ public class FollowStart extends AppCompatActivity implements
     //여기부터는 GPS 활성화를 위한 메소드들
     private void showDialogForLocationServiceSetting() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(FollowStart.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
                 + "위치 설정을 수정하실래요?");
@@ -403,13 +408,13 @@ public class FollowStart extends AppCompatActivity implements
         polyline.setLineColor(Color.argb(128,255,51,0));
 
         polyline.addPoint(MapPoint.mapPointWithGeoCoord(latitude,lonngitude));
-        mMapView.addPolyline(polyline);
-        mMapView.isShowingCurrentLocationMarker();
+        mapView.addPolyline(polyline);
+        mapView.isShowingCurrentLocationMarker();
 
         // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
         int padding = 50; // px
-        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,padding,2,3));
+        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,padding,2,3));
 
         cnt = cnt + 1;
         //km당 알림주는거
@@ -425,12 +430,12 @@ public class FollowStart extends AppCompatActivity implements
             MapPolyline polyline2 = new MapPolyline();
             polyline.setLineColor(Color.argb(128,255,51,0));
             polyline.addPoint(MapPoint.mapPointWithGeoCoord(mLastlocation.getLatitude(),mLastlocation.getLongitude()));
-            mMapView.addPolyline(polyline);
+            mapView.addPolyline(polyline);
 
             // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
             MapPointBounds mapPointBounds2 = new MapPointBounds(polyline.getMapPoints());
             int padding2 = 50; // px
-            mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding,2,3));
+            mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding,2,3));
 
             //최대속도(5.12 값 틀림)
             if(getSpeed > maX){
@@ -503,7 +508,7 @@ public class FollowStart extends AppCompatActivity implements
     @Override
     public void onProviderEnabled(String provider) {
         //권한 체크
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         // 위치정보 업데이트
@@ -519,7 +524,7 @@ public class FollowStart extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         //권한 체크
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         // 위치정보 업데이트
@@ -550,4 +555,5 @@ public class FollowStart extends AppCompatActivity implements
             }
         }
     }
+
 }

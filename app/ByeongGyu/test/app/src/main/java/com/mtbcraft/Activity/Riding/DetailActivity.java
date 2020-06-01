@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Riding;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,6 +15,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
+import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Course.CourseList;
+import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Activity.Mission.Mission;
+import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.network.HttpClient;
 
 import org.json.JSONArray;
@@ -51,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(DetailActivity.this,SubActivity.class);
+                    Intent intent=new Intent(DetailActivity.this, SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:

@@ -185,14 +185,14 @@ public class AndroidController {
 	}
 	
 	// 사용자 스크랩 코스 조회
-	@RequestMapping(value = "/app/riding/scrap/{rr_rider}", method = RequestMethod.GET)
+	@RequestMapping(value = "/app/riding/scrap/{rr_rider}")
 	public @ResponseBody List<Course> getScrap(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
 		return memberService.getScrapCourse(rr_rider);
 	}
 	
 	// 사용자 스크랩 코스 상세보기
 	@RequestMapping(value = "/app/riding/scrap/{rr_rider}/{ss_course}", method = RequestMethod.GET)
-	public @ResponseBody List<Scrap_Status> getScrapDetail(@PathVariable(value = "rr_rider") String rr_rider, @PathVariable(value = "ss_course") String ss_course) throws Exception {
+	public @ResponseBody List<Course> getScrapDetail(@PathVariable(value = "rr_rider") String rr_rider, @PathVariable(value = "ss_course") String ss_course) throws Exception {
 		return androidService.getScrapDetail(rr_rider, ss_course);
 	}
 }

@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Riding;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -27,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.gpstest.R;
 import com.google.android.material.tabs.TabLayout;
+import com.mtbcraft.Activity.Main.endActivity;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPoint;
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class StartActivity extends AppCompatActivity implements
+public class FollowStart extends AppCompatActivity implements
         LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     /*GPS관련 설정 들 */
     private static final String LOG_TAG = "StartActivity";
@@ -164,7 +165,7 @@ public class StartActivity extends AppCompatActivity implements
         });
 
         button2.setOnClickListener(v -> {
-            Intent intent = new Intent(StartActivity.this, endActivity.class);
+            Intent intent = new Intent(FollowStart.this, endActivity.class);
             //형변환한거
             intent.putExtra("cha_dis",cha_dis); //이동거리(소수점X)
             intent.putExtra("cha_max",cha_max); //최대속도(소수점X)
@@ -295,10 +296,10 @@ public class StartActivity extends AppCompatActivity implements
             else {
                 // 거부한 퍼미션이 있다면 앱을 사용할 수 없는 이유를 설명해주고 앱을 종료합니다.2 가지 경우가 있습니다.
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])) {
-                    Toast.makeText(StartActivity.this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FollowStart.this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
                     finish();
                 }else {
-                    Toast.makeText(StartActivity.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FollowStart.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -309,7 +310,7 @@ public class StartActivity extends AppCompatActivity implements
     //여기부터는 GPS 활성화를 위한 메소드들
     private void showDialogForLocationServiceSetting() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(FollowStart.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
                 + "위치 설정을 수정하실래요?");
@@ -503,7 +504,7 @@ public class StartActivity extends AppCompatActivity implements
     @Override
     public void onProviderEnabled(String provider) {
         //권한 체크
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         // 위치정보 업데이트
@@ -519,7 +520,7 @@ public class StartActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         //권한 체크
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         // 위치정보 업데이트

@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mtbcraft.Activity.SubActivity;
+import com.mtbcraft.Activity.Main.SubActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

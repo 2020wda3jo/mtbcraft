@@ -1,4 +1,4 @@
-package com.mtbcraft.Activity;
+package com.mtbcraft.Activity.Main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +19,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
+import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Course.CourseList;
+import com.mtbcraft.Activity.Mission.Mission;
+import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Activity.Scrap.MyScrap;
 
 public class SubActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -85,7 +90,7 @@ public class SubActivity extends AppCompatActivity {
         //라이딩 시작
         startbt.setOnClickListener(v -> {
 
-            Intent intent=new Intent(SubActivity.this,StartActivity.class);
+            Intent intent=new Intent(SubActivity.this, StartActivity.class);
             startActivity(intent);
         });
 
