@@ -62,7 +62,7 @@ public class MyReport extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyReport.this, SubActivity.class);
+                    Intent intent=new Intent(MyReport.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
@@ -70,24 +70,27 @@ public class MyReport extends AppCompatActivity  {
                     startActivity(intent2);
                     finish();
                     break;
-
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(MyReport.this, CourseList.class);
+                    Intent intent3=new Intent(MyReport.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-
-                case R.id.nav_course:
-                    Intent intent4=new Intent(MyReport.this, MyScrap.class);
+                case R.id.nav_courselist:
+                    Intent intent4=new Intent(MyReport.this, CourseList.class);
                     startActivity(intent4);
                     break;
 
-                case R.id.nav_comp:
-                    Intent intent5=new Intent(MyReport.this, Competition.class);
+                case R.id.nav_course:
+                    Intent intent5=new Intent(MyReport.this, MyScrap.class);
                     startActivity(intent5);
                     break;
-                case R.id.nav_mission:
-                    Intent intent6=new Intent(MyReport.this, Mission.class);
+
+                case R.id.nav_comp:
+                    Intent intent6=new Intent(MyReport.this, Competition.class);
                     startActivity(intent6);
+                    break;
+                case R.id.nav_mission:
+                    Intent intent7=new Intent(MyReport.this, Mission.class);
+                    startActivity(intent7);
                     break;
             }
             return true;

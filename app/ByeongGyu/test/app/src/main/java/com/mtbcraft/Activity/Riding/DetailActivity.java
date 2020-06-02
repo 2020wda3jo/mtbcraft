@@ -56,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(DetailActivity.this, SubActivity.class);
+                    Intent intent=new Intent(DetailActivity.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
@@ -64,24 +64,27 @@ public class DetailActivity extends AppCompatActivity {
                     startActivity(intent2);
                     finish();
                     break;
-
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(DetailActivity.this, CourseList.class);
+                    Intent intent3=new Intent(DetailActivity.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-
-                case R.id.nav_course:
-                    Intent intent4=new Intent(DetailActivity.this, MyScrap.class);
+                case R.id.nav_courselist:
+                    Intent intent4=new Intent(DetailActivity.this, CourseList.class);
                     startActivity(intent4);
                     break;
 
-                case R.id.nav_comp:
-                    Intent intent5=new Intent(DetailActivity.this, Competition.class);
+                case R.id.nav_course:
+                    Intent intent5=new Intent(DetailActivity.this, MyScrap.class);
                     startActivity(intent5);
                     break;
-                case R.id.nav_mission:
-                    Intent intent6=new Intent(DetailActivity.this, Mission.class);
+
+                case R.id.nav_comp:
+                    Intent intent6=new Intent(DetailActivity.this, Competition.class);
                     startActivity(intent6);
+                    break;
+                case R.id.nav_mission:
+                    Intent intent7=new Intent(DetailActivity.this, Mission.class);
+                    startActivity(intent7);
                     break;
             }
             return true;
@@ -149,6 +152,7 @@ public class DetailActivity extends AppCompatActivity {
                 String highS="";
                 String maxS = "";
                 String breakS="";
+                String gpx="";
                 JSONArray jarray = new JSONArray(tempData);
                 for(int i=0; i<jarray.length(); i++){
                     JSONObject jObject = jarray.getJSONObject(i);
@@ -159,6 +163,7 @@ public class DetailActivity extends AppCompatActivity {
                     avgS = jObject.getString("rr_avgspeed");
                     highS = jObject.getString("rr_high");
                     maxS = jObject.getString("rr_topspeed");
+                    gpx = jObject.getString("rr_gpx");
                 }
 
                 //주행시간 계산

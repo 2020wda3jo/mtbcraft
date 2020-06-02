@@ -24,6 +24,7 @@ import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Activity.Riding.RidingRecordAll;
 import com.mtbcraft.Recycler.Adapter.MyScrapAdapter;
 import com.mtbcraft.dto.ScrapStatus;
 import com.mtbcraft.network.HttpClient;
@@ -59,32 +60,35 @@ public class MyScrap extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyScrap.this, SubActivity.class);
+                    Intent intent=new Intent(MyScrap.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(MyScrap.this, MyReport.class);
                     startActivity(intent2);
-                    finish();
                     break;
-
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(MyScrap.this, CourseList.class);
+                    Intent intent3=new Intent(MyScrap.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-
-                case R.id.nav_course:
-                    Intent intent4=new Intent(MyScrap.this, MyScrap.class);
+                case R.id.nav_courselist:
+                    Intent intent4=new Intent(MyScrap.this, CourseList.class);
                     startActivity(intent4);
                     break;
 
-                case R.id.nav_comp:
-                    Intent intent5=new Intent(MyScrap.this, Competition.class);
+                case R.id.nav_course:
+                    Intent intent5=new Intent(MyScrap.this, MyScrap.class);
                     startActivity(intent5);
+                    finish();
+                    break;
+
+                case R.id.nav_comp:
+                    Intent intent6=new Intent(MyScrap.this, Competition.class);
+                    startActivity(intent6);
                     break;
                 case R.id.nav_mission:
-                    Intent intent6=new Intent(MyScrap.this, Mission.class);
-                    startActivity(intent6);
+                    Intent intent7=new Intent(MyScrap.this, Mission.class);
+                    startActivity(intent7);
                     break;
             }
             return true;

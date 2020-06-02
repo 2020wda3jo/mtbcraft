@@ -1,6 +1,7 @@
 package com.mtbcraft.Activity.Main;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +23,7 @@ import com.mtbcraft.Activity.Competition.Competition;
 import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Activity.Riding.RidingRecordAll;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 
 public class SubActivity extends AppCompatActivity {
@@ -31,9 +32,22 @@ public class SubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submain);
 
+        // 다이얼로그 바디
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
+        // 메세지
+        alert_confirm.setMessage("문제 및 수정예정 : \n - 라이딩 시작시 현재속도 불일치\n - 리사이클러뷰 간헐적 안보임 \n  - 단위계산 \n- 웹서버 통신 클래스\n - 레이아웃 정리(폰크기마다 차이 \n - 로그인 방식? \n - 상세보기 및 개인기록볼때 지도부분 수정중 \n - IP서버로 변환중");
+        // 확인 버튼 리스너
+        alert_confirm.setPositiveButton("확인", null);
+        // 다이얼로그 생성
+        AlertDialog alert = alert_confirm.create();
+        // 다이얼로그 타이틀
+        alert.setTitle("업데이트 로그");
+        // 다이얼로그 보기
+        alert.show();
+
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String LoginId = auto.getString("LoginId","");
-        Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
+
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -53,32 +67,32 @@ public class SubActivity extends AppCompatActivity {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(SubActivity.this,SubActivity.class);
-                    startActivity(intent);
-                    finish();
                     break;
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(SubActivity.this, MyReport.class);
                     startActivity(intent2);
                     break;
-
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(SubActivity.this, CourseList.class);
+                    Intent intent3=new Intent(SubActivity.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-
-                case R.id.nav_course:
-                    Intent intent4=new Intent(SubActivity.this, MyScrap.class);
+                case R.id.nav_courselist:
+                    Intent intent4=new Intent(SubActivity.this, CourseList.class);
                     startActivity(intent4);
                     break;
 
-                case R.id.nav_comp:
-                    Intent intent5=new Intent(SubActivity.this, Competition.class);
+                case R.id.nav_course:
+                    Intent intent5=new Intent(SubActivity.this, MyScrap.class);
                     startActivity(intent5);
                     break;
-                case R.id.nav_mission:
-                    Intent intent6=new Intent(SubActivity.this, Mission.class);
+
+                case R.id.nav_comp:
+                    Intent intent6=new Intent(SubActivity.this, Competition.class);
                     startActivity(intent6);
+                    break;
+                case R.id.nav_mission:
+                    Intent intent7=new Intent(SubActivity.this, Mission.class);
+                    startActivity(intent7);
                     break;
             }
             return true;

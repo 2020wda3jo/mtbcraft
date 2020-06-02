@@ -3,11 +3,13 @@ package com.mtbcraft.Activity.Course;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,30 +23,136 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.Competition;
-import com.mtbcraft.Activity.Riding.FollowStart;
-import com.mtbcraft.Activity.Mission.Mission;
-import com.mtbcraft.Activity.Riding.MyReport;
-import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Activity.Mission.Mission;
+import com.mtbcraft.Activity.Riding.FollowStart;
+import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Activity.Riding.RidingRecordAll;
+import com.mtbcraft.Activity.Scrap.MyScrap;
+import com.mtbcraft.gpxparser.GPXParser;
+import com.mtbcraft.gpxparser.Gpx;
+import com.mtbcraft.gpxparser.Track;
+import com.mtbcraft.gpxparser.TrackPoint;
+import com.mtbcraft.gpxparser.TrackSegment;
 import com.mtbcraft.network.HttpClient;
+
+import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapPointBounds;
+import net.daum.mf.map.api.MapPolyline;
+import net.daum.mf.map.api.MapReverseGeoCoder;
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class CourseDetail extends AppCompatActivity {
+public class CourseDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     String c_num, gpx;
     TextView textView1, textView2, textView3;
     Button button,button2;
     int Sta;
     private DrawerLayout mDrawerLayout;
+    GPXParser mParser = new GPXParser();
+    Gpx parsedGpx = null;
+    MapView mapView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coursedetail);
 
+        mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+
+        mapView.setCurrentLocationEventListener(this);
+        mapView.isShowingCurrentLocationMarker();
+
+        MapPolyline polyline = new MapPolyline();
+        polyline.setTag(1000);
+        polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
+
+
+
+
+
+
+        Thread uThread = new Thread() {
+
+            @Override
+
+            public void run() {
+
+                try {
+                    //서버에 올려둔 이미지 URL
+                    URL url = new URL("http://100.92.32.8/and.gpx");
+                    //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
+                    /* URLConnection 생성자가 protected로 선언되어 있으므로
+                     개발자가 직접 HttpURLConnection 객체 생성 불가 */
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    /* openConnection()메서드가 리턴하는 urlConnection 객체는
+                    HttpURLConnection의 인스턴스가 될 수 있으므로 캐스팅해서 사용한다*/
+
+                    conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
+                    conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
+
+
+                    InputStream is = conn.getInputStream(); //inputStream 값 가져오기
+                    // InputStream in = getAssets().open("and.gpx");
+                    parsedGpx = mParser.parse(is);
+
+                    if (parsedGpx != null) {
+                        // log stuff
+                        List<Track> tracks = parsedGpx.getTracks();
+                        for (int i = 0; i < tracks.size(); i++) {
+                            Track track = tracks.get(i);
+                            Log.d("track ", i + ":");
+                            List<TrackSegment> segments = track.getTrackSegments();
+                            for (int j = 0; j < segments.size(); j++) {
+                                TrackSegment segment = segments.get(j);
+
+                                for (TrackPoint trackPoint : segment.getTrackPoints()) {
+                                    polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                                    Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
+                                }
+                            }
+                        }
+
+                        // Polyline 지도에 올리기.
+                        mapView.addPolyline(polyline);
+
+// 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                        MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
+                        int padding = 100; // px
+                        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+                    } else {
+                        Log.e("error","Error parsing gpx track!");
+                    }
+
+
+                } catch (MalformedURLException e) {
+
+                    e.printStackTrace();
+
+                } catch (IOException | XmlPullParserException e) {
+
+                    e.printStackTrace();
+
+                }
+
+
+            }
+        };
+        uThread.start(); // 작업 Thread 실행
 
         /* 로그인관련 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -69,31 +177,35 @@ public class CourseDetail extends AppCompatActivity {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseDetail.this, SubActivity.class);
+                    Intent intent=new Intent(CourseDetail.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(CourseDetail.this, MyReport.class);
                     startActivity(intent2);
                     break;
-
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(CourseDetail.this, CourseList.class);
+                    Intent intent3=new Intent(CourseDetail.this, RidingRecordAll.class);
                     startActivity(intent3);
+                    break;
+                case R.id.nav_courselist:
+                    Intent intent4=new Intent(CourseDetail.this, CourseList.class);
+                    startActivity(intent4);
+                    finish();
                     break;
 
                 case R.id.nav_course:
-                    Intent intent4=new Intent(CourseDetail.this, MyScrap.class);
-                    startActivity(intent4);
+                    Intent intent5=new Intent(CourseDetail.this, MyScrap.class);
+                    startActivity(intent5);
                     break;
 
                 case R.id.nav_comp:
-                    Intent intent5=new Intent(CourseDetail.this, Competition.class);
-                    startActivity(intent5);
+                    Intent intent6=new Intent(CourseDetail.this, Competition.class);
+                    startActivity(intent6);
                     break;
                 case R.id.nav_mission:
-                    Intent intent6=new Intent(CourseDetail.this, Mission.class);
-                    startActivity(intent6);
+                    Intent intent7=new Intent(CourseDetail.this, Mission.class);
+                    startActivity(intent7);
                     break;
             }
             return true;
@@ -131,6 +243,8 @@ public class CourseDetail extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 
     public class ScrapTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
@@ -206,7 +320,7 @@ public class CourseDetail extends AppCompatActivity {
                         c_level = jObject.getString("c_level");
                         c_area = jObject.getString("c_area");
                     }
-                    Log.d("씨발", c_distance);
+
                     textView1.setText(c_area);
                     textView2.setText(c_distance);
                     textView3.setText(c_level);
@@ -237,5 +351,40 @@ public class CourseDetail extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
     }
 }

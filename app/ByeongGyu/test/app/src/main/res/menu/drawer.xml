@@ -9,12 +9,15 @@
             android:icon="@drawable/ic_attachment"
             android:title="홈" />
         <item
-            android:id="@+id/nav_mylist"
-
-            android:icon="@drawable/ic_attachment"
-            android:title="라이딩 기록" />
+        android:id="@+id/nav_mylist"
+        android:icon="@drawable/ic_attachment"
+        android:title="라이딩 기록" />
         <item
             android:id="@+id/nav_alllist"
+            android:icon="@drawable/ic_attachment"
+            android:title="공유된 라이딩 기록(X)" />
+        <item
+            android:id="@+id/nav_courselist"
             android:icon="@drawable/ic_image"
             android:title="코스 보기" />
         <item
@@ -24,11 +27,11 @@
         <item
             android:id="@+id/nav_comp"
             android:icon="@drawable/ic_place"
-            android:title="경쟁전" />
+            android:title="경쟁전(X)" />
         <item
             android:id="@+id/nav_mission"
             android:icon="@drawable/ic_place"
-            android:title="미션" />
+            android:title="미션(X)" />
     </group>
 
 

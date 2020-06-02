@@ -1,8 +1,11 @@
 package com.mtbcraft.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +13,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -25,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.Course;
-import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.AndroidService;
@@ -122,12 +129,7 @@ public class AndroidController {
 		return memberService.getRidingRecord(rr_rider);
 	}
 
-	// 주행기록 가져오기
-	@RequestMapping(value = { "/api/get/{rr_rider}/{rr_num}" })
-	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable(value = "rr_rider") String rr_rider,
-			@PathVariable(value = "rr_num") String rr_num) throws Exception {
-		return memberService.getRidingRecordDetail(rr_rider, rr_num);
-	}
+	
 	
 	@RequestMapping(value="/android/fileUpload", method=RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1){

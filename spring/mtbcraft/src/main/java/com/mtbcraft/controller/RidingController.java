@@ -20,7 +20,6 @@ import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.MemberService;
 import com.mtbcraft.service.RidingService;
-
 @Controller
 public class RidingController {
 	@Autowired

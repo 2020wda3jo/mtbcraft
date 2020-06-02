@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.mtbcraft.Activity.Competition.Competition;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
+import com.mtbcraft.Activity.Riding.RidingRecordAll;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Recycler.Adapter.CourseAdapter;
@@ -61,32 +62,35 @@ public class CourseList extends AppCompatActivity  {
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseList.this, SubActivity.class);
+                    Intent intent=new Intent(CourseList.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(CourseList.this, MyReport.class);
                     startActivity(intent2);
                     break;
-
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(CourseList.this, CourseList.class);
+                    Intent intent3=new Intent(CourseList.this, RidingRecordAll.class);
                     startActivity(intent3);
+                    break;
+                case R.id.nav_courselist:
+                    Intent intent4=new Intent(CourseList.this, CourseList.class);
+                    startActivity(intent4);
                     finish();
                     break;
 
                 case R.id.nav_course:
-                    Intent intent4=new Intent(CourseList.this, MyScrap.class);
-                    startActivity(intent4);
+                    Intent intent5=new Intent(CourseList.this, MyScrap.class);
+                    startActivity(intent5);
                     break;
 
                 case R.id.nav_comp:
-                    Intent intent5=new Intent(CourseList.this, Competition.class);
-                    startActivity(intent5);
+                    Intent intent6=new Intent(CourseList.this, Competition.class);
+                    startActivity(intent6);
                     break;
                 case R.id.nav_mission:
-                    Intent intent6=new Intent(CourseList.this, Mission.class);
-                    startActivity(intent6);
+                    Intent intent7=new Intent(CourseList.this, Mission.class);
+                    startActivity(intent7);
                     break;
             }
             return true;

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity{
                 intent.putExtra("UserId",userid.getText().toString());
                 intent.putExtra("UserPw", userpw.getText().toString());
                 startActivity(intent);
+                Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
+                finish();
             });
         }else{
             Intent intent=new Intent(MainActivity.this, SubActivity.class);
