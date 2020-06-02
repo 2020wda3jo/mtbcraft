@@ -7,10 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
-import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.Member;
 import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.RidingRecord;
@@ -39,11 +37,6 @@ public class MemberService {
 		return memberMapper.getRidingRecordDetail(rr_rider, rr_num);
 	}
 	
-	//주행기록 공개여부 업데이트
-	public void updateRidingRecord(int rr_num, int rr_open) throws Exception{
-		memberMapper.updateRidingRecord(rr_num, rr_open);
-	}
-	
 	//코스가져오기
 	public List<Course> getCourse() throws Exception{
 		return memberMapper.getCourse();
@@ -64,20 +57,12 @@ public class MemberService {
 		memberMapper.deleteScrapCourse(ss_rider, ss_course);
 	}
 	
-	//위험지역 가져오기
-	public List<DangerousArea> getDangerousArea() throws Exception{
-		return memberMapper.getDangerousArea();
-	}
-	
 	//사용자가 등록한 위험지역 가져오기
 	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception{
 		return memberMapper.getUserDangerousArea(rr_rider);
 	}
 	
-	//위험지역 등록
-	public void postDangerousArea(DangerousArea da) throws Exception {
-		memberMapper.postDangerousArea(da);
-	}
+	
 	public void deleteDangerousArea(int da_num) throws Exception{
 		memberMapper.deleteDangerousArea(da_num);
 	}

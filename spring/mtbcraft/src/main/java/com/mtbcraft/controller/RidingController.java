@@ -3,7 +3,6 @@ package com.mtbcraft.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Gpx;
@@ -59,7 +57,8 @@ public class RidingController {
 	@ResponseBody
 	public Gpx getMyGPX(int rr_num) throws Exception {
 		String gpxFile = ridingService.getGpxFileByRR_Num(rr_num);
-		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		//String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
 		File file = new File(path);
 		String txt = "";
 		FileInputStream fis = new FileInputStream(file); 
@@ -84,13 +83,20 @@ public class RidingController {
 	}
 
 	// 사용자 주행 기록 공개비공개
-	@RequestMapping(value = "/riding/update", method = RequestMethod.GET)
-	public String updateRidingRecord(int rr_num, int rr_open) throws Exception {
-		System.out.print(rr_num + "의 현재 OPEN 상태 " + rr_open + "에서");
-		rr_open = rr_open == 1 ? 0 : 1;
-		System.out.print(rr_open + "상태로 전환합니다.\n");
-		memberService.updateRidingRecord(rr_num, rr_open);
-		return "/riding/course";
+	@RequestMapping(value = "/riding/update", method = RequestMethod.PUT)
+	@ResponseBody
+	public String updateRidingRecord(int rr_num, int rr_open){
+		try {
+			ridingService.updateRidingRecord(rr_num, rr_open);
+		} catch (Exception e) {
+			return "fail";
+		}
+		
+		if(rr_open==1) {
+			return "y";
+		}else {
+			return "n";
+		}
 	}
 
 	// 코스 조회
@@ -130,9 +136,9 @@ public class RidingController {
 	}
 
 	// 위험 지역 조회
-	@RequestMapping(value = "/riding/DA/checkA", method = RequestMethod.GET)
+	@RequestMapping(value = "/riding/DA", method = RequestMethod.GET)
 	public @ResponseBody List<DangerousArea> getDangerousArea() throws Exception {
-		return memberService.getDangerousArea();
+		return ridingService.getDangerousArea();
 	}
 
 	// 사용자 등록 위험 지역 조회
@@ -140,12 +146,19 @@ public class RidingController {
 	public @ResponseBody List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception {
 		return memberService.getUserDangerousArea(rr_rider);
 	}
+	
 	// 위험지역 등록 신청
-	@RequestMapping(value = "/riding/DA/post", method = RequestMethod.POST)
-	public @ResponseBody String postDangerousArea(@RequestBody DangerousArea da) throws Exception {
-		System.out.println(da.toString());
-		memberService.postDangerousArea(da);
-		return "success";
+	@RequestMapping(value = "/riding/DA", method = RequestMethod.POST)
+	public String postDangerousArea(DangerousArea da, Model model) throws Exception {
+		ridingService.postDangerousArea(da);
+		List<RidingRecord> rrlist = memberService.getRidingRecord(da.getDa_rider());
+		for(int i=0;i<rrlist.size();i++) {
+			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
+		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
+		List<Course> scraplist = memberService.getScrapCourse(da.getDa_rider());
+		model.addAttribute("ridingrecords", rrlist);
+		model.addAttribute("scrapcourses", scraplist);
+		return "riding/course";
 	}
 	// 사용자 등록 위험 지역 삭제
 	@RequestMapping(value = "/riding/DA/delete", method = RequestMethod.DELETE)

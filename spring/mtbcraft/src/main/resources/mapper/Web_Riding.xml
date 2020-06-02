@@ -14,7 +14,26 @@
 	
 	<!-- 라이딩 넘버로 라이딩기록 조회 -->
 	<select id="getRidingRecordDetail" parameterType="Integer" resultType="com.mtbcraft.dto.RidingRecord">
-		select * from riding_record where rr_num = #{rr_num}
+		SELECT * FROM RIDING_RECORD WHERE RR_NUM = #{rr_num}
 	</select>
+	
+	<!-- 라이딩 기록 공개/비공개 전환 -->
+	<update id="updateRidingRecord">
+		UPDATE RIDING_RECORD SET RR_OPEN=#{rr_open} WHERE RR_NUM=#{rr_num}
+	</update>
+	
+	<!-- 등록된 위험지역 조회 -->
+	<select id="getDangerousArea" resultType="com.mtbcraft.dto.DangerousArea">
+		SELECT * FROM DANGEROUS_AREA
+	</select>
+	
+	<!-- 위험지역신청 등록 -->
+	<insert id="postDangerousArea"
+		parameterType="com.mtbcraft.dto.DangerousArea">
+		insert into dangerous_area(da_num, da_rider,
+		da_latitude, da_addr, da_status, da_content, da_longitude, da_image)
+		values(SEQ_DANGEROUSAREA.nextval, #{da_rider}, #{da_latitude},
+		#{da_addr}, 0, #{da_content}, #{da_longitude}, #{da_image})
+	</insert>
 </mapper>
 
