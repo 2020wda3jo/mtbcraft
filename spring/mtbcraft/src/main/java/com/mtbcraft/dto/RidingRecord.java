@@ -2,34 +2,22 @@ package com.mtbcraft.dto;
 
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class RidingRecord {
 
-	public int rr_num;
+	private int rr_num;
 
-	public String rr_rider;
-	public Timestamp rr_date;
-	
-	public String getRr_date() {
-		String str = String.valueOf(rr_date); 
-		int index = str.indexOf(".");
-		String result = str.substring(0,index);
-		return result;
-	}
-	public void setRr_date(Timestamp rr_date) {
-		this.rr_date = rr_date;
-	}
-	
-	public int rr_distance;
-	public int rr_topspeed;
-	public int rr_avgspeed;
-	public int rr_high;
-	public String rr_gpx;
-	public int rr_open;
-	public int rr_breaktime;
-	public int rr_time;
-	public String rr_area;
+	private String rr_rider;
+	private Timestamp rr_date;
+	private int rr_distance;
+	private int rr_topspeed;
+	private int rr_avgspeed;
+	private int rr_high;
+	private String rr_gpx;
+	private int rr_open;
+	private int rr_breaktime;
+	private int rr_time;
+	private String rr_area;
 	
 	public int getRr_num() {
 		return rr_num;
@@ -97,4 +85,22 @@ public class RidingRecord {
 	public void setRr_area(String rr_area) {
 		this.rr_area = rr_area;
 	}
+	public String getRr_date() {
+		String str = String.valueOf(rr_date); 
+		int index = str.indexOf(".");
+		String result = str.substring(0,index);
+		return result;
+	}
+	public String getRr_dateYYYYMMDD() {
+		String str = String.valueOf(rr_date); 
+		String result = str.substring(0,10);
+		return result;
+	}
+	public void setRr_date(Timestamp rr_date) {
+		this.rr_date = rr_date;
+	}
+	
+
+
 }
+	

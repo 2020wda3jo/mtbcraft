@@ -1,9 +1,12 @@
 package com.mtbcraft.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,26 +14,73 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.MemberService;
+import com.mtbcraft.service.RidingService;
 
 @Controller
 public class RidingController {
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private RidingService ridingService;
 
 	// 코스 메뉴 진입
-	@RequestMapping("/riding/course")
-	public String course() {
-		return "riding/course";	//서버에서 혹시 / 때문에 html문서를 못 찾는게 아닐까하여 지워봄
+	@RequestMapping(value = "/riding/course")
+	public String course(String rider, Model model) throws Exception {
+		List<RidingRecord> rrlist = memberService.getRidingRecord(rider);
+		for(int i=0;i<rrlist.size();i++) {
+			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
+		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
+		List<Course> scraplist = memberService.getScrapCourse(rider);
+		model.addAttribute("ridingrecords", rrlist);
+		model.addAttribute("scrapcourses", scraplist);
+		return "riding/course";
+	}
+	
+	// 메인화면 구성을 위한 최신주행기록 3개 조회
+	@RequestMapping(value="/ridingrecordTop3", method=RequestMethod.GET)
+	@ResponseBody
+	public List<RidingRecord> getRidingRecordTop3(String rr_rider) throws Exception{
+		List<RidingRecord> list = ridingService.getRidingRecordTop3(rr_rider);
+		return list;
 	}
 
 	// 사용자 주행 기록 조회
 	@RequestMapping(value = "/riding/check", method = RequestMethod.GET)
 	public @ResponseBody List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
 		return memberService.getRidingRecord(rr_rider);
+	}
+	// RR_NUM으로 GPX파일 조회
+	@RequestMapping(value="/getGpxFileByRR_Num", method = RequestMethod.GET)
+	@ResponseBody
+	public Gpx getMyGPX(int rr_num) throws Exception {
+		String gpxFile = ridingService.getGpxFileByRR_Num(rr_num);
+		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		File file = new File(path);
+		String txt = "";
+		FileInputStream fis = new FileInputStream(file); 
+		while(true) { 
+			int res = fis.read(); 
+			if(res<0) { 
+				break; 
+			}else { 
+				txt += ((char)res);
+			}
+		}
+		fis.close();
+		Gpx gpx = new Gpx();
+		gpx.setting(txt);
+		return gpx;
+	}
+	//RR_NUM으로 RIDINGRECORD 조회
+	@RequestMapping(value="/getRidingRecordByRR_Num", method = RequestMethod.GET)
+	@ResponseBody
+	public RidingRecord getRidingRecordByRR_Num(int rr_num) throws Exception {
+		return ridingService.getRidingRecordDetail(rr_num);
 	}
 
 	// 사용자 주행 기록 공개비공개

@@ -49,7 +49,10 @@
 			<li class=""><a href="/intro">소개</a></li>
             <li class="drop-down"><a href="">라이딩</a>
             	<ul>
-            		<li><a href="/riding/course">코스</a></li>
+            		<li id="li_course"><a href="#">코스</a></li>
+            		<form id="form_course" action="/riding/course" method="post">
+            			<input type="hidden" name="rider" th:value="${#authentication.name}">
+            		</form>
             		<li class=""><a href="/riding/comeon">인원모집</a></li>
             	</ul>
             </li>
@@ -86,3 +89,8 @@
 		</div>
 		<script src="/js/main.js"></script>
 	</header>
+	<script>
+		$("#li_course").click(function(){
+			$("#form_course").submit();
+		});
+	</script>

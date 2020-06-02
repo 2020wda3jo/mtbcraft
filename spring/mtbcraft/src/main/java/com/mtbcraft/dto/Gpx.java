@@ -41,20 +41,37 @@ public class Gpx {
 	}
 	
 	public void setting(String txt) {
-		
-		txt = txt.substring(txt.indexOf("maxLat=")+("maxLat=\"".length()));
-		double maxLat = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
-		txt = txt.substring(txt.indexOf("maxLon=\"")+"maxLon=\"".length());
-		double maxLon = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
-		txt = txt.substring(txt.indexOf("minLat=\"")+"minLat=\"".length());
-		double minLat = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
-		txt = txt.substring(txt.indexOf("minLon=\"")+"minLon=\"".length());
-		double minLon = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+		double maxLat,maxLon,minLat,minLon;
+		if(txt.contains("maxLat=")) {
+			txt = txt.substring(txt.indexOf("maxLat=\"")+("maxLat=\"".length()));
+			maxLat = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+			txt = txt.substring(txt.indexOf("maxLon=\"")+"maxLon=\"".length());
+			maxLon = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+			txt = txt.substring(txt.indexOf("minLat=\"")+"minLat=\"".length());
+			minLat = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+			txt = txt.substring(txt.indexOf("minLon=\"")+"minLon=\"".length());
+			minLon = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+		} else if(txt.contains("maxlat=")) {
+			txt = txt.substring(txt.indexOf("maxlat=\"")+("maxlat=\"".length()));
+			maxLat = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+			txt = txt.substring(txt.indexOf("maxlon=\"")+"maxlon=\"".length());
+			maxLon = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+			txt = txt.substring(txt.indexOf("minlat=\"")+"minlat=\"".length());
+			minLat = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+			txt = txt.substring(txt.indexOf("minlon=\"")+"minlon=\"".length());
+			minLon = Double.parseDouble(txt.substring(0, txt.indexOf("\"")));
+		} else {
+			maxLat = 0;
+			maxLon = 0;
+			minLat = 0;
+			minLon = 0;
+		}
 		
 		this.setMaxLat(maxLat);
 		this.setMaxLon(maxLon);
 		this.setMinLat(minLat);
 		this.setMinLon(minLon);
+		
 		
 		List<Info_GPX> info_list = new ArrayList<Info_GPX>();
 		
@@ -75,8 +92,4 @@ public class Gpx {
 		}
 		this.setInfos(info_list);
 	}
-	
-	
-	
-	
 }
