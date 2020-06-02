@@ -40,6 +40,14 @@ public class RidingController {
 		model.addAttribute("scrapcourses", scraplist);
 		return "riding/course";
 	}
+	
+	// 메인화면 구성을 위한 최신주행기록 3개 조회
+	@RequestMapping(value="/ridingrecordTop3", method=RequestMethod.GET)
+	@ResponseBody
+	public List<RidingRecord> getRidingRecordTop3(String rr_rider) throws Exception{
+		List<RidingRecord> list = ridingService.getRidingRecordTop3(rr_rider);
+		return list;
+	}
 
 	// 사용자 주행 기록 조회
 	@RequestMapping(value = "/riding/check", method = RequestMethod.GET)

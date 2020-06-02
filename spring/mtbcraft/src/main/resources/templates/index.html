@@ -57,7 +57,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		alt="appdown" /></a>
 </div>
 </div>
-<!-- ater user screen --->
+<!-- after user screen --->
 <div th:if="${#authorization.expr('isAuthenticated()')}">
 <!-- 내 서비스 버튼들 -->
 	<section id="select_section">
@@ -68,28 +68,10 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 	</section>
 	<!-- 최근 라이딩 기록 -->
-	 <section id="m_section1">
+	<section id="m_section1">
 		<div class="le_name">최근 라이딩 기록</div>
-		<div class="gal_box">
-			<div class="gal_img"><img src="/imgs/test_ri_img.png" width="400" height="300"/></div>
-			<div class="riding_name">대구 북구</div>
-			<div class="riding_date">2020-05-05</div>
-		</div>
-		
-		<div class="gal_box">
-			<div class="gal_img"><img src="/imgs/test_ri_img.png" width="400" height="300"/></div>
-			<div class="riding_name">대구 북구</div>
-			<div class="riding_date">2020-05-05</div>
-		</div>
-		
-		<div class="gal_box">
-			<div class="gal_img"><img src="/imgs/test_ri_img.png" width="400" height="300"/></div>
-			<div class="riding_name">대구 북구</div>
-			<div class="riding_date">2020-05-05</div>
-		</div>
-		<div id="ri_more_bt">
-		+더보기
-		</div>
+		<div id="myRR"></div>
+		<div id="ri_more_bt">+더보기</div>
 		
 	</section>
 	<!-- 내 클럽 최신글 -->
@@ -153,3 +135,70 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				</section>
 			</div>
 			<footer th:replace="footer"></footer>
+			<script>
+	$(document).ready(function(){
+		var loginUser = $("#nav_t_login span").text();
+		$.ajax({
+			url : "/ridingrecordTop3", // 제이슨오브젝트값을 가져옴
+			data : {rr_rider : loginUser},
+			type : "GET",
+			dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
+			cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
+			success : function(data) {
+				var rr_numlist = [];
+				part_ridingrecord = "";
+				for(var i=0;i<data.length;i++){
+					part_ridingrecord+="<div class='gal_box'><div id='myRR"+i+"' class='gal_img' width='400' height='300'></div>"
+						+"<div class='riding_name'>"+data[i].rr_area+"</div><div class='riding_date'>"+(data[i].rr_date).substring(0,10)+"</div></div>";
+						rr_numlist.push(data[i].rr_gpx);
+				}
+				$("#myRR").html(part_ridingrecord);
+				makeMyRR(rr_numlist);
+			}
+		});
+	});
+	function makeMyRR(rr_numlist){
+		var cnt = 0;
+		for(var i=0;i<rr_numlist.length;i++){
+			$.ajax({
+				url : "/getGpxFileByRR_Num", // 제이슨오브젝트값을 가져옴
+				data : {rr_num : rr_numlist[i]},
+				type : "GET",
+				dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
+				cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
+				success : function(data) {
+					var mapContainer = document.getElementById('myRR'+cnt), // 지도를 표시할 div 
+				    mapOption = { 
+				        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+				        level: 3 // 지도의 확대 레벨
+				    };  
+
+					var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+					drawPolyline(map, data.infos);
+					cnt++;
+				}
+			});
+		}
+	}
+	function drawPolyline(map, infos){
+		// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+		var bounds = new kakao.maps.LatLngBounds();
+		var linePath = [];
+		for(var i=0;i<infos.length;i++){
+			linePath.push(new kakao.maps.LatLng(infos[i].lat, infos[i].lon));
+			bounds.extend(linePath[i]);
+		}
+		// 지도에 표시할 선을 생성합니다
+		var polyline = new kakao.maps.Polyline({
+		    path: linePath, // 선을 구성하는 좌표배열 입니다
+		    strokeWeight: 5, // 선의 두께 입니다
+		    strokeColor: '#FFAE00', // 선의 색깔입니다
+		    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		    strokeStyle: 'solid' // 선의 스타일입니다
+		});
+
+		// 지도에 선을 표시합니다 
+		polyline.setMap(map);
+		map.setBounds(bounds);
+	}
+</script>
