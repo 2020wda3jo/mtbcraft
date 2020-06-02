@@ -22,15 +22,6 @@
 	<select id="getRidingRecord" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
 		select * from riding_record where rr_rider = #{rr_rider} order by rr_num desc
 	</select>
-	
-	<select id="getRidingRecordDetail" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
-		select * from riding_record where rr_rider = #{rr_rider} and rr_num = #{rr_num}
-	</select>
-	
-	<update id="updateRidingRecord">
-		UPDATE RIDING_RECORD SET RR_OPEN=#{rr_open} WHERE
-		RR_NUM=#{rr_num}
-	</update>
 
 	<select id="getCourse" resultType="com.mtbcraft.dto.Course">
 		select * from course order by c_num
@@ -55,23 +46,10 @@
 
 	<!-- 데이터가 많지 않아 현재 진행상황(대기, 인정, 불가) 반영하지않고 모두 들고옴 후에 select * from DANGEROUS_AREA 
 		where DA_STATUS=1 로 수정해야함 -->
-	<select id="getDangerousArea"
-		resultType="com.mtbcraft.dto.DangerousArea">
-		select * from DANGEROUS_AREA
-	</select>
-
 	<select id="getUserDangerousArea" parameterType="String"
 		resultType="com.mtbcraft.dto.DangerousArea">
 		select * from DANGEROUS_AREA where DA_RIDER = #{rr_rider}
 	</select>
-
-	<insert id="postDangerousArea"
-		parameterType="com.mtbcraft.dto.DangerousArea">
-		insert into dangerous_area(da_num, da_rider,
-		da_latitude, da_addr, da_status, da_content, da_longitude, da_image)
-		values(SEQ_DANGEROUSAREA.nextval, #{da_rider}, #{da_latitude},
-		#{da_addr}, 0, #{da_content}, #{da_longitude}, #{da_image})
-	</insert>
 
 	<delete id="deleteDangerousArea" parameterType="Integer">
 		DELETE

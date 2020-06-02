@@ -44,8 +44,10 @@ dependencies {
 	//JSON XML코어
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
 	
-	//GPX
-	implementation 'me.himanshusoni.gpxparser:gpx-parser:1.12'
+	// 파일 다운로드
+	compile group: 'commons-io', name: 'commons-io', version: '2.7'
+	
+	
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
