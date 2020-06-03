@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+#mainbox {
+	width : 95%;
+	height: 800px;
+}
+
+#myInfoBox {
+	float :left;
+	width : 25%;
+}
+#box_search_course{
+	float :left;
+	width : 25%;
+	
+}
+#placesList{
+	height: 550px;
+	overflow: auto;
+}
+
+#map {
+	float :left;
+}
+
+#box_courseInfo{
+	width : 80%;
+}

@@ -56,8 +56,8 @@ public class RidingController {
 	@ResponseBody
 	public Gpx getMyGPX(int rr_num) throws Exception {
 		String gpxFile = ridingService.getGpxFileByRR_Num(rr_num);
-		//String path = "/home/ec2-user/data/gpx/"+gpxFile;
-		String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
+		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		//String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
 		File file = new File(path);
 		String txt = "";
 		FileInputStream fis = new FileInputStream(file); 
