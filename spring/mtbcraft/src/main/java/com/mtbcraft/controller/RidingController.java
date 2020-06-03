@@ -2,6 +2,8 @@ package com.mtbcraft.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,18 +23,16 @@ import com.mtbcraft.service.RidingService;
 @Controller
 public class RidingController {
 	@Autowired
-	private MemberService memberService;
-	@Autowired
 	private RidingService ridingService;
 
 	// 코스 메뉴 진입
 	@RequestMapping(value = "/riding/course")
 	public String course(String rider, Model model) throws Exception {
-		List<RidingRecord> rrlist = memberService.getRidingRecord(rider);
+		List<RidingRecord> rrlist = ridingService.getRidingRecord(rider);
 		for(int i=0;i<rrlist.size();i++) {
 			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
 		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
-		List<Course> scraplist = memberService.getScrapCourse(rider);
+		List<Course> scraplist = ridingService.getScrapCourse(rider);
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);
 		return "riding/course";
@@ -46,34 +46,16 @@ public class RidingController {
 		return list;
 	}
 
-	// 사용자 주행 기록 조회
-	@RequestMapping(value = "/riding/check", method = RequestMethod.GET)
-	public @ResponseBody List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
-		return memberService.getRidingRecord(rr_rider);
-	}
 	// RR_NUM으로 GPX파일 조회
-	@RequestMapping(value="/getGpxFileByRR_Num", method = RequestMethod.GET)
+	@RequestMapping(value="/getGpxByRR_Num", method = RequestMethod.GET)
 	@ResponseBody
-	public Gpx getMyGPX(int rr_num) throws Exception {
+	public Gpx getGpxByRR_Num(int rr_num) throws Exception {
 		String gpxFile = ridingService.getGpxFileByRR_Num(rr_num);
-		String path = "/home/ec2-user/data/gpx/"+gpxFile;
-		//String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
-		File file = new File(path);
-		String txt = "";
-		FileInputStream fis = new FileInputStream(file); 
-		while(true) { 
-			int res = fis.read(); 
-			if(res<0) { 
-				break; 
-			}else { 
-				txt += ((char)res);
-			}
-		}
-		fis.close();
 		Gpx gpx = new Gpx();
-		gpx.setting(txt);
+		makeGpx(gpx, gpxFile);
 		return gpx;
 	}
+	
 	//RR_NUM으로 RIDINGRECORD 조회
 	@RequestMapping(value="/getRidingRecordByRR_Num", method = RequestMethod.GET)
 	@ResponseBody
@@ -99,38 +81,31 @@ public class RidingController {
 	}
 
 	// 코스 조회
-	@RequestMapping(value = "/riding/course/check", method = RequestMethod.GET)
-	public @ResponseBody List<Course> getCourse() throws Exception {
-		return memberService.getCourse();
+	@RequestMapping(value = "/riding/course/list", method = RequestMethod.GET)
+	public @ResponseBody List<RidingRecord> getCourse() throws Exception {
+		return ridingService.getCourses(); 
 	}
 
 	// 사용자 스크랩 코스 조회
 	@RequestMapping(value = "/riding/scrap/check", method = RequestMethod.GET)
 	public @ResponseBody List<Course> getScrapCourse(String rr_rider) throws Exception {
-		return memberService.getScrapCourse(rr_rider);
+		return ridingService.getScrapCourse(rr_rider);
 	}
 
 	// 사용자 스크랩 코스 등록
 	@RequestMapping(value = "/riding/scrap/check", method = RequestMethod.POST)
 	@ResponseBody
 	public String postScrapCourse(@RequestBody Scrap_Status ss) {
-		String ss_rider = ss.getSs_rider();
-		int ss_course = ss.getSs_course();
-		try {
-			memberService.postScrapCourse(ss_rider, ss_course);
-			System.out.println("사용자 " + ss_rider + "이 " + ss_course + "코스를 스크랩합니다.");
-			return "success";
-		} catch (Exception e) {
-			System.out.println("사용자 " + ss_rider + "은 이미" + ss_course + "코스를 스크랩하였습니다.");
-			return "fail";
-		}
+		return null;
 	}
 
 	// 사용자 스크랩 코스 삭제
 	@RequestMapping(value = "/riding/scrap/delete", method = RequestMethod.GET)
 	public String deleteScrapCourse(String ss_rider, int ss_course) throws Exception {
-		System.out.println("사용자 " + ss_rider + "의 스크랩코스 " + ss_course + "를 삭제합니다");
-		memberService.deleteScrapCourse(ss_rider, ss_course);
+		/*
+		 * System.out.println("사용자 " + ss_rider + "의 스크랩코스 " + ss_course + "를 삭제합니다");
+		 * memberService.deleteScrapCourse(ss_rider, ss_course);
+		 */
 		return "/riding/course";
 	}
 
@@ -143,18 +118,18 @@ public class RidingController {
 	// 사용자 등록 위험 지역 조회
 	@RequestMapping(value = "/riding/DA/check", method = RequestMethod.GET)
 	public @ResponseBody List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception {
-		return memberService.getUserDangerousArea(rr_rider);
+		return ridingService.getUserDangerousArea(rr_rider);
 	}
 	
 	// 위험지역 등록 신청
 	@RequestMapping(value = "/riding/DA", method = RequestMethod.POST)
 	public String postDangerousArea(DangerousArea da, Model model) throws Exception {
 		ridingService.postDangerousArea(da);
-		List<RidingRecord> rrlist = memberService.getRidingRecord(da.getDa_rider());
+		List<RidingRecord> rrlist = ridingService.getRidingRecord(da.getDa_rider());
 		for(int i=0;i<rrlist.size();i++) {
 			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
 		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
-		List<Course> scraplist = memberService.getScrapCourse(da.getDa_rider());
+		List<Course> scraplist = ridingService.getScrapCourse(da.getDa_rider());
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);
 		return "riding/course";
@@ -162,22 +137,21 @@ public class RidingController {
 	// 사용자 등록 위험 지역 삭제
 	@RequestMapping(value = "/riding/DA/delete", method = RequestMethod.DELETE)
 	public @ResponseBody String deleteDangerousArea(@RequestBody DangerousArea da) throws Exception {
-		System.out.println(da.toString());
-		memberService.deleteDangerousArea(da.getDa_num());
+		/*
+		 * System.out.println(da.toString());
+		 * memberService.deleteDangerousArea(da.getDa_num());
+		 */
 		return "success";
 	}
 	// 다른 사용자 등록 위험 지역 해지 신청
 	@RequestMapping(value = "/riding/DA/delete", method = RequestMethod.POST)
 	public @ResponseBody String postNO_DangerousArea(@RequestBody No_Danger nd) throws Exception {
-		System.out.println(nd.getNd_num()+"/"+nd.getNd_rider()+"/"+nd.getNd_content()+"/"+nd.getNd_image());
-		try {
-			memberService.postNoDanger(nd);
-			return "success";
-		} catch (Exception e) {
-			return "fail";
-		}
-		
-		
+		/*
+		 * System.out.println(nd.getNd_num()+"/"+nd.getNd_rider()+"/"+nd.getNd_content()
+		 * +"/"+nd.getNd_image()); try { memberService.postNoDanger(nd); return
+		 * "success"; } catch (Exception e) { return "fail"; }
+		 */
+		return "success";
 	}
 
 	// 내 코스 공유
@@ -244,5 +218,23 @@ public class RidingController {
 	public String comeon() {
 
 		return "/riding/comeon";
+	}
+	
+	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
+		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		//String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
+		File file = new File(path);
+		String txt = "";
+		FileInputStream fis = new FileInputStream(file); 
+		while(true) { 
+			int res = fis.read(); 
+			if(res<0) { 
+				break; 
+			}else { 
+				txt += ((char)res);
+			}
+		}
+		fis.close();
+		gpx.setting(txt);
 	}
 }

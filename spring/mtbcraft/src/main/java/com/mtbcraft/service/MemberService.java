@@ -1,9 +1,7 @@
 package com.mtbcraft.service;
 
 import java.util.List;
-
 import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +11,6 @@ import com.mtbcraft.dto.Member;
 import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.mapper.MemberMapper;
-
 
 @Service
 @Transactional

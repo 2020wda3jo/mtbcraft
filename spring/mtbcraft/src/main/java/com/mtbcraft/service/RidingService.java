@@ -6,6 +6,8 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.mapper.RidingMapper;
@@ -20,6 +22,11 @@ public class RidingService {
 	//로그인 후 페이지 구성을 위한 최신 라이딩 기록 조회
 	public List<RidingRecord> getRidingRecordTop3(String rr_rider) throws Exception{
 		return ridingMapper.getRidingRecordTop3(rr_rider);
+	}
+	
+	//사용자 라이딩 기록 조회
+	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
+		return ridingMapper.getRidingRecord(rr_rider);
 	}
 	
 	//라이딩 넘버로 GPX파일명 조회
@@ -41,9 +48,24 @@ public class RidingService {
 	public List<DangerousArea> getDangerousArea() throws Exception{
 		return ridingMapper.getDangerousArea();
 	}
+
+	//사용자가 등록한 위험지역 조회
+	public List<DangerousArea> getUserDangerousArea(String rr_rider) throws Exception{
+		return ridingMapper.getUserDangerousArea(rr_rider);
+	}
 	
 	//위험지역 등록
 	public void postDangerousArea(DangerousArea da) throws Exception {
 		ridingMapper.postDangerousArea(da);
+	}
+	
+	//등록된 코스 조회
+	public List<RidingRecord> getCourses() throws Exception{
+		return ridingMapper.getCourses();
+	}
+	
+	//코스스크랩 조회
+	public List<Course> getScrapCourse(String rr_rider) throws Exception{
+		return ridingMapper.getScrapCourse(rr_rider);
 	}
 }
