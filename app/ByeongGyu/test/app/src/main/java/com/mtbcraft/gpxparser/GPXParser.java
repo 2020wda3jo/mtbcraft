@@ -76,7 +76,7 @@ public class GPXParser {
         List<Track> tracks = new ArrayList<>();
         List<Route> routes = new ArrayList<>();
 
-        parser.require(XmlPullParser.START_TAG, namespace, TAG_GPX);
+       // parser.require(XmlPullParser.START_TAG, namespace, TAG_GPX);
 
         Gpx.Builder builder = new Gpx.Builder();
         builder.setVersion(parser.getAttributeValue(namespace, TAG_VERSION));
@@ -106,7 +106,7 @@ public class GPXParser {
                     break;
             }
         }
-        parser.require(XmlPullParser.END_TAG, namespace, TAG_GPX);
+       // parser.require(XmlPullParser.END_TAG, namespace, TAG_GPX);
         return builder
                 .setWayPoints(wayPoints)
                 .setRoutes(routes)
@@ -192,10 +192,10 @@ public class GPXParser {
     private Bounds readBounds(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, namespace, TAG_BOUNDS);
         Bounds bounds = new Bounds.Builder()
-                .setMinLat(Double.valueOf(parser.getAttributeValue(namespace, TAG_MIN_LAT)))
-                .setMinLon(Double.valueOf(parser.getAttributeValue(namespace, TAG_MIN_LON)))
-                .setMaxLat(Double.valueOf(parser.getAttributeValue(namespace, TAG_MAX_LAT)))
-                .setMaxLon(Double.valueOf(parser.getAttributeValue(namespace, TAG_MAX_LON)))
+               // .setMinLat(Double.valueOf(parser.getAttributeValue(namespace, TAG_MIN_LAT)))
+               // .setMinLon(Double.valueOf(parser.getAttributeValue(namespace, TAG_MIN_LON)))
+               //// .setMaxLat(Double.valueOf(parser.getAttributeValue(namespace, TAG_MAX_LAT)))
+              //  .setMaxLon(Double.valueOf(parser.getAttributeValue(namespace, TAG_MAX_LON)))
                 .build();
 
         parser.nextTag();

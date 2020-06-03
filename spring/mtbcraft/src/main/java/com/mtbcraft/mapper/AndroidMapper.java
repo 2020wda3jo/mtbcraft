@@ -20,6 +20,9 @@ public interface AndroidMapper {
 	//안드로이드 앱에서 라이딩 기록 저장
 	public String insertRecord(RidingRecord record) throws Exception;
 
+	//주행기록 전체보기
+	public List<RidingRecord> getRidingRecordAll();
+		
 	//안드로이드 앱에서 라이딩 기록 리스트 가져오기
 	public String readRecord(String rr_rider);
 	
@@ -40,4 +43,7 @@ public interface AndroidMapper {
 	
 	//스크랩 코스 상세보기
 	public List<Course> getScrapDetail(String rr_rider, String ss_course) throws Exception;
+
+	public List<Course> getRidingRecordAllItem(String rr_num) throws Exception;
+
 }

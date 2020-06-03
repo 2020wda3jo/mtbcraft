@@ -1,8 +1,6 @@
-package com.mtbcraft.Activity.Course;
+package com.mtbcraft.Activity.Riding;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,9 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,11 +19,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
-import com.mtbcraft.Activity.Riding.FollowStart;
-import com.mtbcraft.Activity.Riding.MyReport;
-import com.mtbcraft.Activity.Riding.RidingRecordAll;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.gpxparser.GPXParser;
 import com.mtbcraft.gpxparser.Gpx;
@@ -56,11 +50,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CourseDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
-    String c_num, gpx;
-    TextView textView1, textView2, textView3;
-    Button button,button2;
-    int Sta;
+public class RidingRecordAll_Detail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
+    String rr_num;
+    String rr_rider;
+    int send ;
+    TextView textView1, textView2, textView3, textView4, textView5, textView6;
     private DrawerLayout mDrawerLayout;
     GPXParser mParser = new GPXParser();
     Gpx parsedGpx = null;
@@ -68,44 +62,28 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coursedetail);
+        setContentView(R.layout.activity_mydetail);
 
         mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
-        mapView.setCurrentLocationEventListener(this);
-        mapView.isShowingCurrentLocationMarker();
-
+        //폴리라인 그리자~
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
 
-
-
-
-
-
         Thread uThread = new Thread() {
-
             @Override
-
             public void run() {
-
                 try {
-                    //서버에 올려둔 이미지 URL
-                    URL url = new URL("http://100.92.32.8/and.gpx");
-                    //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
-                    /* URLConnection 생성자가 protected로 선언되어 있으므로
-                     개발자가 직접 HttpURLConnection 객체 생성 불가 */
+                    //서버 IP(로컬작업용)
+                    String gpxname = getIntent().getStringExtra("rr_gpx");
+                    Log.d("ddd",gpxname);
+                    URL url = new URL("http://13.209.229.237:8080/app/getGPX/"+gpxname);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    /* openConnection()메서드가 리턴하는 urlConnection 객체는
-                    HttpURLConnection의 인스턴스가 될 수 있으므로 캐스팅해서 사용한다*/
-
                     conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
                     conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
-
-
                     InputStream is = conn.getInputStream(); //inputStream 값 가져오기
                     // InputStream in = getAssets().open("and.gpx");
                     parsedGpx = mParser.parse(is);
@@ -119,7 +97,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
                             List<TrackSegment> segments = track.getTrackSegments();
                             for (int j = 0; j < segments.size(); j++) {
                                 TrackSegment segment = segments.get(j);
-
                                 for (TrackPoint trackPoint : segment.getTrackPoints()) {
                                     polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
                                     Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
@@ -130,15 +107,14 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
                         // Polyline 지도에 올리기.
                         mapView.addPolyline(polyline);
 
-// 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                        // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
                         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
                         int padding = 100; // px
                         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+
                     } else {
                         Log.e("error","Error parsing gpx track!");
                     }
-
-
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException | XmlPullParserException e) {
@@ -148,12 +124,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         };
         uThread.start(); // 작업 Thread 실행
 
-        /* 로그인관련 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId","");
-        Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
 
-        /*네비게이션 바 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -171,67 +142,55 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             int id = menuItem.getItemId();
             switch (id) {
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseDetail.this,SubActivity.class);
+                    Intent intent=new Intent(RidingRecordAll_Detail.this,SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.nav_mylist:
-                    Intent intent2=new Intent(CourseDetail.this, MyReport.class);
+                    Intent intent2=new Intent(RidingRecordAll_Detail.this, MyReport.class);
                     startActivity(intent2);
+                    finish();
                     break;
                 case R.id.nav_alllist:
-                    Intent intent3=new Intent(CourseDetail.this, RidingRecordAll.class);
+                    Intent intent3=new Intent(RidingRecordAll_Detail.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
                 case R.id.nav_courselist:
-                    Intent intent4=new Intent(CourseDetail.this, CourseList.class);
+                    Intent intent4=new Intent(RidingRecordAll_Detail.this, CourseList.class);
                     startActivity(intent4);
-                    finish();
                     break;
 
                 case R.id.nav_course:
-                    Intent intent5=new Intent(CourseDetail.this, MyScrap.class);
+                    Intent intent5=new Intent(RidingRecordAll_Detail.this, MyScrap.class);
                     startActivity(intent5);
                     break;
 
                 case R.id.nav_comp:
-                    Intent intent6=new Intent(CourseDetail.this, Competition.class);
+                    Intent intent6=new Intent(RidingRecordAll_Detail.this, Competition.class);
                     startActivity(intent6);
                     break;
                 case R.id.nav_mission:
-                    Intent intent7=new Intent(CourseDetail.this, Mission.class);
+                    Intent intent7=new Intent(RidingRecordAll_Detail.this, Mission.class);
                     startActivity(intent7);
                     break;
             }
             return true;
         });
 
-        textView1 = (TextView)findViewById(R.id.course_add);
-        textView2 = (TextView)findViewById(R.id.course_dis );
-        textView3 = (TextView)findViewById(R.id.course_level );
-        button = (Button)findViewById(R.id.scrap_bt);
-        button2 = (Button)findViewById(R.id.follow_bt);
+        textView1 = (TextView)findViewById(R.id.Riding_time);
+        textView2 = (TextView)findViewById(R.id.Riding_distance );
+        textView3 = (TextView)findViewById(R.id.Riding_rest );
+        textView4 = (TextView)findViewById(R.id.Riding_avg );
+        textView5 = (TextView)findViewById(R.id.Riding_godo );
+        textView6 = (TextView)findViewById(R.id.Riding_max );
+
+
         Intent intent = new Intent(this.getIntent());
-        c_num = intent.getStringExtra("c_num");
-        gpx = intent.getStringExtra("c_gpx");
 
-        button.setOnClickListener(v -> {
-            ScrapTask scrap = new ScrapTask();
-            Map<String, String> params = new HashMap<String, String>();
-                params.put("c_num", c_num);
-                params.put("r_rider", LoginId);
-            scrap.execute(params);
-
-        });
-
-        button2.setOnClickListener(v->{
-            Intent intent2=new Intent(CourseDetail.this, FollowStart.class);
-            intent2.putExtra("gpx",gpx);
-        });
-
+        rr_num = intent.getStringExtra("rr_num");
         try {
             GetTask getTask = new GetTask();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("c_num", c_num);
+            params.put("rr_num", rr_num);
             getTask.execute(params);
         } catch (Exception e) {
             e.printStackTrace();
@@ -240,13 +199,15 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
 
 
-    public class ScrapTask extends AsyncTask<Map<String, String>, Integer, String> {
+
+    public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
+
         @Override
         protected String doInBackground(Map<String, String>... maps) {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://100.92.32.8:8080/app/riding/coursescrap");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/ridingrecord/"+rr_num);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -264,67 +225,58 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
         @Override
         protected void onPostExecute(String s) {
+            //Log.d("디테일 ", s);
             try {
-                Toast.makeText(getApplicationContext(), "스크랩 보관함에 저장되었습니다.", Toast.LENGTH_SHORT).show();
+
+                String tempData = s;
+
+                //json값을 받기위한 변수들
+
+                String secS = "";
+                String test = "";
+                String disS = "";
+                String avgS = "";
+                String highS="";
+                String maxS = "";
+                String breakS="";
+                String gpx="";
+                JSONArray jarray = new JSONArray(tempData);
+                for(int i=0; i<jarray.length(); i++){
+                    JSONObject jObject = jarray.getJSONObject(i);
+                    test = jObject.getString("rr_rider");
+                    secS = jObject.getString("rr_time");
+                    disS = jObject.getString("rr_distance");
+                    breakS = jObject.getString("rr_breaktime");
+                    avgS = jObject.getString("rr_avgspeed");
+                    highS = jObject.getString("rr_high");
+                    maxS = jObject.getString("rr_topspeed");
+                    gpx = jObject.getString("rr_gpx");
+                }
+
+                //주행시간 계산
+                int hour, min, sec = Integer.parseInt(secS);
+                min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
+
+                //휴식시간 계산
+                int b_hour, b_min, b_sec = Integer.parseInt(breakS);
+                b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
+
+                int des = Integer.parseInt(disS);
+                float km = (float) (des/1000.0);
+                String total = km+"Km";
+
+                textView1.setText(hour+"시간 "+min+"분 "+sec+"초");
+                textView2.setText(total);
+                textView3.setText(b_hour+"시간 "+b_min+"분 "+b_sec+"초");
+                textView4.setText(avgS+"km/h");
+                textView5.setText(highS+"m");
+                textView6.setText(maxS+"km/h");
+
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "저장에 실패하였습니다", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
-        public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
-            @Override
-            protected String doInBackground(Map<String, String>... maps) {
-                // Http 요청 준비 작업
-                //URL은 현재 자기 아이피번호를 입력해야합니다.
-                HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/course/"+c_num);
-                // Parameter 를 전송한다.
-                http.addAllParameters(maps[0]);
-                //Http 요청 전송
-                HttpClient post = http.create();
-                post.request();
-
-                // 응답 상태코드 가져오기
-                int statusCode = post.getHttpStatusCode();
-
-                // 응답 본문 가져오기
-                String body = post.getBody();
-
-                return body;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                Log.d("디테일 ", s);
-                try {
-
-                    String tempData = s;
-
-                    //json값을 받기위한 변수들
-
-                    String c_distance = "";
-                    String c_level = "";
-                    String c_area = "";
-
-                    JSONArray jarray = new JSONArray(tempData);
-                    for (int i = 0; i < jarray.length(); i++) {
-                        JSONObject jObject = jarray.getJSONObject(i);
-                        c_distance = jObject.getString("c_distance");
-                        c_level = jObject.getString("c_level");
-                        c_area = jObject.getString("c_area");
-                    }
-
-                    textView1.setText(c_area);
-                    textView2.setText(c_distance);
-                    textView3.setText(c_level);
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                }
-            }
-        }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -346,11 +298,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
 
     @Override
     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {

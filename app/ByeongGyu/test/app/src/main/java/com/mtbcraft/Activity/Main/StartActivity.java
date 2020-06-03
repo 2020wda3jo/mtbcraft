@@ -555,5 +555,4 @@ public class StartActivity extends AppCompatActivity implements
             }
         }
     }
-
 }

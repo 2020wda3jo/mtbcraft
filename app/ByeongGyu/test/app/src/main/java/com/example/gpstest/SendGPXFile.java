@@ -15,7 +15,6 @@ public class SendGPXFile extends AppCompatActivity implements Runnable {
 
     }
 
-
     final String url_address = "http://13.209.229.237:8080/android/fileUpload";
 
     //안드로이드 내 저장 파일 이름

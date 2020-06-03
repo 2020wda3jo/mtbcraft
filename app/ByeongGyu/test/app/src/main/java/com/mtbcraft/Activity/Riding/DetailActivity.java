@@ -1,10 +1,13 @@
 package com.mtbcraft.Activity.Riding;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -20,24 +23,57 @@ import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Scrap.MyScrap;
+import com.mtbcraft.gpxparser.GPXParser;
+import com.mtbcraft.gpxparser.Gpx;
+import com.mtbcraft.gpxparser.Track;
+import com.mtbcraft.gpxparser.TrackPoint;
+import com.mtbcraft.gpxparser.TrackSegment;
 import com.mtbcraft.network.HttpClient;
+
+import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapPointBounds;
+import net.daum.mf.map.api.MapPolyline;
+import net.daum.mf.map.api.MapReverseGeoCoder;
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
     String rr_num;
     String rr_rider;
+    GPXParser mParser = new GPXParser();
+    Gpx parsedGpx = null;
+    MapView mapView;
     TextView textView1, textView2, textView3, textView4, textView5, textView6;
     private DrawerLayout mDrawerLayout;
+    String secS, test, disS, avgS, highS, maxS, breakS, gpx;
+    MapPolyline polyline = new MapPolyline();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mydetail);
 
+
+        mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+
+        //폴리라인 그리자~
+
+        polyline.setTag(1000);
+        polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,6 +133,7 @@ public class DetailActivity extends AppCompatActivity {
         textView5 = (TextView)findViewById(R.id.Riding_godo );
         textView6 = (TextView)findViewById(R.id.Riding_max );
 
+
         Intent intent = new Intent(this.getIntent());
 
         rr_num = intent.getStringExtra("rr_num");
@@ -111,7 +148,6 @@ public class DetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
 
@@ -142,17 +178,7 @@ public class DetailActivity extends AppCompatActivity {
             try {
 
                 String tempData = s;
-
                 //json값을 받기위한 변수들
-
-                String secS = "";
-                String test = "";
-                String disS = "";
-                String avgS = "";
-                String highS="";
-                String maxS = "";
-                String breakS="";
-                String gpx="";
                 JSONArray jarray = new JSONArray(tempData);
                 for(int i=0; i<jarray.length(); i++){
                     JSONObject jObject = jarray.getJSONObject(i);
@@ -185,6 +211,54 @@ public class DetailActivity extends AppCompatActivity {
                 textView5.setText(highS+"m");
                 textView6.setText(maxS+"km/h");
 
+                Thread uThread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("http://13.209.229.237:8080/app/getGPX/"+gpx);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
+                            conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
+                            InputStream is = conn.getInputStream(); //inputStream 값 가져오기
+                            // InputStream in = getAssets().open("and.gpx");
+                            parsedGpx = mParser.parse(is);
+
+                            if (parsedGpx != null) {
+                                // log stuff
+                                List<Track> tracks = parsedGpx.getTracks();
+                                for (int i = 0; i < tracks.size(); i++) {
+                                    Track track = tracks.get(i);
+                                    Log.d("track ", i + ":");
+                                    List<TrackSegment> segments = track.getTrackSegments();
+                                    for (int j = 0; j < segments.size(); j++) {
+                                        TrackSegment segment = segments.get(j);
+                                        for (TrackPoint trackPoint : segment.getTrackPoints()) {
+                                            polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                                            Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
+                                        }
+                                    }
+                                }
+
+                                // Polyline 지도에 올리기.
+                                mapView.addPolyline(polyline);
+
+                                // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                                MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
+                                int padding = 100; // px
+                                mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+
+                            } else {
+                                Log.e("error","Error parsing gpx track!");
+                            }
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException | XmlPullParserException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                uThread.start(); // 작업 Thread 실행
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -210,5 +284,35 @@ public class DetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
     }
 }

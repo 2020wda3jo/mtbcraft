@@ -21,6 +21,7 @@ import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.Competition;
 import com.mtbcraft.Activity.Course.CourseList;
+import com.mtbcraft.Activity.Course.CourseSearch;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Riding.RidingRecordAll;
@@ -32,6 +33,7 @@ public class SubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submain);
 
+        /*이건 그냥 업데이트 기록 다이얼로그 창 */
         // 다이얼로그 바디
         AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
         // 메세지
@@ -45,11 +47,11 @@ public class SubActivity extends AppCompatActivity {
         // 다이얼로그 보기
         alert.show();
 
+        /* 로그인 정보 가져오기 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String LoginId = auto.getString("LoginId","");
 
-
-
+        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -66,33 +68,42 @@ public class SubActivity extends AppCompatActivity {
 
             int id = menuItem.getItemId();
             switch (id) {
+                //홈
                 case R.id.nav_home:
                     break;
+                //라이딩 기록
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(SubActivity.this, MyReport.class);
                     startActivity(intent2);
                     break;
+                //공유된 라이딩 기록
                 case R.id.nav_alllist:
                     Intent intent3=new Intent(SubActivity.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-                case R.id.nav_courselist:
-                    Intent intent4=new Intent(SubActivity.this, CourseList.class);
+                //코스검색
+                case R.id.nav_course_search:
+                    Intent intent4=new Intent(SubActivity.this, CourseSearch.class);
                     startActivity(intent4);
-                    break;
-
-                case R.id.nav_course:
-                    Intent intent5=new Intent(SubActivity.this, MyScrap.class);
+                //코스보기
+                case R.id.nav_courselist:
+                    Intent intent5=new Intent(SubActivity.this, CourseList.class);
                     startActivity(intent5);
                     break;
-
-                case R.id.nav_comp:
-                    Intent intent6=new Intent(SubActivity.this, Competition.class);
+                //스크랩 보관함
+                case R.id.nav_course:
+                    Intent intent6=new Intent(SubActivity.this, MyScrap.class);
                     startActivity(intent6);
                     break;
-                case R.id.nav_mission:
-                    Intent intent7=new Intent(SubActivity.this, Mission.class);
+                //경쟁전
+                case R.id.nav_comp:
+                    Intent intent7=new Intent(SubActivity.this, Competition.class);
                     startActivity(intent7);
+                    break;
+                //미션
+                case R.id.nav_mission:
+                    Intent intent8=new Intent(SubActivity.this, Mission.class);
+                    startActivity(intent8);
                     break;
             }
             return true;
@@ -130,4 +141,6 @@ public class SubActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /* 네이베이션 끝 */
 }

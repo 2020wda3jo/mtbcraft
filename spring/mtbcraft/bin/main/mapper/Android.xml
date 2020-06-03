@@ -30,4 +30,15 @@
 	<select id="getScrapDetail" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
 		select * from course where c_num = #{c_num}
 	</select>
+	
+	<!-- 주행기록전체보기 -->
+	<select id="getRidingRecordAll" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
+		select * from riding_record order by rr_num desc
+	</select>
+	
+	<!-- 주행기록전체보기 -->
+	<select id="getRidingRecordAllItem" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
+		select * from riding_record where rr_num = #{rr_num}
+	</select>
+	
 </mapper>
