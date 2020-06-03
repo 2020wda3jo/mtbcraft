@@ -19,7 +19,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.Activity.Course.CourseList;
+import com.mtbcraft.Activity.Course.CourseSearch;
 import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Scrap.MyScrap;
@@ -91,36 +93,43 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
             int id = menuItem.getItemId();
             switch (id) {
+                //홈
                 case R.id.nav_home:
-                    Intent intent=new Intent(DetailActivity.this,SubActivity.class);
+                    Intent intent=new Intent(DetailActivity.this, SubActivity.class);
                     startActivity(intent);
-                    break;
+                    //라이딩 기록
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(DetailActivity.this, MyReport.class);
                     startActivity(intent2);
-                    finish();
                     break;
+                //공유된 라이딩 기록
                 case R.id.nav_alllist:
                     Intent intent3=new Intent(DetailActivity.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-                case R.id.nav_courselist:
-                    Intent intent4=new Intent(DetailActivity.this, CourseList.class);
+                //코스검색
+                case R.id.nav_course_search:
+                    Intent intent4=new Intent(DetailActivity.this, CourseSearch.class);
                     startActivity(intent4);
-                    break;
-
-                case R.id.nav_course:
-                    Intent intent5=new Intent(DetailActivity.this, MyScrap.class);
+                    //코스보기
+                case R.id.nav_courselist:
+                    Intent intent5=new Intent(DetailActivity.this, CourseList.class);
                     startActivity(intent5);
                     break;
-
-                case R.id.nav_comp:
-                    Intent intent6=new Intent(DetailActivity.this, Competition.class);
+                //스크랩 보관함
+                case R.id.nav_course:
+                    Intent intent6=new Intent(DetailActivity.this, MyScrap.class);
                     startActivity(intent6);
                     break;
-                case R.id.nav_mission:
-                    Intent intent7=new Intent(DetailActivity.this, Mission.class);
+                //경쟁전
+                case R.id.nav_comp:
+                    Intent intent7=new Intent(DetailActivity.this, Competition.class);
                     startActivity(intent7);
+                    break;
+                //미션
+                case R.id.nav_mission:
+                    Intent intent8=new Intent(DetailActivity.this, Mission.class);
+                    startActivity(intent8);
                     break;
             }
             return true;
@@ -156,7 +165,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/api/get/"+rr_rider+"/"+rr_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237/:8080/api/get/"+rr_rider+"/"+rr_num);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

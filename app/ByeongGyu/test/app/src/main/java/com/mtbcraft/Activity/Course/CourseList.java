@@ -61,36 +61,44 @@ public class CourseList extends AppCompatActivity  {
 
             int id = menuItem.getItemId();
             switch (id) {
+                //홈
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseList.this,SubActivity.class);
+                    Intent intent=new Intent(CourseList.this, SubActivity.class);
                     startActivity(intent);
-                    break;
+                    //라이딩 기록
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(CourseList.this, MyReport.class);
                     startActivity(intent2);
                     break;
+                //공유된 라이딩 기록
                 case R.id.nav_alllist:
                     Intent intent3=new Intent(CourseList.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-                case R.id.nav_courselist:
-                    Intent intent4=new Intent(CourseList.this, CourseList.class);
+                //코스검색
+                case R.id.nav_course_search:
+                    Intent intent4=new Intent(CourseList.this, CourseSearch.class);
                     startActivity(intent4);
+                    //코스보기
+                case R.id.nav_courselist:
+                    Intent intent5=new Intent(CourseList.this, CourseList.class);
+                    startActivity(intent5);
                     finish();
                     break;
-
+                //스크랩 보관함
                 case R.id.nav_course:
-                    Intent intent5=new Intent(CourseList.this, MyScrap.class);
-                    startActivity(intent5);
-                    break;
-
-                case R.id.nav_comp:
-                    Intent intent6=new Intent(CourseList.this, Competition.class);
+                    Intent intent6=new Intent(CourseList.this, MyScrap.class);
                     startActivity(intent6);
                     break;
-                case R.id.nav_mission:
-                    Intent intent7=new Intent(CourseList.this, Mission.class);
+                //경쟁전
+                case R.id.nav_comp:
+                    Intent intent7=new Intent(CourseList.this, Competition.class);
                     startActivity(intent7);
+                    break;
+                //미션
+                case R.id.nav_mission:
+                    Intent intent8=new Intent(CourseList.this, Mission.class);
+                    startActivity(intent8);
                     break;
             }
             return true;
@@ -115,7 +123,7 @@ public class CourseList extends AppCompatActivity  {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/course");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/course");
             // Parameter 를 전송한다.
 
             //Http 요청 전송

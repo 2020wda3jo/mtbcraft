@@ -37,7 +37,7 @@ public class SubActivity extends AppCompatActivity {
         // 다이얼로그 바디
         AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
         // 메세지
-        alert_confirm.setMessage("문제 및 수정예정 : \n - 라이딩 시작시 현재속도 불일치\n - 리사이클러뷰 간헐적 안보임 \n  - 단위계산 \n- 웹서버 통신 클래스\n - 레이아웃 정리(폰크기마다 차이 \n - 로그인 방식? \n - 상세보기 및 개인기록볼때 지도부분 수정중 \n - IP서버로 변환중");
+        alert_confirm.setMessage("문제 및 수정예정 : \n - 라이딩 시작시 현재속도 불일치 \n  - 단위계산 \n- 웹서버 통신 클래스\n - 레이아웃 정리(폰크기마다 차이 \n - 로그인 방식?  \n - IP서버로 변환중");
         // 확인 버튼 리스너
         alert_confirm.setPositiveButton("확인", null);
         // 다이얼로그 생성

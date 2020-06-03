@@ -27,7 +27,8 @@ public interface AndroidMapper {
 	public String readRecord(String rr_rider);
 	
 	// 사용자 라이딩 기록 검색
-	public List<RidingRecord> getRidingRecordDetail(String rr_rider, String rr_num) throws Exception;
+	public List<RidingRecord> getRidingRecordDetail(@Param("rr_rider") String rr_rider, @Param("rr_num") String rr_num) throws Exception;
+	
 	
 	//코스 가져오기
 	public List<Course> getCourse() throws Exception;

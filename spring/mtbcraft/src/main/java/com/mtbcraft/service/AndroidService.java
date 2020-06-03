@@ -42,6 +42,11 @@ public class AndroidService {
 		return androidMapper.readRecord(rr_rider);
 	}
 	
+	//주행기록 상세가져오기
+	public List<RidingRecord> getRidingRecordDetail(String rr_rider, String rr_num) throws Exception {
+		return androidMapper.getRidingRecordDetail(rr_rider, rr_num);
+	}
+	
 	//코스가져오기
 	public List<Course> getCourse() throws Exception{
 		return androidMapper.getCourse();
@@ -69,6 +74,8 @@ public class AndroidService {
 	public List<Course> getRidingRecordAllItem(String rr_num) throws Exception {
 		return androidMapper.getRidingRecordAllItem(rr_num);
 	}
+	
+
 	
 
 }

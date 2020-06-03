@@ -20,7 +20,9 @@ import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.Activity.Course.CourseList;
+import com.mtbcraft.Activity.Course.CourseSearch;
 import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Scrap.MyScrap;
@@ -61,36 +63,44 @@ public class MyReport extends AppCompatActivity  {
 
             int id = menuItem.getItemId();
             switch (id) {
+                //홈
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyReport.this,SubActivity.class);
+                    Intent intent=new Intent(MyReport.this, SubActivity.class);
                     startActivity(intent);
-                    break;
+                    //라이딩 기록
                 case R.id.nav_mylist:
                     Intent intent2=new Intent(MyReport.this, MyReport.class);
                     startActivity(intent2);
                     finish();
                     break;
+                //공유된 라이딩 기록
                 case R.id.nav_alllist:
                     Intent intent3=new Intent(MyReport.this, RidingRecordAll.class);
                     startActivity(intent3);
                     break;
-                case R.id.nav_courselist:
-                    Intent intent4=new Intent(MyReport.this, CourseList.class);
+                //코스검색
+                case R.id.nav_course_search:
+                    Intent intent4=new Intent(MyReport.this, CourseSearch.class);
                     startActivity(intent4);
-                    break;
-
-                case R.id.nav_course:
-                    Intent intent5=new Intent(MyReport.this, MyScrap.class);
+                    //코스보기
+                case R.id.nav_courselist:
+                    Intent intent5=new Intent(MyReport.this, CourseList.class);
                     startActivity(intent5);
                     break;
-
-                case R.id.nav_comp:
-                    Intent intent6=new Intent(MyReport.this, Competition.class);
+                //스크랩 보관함
+                case R.id.nav_course:
+                    Intent intent6=new Intent(MyReport.this, MyScrap.class);
                     startActivity(intent6);
                     break;
-                case R.id.nav_mission:
-                    Intent intent7=new Intent(MyReport.this, Mission.class);
+                //경쟁전
+                case R.id.nav_comp:
+                    Intent intent7=new Intent(MyReport.this, Competition.class);
                     startActivity(intent7);
+                    break;
+                //미션
+                case R.id.nav_mission:
+                    Intent intent8=new Intent(MyReport.this, Mission.class);
+                    startActivity(intent8);
                     break;
             }
             return true;

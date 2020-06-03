@@ -76,6 +76,7 @@ public class RidingRecordAll extends AppCompatActivity {
                 case R.id.nav_alllist:
                     Intent intent3=new Intent(RidingRecordAll.this, RidingRecordAll.class);
                     startActivity(intent3);
+                    finish();
                     break;
                 //코스검색
                 case R.id.nav_course_search:
@@ -121,7 +122,7 @@ public class RidingRecordAll extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/api/get/ridingrecord");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/api/get/ridingrecord");
 
             //Http 요청 전송
             HttpClient post = http.create();

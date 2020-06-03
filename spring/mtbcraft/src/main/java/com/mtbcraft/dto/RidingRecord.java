@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 public class RidingRecord {
 
 	private int rr_num;
-
 	private String rr_rider;
 	private Timestamp rr_date;
 	private int rr_distance;
@@ -18,6 +17,8 @@ public class RidingRecord {
 	private int rr_breaktime;
 	private int rr_time;
 	private String rr_area;
+	private int rr_course;
+	private int rr_comp;
 	
 	public int getRr_num() {
 		return rr_num;
@@ -99,6 +100,19 @@ public class RidingRecord {
 	public void setRr_date(Timestamp rr_date) {
 		this.rr_date = rr_date;
 	}
+	public int getRr_course() {
+		return rr_course;
+	}
+	public void setRr_course(int rr_course) {
+		this.rr_course = rr_course;
+	}
+	public int getRr_comp() {
+		return rr_comp;
+	}
+	public void setRr_comp(int rr_comp) {
+		this.rr_comp = rr_comp;
+	}
+	
 	
 
 

@@ -132,10 +132,11 @@ public class AndroidController {
 	}
 
 	// 주행기록 가져오기
-	@RequestMapping(value = { "/api/get/{rr_rider}/{rr_num}" })
-	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable(value = "rr_rider") String rr_rider,
-			@PathVariable(value = "rr_num") String rr_num) throws Exception {
-		return memberService.getRidingRecordDetail(rr_rider, rr_num);
+	@RequestMapping(value = "/api/get/{rr_rider}/{rr_num}")
+	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable String rr_rider,
+			@PathVariable String rr_num) throws Exception {
+		RidingRecord record = new RidingRecord();
+		return androidService.getRidingRecordDetail(rr_rider, rr_num);
 	}
 
 	@RequestMapping(value = "/android/fileUpload", method = RequestMethod.POST)
