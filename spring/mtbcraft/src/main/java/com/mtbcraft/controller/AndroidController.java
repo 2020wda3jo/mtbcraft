@@ -213,7 +213,7 @@ public class AndroidController {
 	    HttpHeaders headers = new HttpHeaders();
 	    byte[] media = null;
 		try {
-		    InputStream in = new FileInputStream("C://test/"+fileName);
+		    InputStream in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
 			media = IOUtils.toByteArray(in);
 		    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 		    
