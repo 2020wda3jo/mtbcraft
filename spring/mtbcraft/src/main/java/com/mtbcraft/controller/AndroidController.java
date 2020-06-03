@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-//import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -125,19 +125,6 @@ public class AndroidController {
 		return result;
 	}
 
-	// 주행기록전체 가져오기
-	@RequestMapping(value = "/api/get/ridingrecord")
-	public @ResponseBody List<RidingRecord> getRidingRecordAll() throws Exception {
-		return androidService.getRidingRecordAll();
-	}
-	
-	// 코스 조회
-	@RequestMapping(value = "/app/riding/ridingrecord/{rr_num}")
-	public @ResponseBody List<Course> getRidingRecordAllItem(@PathVariable(value = "rr_num") String rr_num) throws Exception {
-		return androidService.getRidingRecordAllItem(rr_num);
-	}
-		
-	
 	// 주행기록 가져오기
 	@RequestMapping(value = "/api/get/{rr_rider}")
 	public @ResponseBody List<RidingRecord> getRidingRecord(@PathVariable String rr_rider) throws Exception {
@@ -157,7 +144,6 @@ public class AndroidController {
 
 			// String path =
 			// "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
-			
 			String path = "/home/ec2-user/data/gpx";
 			String fileName = "";
 
@@ -221,23 +207,23 @@ public class AndroidController {
 		return androidService.getScrapDetail(rr_rider, ss_course);
 	}
 
-//	@RequestMapping(value = "/app/getGPX/{file_name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
-//	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName ) {
-//		
-//	    HttpHeaders headers = new HttpHeaders();
-//	    byte[] media = null;
-//		try {
-//		    InputStream in = new FileInputStream("C://test/"+fileName);
-//			media = IOUtils.toByteArray(in);
-//		    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-//		    
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
-//	    return responseEntity;
-//	}
+	@RequestMapping(value = "/app/getGPX/{file_name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
+	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName ) {
+		
+	    HttpHeaders headers = new HttpHeaders();
+	    byte[] media = null;
+		try {
+		    InputStream in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
+			media = IOUtils.toByteArray(in);
+		    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+		    
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+	    return responseEntity;
+	}
 
 	@RequestMapping(value = "/app/getRidingRecord")
 	public String getAppRidingRecord() {
