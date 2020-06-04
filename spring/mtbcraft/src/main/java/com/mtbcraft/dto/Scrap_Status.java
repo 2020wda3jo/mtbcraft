@@ -7,7 +7,7 @@ import javax.persistence.Id;
 
 public class Scrap_Status {
 	private String ss_rider;
-	private int ss_course;
+	private int ss_rnum;
 	private int c_num;
 	private int c_distance;
 	private int c_level;
@@ -20,11 +20,11 @@ public class Scrap_Status {
 	public void setSs_rider(String ss_rider) {
 		this.ss_rider = ss_rider;
 	}
-	public int getSs_course() {
-		return ss_course;
+	public int getSs_rnum() {
+		return ss_rnum;
 	}
-	public void setSs_course(int ss_course) {
-		this.ss_course = ss_course;
+	public void setSs_rnum(int ss_rnum) {
+		this.ss_rnum = ss_rnum;
 	}
 	public int getC_distance() {
 		return c_distance;

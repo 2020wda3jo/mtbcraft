@@ -17,9 +17,22 @@ public class RidingRecord {
 	private int rr_breaktime;
 	private int rr_time;
 	private String rr_area;
-	private int rr_course;
 	private int rr_comp;
+	private int rr_like;
+	private String rr_name;
 	
+	public int getRr_like() {
+		return rr_like;
+	}
+	public void setRr_like(int rr_like) {
+		this.rr_like = rr_like;
+	}
+	public String getRr_name() {
+		return rr_name;
+	}
+	public void setRr_name(String rr_name) {
+		this.rr_name = rr_name;
+	}
 	public int getRr_num() {
 		return rr_num;
 	}
@@ -100,21 +113,11 @@ public class RidingRecord {
 	public void setRr_date(Timestamp rr_date) {
 		this.rr_date = rr_date;
 	}
-	public int getRr_course() {
-		return rr_course;
-	}
-	public void setRr_course(int rr_course) {
-		this.rr_course = rr_course;
-	}
 	public int getRr_comp() {
 		return rr_comp;
 	}
 	public void setRr_comp(int rr_comp) {
 		this.rr_comp = rr_comp;
 	}
-	
-	
-
-
 }
 	

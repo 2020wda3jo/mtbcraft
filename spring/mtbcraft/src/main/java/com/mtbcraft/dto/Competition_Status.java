@@ -15,6 +15,15 @@ public class Competition_Status {
 	private int cs_club;
 	@Column
 	private int cs_score;
+	@Column
+	private int cs_rank;
+	
+	public int getCs_rank() {
+		return cs_rank;
+	}
+	public void setCs_rank(int cs_rank) {
+		this.cs_rank = cs_rank;
+	}
 	public int getCs_num() {
 		return cs_num;
 	}
@@ -39,6 +48,4 @@ public class Competition_Status {
 	public void setCs_score(int cs_score) {
 		this.cs_score = cs_score;
 	}
-	
-	
 }
