@@ -64,6 +64,8 @@
 		select * from riding_record where rr_num = #{rr_num}
 	</select>
 	
-
+	<select id="getCompetition" resultType="com.mtbcraft.dto.Competition">
+		select * from competition order by comp_num
+	</select>
 	
 </mapper>

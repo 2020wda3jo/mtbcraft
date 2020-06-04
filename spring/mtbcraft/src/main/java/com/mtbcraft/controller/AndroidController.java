@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
@@ -208,19 +209,33 @@ public class AndroidController {
 		return androidService.getScrapDetail(rr_rider, ss_course);
 	}
 
-	@RequestMapping(value = "/app/getGPX/{file_name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
+	@RequestMapping(value = "/app/getGPX/{file_name}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName ) {
 		
 	    HttpHeaders headers = new HttpHeaders();
 	    byte[] media = null;
-		try {
-		    InputStream in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
-			media = IOUtils.toByteArray(in);
-		    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-		    
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    String[] endName = fileName.split(".");
+	    
+	    if (endName[1] == "gpx") {
+	    	try {
+	    		InputStream in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
+	    		media = IOUtils.toByteArray(in);
+	    		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+	    		
+	    	} catch (IOException e) {
+	    		// TODO Auto-generated catch block
+	    		e.printStackTrace();
+	    	}
+		}else {
+	    	try {
+	    		InputStream in = new FileInputStream("/home/ec2-user/data/comp/"+fileName);
+	    		media = IOUtils.toByteArray(in);
+	    		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+	    		
+	    	} catch (IOException e) {
+	    		// TODO Auto-generated catch block
+	    		e.printStackTrace();
+	    	}
 		}
 	    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
 	    return responseEntity;
@@ -229,5 +244,11 @@ public class AndroidController {
 	@RequestMapping(value = "/app/getRidingRecord")
 	public String getAppRidingRecord() {
 		return "riding/appRidingRecord";
+	}
+	
+	// 코스 조회
+	@RequestMapping(value = "/app/competition")
+	public @ResponseBody List<Competition> getCompetition() throws Exception {
+		return androidService.getCompetition();
 	}
 }

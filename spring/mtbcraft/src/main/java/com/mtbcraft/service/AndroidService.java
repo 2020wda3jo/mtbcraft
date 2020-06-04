@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.mapper.AndroidMapper;
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
@@ -75,7 +76,10 @@ public class AndroidService {
 		return androidMapper.getRidingRecordAllItem(rr_num);
 	}
 	
-
+	//경쟁전가져오기
+	public List<Competition> getCompetition() throws Exception{
+		return androidMapper.getCompetition();
+	}
 	
 
 }
