@@ -32,6 +32,12 @@ public class CommunityController {
 		
 		return "/community/club/club";
 	}
+	
+	// 커뮤니티 클럽 만들기 페이지
+	@RequestMapping(value = "/community/club/create", method = RequestMethod.GET)
+	public String moveClubCreatePage() {
+		return "/community/club/create";
+	}
 
 	// 커뮤니티 클럽 만들기
 	@RequestMapping(value = "/community/club/create", method = RequestMethod.POST)
