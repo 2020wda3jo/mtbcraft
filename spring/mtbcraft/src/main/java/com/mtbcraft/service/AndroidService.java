@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.mapper.AndroidMapper;
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
@@ -39,7 +40,7 @@ public class AndroidService {
 	}
 	
 	//라이딩기록 보기
-	public String readRecord(String rr_rider) throws Exception{
+	public List<App_RidingRecord> readRecord(String rr_rider) throws Exception{
 		return androidMapper.readRecord(rr_rider);
 	}
 	

@@ -21,10 +21,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mtbcraft.Activity.Competition.Competition;
 import com.mtbcraft.Activity.Course.CourseList;
-import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Activity.Course.CourseSearch;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
-import com.mtbcraft.Activity.Riding.RidingRecordAll;
 import com.mtbcraft.Recycler.Adapter.MyScrapAdapter;
 import com.mtbcraft.dto.ScrapStatus;
 import com.mtbcraft.network.HttpClient;
@@ -59,36 +58,40 @@ public class MyScrap extends AppCompatActivity  {
 
             int id = menuItem.getItemId();
             switch (id) {
+                //홈
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyScrap.this,SubActivity.class);
-                    startActivity(intent);
+                    Intent home=new Intent(MyScrap.this, MyReport.class);
+                    startActivity(home);
                     break;
+                //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent intent2=new Intent(MyScrap.this, MyReport.class);
-                    startActivity(intent2);
+                    Intent mylist=new Intent(MyScrap.this, MyReport.class);
+                    startActivity(mylist);
                     break;
-                case R.id.nav_alllist:
-                    Intent intent3=new Intent(MyScrap.this, RidingRecordAll.class);
-                    startActivity(intent3);
-                    break;
+                //코스보기
                 case R.id.nav_courselist:
-                    Intent intent4=new Intent(MyScrap.this, CourseList.class);
-                    startActivity(intent4);
+                    Intent courselist=new Intent(MyScrap.this, CourseList.class);
+                    startActivity(courselist);
                     break;
-
-                case R.id.nav_course:
-                    Intent intent5=new Intent(MyScrap.this, MyScrap.class);
-                    startActivity(intent5);
+                //코스검색
+                case R.id.nav_course_search:
+                    Intent coursesearch=new Intent(MyScrap.this, CourseSearch.class);
+                    startActivity(coursesearch);
+                    //스크랩 보관함
+                case R.id.nav_course_get:
+                    Intent courseget=new Intent(MyScrap.this, MyScrap.class);
+                    startActivity(courseget);
                     finish();
                     break;
-
+                //경쟁전
                 case R.id.nav_comp:
-                    Intent intent6=new Intent(MyScrap.this, Competition.class);
-                    startActivity(intent6);
+                    Intent comp=new Intent(MyScrap.this, Competition.class);
+                    startActivity(comp);
                     break;
+                //미션
                 case R.id.nav_mission:
-                    Intent intent7=new Intent(MyScrap.this, Mission.class);
-                    startActivity(intent7);
+                    Intent mission=new Intent(MyScrap.this, Mission.class);
+                    startActivity(mission);
                     break;
             }
             return true;

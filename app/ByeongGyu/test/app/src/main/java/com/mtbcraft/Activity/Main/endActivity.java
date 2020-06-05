@@ -10,12 +10,15 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.gpstest.GpxInfo;
 import com.example.gpstest.R;
@@ -58,6 +61,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
     //형 변환
     String cha_dis, cha_avg, cha_max;
 
+    //라이딩 이름 짓기
+    LinearLayout openset;
+    TextView riding_nameinput;
+    CharSequence riding_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +81,6 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         cha_dis= intent.getStringExtra("cha_dis"); //이동거리(소수점X)
         cha_max =  intent.getStringExtra("cha_max"); //최대속도(소수점X)
         cha_avg = intent.getStringExtra("cha_avg"); //평균속도(소수점X)
-
-
         cha_dis = intent.getStringExtra("cha_dis");
         cha_avg = intent.getStringExtra("cha_avg");
         cha_max = intent.getStringExtra("cha_max");
@@ -87,7 +92,8 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
         endsec = intent.getStringExtra("endsec"); //라이딩 시간(초)
         restsectime = intent.getStringExtra("restsectime"); //휴식시간(초)
-      //  ArrayList<Double> test1 = (ArrayList<Double>)
+
+
         ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
         ArrayList<Double> witch_lon = (ArrayList<Double>)intent.getSerializableExtra("witch_lon");
         ArrayList<Double> ele = (ArrayList<Double>)intent.getSerializableExtra("ele");
@@ -108,20 +114,18 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
 
-// Polyline 좌표 지정.
+        // Polyline 좌표 지정.
         for(int i=0; i<witch_lat.size(); i++){
             polyline.addPoint(MapPoint.mapPointWithGeoCoord(witch_lat.get(i), witch_lon.get(i)));
         }
 
-// Polyline 지도에 올리기.
+        // Polyline 지도에 올리기.
         mapView.addPolyline(polyline);
 
-// 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+        // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
         int padding = 100; // px
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
-
-
 
         avgsoeed = (TextView) findViewById(R.id.endavg);
         maxspeed = (TextView) findViewById(R.id.endmax);
@@ -129,12 +133,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         resttime = (TextView) findViewById(R.id.endresttime);
         ingtime = (TextView) findViewById(R.id.ending);
         distence = (TextView) findViewById(R.id.enddis);
-        result = (TextView) findViewById(R.id.result);
+        riding_nameinput = (EditText)findViewById(R.id.riding_nameinput); //라이딩 이름 넣기
 
         Button save = (Button) findViewById(R.id.saveriding);
         RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
-
-
 
         //앞에서 받아온값들을 텍스트로 설정
         avgsoeed.setText(AvgSpeed); //평균속도
@@ -143,7 +145,6 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         resttime.setText(RestTime); //휴식시간
         ingtime.setText(IngTime); //지속시간
         distence.setText(Distence); //이동거리
-
         // gpx파일 제목을 위해 현재 시간 구하기
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -154,6 +155,8 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         StrictMode.setThreadPolicy(policy);
         NetworkTask2 networkTask = new NetworkTask2();
         final String select;
+
+        //공개여부 선택
         openselect.setOnCheckedChangeListener((RadioGroup.OnCheckedChangeListener) (group, checkedId) -> {
             RadioGroup rg = (RadioGroup)findViewById(R.id.selectgroup); // 라디오그룹 객체 맵핑
             RadioButton selectedRdo = (RadioButton)findViewById(rg.getCheckedRadioButtonId()); // rg 라디오그룹의 체크된(getCheckedRadioButtonId) 라디오버튼 객체 맵핑
@@ -200,16 +203,11 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
             GpxInfo.trkpt trkptObj = new GpxInfo.trkpt(witch_lat.get(i), witch_lon.get(i), ele.get(i));
             trkptArray.add(trkptObj);
         }
-
         trksegObj.setTrkptList(trkptArray);
-
-
         // Create a file to save to and make sure to use the path provided from
         // getFilesDir().getPath().
         File xmlFile = new File(getFilesDir().getPath() + "/gpx_" + nowTime + ".gpx");
-
         // Serialize the Person
-
         try
         {
             Serializer serializer = new Persister();
@@ -251,8 +249,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 NetworkTask2 networkTask1 = new NetworkTask2();
                 Map<String, String> params = new HashMap<String, String>();
 
-              Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec);
-
+              Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
                 params.put("rr_rider", LoginId);
                 params.put("rr_distance", cha_dis);
                 params.put("rr_topspeed", cha_max);
@@ -263,6 +260,8 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 params.put("rr_breaktime", restsectime);
                 params.put("rr_time", endsec);
                 params.put("rr_area", "대구 북구");
+                params.put("rr_like", "0");
+                params.put("rr_name", riding_nameinput.getText().toString());
                 networkTask1.execute(params);
             }catch(Exception e){
                 e.printStackTrace();
@@ -276,7 +275,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://100.92.32.8:8080/api/upload");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237:8080/api/upload");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -295,42 +294,33 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
             try{
                 Log.d("JSON_RESULT", s);
                 Toast.makeText(getApplicationContext(), "기록이 저장되었습니다.", Toast.LENGTH_LONG).show();
+                ActivityCompat.finishAffinity(endActivity.this);
             }catch(Exception e){
                 Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
             }
-
-
         }
     }
-
-
-
 
     @Override
     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
 
     }
-
     @Override
     public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
 
     }
-
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
 
     }
-
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
 
     }
-
     @Override
     public void onCurrentLocationUpdateFailed(MapView mapView) {
 
     }
-
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
 

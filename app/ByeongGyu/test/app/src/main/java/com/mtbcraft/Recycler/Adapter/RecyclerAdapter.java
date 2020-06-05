@@ -2,6 +2,7 @@ package com.mtbcraft.Recycler.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
         int hour;
         int min;
         int sec;
-        sec = Integer.parseInt(itemList.get(position).getRr_time());
+        sec = (itemList.get(position).getRr_time());
 
         min = sec/60;
         hour = min/60;
@@ -61,7 +62,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
             min=00;
         }
 
-        int des = Integer.parseInt(itemList.get(position).getRr_distance());
+        int des = (itemList.get(position).getRr_distance());
         float km = (float) (des/1000.0);
         String total = String.valueOf(km)+"Km";
 
@@ -86,7 +87,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
             intent.putExtra("rr_num",itemList.get(position).getRr_num());
             intent.putExtra("rr_rider",itemList.get(position).getRr_rider());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-              v.getContext().startActivity(intent);
+            Log.d("보잡",itemList.get(position).getRr_num()+itemList.get(position).getRr_rider());
+            v.getContext().startActivity(intent);
         });
     }
 

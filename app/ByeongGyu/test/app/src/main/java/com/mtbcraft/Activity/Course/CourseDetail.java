@@ -23,11 +23,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.Competition;
-import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.FollowStart;
 import com.mtbcraft.Activity.Riding.MyReport;
-import com.mtbcraft.Activity.Riding.RidingRecordAll;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.gpxparser.GPXParser;
 import com.mtbcraft.gpxparser.Gpx;
@@ -172,41 +170,38 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent intent=new Intent(CourseDetail.this, SubActivity.class);
-                    startActivity(intent);
+                    Intent home=new Intent(CourseDetail.this, MyReport.class);
+                    startActivity(home);
+                    break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent intent2=new Intent(CourseDetail.this, MyReport.class);
-                    startActivity(intent2);
+                    Intent mylist=new Intent(CourseDetail.this, MyReport.class);
+                    startActivity(mylist);
                     break;
-                //공유된 라이딩 기록
-                case R.id.nav_alllist:
-                    Intent intent3=new Intent(CourseDetail.this, RidingRecordAll.class);
-                    startActivity(intent3);
+                //코스보기
+                case R.id.nav_courselist:
+                    Intent courselist=new Intent(CourseDetail.this, CourseList.class);
+                    startActivity(courselist);
+                    finish();
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent intent4=new Intent(CourseDetail.this, CourseSearch.class);
-                    startActivity(intent4);
-                    //코스보기
-                case R.id.nav_courselist:
-                    Intent intent5=new Intent(CourseDetail.this, CourseList.class);
-                    startActivity(intent5);
-                    break;
-                //스크랩 보관함
-                case R.id.nav_course:
-                    Intent intent6=new Intent(CourseDetail.this, MyScrap.class);
-                    startActivity(intent6);
+                    Intent coursesearch=new Intent(CourseDetail.this, CourseSearch.class);
+                    startActivity(coursesearch);
+                    //스크랩 보관함
+                case R.id.nav_course_get:
+                    Intent courseget=new Intent(CourseDetail.this, MyScrap.class);
+                    startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent intent7=new Intent(CourseDetail.this, Competition.class);
-                    startActivity(intent7);
+                    Intent comp=new Intent(CourseDetail.this, Competition.class);
+                    startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent intent8=new Intent(CourseDetail.this, Mission.class);
-                    startActivity(intent8);
+                    Intent mission=new Intent(CourseDetail.this, Mission.class);
+                    startActivity(mission);
                     break;
             }
             return true;

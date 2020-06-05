@@ -166,8 +166,25 @@ public class StartActivity extends AppCompatActivity implements
         });
 
         button2.setOnClickListener(v -> {
-            Intent intent = new Intent(StartActivity.this, endActivity.class);
             //형변환한거
+            if(cha_dis.equals("")){
+                /*이동거리가 0이면 라이딩 기록 종료시키면 액티비티 종료 */
+                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
+                alert_confirm.setMessage("수집 데이터가 너무 적어 저장하지 않습니다");
+                alert_confirm.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                alert_confirm.setNegativeButton("아니오", null);
+                AlertDialog alert = alert_confirm.create();
+                alert.setTitle("라이딩 기록 실패");
+                alert.show();
+
+            }else{
+
+                Intent intent = new Intent(StartActivity.this, endActivity.class);
             intent.putExtra("cha_dis",cha_dis); //이동거리(소수점X)
             intent.putExtra("cha_max",cha_max); //최대속도(소수점X)
             intent.putExtra("cha_avg",cha_avg); //평균속도(소수점X)
@@ -191,7 +208,7 @@ public class StartActivity extends AppCompatActivity implements
             intent.putExtra("kyun",witch_lon); //경도(지도보여줄거)
             startActivity(intent);
             finish();
-
+            }
         });
 
         //권한 체크

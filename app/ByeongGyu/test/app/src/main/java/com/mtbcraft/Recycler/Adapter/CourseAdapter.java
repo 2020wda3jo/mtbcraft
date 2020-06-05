@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,8 +15,7 @@ import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.dto.Course;
 
 import java.util.ArrayList;
-
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHolder>{
+public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
 
     public Context mContext;
     public ArrayList<Course> itemList;
@@ -61,24 +57,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
     }
 
 
-    class CourseHolder extends RecyclerView.ViewHolder {
-        public TextView textView1, textView2, textView3;
-        public ImageView imageView;
-        public LinearLayout viewClick;
-        public final View mView;
-
-        public CourseHolder( View itemView) {
-            super(itemView);
-            mView = itemView;
-            textView1 = itemView.findViewById(R.id.textView1);
-            textView2 = itemView.findViewById(R.id.textView2);
-            textView3 = itemView.findViewById(R.id.textView3);
-            imageView = itemView.findViewById(R.id.imageView);
-            viewClick = itemView.findViewById(R.id.viewClick);
-
-        }
-
-    }
 
     @Override
     public int getItemCount() {

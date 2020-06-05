@@ -24,7 +24,6 @@ import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Course.CourseSearch;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
-import com.mtbcraft.Activity.Riding.RidingRecordAll;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 
 public class SubActivity extends AppCompatActivity {
@@ -73,37 +72,33 @@ public class SubActivity extends AppCompatActivity {
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent intent2=new Intent(SubActivity.this, MyReport.class);
-                    startActivity(intent2);
+                    Intent mylist=new Intent(SubActivity.this, MyReport.class);
+                    startActivity(mylist);
+
                     break;
-                //공유된 라이딩 기록
-                case R.id.nav_alllist:
-                    Intent intent3=new Intent(SubActivity.this, RidingRecordAll.class);
-                    startActivity(intent3);
+                //코스보기
+                case R.id.nav_courselist:
+                    Intent courselist=new Intent(SubActivity.this, CourseList.class);
+                    startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent intent4=new Intent(SubActivity.this, CourseSearch.class);
-                    startActivity(intent4);
-                //코스보기
-                case R.id.nav_courselist:
-                    Intent intent5=new Intent(SubActivity.this, CourseList.class);
-                    startActivity(intent5);
-                    break;
+                    Intent coursesearch=new Intent(SubActivity.this, CourseSearch.class);
+                    startActivity(coursesearch);
                 //스크랩 보관함
-                case R.id.nav_course:
-                    Intent intent6=new Intent(SubActivity.this, MyScrap.class);
-                    startActivity(intent6);
+                case R.id.nav_course_get:
+                    Intent courseget=new Intent(SubActivity.this, MyScrap.class);
+                    startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent intent7=new Intent(SubActivity.this, Competition.class);
-                    startActivity(intent7);
+                    Intent comp=new Intent(SubActivity.this, Competition.class);
+                    startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent intent8=new Intent(SubActivity.this, Mission.class);
-                    startActivity(intent8);
+                    Intent mission=new Intent(SubActivity.this, Mission.class);
+                    startActivity(mission);
                     break;
             }
             return true;

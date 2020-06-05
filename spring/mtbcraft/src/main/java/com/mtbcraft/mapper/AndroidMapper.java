@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
@@ -25,7 +26,7 @@ public interface AndroidMapper {
 	public List<RidingRecord> getRidingRecordAll();
 		
 	//안드로이드 앱에서 라이딩 기록 리스트 가져오기
-	public String readRecord(String rr_rider);
+	public List<App_RidingRecord> readRecord(String rr_rider);
 	
 	// 사용자 라이딩 기록 검색
 	public List<RidingRecord> getRidingRecordDetail(@Param("rr_rider") String rr_rider, @Param("rr_num") String rr_num) throws Exception;

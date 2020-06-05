@@ -6,10 +6,17 @@
     android:layout_height="match_parent"
     tools:context="com.mtbcraft.Activity.Main.endActivity">
 
+
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
@@ -20,153 +27,258 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <RelativeLayout
             android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="300dp" />
 
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:columnCount="2"
-        app:layout_constraintBottom_toTopOf="@+id/_dynamic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints,UnknownId">
 
-        <TextView
-            android:layout_gravity="right"
-            android:text="주행거리 "
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/enddis"
-            android:text=" "
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/maxspeedlabel"
-            android:layout_gravity="right"
-            android:text="최대속도"
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/endmax"
-            android:text=" "
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/avgspeedlabel"
-            android:layout_gravity="right"
-            android:text="평균속도"
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/endavg"
-            android:text=" "
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/getgodoa"
-            android:layout_gravity="right"
-            android:text="획득고도 "
-            android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/endget"
-            android:layout_width="match_parent"
+        <GridLayout
+            android:id="@+id/record_grid"
+            android:verticalSpacing="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity = "center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="3"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            android:gravity="center"
-            android:text=" "
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="74dp"
+                    android:layout_height="54dp"
+                    android:src="@drawable/riding_time"
+                    tools:layout_editor_absoluteX="131dp"
+                    tools:layout_editor_absoluteY="407dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="라이딩 시간" />
+                <TextView
+                    android:id="@+id/ending"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0:0:0"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="50dp">
 
-        <TextView
-            android:id="@+id/rest"
-            android:layout_gravity="right"
-            android:text="휴식시간"
-            android:textSize="25dp" />
+                <ImageView
+                    android:layout_width="74dp"
+                    android:layout_height="54dp"
+                    android:src="@drawable/rest_time"
+                    tools:layout_editor_absoluteX="131dp"
+                    tools:layout_editor_absoluteY="407dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="휴식시간" />
 
-        <TextView
-            android:id="@+id/endresttime"
-            android:text=" "
-            android:textSize="25dp" />
+                <TextView
+                    android:id="@+id/endresttime"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/ingtime"
-            android:layout_gravity="right"
-            android:text="라이딩 시간 "
-            android:textSize="25dp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="40dp">
 
-        <TextView
-            android:id="@+id/ending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                <ImageView
+                    android:layout_width="74dp"
+                    android:layout_height="54dp"
+                    android:src="@drawable/max_speed"
+                    tools:layout_editor_absoluteX="131dp"
+                    tools:layout_editor_absoluteY="407dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="최대속도" />
+                <TextView
+                    android:id="@+id/endmax"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-            android:gravity="center"
-            android:text=" "
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="40dp">
 
-            android:textSize="20dp"
-            android:textStyle="bold" />
-    </GridLayout>
+                <ImageView
+                    android:layout_width="74dp"
+                    android:layout_height="54dp"
+                    android:src="@drawable/avg_speed"
+                    tools:layout_editor_absoluteX="131dp"
+                    tools:layout_editor_absoluteY="407dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="평균속도"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/endavg"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textSize="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="40dp">
+
+                <ImageView
+                    android:layout_width="74dp"
+                    android:layout_height="54dp"
+                    android:src="@drawable/riding_des"
+                    tools:layout_editor_absoluteX="131dp"
+                    tools:layout_editor_absoluteY="407dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="이동거리" />
+
+                <TextView
+                    android:id="@+id/enddis"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textSize="25dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="40dp">
+                <ImageView
+                    android:layout_width="74dp"
+                    android:layout_height="54dp"
+                    android:src="@drawable/godo"
+                    tools:layout_editor_absoluteX="131dp"
+                    tools:layout_editor_absoluteY="407dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="획득고도" />
+                <TextView
+                    android:id="@+id/endget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </GridLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:id="@+id/openset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="라이딩 이름  : " />
+
+            <EditText
+                android:id="@+id/riding_nameinput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="내 라이딩"
+                android:inputType="textPersonName"
+                android:text=" " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp">
+            <RadioGroup
+                android:id="@+id/selectgroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/NoOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="비공개" />
+
+                <RadioButton
+                    android:id="@+id/ClubOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="클럽 공개" />
+
+                <RadioButton
+                    android:id="@+id/FriOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전체 공개" />
+
+            </RadioGroup>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp">
             <Button
                 android:id="@+id/saveriding"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="기록저장"
                 tools:layout_editor_absoluteX="31dp"
                 tools:layout_editor_absoluteY="626dp"
                 tools:ignore="MissingConstraints" />
 
-            <Button
-                android:id="@+id/shareriding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="기록공유"
-                tools:layout_editor_absoluteX="31dp"
-                tools:layout_editor_absoluteY="626dp"
-                tools:ignore="MissingConstraints" />
-
-            <TextView
-                android:id="@+id/result"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <RadioGroup
-                android:id="@+id/selectgroup"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <RadioButton
-                    android:id="@+id/NoOpen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="비공개" />
-
-                <RadioButton
-                    android:id="@+id/ClubOpen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="클럽 공개" />
-
-                <RadioButton
-                    android:id="@+id/FriOpen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="전체 공개" />
-            </RadioGroup>
         </LinearLayout>
     </LinearLayout>
-
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

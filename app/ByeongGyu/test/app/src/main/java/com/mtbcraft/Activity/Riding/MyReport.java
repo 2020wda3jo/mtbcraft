@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,10 +21,8 @@ import com.example.gpstest.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mtbcraft.Activity.Competition.Competition;
-import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Course.CourseSearch;
-import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.Recycler.Adapter.RecyclerAdapter;
@@ -65,42 +64,38 @@ public class MyReport extends AppCompatActivity  {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent intent=new Intent(MyReport.this, SubActivity.class);
-                    startActivity(intent);
-                    //라이딩 기록
+                    Intent home=new Intent(MyReport.this, MyReport.class);
+                    startActivity(home);
+                    break;
+                //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent intent2=new Intent(MyReport.this, MyReport.class);
-                    startActivity(intent2);
+                    Intent mylist=new Intent(MyReport.this, MyReport.class);
+                    startActivity(mylist);
                     finish();
                     break;
-                //공유된 라이딩 기록
-                case R.id.nav_alllist:
-                    Intent intent3=new Intent(MyReport.this, RidingRecordAll.class);
-                    startActivity(intent3);
+                //코스보기
+                case R.id.nav_courselist:
+                    Intent courselist=new Intent(MyReport.this, CourseList.class);
+                    startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent intent4=new Intent(MyReport.this, CourseSearch.class);
-                    startActivity(intent4);
-                    //코스보기
-                case R.id.nav_courselist:
-                    Intent intent5=new Intent(MyReport.this, CourseList.class);
-                    startActivity(intent5);
-                    break;
-                //스크랩 보관함
-                case R.id.nav_course:
-                    Intent intent6=new Intent(MyReport.this, MyScrap.class);
-                    startActivity(intent6);
+                    Intent coursesearch=new Intent(MyReport.this, CourseSearch.class);
+                    startActivity(coursesearch);
+                    //스크랩 보관함
+                case R.id.nav_course_get:
+                    Intent courseget=new Intent(MyReport.this, MyScrap.class);
+                    startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent intent7=new Intent(MyReport.this, Competition.class);
-                    startActivity(intent7);
+                    Intent comp=new Intent(MyReport.this, Competition.class);
+                    startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent intent8=new Intent(MyReport.this, Mission.class);
-                    startActivity(intent8);
+                    Intent mission=new Intent(MyReport.this, Mission.class);
+                    startActivity(mission);
                     break;
             }
             return true;
@@ -146,7 +141,9 @@ public class MyReport extends AppCompatActivity  {
         protected void onPostExecute(String s) {
            // Log.d("로그: ",s);
             try{
+
                 JSONArray jsonArray = new JSONArray(s);
+                Log.d("마이리포트",s+"\n");
                 StringBuffer sb = new StringBuffer();
                 String tempData = s;
 

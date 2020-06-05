@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
@@ -96,6 +97,8 @@ public class AndroidController {
 		record.setRr_breaktime(Integer.parseInt(request.getParameter("rr_breaktime")));
 		record.setRr_time(Integer.parseInt(request.getParameter("rr_time")));
 		record.setRr_area(request.getParameter("rr_area"));
+		record.setRr_like(Integer.parseInt(request.getParameter("rr_like")));
+		record.setRr_name(request.getParameter("rr_name"));
 
 		androidService.insertRecord(record);
 		// 안드로이드로부터 받은 데이터
@@ -109,27 +112,19 @@ public class AndroidController {
 		System.out.println("rr_breaktime " + request.getParameter("rr_breaktime")); // gpx
 		System.out.println("rr_time " + request.getParameter("rr_time")); // 공개여부
 		System.out.println("rr_area " + request.getParameter("rr_area")); // 획득고도
+		System.out.println("rr_name"+request.getParameter("rr_name"));
 
 		// 안드로이드에게 전달하는 데이터
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("data1", request.getParameter("rr_rider"));
-		result.put("data2", request.getParameter("rr_distance"));
-		result.put("data3", request.getParameter("rr_topspeed"));
-		result.put("data4", request.getParameter("rr_avgspeed"));
-		result.put("data5", request.getParameter("rr_high"));
-		result.put("data6", request.getParameter("rr_gpx"));
-		result.put("data7", request.getParameter("rr_open"));
-		result.put("data8", request.getParameter("rr_breaktime"));
-		result.put("data9", request.getParameter("rr_time"));
-		result.put("data10", request.getParameter("rr_area"));
 
 		return result;
 	}
 
 	// 주행기록 가져오기
 	@RequestMapping(value = "/api/get/{rr_rider}")
-	public @ResponseBody List<RidingRecord> getRidingRecord(@PathVariable String rr_rider) throws Exception {
-		return memberService.getRidingRecord(rr_rider);
+	public @ResponseBody List<App_RidingRecord> getRidingRecord(@PathVariable String rr_rider) throws Exception {
+		return androidService.readRecord(rr_rider);
 	}
 
 	// 주행기록 가져오기
