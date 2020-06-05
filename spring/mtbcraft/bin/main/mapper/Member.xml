@@ -71,4 +71,3 @@
 		delete from MARKET_VISION where num = #{param1}
 	</delete>
 </mapper>
-

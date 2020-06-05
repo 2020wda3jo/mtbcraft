@@ -7,6 +7,11 @@
 		<![CDATA[ SELECT * FROM (SELECT * FROM RIDING_RECORD WHERE RR_RIDER = #{rr_rider} ORDER BY RR_DATE DESC) WHERE ROWNUM <= 3 ]]>
 	</select>
 	
+	<!-- 사용자 주행기록 조회 -->
+	<select id="getRidingRecord" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
+		select * from riding_record where rr_rider = #{rr_rider} order by rr_num desc
+	</select>
+	
 	<!-- 라이딩 넘버로 GPX파일명 조회 -->
 	<select id="getGpxFileByRR_Num" parameterType="Integer" resultType="String">
 		SELECT RR_GPX FROM RIDING_RECORD WHERE RR_NUM=#{rr_num}
@@ -27,6 +32,12 @@
 		SELECT * FROM DANGEROUS_AREA
 	</select>
 	
+	<!-- 사용자 등록 위험지역 조회 -->
+	<select id="getUserDangerousArea" parameterType="String"
+		resultType="com.mtbcraft.dto.DangerousArea">
+		select * from DANGEROUS_AREA where DA_RIDER = #{rr_rider}
+	</select>
+	
 	<!-- 위험지역신청 등록 -->
 	<insert id="postDangerousArea"
 		parameterType="com.mtbcraft.dto.DangerousArea">
@@ -35,5 +46,19 @@
 		values(SEQ_DANGEROUSAREA.nextval, #{da_rider}, #{da_latitude},
 		#{da_addr}, 0, #{da_content}, #{da_longitude}, #{da_image})
 	</insert>
+	
+	<!-- 사용자 스크랩 코스 조회 -->
+	<select id="getScrapCourse" parameterType="String"
+		resultType="com.mtbcraft.dto.Course">
+		select * from course where exists (select ss_course from
+		SCRAP_STATUS where SS_RIDER=#{rr_rider} and
+		course.C_NUM=SCRAP_STATUS.SS_COURSE)
+	</select>
+	
+	<!-- 현재는 코스가 아닌 주행기록을 조회하기에 협의 후 최종결정 --> 
+	<!-- 등록된 코스 조회 -->
+	<select id="getCourses" resultType="com.mtbcraft.dto.RidingRecord">
+		SELECT * FROM RIDING_RECORD WHERE RR_OPEN=1
+	</select>
 </mapper>
 

@@ -184,7 +184,7 @@ public class AndroidController {
 	@RequestMapping(value = "/app/riding/coursescrap")
 	public @ResponseBody Map<String, String> coursescrap(HttpServletRequest request) throws Exception {
 		Scrap_Status scrap = new Scrap_Status();
-		scrap.setSs_course(Integer.parseInt(request.getParameter("c_num")));
+		scrap.setSs_rnum(Integer.parseInt(request.getParameter("c_num")));
 		scrap.setSs_rider(request.getParameter("r_rider"));
 		androidService.insertScrap(scrap);
 
