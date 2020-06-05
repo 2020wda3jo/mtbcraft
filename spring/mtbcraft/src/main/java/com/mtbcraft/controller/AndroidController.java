@@ -217,7 +217,7 @@ public class AndroidController {
 	    byte[] media = null;
 	    InputStream in;
 	    
-	    if (fileName.contains("gpx"))
+	    if (fileName.contains(".gpx"))
 	    	in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
 	    else
 	    	in = new FileInputStream("/home/ec2-user/data/comp/"+fileName);
