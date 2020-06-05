@@ -209,44 +209,32 @@ public class AndroidController {
 		return androidService.getScrapDetail(rr_rider, ss_course);
 	}
 
+	// 파일 다운로드
 	@RequestMapping(value = "/app/getGPX/{file_name}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName ) {
+	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName ) throws IOException {
 		
 	    HttpHeaders headers = new HttpHeaders();
 	    byte[] media = null;
-	    String[] endName = fileName.split(".");
+	    InputStream in;
 	    
-	    if (endName[1] == "gpx") {
-	    	try {
-	    		InputStream in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
-	    		media = IOUtils.toByteArray(in);
-	    		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-	    		
-	    	} catch (IOException e) {
-	    		// TODO Auto-generated catch block
-	    		e.printStackTrace();
-	    	}
-		}else {
-	    	try {
-	    		InputStream in = new FileInputStream("/home/ec2-user/data/comp/"+fileName);
-	    		media = IOUtils.toByteArray(in);
-	    		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-	    		
-	    	} catch (IOException e) {
-	    		// TODO Auto-generated catch block
-	    		e.printStackTrace();
-	    	}
-		}
+	    if (fileName.contains("gpx"))
+	    	in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
+	    else
+	    	in = new FileInputStream("/home/ec2-user/data/comp/"+fileName);
+
+	    media = IOUtils.toByteArray(in);
+	    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 	    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
 	    return responseEntity;
 	}
 
+	// 웹뷰용 라이딩 기록
 	@RequestMapping(value = "/app/getRidingRecord")
 	public String getAppRidingRecord() {
 		return "riding/appRidingRecord";
 	}
 	
-	// 코스 조회
+	// 경쟁전 조회
 	@RequestMapping(value = "/app/competition")
 	public @ResponseBody List<Competition> getCompetition() throws Exception {
 		return androidService.getCompetition();
