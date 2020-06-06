@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,14 +25,12 @@ import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.Recycler.Adapter.CourseAdapter;
 import com.mtbcraft.Recycler.Adapter.RecyclerAdapter;
-import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.gpxparser.GPXParser;
 import com.mtbcraft.gpxparser.Gpx;
 import com.mtbcraft.network.HttpClient;
 
 import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
@@ -152,10 +149,10 @@ public class CourseList extends AppCompatActivity implements MapView.CurrentLoca
                 String tempData = s;
 
                 Gson gson = new Gson();
-                ArrayList<Course> itemList = new ArrayList<>();
-                Course[] items = gson.fromJson(tempData, Course[].class);
+                ArrayList<RidingRecord> itemList = new ArrayList<>();
+                RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
 
-                for(Course item: items){
+                for(RidingRecord item: items){
                     itemList.add(item);
                 }
 

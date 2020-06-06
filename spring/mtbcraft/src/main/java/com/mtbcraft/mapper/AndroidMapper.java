@@ -33,7 +33,7 @@ public interface AndroidMapper {
 	
 	
 	//코스 가져오기
-	public List<Course> getCourse() throws Exception;
+	public List<App_RidingRecord> getCourse() throws Exception;
 		
 	//코스 상세보기
 	public List<Course> getCourseItem(String c_num) throws Exception;

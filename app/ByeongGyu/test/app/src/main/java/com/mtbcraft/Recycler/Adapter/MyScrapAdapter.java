@@ -40,9 +40,9 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
     @Override
     public void onBindViewHolder(@NonNull final MyScrapHolder testViewHolder, final int position) {
 
-        testViewHolder.textView1.setText(itemList.get(position).getC_area());
-        testViewHolder.textView2.setText(String.valueOf(itemList.get(position).getC_distance()));
-        testViewHolder.textView3.setText(String.valueOf(itemList.get(position).getC_level()));
+        testViewHolder.c_rider_name.setText(itemList.get(position).getC_area());
+        testViewHolder.c_name.setText(String.valueOf(itemList.get(position).getC_distance()));
+        testViewHolder.c_time.setText(String.valueOf(itemList.get(position).getC_level()));
 
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
@@ -62,7 +62,7 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
 
 
     class MyScrapHolder extends RecyclerView.ViewHolder {
-        public TextView textView1, textView2, textView3;
+        public TextView c_rider_name, c_name, c_time, c_avg, c_getgodo;
         public ImageView imageView;
         public LinearLayout viewClick;
         public final View mView;
@@ -70,9 +70,11 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
         public MyScrapHolder( View itemView) {
             super(itemView);
             mView = itemView;
-            textView1 = itemView.findViewById(R.id.textView1);
-            textView2 = itemView.findViewById(R.id.textView2);
-            textView3 = itemView.findViewById(R.id.textView3);
+            c_rider_name = itemView.findViewById(R.id.c_rider_name);
+            c_name = itemView.findViewById(R.id.c_name);
+            c_time = itemView.findViewById(R.id.c_time);
+            c_avg = itemView.findViewById(R.id.c_avg);
+            c_getgodo = itemView.findViewById(R.id.c_getgodo);
             imageView = itemView.findViewById(R.id.imageView);
             viewClick = itemView.findViewById(R.id.viewClick);
 

@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gpstest.R;
 import com.mtbcraft.Activity.Course.CourseDetail;
-import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.RidingRecord;
 
 import java.util.ArrayList;
 public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
 
     public Context mContext;
-    public ArrayList<Course> itemList;
-    Course item;
+    public ArrayList<RidingRecord> itemList;
+    RidingRecord item;
 
-    public CourseAdapter(Context mContext, ArrayList<Course> itemList) {
+    public CourseAdapter(Context mContext, ArrayList<RidingRecord> itemList) {
         this.mContext = mContext;
         this.itemList = itemList;
     }
@@ -36,21 +36,42 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final CourseHolder testViewHolder, final int position) {
+        int hour;
+        int min;
+        int sec;
+        sec = (itemList.get(position).getRr_time());
 
-        testViewHolder.textView1.setText(itemList.get(position).getC_area());
-        testViewHolder.textView2.setText(String.valueOf(itemList.get(position).getC_distance()));
-        testViewHolder.textView3.setText(String.valueOf(itemList.get(position).getC_level()));
+        min = sec/60;
+        hour = min/60;
+        sec = sec % 60;
+        min = min % 60;
+        if(hour == 0){
+            hour=00;
+        }
+        if(min==0){
+            min=00;
+        }
+        String hour_s = String.valueOf(hour);
+        int des = (itemList.get(position).getRr_distance());
+        float km = (float) (des/1000.0);
+        String total = String.valueOf(km)+"Km";
+        testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
+        testViewHolder.c_name.setText(itemList.get(position).getRr_name());
+        testViewHolder.c_time.setText(hour_s+":"+min+":"+ sec);
+        testViewHolder.c_avg.setText(String.valueOf(itemList.get(position).getRr_avgspeed())+"km");
+        testViewHolder.c_getgodo.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
+        testViewHolder.c_dis.setText(total);
 
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
-            Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getC_num(),  Toast.LENGTH_LONG).show();
+            Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
             Intent intent = new Intent(v.getContext(), CourseDetail.class);
-            intent.putExtra("c_num",String.valueOf(itemList.get(position).getC_num()));
-            intent.putExtra("c_distance",itemList.get(position).getC_distance());
-            intent.putExtra("c_level",itemList.get(position).getC_level());
-            intent.putExtra("c_area",itemList.get(position).getC_area());
-            intent.putExtra("c_gpx",itemList.get(position).getC_gpx());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("c_num",String.valueOf(itemList.get(position).getRr_num()));
+           // intent.putExtra("c_distance",itemList.get(position).getC_distance());
+            //intent.putExtra("c_level",itemList.get(position).getC_level());
+            //intent.putExtra("c_area",itemList.get(position).getC_area());
+            //intent.putExtra("c_gpx",itemList.get(position).getC_gpx());
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               v.getContext().startActivity(intent);
 
         });

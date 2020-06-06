@@ -32,10 +32,17 @@
 	select * from riding_record where rr_rider = #{rr_rider}
 		
 	</select>
+	
+	<!-- 내 기록 상세보기 -->
 	<select id="getRidingRecordDetail" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
 		select * from riding_record where rr_rider = #{rr_rider} and rr_num = #{rr_num}
 	</select>
 	
+	<!-- 코스보기 -->
+	
+	<select id="getCourse" parameterType="String" resultType="com.mtbcraft.dto.App_RidingRecord">
+		select * from riding_record where rr_open= '1' order by rr_date desc
+	</select>
 	
 	<!-- 코스 상세 보기 -->
 	<select id="getCourseItem" parameterType="String" resultType="com.mtbcraft.dto.Course">

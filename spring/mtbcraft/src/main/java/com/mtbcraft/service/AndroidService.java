@@ -50,7 +50,7 @@ public class AndroidService {
 	}
 	
 	//코스가져오기
-	public List<Course> getCourse() throws Exception{
+	public List<App_RidingRecord> getCourse() throws Exception{
 		return androidMapper.getCourse();
 	}
 	

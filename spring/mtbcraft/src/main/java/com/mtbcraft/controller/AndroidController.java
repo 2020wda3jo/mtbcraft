@@ -164,8 +164,8 @@ public class AndroidController {
 
 	// 코스 조회
 	@RequestMapping(value = "/app/riding/course")
-	public @ResponseBody List<Course> getCourse() throws Exception {
-		return memberService.getCourse();
+	public @ResponseBody List<App_RidingRecord> getCourse() throws Exception {
+		return androidService.getCourse();
 	}
 
 	// 코스 조회

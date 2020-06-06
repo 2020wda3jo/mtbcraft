@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +17,8 @@ import com.example.gpstest.R;
 import com.mtbcraft.Activity.Riding.DetailActivity;
 import com.mtbcraft.dto.RidingRecord;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyRecordHolder>{
 
@@ -70,15 +67,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
 
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String aaa = itemList.get(position).getRr_date();
-        Date to;
-        try {
-            to = transFormat.parse(aaa);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        testViewHolder.textView1.setText(itemList.get(position).getRr_date());
-        testViewHolder.textView2.setText(hour_s+":"+min+":"+ sec);
-        testViewHolder.textView3.setText(total);
+        String bbb = itemList.get(position).getRr_date();
+        testViewHolder.record_name.setText(itemList.get(position).getRr_name());
+        testViewHolder.record_time.setText(hour_s+":"+min+":"+ sec);
+        testViewHolder.record_distance.setText(total);
+        testViewHolder.record_date.setText(aaa.substring(0,10));
+        testViewHolder.record_datetime.setText(bbb.substring(11,19));
+
+
 
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
@@ -94,19 +90,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
 
 
     class MyRecordHolder extends RecyclerView.ViewHolder {
-        public TextView textView1, textView2, textView3;
-        public ImageView imageView;
+        public TextView record_name, record_time, record_distance, record_date, record_datetime;
         public LinearLayout viewClick;
         public final View mView;
         public MyRecordHolder( View itemView) {
             super(itemView);
             mView = itemView;
-            textView1 = itemView.findViewById(R.id.textView1);
-            textView2 = itemView.findViewById(R.id.textView2);
-            textView3 = itemView.findViewById(R.id.textView3);
-            imageView = itemView.findViewById(R.id.imageView);
+            record_name = itemView.findViewById(R.id.record_name);
+            record_time = itemView.findViewById(R.id.record_time);
+            record_distance = itemView.findViewById(R.id.record_distance);
+            record_date = itemView.findViewById(R.id.record_date);
+            record_datetime = itemView.findViewById(R.id.record_datetime);
             viewClick = itemView.findViewById(R.id.viewClick);
-
         }
 
     }
