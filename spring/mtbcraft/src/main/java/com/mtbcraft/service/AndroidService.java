@@ -13,6 +13,7 @@ import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.JoinedComp;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
@@ -80,6 +81,11 @@ public class AndroidService {
 	//경쟁전가져오기
 	public List<Competition> getCompetition() throws Exception{
 		return androidMapper.getCompetition();
+	}
+	
+	//경쟁전 참가내역 가져오기
+	public List<JoinedComp> getjoinedComp(String rr_rider) throws Exception{
+		return androidMapper.getjoinedComp(rr_rider);
 	}
 	
 

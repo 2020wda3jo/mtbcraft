@@ -36,6 +36,7 @@ import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.JoinedComp;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
@@ -234,4 +235,12 @@ public class AndroidController {
 	public @ResponseBody List<Competition> getCompetition() throws Exception {
 		return androidService.getCompetition();
 	}
+	
+	//경쟁전 참가내역 가져오기
+	@RequestMapping(value = "/app/competition/{rr_rider}")
+	public @ResponseBody List<JoinedComp> getjoinedComp(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
+		return androidService.getjoinedComp(rr_rider);
+	}
+	
+	
 }

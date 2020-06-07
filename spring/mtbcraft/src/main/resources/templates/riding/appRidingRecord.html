@@ -26,6 +26,8 @@
 	    };
 		var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다 
 		
+		var polyline;
+		
 		function getParam(sname) {
 		    var params = location.search.substr(location.search.indexOf("?") + 1);
 		    var sval = "";
@@ -38,39 +40,41 @@
 		}
 		
 		$.ajax({
-		url : "/getGpxFileByRR_Num",
-		type : "GET",
-		data : {rr_num : getParam("rr_num")},
-		dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
-		cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
-		success : function(data) {
-			map = new kakao.maps.Map(mapContainer, mapOption); // 클릭시 새로운 지도를 생성합니다
-			var point = data.infos;
-			var linePath = [];
-			
-			// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-			var bounds = new kakao.maps.LatLngBounds();
-			
-			for(var i=0;i<point.length;i++){
-				var location = new kakao.maps.LatLng(point[i].lat, point[i].lon);
-				linePath.push(location);
-				bounds.extend(location);
+			url : "/getGpxByRR_Num",
+			type : "GET",
+			data : {rr_num : getParam("rr_num")},
+			dataType : "json",
+			cache : false,
+			success : function(data) {
+				if(polyline){
+					polyline.setMap(null);
+				}
+				
+				var point = data.infos;
+				var linePath = [];
+				
+				// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+				var bounds = new kakao.maps.LatLngBounds();
+				
+				for(var i=0;i<point.length;i++){
+					var location = new kakao.maps.LatLng(point[i].lat, point[i].lon);
+					linePath.push(location);
+					bounds.extend(location);
+				}
+				// 지도에 표시할 선을 생성합니다
+				polyline = new kakao.maps.Polyline({
+				    path: linePath, // 선을 구성하는 좌표배열 입니다
+				    strokeWeight: 7, // 선의 두께 입니다
+				    strokeColor: "#FF6600", // 선의 색깔입니다
+				    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+				    strokeStyle: 'solid' // 선의 스타일입니다
+				});
+				// 지도에 선을 표시합니다 
+				polyline.setMap(map);
+				// 맵을 이동시킵니다.
+				map.setBounds(bounds);
 			}
-			// 지도에 표시할 선을 생성합니다
-			var polyline = new kakao.maps.Polyline({
-			    path: linePath, // 선을 구성하는 좌표배열 입니다
-			    strokeWeight: 7, // 선의 두께 입니다
-			    strokeColor: "#FF6600", // 선의 색깔입니다
-			    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-			    strokeStyle: 'solid' // 선의 스타일입니다
-			});
-			// 지도에 선을 표시합니다 
-			polyline.setMap(map);
-			// 맵을 이동시킵니다.
-			map.setBounds(bounds);
-		}
-	});
-		
+		});
 	});
 </script>
 </body>
