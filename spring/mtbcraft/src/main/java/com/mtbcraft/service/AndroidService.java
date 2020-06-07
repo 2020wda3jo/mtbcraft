@@ -88,5 +88,7 @@ public class AndroidService {
 		return androidMapper.getjoinedComp(rr_rider);
 	}
 	
-
+	public String getCompCourse(int c_num) throws Exception {
+		return androidMapper.getCompCourse(c_num);
+	}
 }

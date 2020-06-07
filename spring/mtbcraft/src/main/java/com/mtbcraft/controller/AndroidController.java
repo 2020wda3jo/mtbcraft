@@ -36,6 +36,7 @@ import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.JoinedComp;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
@@ -242,5 +243,37 @@ public class AndroidController {
 		return androidService.getjoinedComp(rr_rider);
 	}
 	
+	// 경쟁전 코스 정보
+	@RequestMapping(value = "/app/getAppCompCourse")
+	public String getAppCompCourse() {
+		return "entertainment/appCompCourse";
+	}
+	
+	// C_NUM으로 GPX파일 조회
+	@RequestMapping(value="/getCompCourse", method = RequestMethod.GET)
+	@ResponseBody
+	public Gpx getCompCourse(int c_num) throws Exception {
+		String gpxFile = androidService.getCompCourse(c_num);
+		Gpx gpx = new Gpx();
+		makeGpx(gpx, gpxFile);
+		return gpx;
+	}
+	
+	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
+		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		File file = new File(path);
+		String txt = "";
+		FileInputStream fis = new FileInputStream(file); 
+		while(true) { 
+			int res = fis.read(); 
+			if(res<0) { 
+				break; 
+			}else { 
+				txt += ((char)res);
+			}
+		}
+		fis.close();
+		gpx.setting(txt);
+	}
 	
 }

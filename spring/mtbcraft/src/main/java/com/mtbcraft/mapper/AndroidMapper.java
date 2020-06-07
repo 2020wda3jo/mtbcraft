@@ -55,4 +55,7 @@ public interface AndroidMapper {
 	
 	//경쟁전 참가 내역 가져오기
 	public List<JoinedComp> getjoinedComp(String rr_rider) throws Exception;
+	
+	//경쟁전 코스 가져오기
+	public String getCompCourse(int c_num) throws Exception;
 }

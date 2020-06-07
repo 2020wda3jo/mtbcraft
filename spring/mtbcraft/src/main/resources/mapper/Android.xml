@@ -86,4 +86,7 @@
 		select rr_comp from riding_record where rr_rider = #{rr_rider} and rr_comp is not null
 	</select>
 	
+	<select id="getCompCourse" parameterType="Integer" resultType="String">
+		select c_gpx from course where c_num = #{c_num}
+	</select>
 </mapper>
