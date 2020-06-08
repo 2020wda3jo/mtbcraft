@@ -7,35 +7,33 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.UiThread;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
+import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.FragmentManager;
 
 import com.capston.mtbcraft.R;
 import com.google.android.material.tabs.TabLayout;
 import com.naver.maps.geometry.LatLng;
-import com.naver.maps.map.LocationTrackingMode;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapFragment;
-import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.LocationOverlay;
-import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 
@@ -45,21 +43,20 @@ import java.util.Arrays;
 import java.util.Date;
 
 
-public class StartActivity extends AppCompatActivity implements LocationListener, OnMapReadyCallback {
+public class StartActivity extends AppCompatActivity implements LocationListener{
     /*GPS관련 설정 들 */
-    private static final String LOG_TAG = "StartActivity";
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
+    private NaverMap map;
+    private FusedLocationSource locationSource;
+    private static final int PERMISSION_REQUEST_CODE = 100;
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+    @Nullable
     private LocationManager locationManager;
+
     private Location mLastlocation = null;
     private Boolean isRunning = true;
-    final static int Init=0;
-    final static int Run=1;
-    private MapView mapView;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    private FusedLocationSource locationSource;
-    private NaverMap naverMap;
 
     /*레이아웃 관련*/
     //뷰에서 상단정보
@@ -70,18 +67,17 @@ public class StartActivity extends AppCompatActivity implements LocationListener
 
     Thread timeThread = null;
     LinearLayout layout, layout2, layout3, layout4, layout5, layout6, layout7, layout8, m_status, layout9, layout10, map_view;
-    Fragment map;
+
     //각종 변수
     double latitude, lonngitude, getgodo, getSpeed=0, hap = 0, getgodoval = 0, intime=0, avg=0, maX=0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
     int cnt=0, restcnt = 0;
     ArrayList<Double> witch_lat = new ArrayList<>();
     ArrayList<Double> witch_lon = new ArrayList<>();
     ArrayList<Double> ele = new ArrayList<>();
+
     //휴식시간 계산
     int hour, min, sec;
 
-    //Km당 알림주기 위한 변수
-    int gps_cnt, gps_dis;
 
     //형변환용변수
     String cha_dis="", cha_max="", cha_avg="";
@@ -90,20 +86,17 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainstart);
 
-        mapView = findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
+        // ...
 
         FragmentManager fm = getSupportFragmentManager();
-        MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map_view);
+        MapFragment mapFragment = (MapFragment) fm.findFragmentById(R.id.map_view);
         if (mapFragment == null) {
             mapFragment = MapFragment.newInstance();
             fm.beginTransaction().add(R.id.map_view, mapFragment).commit();
         }
+        mapFragment.getMapAsync(naverMap -> map = naverMap);
 
-        mapFragment.getMapAsync(this);
-
-        locationSource =
-                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
 
 
@@ -270,32 +263,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         }
     }
 
-    //여기부터는 GPS 활성화를 위한 메소드들
-    private void showDialogForLocationServiceSetting() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
-        builder.setTitle("위치 서비스 비활성화");
-        builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
-                + "위치 설정을 수정하실래요?");
-        builder.setCancelable(true);
-        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                Intent callGPSSettingIntent
-                        = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE);
-            }
-        });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        builder.create().show();
-    }
-
-
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         @Override
@@ -359,6 +326,13 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         latitude = location.getLatitude();
         lonngitude = location.getLongitude();
 
+        LatLng coord = new LatLng(location);
+        LocationOverlay locationOverlay = map.getLocationOverlay();
+        locationOverlay.setVisible(true);
+        locationOverlay.setPosition(coord);
+        locationOverlay.setBearing(location.getBearing());
+        map.moveCamera(CameraUpdate.scrollTo(coord));
+
         // 위도 경도 정보 배열 저장
         witch_lat.add(latitude);
         witch_lon.add(lonngitude);
@@ -371,10 +345,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
 
         // 고도 정보 저장
         ele.add(location.getAltitude());
-
-
-
-
         cnt = cnt + 1;
         //km당 알림주는거
 
@@ -383,14 +353,19 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         nowspeed.setText(String.format("%.1f", getSpeed));  //Get Speed
         m_speed.setText(String.format("%.1f", getSpeed)+"km/h");
 
+        Log.i("onchange",location.getLatitude() + "  "+location.getLongitude());
         // 위치 변경이 두번째로 변경된 경우 계산에 의해 속도 계산
         if(mLastlocation != null) {
             /*폴리라인 그리기 */
-
-
-            // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
-
-
+            PathOverlay path = new PathOverlay();
+            path.setCoords(Arrays.asList(
+                    new LatLng(location.getLatitude(), location.getLongitude()),
+                    new LatLng(mLastlocation.getLatitude(), mLastlocation.getLongitude())
+            ));
+            path.setMap(map);
+            path.setWidth(30);
+            path.setColor(Color.RED);
+            Log.i("onchange",mLastlocation.getLatitude() + "  "+mLastlocation.getLongitude());
             //최대속도(5.12 값 틀림)
             if(getSpeed > maX){
                 maX = getSpeed;
@@ -417,26 +392,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
 
             int testhap=0;
             dis.setText(String.format("%.2f",hap));
-            /*
-            if(hap>1000){
-                hap = hap/1000;
-                m_distance.setText((String.format("%.1f",hap)+"km"));
-                dis.setText(String.format("%.1f",hap));
-            }else{
-                m_distance.setText((String.format("%.2f",hap)+"m"));
-                dis.setText(String.format("%.2f",hap));
-            }
 
-             */
-            if(hap>1000){
-                //알림주고
-                Toast toast = Toast.makeText(getApplicationContext(), hap+"임", Toast.LENGTH_SHORT); toast.show();
-                //1000을 올려
-                testhap = (int) (testhap+(hap+1000));
-            }else{ //그럼 hap>2000인데 크지 않으면
-                //알림X
-
-            }
             //평균속도
             avg= hap/cnt;
             avgspeed.setText(String.format("%.1f", Double.parseDouble(String.valueOf(avg))));
@@ -477,7 +433,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     @Override
     protected void onResume() {
         super.onResume();
-        mapView.onResume();
         //권한 체크
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -489,7 +444,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     @Override
     protected void onPause() {
         super.onPause();
-        mapView.onPause();
         // 위치정보 가져오기 제거
         locationManager.removeUpdates(this);
     }
@@ -497,92 +451,72 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     @Override
     protected void onStart() {
         super.onStart();
-        mapView.onStart();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //권한이 없을 경우 최초 권한 요청 또는 사용자에 의한 재요청 확인
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                // 권한 재요청
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-                return;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-                return;
+        if (hasPermission()) {
+            if (locationManager != null) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, 1000, 2, this);
             }
+        } else {
+            ActivityCompat.requestPermissions(
+                    this, PERMISSIONS, PERMISSION_REQUEST_CODE);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (locationSource.onRequestPermissionsResult(
-                requestCode, permissions, grantResults)) {
-            if (!locationSource.isActivated()) { // 권한 거부됨
-                naverMap.setLocationTrackingMode(LocationTrackingMode.None);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (hasPermission() && locationManager != null) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, 1000, 10, this);
             }
             return;
         }
-        super.onRequestPermissionsResult(
-                requestCode, permissions, grantResults);
     }
+
+    private boolean hasPermission() {
+        return PermissionChecker.checkSelfPermission(this, PERMISSIONS[0])
+                == PermissionChecker.PERMISSION_GRANTED
+                && PermissionChecker.checkSelfPermission(this, PERMISSIONS[1])
+                == PermissionChecker.PERMISSION_GRANTED;
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        mapView.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
     }
-    @UiThread
-    @Override
-    public void onMapReady(@NonNull NaverMap naverMap) {
-        this.naverMap = naverMap;
-        naverMap.setLocationSource(locationSource);
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
-        naverMap.addOnLocationChangeListener(location ->
-                Toast.makeText(this,
-                        location.getLatitude() + ", " + location.getLongitude(),
-                        Toast.LENGTH_SHORT).show()
-
-
-        );
-
-        PathOverlay path = new PathOverlay();
-        path.setCoords(Arrays.asList(
-                new LatLng(37.57152, 126.97714),
-                new LatLng(37.56607, 126.98268),
-                new LatLng(37.56445, 126.97707),
-                new LatLng(37.55855, 126.97822)
-        ));
-        path.setMap(naverMap);
-
-
-        LocationOverlay locationOverlay = naverMap.getLocationOverlay();
-        locationOverlay.setVisible(true);
-        locationOverlay.setPosition(new LatLng(37.5670135, 126.9783740));
-        locationOverlay.setIconWidth(40);
-        locationOverlay.setIconHeight(40);
-        locationOverlay.setIcon(OverlayImage.fromResource(R.drawable.map_maker));
-
-    }
-
-
-
 }

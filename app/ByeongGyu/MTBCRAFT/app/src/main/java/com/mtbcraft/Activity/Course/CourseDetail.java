@@ -55,8 +55,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CourseDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
-    String c_num, gpx;
-    TextView textView1, textView2, textView3;
+    String c_num, gpx, c_name;
+    TextView textView1, textView2, textView3, det_title;
     Button button,button2;
     int Sta;
     private DrawerLayout mDrawerLayout;
@@ -68,83 +68,13 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coursedetail);
 
-        mapView = new MapView(this);
+        mapView = new MapView(CourseDetail.this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
         mapView.setCurrentLocationEventListener(this);
         mapView.isShowingCurrentLocationMarker();
 
-        MapPolyline polyline = new MapPolyline();
-        polyline.setTag(1000);
-        polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
-
-
-
-
-
-
-        Thread uThread = new Thread() {
-
-            @Override
-
-            public void run() {
-
-                try {
-                    //서버에 올려둔 이미지 URL
-                    URL url = new URL("http://100.92.32.8/and.gpx");
-                    //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
-                    /* URLConnection 생성자가 protected로 선언되어 있으므로
-                     개발자가 직접 HttpURLConnection 객체 생성 불가 */
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    /* openConnection()메서드가 리턴하는 urlConnection 객체는
-                    HttpURLConnection의 인스턴스가 될 수 있으므로 캐스팅해서 사용한다*/
-
-                    conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
-                    conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
-
-
-                    InputStream is = conn.getInputStream(); //inputStream 값 가져오기
-                    // InputStream in = getAssets().open("and.gpx");
-                    parsedGpx = mParser.parse(is);
-
-                    if (parsedGpx != null) {
-                        // log stuff
-                        List<Track> tracks = parsedGpx.getTracks();
-                        for (int i = 0; i < tracks.size(); i++) {
-                            Track track = tracks.get(i);
-                            Log.d("track ", i + ":");
-                            List<TrackSegment> segments = track.getTrackSegments();
-                            for (int j = 0; j < segments.size(); j++) {
-                                TrackSegment segment = segments.get(j);
-
-                                for (TrackPoint trackPoint : segment.getTrackPoints()) {
-                                    polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
-                                    Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
-                                }
-                            }
-                        }
-
-                        // Polyline 지도에 올리기.
-                        mapView.addPolyline(polyline);
-
-// 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
-                        MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
-                        int padding = 100; // px
-                        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
-                    } else {
-                        Log.e("error","Error parsing gpx track!");
-                    }
-
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException | XmlPullParserException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        uThread.start(); // 작업 Thread 실행
 
         /* 로그인관련 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -210,11 +140,79 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         textView1 = (TextView)findViewById(R.id.course_add);
         textView2 = (TextView)findViewById(R.id.course_dis );
         textView3 = (TextView)findViewById(R.id.course_level );
+        det_title = (TextView)findViewById(R.id.deta_title);
         button = (Button)findViewById(R.id.scrap_bt);
         button2 = (Button)findViewById(R.id.follow_bt);
         Intent intent = new Intent(this.getIntent());
         c_num = intent.getStringExtra("c_num");
         gpx = intent.getStringExtra("c_gpx");
+        c_name = intent.getStringExtra("c_name");
+
+
+        MapPolyline polyline = new MapPolyline();
+        polyline.setTag(1000);
+        polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
+
+        Thread uThread = new Thread() {
+
+            @Override
+
+            public void run() {
+
+                try {
+                    //서버에 올려둔 이미지 URL
+                    URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+gpx);
+                    //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
+                    /* URLConnection 생성자가 protected로 선언되어 있으므로
+                     개발자가 직접 HttpURLConnection 객체 생성 불가 */
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    /* openConnection()메서드가 리턴하는 urlConnection 객체는
+                    HttpURLConnection의 인스턴스가 될 수 있으므로 캐스팅해서 사용한다*/
+
+                    conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
+                    conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
+
+
+                    InputStream is = conn.getInputStream(); //inputStream 값 가져오기
+                    // InputStream in = getAssets().open("and.gpx");
+                    parsedGpx = mParser.parse(is);
+
+                    if (parsedGpx != null) {
+                        // log stuff
+                        List<Track> tracks = parsedGpx.getTracks();
+                        for (int i = 0; i < tracks.size(); i++) {
+                            Track track = tracks.get(i);
+                            Log.d("track ", i + ":");
+                            List<TrackSegment> segments = track.getTrackSegments();
+                            for (int j = 0; j < segments.size(); j++) {
+                                TrackSegment segment = segments.get(j);
+
+                                for (TrackPoint trackPoint : segment.getTrackPoints()) {
+                                    polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                                    Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
+                                }
+                            }
+                        }
+                        // Polyline 지도에 올리기.
+                        mapView.addPolyline(polyline);
+
+                        // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                        MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
+                        int padding = 100; // px
+                        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+                    } else {
+                        Log.e("error","Error parsing gpx track!");
+                    }
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException | XmlPullParserException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        uThread.start(); // 작업 Thread 실행
 
         button.setOnClickListener(v -> {
             ScrapTask scrap = new ScrapTask();
@@ -228,6 +226,11 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         button2.setOnClickListener(v->{
             Intent intent2=new Intent(CourseDetail.this, FollowStart.class);
             intent2.putExtra("gpx",gpx);
+            intent2.putExtra("c_name",c_name);
+            startActivity(intent2);
+
+            finish();
+            mapViewContainer.removeAllViews();
         });
 
         try {
@@ -239,7 +242,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             e.printStackTrace();
         }
     }
-
 
 
     public class ScrapTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -306,20 +308,23 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
                     //json값을 받기위한 변수들
 
                     String c_distance = "";
-                    String c_level = "";
                     String c_area = "";
+                    String c_title="";
+                    String c_avg="";
 
                     JSONArray jarray = new JSONArray(tempData);
                     for (int i = 0; i < jarray.length(); i++) {
                         JSONObject jObject = jarray.getJSONObject(i);
-                        c_distance = jObject.getString("c_distance");
-                        c_level = jObject.getString("c_level");
-                        c_area = jObject.getString("c_area");
+                        c_distance = jObject.getString("rr_distance");
+                        c_area = jObject.getString("rr_area");
+                        c_title = jObject.getString("rr_name");
+                        c_avg = jObject.getString("rr_avgspeed");
                     }
 
                     textView1.setText(c_area);
                     textView2.setText(c_distance);
-                    textView3.setText(c_level);
+                    textView3.setText(c_avg);
+                    det_title.setText(c_title);
                 } catch (Exception e) {
                     e.printStackTrace();
 
@@ -348,11 +353,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
 
     @Override
     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
@@ -383,4 +383,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
 
     }
+
+
 }

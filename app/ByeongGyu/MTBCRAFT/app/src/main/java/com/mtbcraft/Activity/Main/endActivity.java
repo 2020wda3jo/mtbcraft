@@ -20,8 +20,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.capston.mtbcraft.*;
 import com.mtbcraft.GpxInfo;
-import com.capston.mtbcraft.R;
 import com.mtbcraft.SendGPXFile;
 import com.mtbcraft.network.HttpClient;
 
@@ -249,7 +249,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 NetworkTask2 networkTask1 = new NetworkTask2();
                 Map<String, String> params = new HashMap<String, String>();
 
-              Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
+                Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
                 params.put("rr_rider", LoginId);
                 params.put("rr_distance", cha_dis);
                 params.put("rr_topspeed", cha_max);

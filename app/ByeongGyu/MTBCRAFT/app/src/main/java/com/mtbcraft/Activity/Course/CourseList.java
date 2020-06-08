@@ -30,13 +30,9 @@ import com.mtbcraft.gpxparser.GPXParser;
 import com.mtbcraft.gpxparser.Gpx;
 import com.mtbcraft.network.HttpClient;
 
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapReverseGeoCoder;
-import net.daum.mf.map.api.MapView;
-
 import java.util.ArrayList;
 import java.util.Map;
-public class CourseList extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
+public class CourseList extends AppCompatActivity {
     GPXParser mParser = new GPXParser();
     Gpx parsedGpx = null;
 
@@ -184,36 +180,6 @@ public class CourseList extends AppCompatActivity implements MapView.CurrentLoca
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-
-    }
-
-    @Override
-    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-
-    }
-
-    @Override
-    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdateFailed(MapView mapView) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdateCancelled(MapView mapView) {
-
     }
 }
 

@@ -29,13 +29,21 @@
             android:orientation="vertical"
             android:layout_gravity = "center"
             tools:ignore="MissingConstraints">
+
             <RelativeLayout
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
-                android:layout_marginTop="70dp"
-                android:layout_height="200dp" />
+                android:layout_height="200dp"
+                android:layout_marginTop="55dp" />
 
-
+            <TextView
+                android:id="@+id/deta_title"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="20dp"
+                android:textColor="@android:color/black"/>
 
             <GridLayout
                 android:verticalSpacing="30dp"
@@ -95,7 +103,7 @@
                         android:id="@+id/course_dis"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="00:00:00"
+                        android:text="0"
                         tools:ignore="MissingConstraints"
                         android:layout_gravity="center" />
                 </LinearLayout>
@@ -109,13 +117,13 @@
                     <ImageView
                         android:layout_width="74dp"
                         android:layout_height="54dp"
-                        android:src="@drawable/level_icon"
+                        android:src="@drawable/avg_speed"
                         android:layout_gravity="center" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="난이도" />
+                        android:text="평균속도" />
                     <TextView
                         android:id="@+id/course_level"
                         android:layout_width="wrap_content"

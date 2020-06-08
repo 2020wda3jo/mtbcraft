@@ -1,10 +1,6 @@
 package com.mtbcraft.Recycler.Adapter;
 
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,28 +8,22 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapPolyline;
-import net.daum.mf.map.api.MapReverseGeoCoder;
-import net.daum.mf.map.api.MapView;
-
-public class CourseHolder extends RecyclerView.ViewHolder implements
-        LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
+public class CourseHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
 
     public TextView c_rider_name, c_name, c_time, c_avg, c_getgodo, c_dis;
     public ImageView imageView;
     public LinearLayout viewClick;
     public View mView;
-     MapView mapView1;
-    MapPolyline polyline;
-    ViewGroup mapViewContainer;
-    public CourseHolder(MapView mapView){
-        super(mapView);
-        mapView1 = new MapView(mapView.getContext());
-        mapViewContainer = (ViewGroup) mapView.findViewById(R.id.map_view);
+    public GoogleMap map;
+    MapView mapView;
+    private GoogleMap googleMap;
 
-    }
     public CourseHolder(View itemView) {
         super(itemView);
 
@@ -46,56 +36,18 @@ public class CourseHolder extends RecyclerView.ViewHolder implements
         c_dis = itemView.findViewById(R.id.c_dis);
         imageView = itemView.findViewById(R.id.imageView);
         viewClick = itemView.findViewById(R.id.viewClick);
+        mapView = itemView.findViewById(R.id.map);
 
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-
-    }
-
-    @Override
-    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-
-    }
-
-    @Override
-    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdateFailed(MapView mapView) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdateCancelled(MapView mapView) {
-
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        //지도타입 - 일반
+        this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //기본위치(63빌딩)
+        LatLng position = new LatLng(37.5197889 , 126.9403083);
+        //화면중앙의 위치와 카메라 줌비율
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
     }
 }

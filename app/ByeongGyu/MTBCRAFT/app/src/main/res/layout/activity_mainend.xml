@@ -28,11 +28,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <RelativeLayout
+        <com.naver.maps.map.MapView
             android:id="@+id/map_view"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
-
 
         <GridLayout
             android:id="@+id/record_grid"

@@ -61,17 +61,18 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         testViewHolder.c_avg.setText(String.valueOf(itemList.get(position).getRr_avgspeed())+"km");
         testViewHolder.c_getgodo.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
         testViewHolder.c_dis.setText(total);
+       // testViewHolder.mapView();
 
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
             Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
             Intent intent = new Intent(v.getContext(), CourseDetail.class);
             intent.putExtra("c_num",String.valueOf(itemList.get(position).getRr_num()));
-           // intent.putExtra("c_distance",itemList.get(position).getC_distance());
-            //intent.putExtra("c_level",itemList.get(position).getC_level());
-            //intent.putExtra("c_area",itemList.get(position).getC_area());
-            //intent.putExtra("c_gpx",itemList.get(position).getC_gpx());
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("c_distance",itemList.get(position).getRr_distance());
+            intent.putExtra("c_area",itemList.get(position).getRr_area());
+            intent.putExtra("c_gpx",itemList.get(position).getRr_gpx());
+            intent.putExtra("c_name",itemList.get(position).getRr_name());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               v.getContext().startActivity(intent);
 
         });

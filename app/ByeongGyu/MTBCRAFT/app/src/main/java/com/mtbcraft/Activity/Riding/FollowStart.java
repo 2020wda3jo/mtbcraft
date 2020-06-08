@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +28,13 @@ import androidx.core.app.ActivityCompat;
 
 import com.capston.mtbcraft.R;
 import com.google.android.material.tabs.TabLayout;
+import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.Activity.Main.endActivity;
+import com.mtbcraft.gpxparser.GPXParser;
+import com.mtbcraft.gpxparser.Gpx;
+import com.mtbcraft.gpxparser.Track;
+import com.mtbcraft.gpxparser.TrackPoint;
+import com.mtbcraft.gpxparser.TrackSegment;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPoint;
@@ -36,9 +43,17 @@ import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class FollowStart extends AppCompatActivity implements
@@ -51,13 +66,14 @@ public class FollowStart extends AppCompatActivity implements
     private LocationManager locationManager;
     private Location mLastlocation = null;
     private Boolean isRunning = true;
-
+    GPXParser mParser = new GPXParser();
+    Gpx parsedGpx = null;
     final static int Init=0;
     final static int Run=1;
 
     /*레이아웃 관련*/
     LinearLayout maView;
-    MapView mMapView;
+    MapView mapView;
 
     //뷰에서 상단정보
     TextView m_speed, m_distance, m_time ,m_t, m_rest;
@@ -85,7 +101,7 @@ public class FollowStart extends AppCompatActivity implements
     String cha_dis="", cha_max="", cha_avg="";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mainstart);
+        setContentView(R.layout.activity_flow);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분");
         Date time = new Date();
@@ -112,10 +128,81 @@ public class FollowStart extends AppCompatActivity implements
         Button button2 = (Button)findViewById(R.id.endriding);
 
         //지도띄우기
-        mMapView = (MapView)findViewById(R.id.map_view);
+        mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
 
-        mMapView.setCurrentLocationEventListener(this);
-        mMapView.isShowingCurrentLocationMarker();
+        mapView.setCurrentLocationEventListener(this);
+        mapView.isShowingCurrentLocationMarker();
+
+        MapPolyline polyline = new MapPolyline();
+        polyline.setTag(1000);
+        polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
+        Intent intentt = new Intent(this.getIntent());
+        intentt.getStringExtra("c_name");
+        courseinfo.setText(intentt.getStringExtra("c_name"));
+        Log.d("확인",intentt.getStringExtra("c_name") + ""+ intentt.getStringExtra("gpx"));
+        Thread uThread = new Thread() {
+
+            @Override
+
+            public void run() {
+
+                try {
+                    //서버에 올려둔 이미지 URL
+                    URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+intentt.getStringExtra("gpx"));
+                    //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
+                    /* URLConnection 생성자가 protected로 선언되어 있으므로
+                     개발자가 직접 HttpURLConnection 객체 생성 불가 */
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    /* openConnection()메서드가 리턴하는 urlConnection 객체는
+                    HttpURLConnection의 인스턴스가 될 수 있으므로 캐스팅해서 사용한다*/
+
+                    conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
+                    conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
+
+
+                    InputStream is = conn.getInputStream(); //inputStream 값 가져오기
+                    // InputStream in = getAssets().open("and.gpx");
+                    parsedGpx = mParser.parse(is);
+
+                    if (parsedGpx != null) {
+                        // log stuff
+                        List<Track> tracks = parsedGpx.getTracks();
+                        for (int i = 0; i < tracks.size(); i++) {
+                            Track track = tracks.get(i);
+                            Log.d("track ", i + ":");
+                            List<TrackSegment> segments = track.getTrackSegments();
+                            for (int j = 0; j < segments.size(); j++) {
+                                TrackSegment segment = segments.get(j);
+
+                                for (TrackPoint trackPoint : segment.getTrackPoints()) {
+                                    polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                                    Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
+                                }
+                            }
+                        }
+                        // Polyline 지도에 올리기.
+                        mapView.addPolyline(polyline);
+
+                        // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                        MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
+                        int padding = 100; // px
+                        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+                    } else {
+                        Log.e("error","Error parsing gpx track!");
+                    }
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException | XmlPullParserException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        uThread.start(); // 작업 Thread 실행
+
 
         timeThread = new Thread(new timeThread());
         timeThread.start();
@@ -204,7 +291,7 @@ public class FollowStart extends AppCompatActivity implements
     private void changeView(int index) {
         switch (index) {
             case 0 :
-                mMapView.setVisibility(View.VISIBLE);
+                mapView.setVisibility(View.VISIBLE);
                 m_status.setVisibility(View.VISIBLE);
                 m_time.setVisibility(View.VISIBLE);
                 layout.setVisibility(View.INVISIBLE);
@@ -218,7 +305,7 @@ public class FollowStart extends AppCompatActivity implements
                 layout9.setVisibility(View.INVISIBLE);
                 break ;
             case 1 :
-                mMapView.setVisibility(View.GONE);
+                mapView.setVisibility(View.GONE);
                 m_status.setVisibility(View.INVISIBLE);
                 m_time.setVisibility(View.INVISIBLE);
                 layout.setVisibility(View.VISIBLE);
@@ -236,8 +323,8 @@ public class FollowStart extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-        mMapView.setShowCurrentLocationMarker(true);
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+        mapView.setShowCurrentLocationMarker(true);
     }
 
     @Override
@@ -291,7 +378,7 @@ public class FollowStart extends AppCompatActivity implements
             if ( check_result ) {
                 Log.d("@@@", "start");
                 //위치 값을 가져올 수 있음
-                mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
             }
             else {
                 // 거부한 퍼미션이 있다면 앱을 사용할 수 없는 이유를 설명해주고 앱을 종료합니다.2 가지 경우가 있습니다.
@@ -399,19 +486,6 @@ public class FollowStart extends AppCompatActivity implements
 
         // 고도 정보 저장
         ele.add(location.getAltitude());
-
-        MapPolyline polyline = new MapPolyline();
-        polyline.setLineColor(Color.argb(128,255,51,0));
-
-        polyline.addPoint(MapPoint.mapPointWithGeoCoord(latitude,lonngitude));
-        mMapView.addPolyline(polyline);
-        mMapView.isShowingCurrentLocationMarker();
-
-        // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
-        MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
-        int padding = 50; // px
-        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,padding,2,3));
-
         cnt = cnt + 1;
         //km당 알림주는거
 
@@ -422,17 +496,6 @@ public class FollowStart extends AppCompatActivity implements
 
         // 위치 변경이 두번째로 변경된 경우 계산에 의해 속도 계산
         if(mLastlocation != null) {
-            /*폴리라인 그리기 */
-            MapPolyline polyline2 = new MapPolyline();
-            polyline.setLineColor(Color.argb(128,255,51,0));
-            polyline.addPoint(MapPoint.mapPointWithGeoCoord(mLastlocation.getLatitude(),mLastlocation.getLongitude()));
-            mMapView.addPolyline(polyline);
-
-            // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
-            MapPointBounds mapPointBounds2 = new MapPointBounds(polyline.getMapPoints());
-            int padding2 = 50; // px
-            mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding,2,3));
-
             //최대속도(5.12 값 틀림)
             if(getSpeed > maX){
                 maX = getSpeed;
@@ -551,4 +614,6 @@ public class FollowStart extends AppCompatActivity implements
             }
         }
     }
+
+
 }

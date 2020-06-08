@@ -16,9 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="8819eab741cd2e061a5bb0e04dbe8a96"/>
+        <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="frzpsowm1l" />
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCa8UBfxfwsrydbQwFng-J7D_O1lnOUOss"/>
         <activity android:name="com.mtbcraft.Activity.Main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

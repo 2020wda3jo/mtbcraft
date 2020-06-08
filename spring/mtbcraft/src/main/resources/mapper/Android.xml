@@ -39,14 +39,13 @@
 	</select>
 	
 	<!-- 코스보기 -->
-	
 	<select id="getCourse" parameterType="String" resultType="com.mtbcraft.dto.App_RidingRecord">
 		select * from riding_record where rr_open= '1' order by rr_date desc
 	</select>
 	
 	<!-- 코스 상세 보기 -->
-	<select id="getCourseItem" parameterType="String" resultType="com.mtbcraft.dto.Course">
-		select * from course where c_num = #{c_num}
+	<select id="getCourseItem" parameterType="String" resultType="com.mtbcraft.dto.App_RidingRecord">
+		select * from riding_record where rr_num = #{c_num}
 	</select>
 	
 	<!-- 코스 스크랩 -->

@@ -205,7 +205,7 @@ public class AndroidController {
 	}
 
 	// 파일 다운로드
-	@RequestMapping(value = "/app/getGPX/{file_name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/app/getGPX/gpx/{file_name}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName ) throws IOException {
 		
 	    HttpHeaders headers = new HttpHeaders();
