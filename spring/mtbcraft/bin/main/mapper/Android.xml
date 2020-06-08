@@ -82,7 +82,7 @@
 		select * from competition order by comp_num
 	</select>
 	
-	<select id="getjoinedComp" parameterType= "String" resultType="com.mtbcraft.dto.JoinedComp">
+	<select id="getjoinedComp" parameterType= "String" resultType="String">
 		select rr_comp from riding_record where rr_rider = #{rr_rider} and rr_comp is not null
 	</select>
 	

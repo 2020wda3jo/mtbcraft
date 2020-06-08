@@ -10,7 +10,6 @@ import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
-import com.mtbcraft.dto.JoinedComp;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
