@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mtbcraft.mapper.AndroidMapper;
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_RidingRecord;
+import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
@@ -82,5 +83,16 @@ public class AndroidService {
 		return androidMapper.getCompetition();
 	}
 	
-
+	//경쟁전 참가내역 가져오기
+	public String getjoinedComp(String rr_rider) throws Exception{
+		return androidMapper.getjoinedComp(rr_rider);
+	}
+	
+	public String getCompCourse(int c_num) throws Exception {
+		return androidMapper.getCompCourse(c_num);
+	}
+	
+	public List<CompClub> getCompClub(int cs_comp) throws Exception {
+		return androidMapper.getCompClub(cs_comp);
+	}
 }

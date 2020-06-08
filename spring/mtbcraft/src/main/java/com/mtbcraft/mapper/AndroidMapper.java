@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_RidingRecord;
+import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Login;
@@ -51,4 +52,13 @@ public interface AndroidMapper {
 
 	//경쟁전 가져오기
 	public List<Competition> getCompetition() throws Exception;
+	
+	//경쟁전 참가 내역 가져오기
+	public String getjoinedComp(String rr_rider) throws Exception;
+	
+	//경쟁전 코스 가져오기
+	public String getCompCourse(int c_num) throws Exception;
+	
+	//경쟁전 클럽 순위 가져오기
+	public List<CompClub> getCompClub(int cs_comp) throws Exception;
 }

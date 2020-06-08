@@ -40,9 +40,9 @@
 		}
 		
 		$.ajax({
-			url : "/getGpxByRR_Num",
+			url : "/getCompCourse",
 			type : "GET",
-			data : {rr_num : getParam("rr_num")},
+			data : {c_num : getParam("c_num")},
 			dataType : "json",
 			cache : false,
 			success : function(data) {
