@@ -5,7 +5,6 @@ public class CompClub {
 	private int cs_score;
 	private String cb_name;
 	private String cb_image;
-	private String test;
 	
 	public String getCb_image() {
 		return cb_image;
