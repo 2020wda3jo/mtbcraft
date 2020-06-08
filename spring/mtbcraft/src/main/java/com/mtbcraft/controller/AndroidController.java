@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_RidingRecord;
+import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Gpx;
@@ -207,18 +208,15 @@ public class AndroidController {
 	}
 
 	// 파일 다운로드
-	@RequestMapping(value = "/app/getGPX/{file_name}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName ) throws IOException {
+	@RequestMapping(value = "/app/getGPX/{file_dir}/{file_name}", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName, @PathVariable("file_dir") String fileDir ) throws IOException {
 		
 	    HttpHeaders headers = new HttpHeaders();
 	    byte[] media = null;
 	    InputStream in;
 	    
-	    if (fileName.contains(".gpx"))
-	    	in = new FileInputStream("/home/ec2-user/data/gpx/"+fileName);
-	    else
-	    	in = new FileInputStream("/home/ec2-user/data/comp/"+fileName);
-
+	    in = new FileInputStream("/home/ec2-user/data/" + fileDir + "/" +fileName);
+	    
 	    media = IOUtils.toByteArray(in);
 	    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 	    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
@@ -239,7 +237,7 @@ public class AndroidController {
 	
 	//경쟁전 참가내역 가져오기
 	@RequestMapping(value = "/app/competition/{rr_rider}")
-	public @ResponseBody List<JoinedComp> getjoinedComp(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
+	public @ResponseBody String getjoinedComp(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
 		return androidService.getjoinedComp(rr_rider);
 	}
 	
@@ -276,4 +274,9 @@ public class AndroidController {
 		gpx.setting(txt);
 	}
 	
+	@RequestMapping("/app/getCompClub/{cs_comp}")
+	public @ResponseBody List<CompClub> getCompClub( @PathVariable(value = "cs_comp") int cs_comp) throws Exception {
+		return androidService.getCompClub(cs_comp);
+	}
+
 }

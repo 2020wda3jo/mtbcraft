@@ -89,4 +89,8 @@
 	<select id="getCompCourse" parameterType="Integer" resultType="String">
 		select c_gpx from course where c_num = #{c_num}
 	</select>
+	
+	<select id="getCompClub" parameterType="Integer" resultType="com.mtbcraft.dto.CompClub">
+		select cs_club, cs_score, cb_name, cb_image from competition_status, club where cs_club = cb_num and cs_comp = #{cs_comp} order by cs_score desc
+	</select>
 </mapper>
