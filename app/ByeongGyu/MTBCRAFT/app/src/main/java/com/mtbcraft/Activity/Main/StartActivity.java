@@ -98,9 +98,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-
-
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분");
         Date time = new Date();
         String time2 = format.format(time);
@@ -287,9 +284,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
-
-
 
     public class timeThread implements Runnable {
         @Override

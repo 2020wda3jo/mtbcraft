@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 종료 -->
+    <item android:state_focused="false" android:state_pressed="false">
+        <shape>
+            <solid android:color="#d61f79" />
+            <corners android:radius="1000dp" />
+            <padding android:bottom="30dp" android:left="10dp"
+                android:right="10dp" android:top="10dp" />
+            <!--<stroke
+                android:width="2dp"
+                android:color="@android:color/holo_orange_dark" />-->
+        </shape>
+    </item>
+
+</selector>

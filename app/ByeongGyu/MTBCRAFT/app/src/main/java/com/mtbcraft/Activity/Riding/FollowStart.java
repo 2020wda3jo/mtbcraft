@@ -135,9 +135,7 @@ public class FollowStart extends AppCompatActivity implements
         mapView.setCurrentLocationEventListener(this);
         mapView.isShowingCurrentLocationMarker();
 
-        MapPolyline polyline = new MapPolyline();
-        polyline.setTag(1000);
-        polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
+
         Intent intentt = new Intent(this.getIntent());
         intentt.getStringExtra("c_name");
         courseinfo.setText(intentt.getStringExtra("c_name"));
@@ -149,6 +147,9 @@ public class FollowStart extends AppCompatActivity implements
             public void run() {
 
                 try {
+                    MapPolyline polyline = new MapPolyline();
+                    polyline.setTag(1000);
+                    polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
                     //서버에 올려둔 이미지 URL
                     URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+intentt.getStringExtra("gpx"));
                     //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
@@ -177,6 +178,7 @@ public class FollowStart extends AppCompatActivity implements
                                 TrackSegment segment = segments.get(j);
 
                                 for (TrackPoint trackPoint : segment.getTrackPoints()) {
+
                                     polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
                                     Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
                                 }
@@ -494,9 +496,21 @@ public class FollowStart extends AppCompatActivity implements
         nowspeed.setText(String.format("%.1f", getSpeed));  //Get Speed
         m_speed.setText(String.format("%.1f", getSpeed)+"km/h");
 
+        MapPolyline polyline2 = new MapPolyline();
+        polyline2.setTag(1000);
+        polyline2.setLineColor(Color.argb(255, 38, 149, 38)); // Polyline 컬러 지정.
+        polyline2.addPoint(MapPoint.mapPointWithGeoCoord(location.getLatitude(), location.getLongitude()));
+        mapView.addPolyline(polyline2);
+        mapView.isShowingCurrentLocationMarker();
         // 위치 변경이 두번째로 변경된 경우 계산에 의해 속도 계산
         if(mLastlocation != null) {
-            //최대속도(5.12 값 틀림)
+            polyline2.addPoint(MapPoint.mapPointWithGeoCoord(mLastlocation.getLatitude(), mLastlocation.getLongitude()));
+            mapView.addPolyline(polyline2);
+            MapPointBounds mapPointBounds2 = new MapPointBounds(polyline2.getMapPoints());
+            int padding2 = 50; // px
+            mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding2,2,3));
+
+
             if(getSpeed > maX){
                 maX = getSpeed;
                 maxspeed.setText(String.format("%.1f", maX));
@@ -595,6 +609,7 @@ public class FollowStart extends AppCompatActivity implements
         super.onPause();
         // 위치정보 가져오기 제거
         locationManager.removeUpdates(this);
+
     }
 
     @Override

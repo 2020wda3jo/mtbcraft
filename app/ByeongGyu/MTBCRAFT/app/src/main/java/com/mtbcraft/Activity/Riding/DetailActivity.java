@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -59,7 +61,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
     MapPolyline polyline = new MapPolyline();
     TextView textView1, textView2, textView3, textView4, textView5, textView6;
     private DrawerLayout mDrawerLayout;
-    String secS, test, disS, avgS, highS, maxS, breakS, gpx;
+    String secS, test, disS, avgS, highS, maxS, breakS, gpx, open;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +144,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
         rr_num = intent.getStringExtra("rr_num");
         rr_rider = intent.getStringExtra("rr_rider");
+       // open = intent.getStringExtra("open");
         try {
             GetTask getTask = new GetTask();
             Map<String, String> params = new HashMap<String, String>();
@@ -151,7 +154,78 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
+        //공개여부 선택
+        openselect.setOnCheckedChangeListener((RadioGroup.OnCheckedChangeListener) (group, checkedId) -> {
+            RadioGroup rg = (RadioGroup)findViewById(R.id.selectgroup); // 라디오그룹 객체 맵핑
+            RadioButton selectedRdo = (RadioButton)findViewById(rg.getCheckedRadioButtonId()); // rg 라디오그룹의 체크된(getCheckedRadioButtonId) 라디오버튼 객체 맵핑
+            String selectedValue = selectedRdo.getText().toString();
+            String value="";
+            switch (selectedValue){
+                case "비공개":
+                    value="0";
+                    try {
+                        OpenSet openset = new OpenSet();
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("rr_num", rr_num);
+                        params.put("rr_rider", rr_rider);
+                        params.put("open","0");
+                        openset.execute(params);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "전체 공개":
+                    value="1";
+                    try {
+                        OpenSet openset = new OpenSet();
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("rr_num", rr_num);
+                        params.put("rr_rider", rr_rider);
+                        params.put("open","1");
+                        openset.execute(params);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    value="1";
+                    break;
+            }
+        });
+
     }
+
+    public class OpenSet extends AsyncTask<Map<String, String>, Integer, String> {
+
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://100.92.32.8:8080/android/recordset/open");
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+
+            return body;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("디테일 ", s);
+        }
+    }
+
 
     public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
 
@@ -219,7 +293,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                     @Override
                     public void run() {
                         try {
-                            URL url = new URL("http://13.209.229.237:8080/app/getGPX/"+gpx);
+                            URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+gpx);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                             conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
                             conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)

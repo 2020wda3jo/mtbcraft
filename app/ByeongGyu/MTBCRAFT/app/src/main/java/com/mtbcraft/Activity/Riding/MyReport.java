@@ -142,7 +142,7 @@ public class MyReport extends AppCompatActivity  {
            // Log.d("로그: ",s);
             try{
 
-                JSONArray jsonArray = new JSONArray(s);
+
                 Log.d("마이리포트",s+"\n");
                 StringBuffer sb = new StringBuffer();
                 String tempData = s;

@@ -25,11 +25,35 @@
 
     </com.google.android.material.tabs.TabLayout>
 
+
+
+    <com.naver.maps.map.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="시간"
+            android:textSize="17dp" />
+        <TextView
+            android:id="@+id/m_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0:0:0"
+            android:textSize="20dp" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/endriding"
             android:layout_width="wrap_content"
@@ -69,26 +93,9 @@
                 android:textSize="17dp" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/m_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:gravity="right"
-            android:text="00:00:00"
-            android:textSize="17dp" />
-
-
     </LinearLayout>
 
-
-
-    <com.naver.maps.map.MapView
-        android:id="@+id/map_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+    <!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,7 +145,7 @@
             android:layout_weight="1"
             android:layout_marginRight="10dp"
             android:gravity="right"
-            android:text="거리"
+            android:text="거리(km)"
             android:textSize="20dp" />
     </LinearLayout>
 
@@ -183,7 +190,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="left"
-            android:text="평균속도"
+            android:text="평균속도(km/h)"
             android:layout_marginLeft="10dp"
             android:textSize="20dp" />
         <TextView
@@ -191,7 +198,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="최대속도"
+            android:text="최대속도(km/h)"
             android:layout_marginRight="10dp"
             android:textSize="20dp" />
     </LinearLayout>
@@ -236,7 +243,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="left"
-            android:text="고도"
+            android:text="고도(m)"
             android:layout_marginLeft="10dp"
             android:textSize="20dp" />
         <TextView
@@ -244,7 +251,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="획득고도"
+            android:text="획득고도(m)"
             android:layout_marginRight="10dp"
             android:textSize="20dp" />
     </LinearLayout>
@@ -332,6 +339,16 @@
             android:textSize="20dp" />
     </LinearLayout>
 
+
+
+
+
+
+
+
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -354,5 +371,5 @@
         android:text="00"
         android:layout_marginRight="10dp"
         android:textSize="20dp" />
-    </LinearLayout>
+    </LinearLayout>-->
 </LinearLayout>

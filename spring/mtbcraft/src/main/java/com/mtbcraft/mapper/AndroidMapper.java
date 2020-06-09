@@ -61,4 +61,6 @@ public interface AndroidMapper {
 	
 	//경쟁전 클럽 순위 가져오기
 	public List<CompClub> getCompClub(int cs_comp) throws Exception;
+
+	public String RidingOpenSet(RidingRecord record) throws Exception;
 }

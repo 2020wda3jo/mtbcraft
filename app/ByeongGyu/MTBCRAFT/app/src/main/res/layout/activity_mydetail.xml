@@ -209,10 +209,40 @@
                         tools:ignore="MissingConstraints"
                         android:layout_gravity="center" />
                 </LinearLayout>
-
             </GridLayout>
-        </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="공개여부 설정 : " />
+
+                <RadioGroup
+                    android:id="@+id/selectgroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/NoOpen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="비공개" />
+                    <RadioButton
+                        android:id="@+id/FriOpen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="전체 공개" />
+
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

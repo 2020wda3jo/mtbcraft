@@ -129,13 +129,31 @@ public class AndroidController {
 		return androidService.readRecord(rr_rider);
 	}
 
-	// 주행기록 가져오기
+	// 주행기록 상세보기
 	@RequestMapping(value = "/api/get/{rr_rider}/{rr_num}")
 	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable String rr_rider,
 			@PathVariable String rr_num) throws Exception {
 		RidingRecord record = new RidingRecord();
 		return androidService.getRidingRecordDetail(rr_rider, rr_num);
 	}
+	
+	//주행기록 상세보기(공개여부설정)
+		@RequestMapping(value = "/android/recordset/open")
+		public @ResponseBody Map<String, String> RidingOpenSet(HttpServletRequest request) throws Exception {
+			RidingRecord record = new RidingRecord();
+			record.setRr_num(Integer.parseInt(request.getParameter("rr_num")));
+			record.setRr_rider(request.getParameter("rr_rider"));
+			record.setRr_open(Integer.parseInt(request.getParameter("open")));
+			System.out.println(request.getParameter("rr_num")+ " "+ request.getParameter("rr_rider")+" "+request.getParameter("open"));
+			
+			androidService.RidingOpenSet(record);
+			// 안드로이드에게 전달하는 데이터
+			Map<String, String> result = new HashMap<String, String>();
+			result.put("data1", "성공했쩡");
+			
+			return result;
+		}
+	
 
 	@RequestMapping(value = "/android/fileUpload", method = RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1) {
