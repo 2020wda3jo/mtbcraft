@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.Club;
+import com.mtbcraft.dto.Club_Join;
 import com.mtbcraft.service.CommunityService;
 
 @Controller
@@ -44,18 +45,21 @@ public class CommunityController {
 	public String clubcreate(Club club, MultipartFile uploadfile) throws Exception {
 	
 		String filename = uploadfile.getOriginalFilename();
-		String directory = "/home/ec2-user/data/club";
+		//String directory = "/home/ec2-user/data/club"; // 서버
+		String directory = "C:\\ServerFiles"; // 로컬
 		String filepath = Paths.get(directory, filename).toString();
 		
 		club.setCb_image(filename);
-		
+		communityService.insertClub(club);
+		Club_Join cb_join = new Club_Join();
+		cb_join.setCj_rider(club.getCb_manager()); // cb_join 안에 club의 cb_manager를 삽입
+		communityService.insertCJ(cb_join);
 		// Save the file locally
-		BufferedOutputStream stream =
-				new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
 		stream.write(uploadfile.getBytes());
 		stream.close();
 		
-		return "/community/club/create";
+		return "/community/club/success";
 	}
 	
 	@RequestMapping(value = "/community/club/create/check", method = RequestMethod.GET)

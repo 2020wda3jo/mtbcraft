@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.dto.Club;
+import com.mtbcraft.dto.Club_Join;
 import com.mtbcraft.mapper.CommunityMapper;
 import com.mtbcraft.mapper.MemberMapper;
 
@@ -25,6 +26,10 @@ public class CommunityService {
 	///클럽이름 중복검사
 	public int checkClubName(String cb_name){
 		return communityMapper.checkClubName(cb_name);
+	}
+	
+	public void insertCJ(Club_Join cb_join) {
+		communityMapper.insertCJ(cb_join);
 	}
 	
 }

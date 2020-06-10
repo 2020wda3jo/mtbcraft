@@ -1,7 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header"></head>
-<form action="/community/club/create" method="get">
-	<input type="submit" value="클럽 생성">
-</form>
+
+<button onclick="goCreateClub()">클럽 생성</button>
+
+<input type="hidden" id="userclub" name="userclub">
+<button onclick="goBoard()">클럽게시판</button>
+<input type="hidden" id="cb_manager" name="cb_manager">
+
+<script>
+$(document).ready(function() {
+	//로그인 했을때만 로그인한 사용자아이디 가져옴
+	$("#cb_manager").val($("#nav_t_login ul li b span").html());
+	
+   $.ajax({
+      url : "/community/club/get",
+      dataType : "json",
+      cache : false,
+      data : {cj_rider : $("#nav_t_login ul span").text()},
+      success : function(data) {
+            	$("#userclub").val(data);
+         }
+      });
+});
+
+function goBoard() {
+	if($("#userclub").val()==0) {
+		alert("클럽에 가입되어 있지 않습니다.");
+		return;
+	}
+	location.href = "/community/club/club_board/"+ $("#userclub").val();
+}
+
+function goCreateClub() {
+	if($("#userclub").val()!=0 || $("#userclub").val()=="" || $("#userclub").val()== null || $("#cb_manager").val()=="") {
+		alert("이미 클럽에 소속되어 있거나 로그인 중이 아닙니다.");
+		return;
+	}
+	location.href = "/community/club/create";
+}
+
+</script>
 <footer th:replace="footer"></footer>
