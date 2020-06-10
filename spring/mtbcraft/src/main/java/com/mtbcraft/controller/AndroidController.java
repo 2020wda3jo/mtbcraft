@@ -200,11 +200,12 @@ public class AndroidController {
 	public @ResponseBody Map<String, String> coursescrap(HttpServletRequest request) throws Exception {
 		Scrap_Status scrap = new Scrap_Status();
 		scrap.setSs_rnum(Integer.parseInt(request.getParameter("c_num")));
-		scrap.setSs_rider(request.getParameter("r_rider"));
+		scrap.setSs_rider(request.getParameter("ss_rider"));
+		
 		androidService.insertScrap(scrap);
 
 		System.out.println(request.getParameter("c_num"));
-		System.out.println(request.getParameter("r_rider"));
+		System.out.println(request.getParameter("ss_rider"));
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("Status", "Ok");
 
@@ -213,8 +214,8 @@ public class AndroidController {
 
 	// 사용자 스크랩 코스 조회
 	@RequestMapping(value = "/app/riding/scrap/{rr_rider}")
-	public @ResponseBody List<Course> getScrap(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
-		return memberService.getScrapCourse(rr_rider);
+	public @ResponseBody List<Scrap_Status> getScrap(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
+		return androidService.getScrap(rr_rider);
 	}
 
 	// 사용자 스크랩 코스 상세보기
@@ -294,6 +295,13 @@ public class AndroidController {
 	@RequestMapping("/app/getCompClub/{cs_comp}")
 	public @ResponseBody List<CompClub> getCompClub( @PathVariable(value = "cs_comp") int cs_comp) throws Exception {
 		return androidService.getCompClub(cs_comp);
+	}
+	
+	//코스검색
+	@RequestMapping("/riding/Android_CourseSearch")
+	public String CourseSearch() throws Exception{
+		
+		return "/riding/Android_CourseSearch";
 	}
 
 }

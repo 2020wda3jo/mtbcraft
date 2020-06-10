@@ -218,8 +218,9 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             ScrapTask scrap = new ScrapTask();
             Map<String, String> params = new HashMap<String, String>();
                 params.put("c_num", c_num);
-                params.put("r_rider", LoginId);
+                params.put("ss_rider", LoginId);
             scrap.execute(params);
+            Log.d("dfasdf",c_num+" " +LoginId);
 
         });
 
@@ -250,7 +251,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237:8080/app/riding/coursescrap");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://100.92.32.8:8080/app/riding/coursescrap");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
