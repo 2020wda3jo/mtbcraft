@@ -278,7 +278,7 @@ public class RidingController {
 	// 코스 검색 진입
 	@RequestMapping(value = "/riding/search", method = RequestMethod.GET)
 	public String coursesearch() {
-		return "/riding/search";
+		return "riding/search";
 	}
 		
 	// 코스 인원모집

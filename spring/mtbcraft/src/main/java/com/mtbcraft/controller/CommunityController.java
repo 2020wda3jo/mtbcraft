@@ -37,13 +37,13 @@ public class CommunityController {
 	@RequestMapping(value = "/community/club", method = RequestMethod.GET)
 	public String comunityclub() {
 		
-		return "/community/club/club";
+		return "community/club/club";
 	}
 	
 	// 커뮤니티 클럽 만들기 페이지
 	@RequestMapping(value = "/community/club/create", method = RequestMethod.GET)
 	public String moveClubCreatePage() {
-		return "/community/club/create";
+		return "community/club/create";
 	}
 
 	// 커뮤니티 클럽 만들기
@@ -65,7 +65,7 @@ public class CommunityController {
 		stream.write(uploadfile.getBytes());
 		stream.close();
 		
-		return "/community/club/success";
+		return "community/club/success";
 	}
 	
 	//클럽명 중복 검사
@@ -89,37 +89,37 @@ public class CommunityController {
 	// 커뮤니티 클럽 가입
 	@RequestMapping(value = "/community/club/join", method = RequestMethod.GET)
 	public String clubjoin() {
-		return "/community/club/join";
+		return "community/club/join";
 	}
 
 	// 커뮤니티 클럽 가입
 	@RequestMapping(value = "/community/club/join", method = RequestMethod.POST)
 	public String clubjoinpost() {
-		return "/community/club/join";
+		return "community/club/join";
 	}
 
 	// 클럽 게시판
 	@RequestMapping(value = "/community/club/clubboard", method = RequestMethod.GET)
 	public String clubboard() {
-		return "/community/club/myclub/clubboard";
+		return "community/club/myclub/clubboard";
 	}
 
 	// 클럽 게시판 검색
 	@RequestMapping(value = "/community/club/myclub/clubboard/search", method = RequestMethod.GET)
 	public String clubcreateget() {
-		return "/community/club/myclub/clubboard/search";
+		return "community/club/myclub/clubboard/search";
 	}
 
 	// 클럽 게시판 글쓰기
 	@RequestMapping(value = "/community/club/myclub/clubboard/posting", method = RequestMethod.POST)
 	public String clubcreatepost() {
-		return "/community/club/myclub/clubboard/posting";
+		return "community/club/myclub/clubboard/posting";
 	}
 
 	// 클럽 캘린더 페이지로 이동
 	@RequestMapping(value = "/community/club/calender", method = RequestMethod.GET)
 	public String clubcalender() throws ParseException {
-		return "/community/club/calender";
+		return "community/club/calender";
 	}
 	
 	// 클럽 캘린더 일정 조회
