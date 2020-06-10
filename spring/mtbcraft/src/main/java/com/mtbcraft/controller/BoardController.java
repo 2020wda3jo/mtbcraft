@@ -65,10 +65,8 @@ public class BoardController {
 	@RequestMapping(value = "/community/club/get", method = RequestMethod.GET)
 	@ResponseBody
 	public int getClubNum(String cj_rider) {
-		System.out.println(cj_rider);
 		try {
 			int result = boardService.getJoinCLub(cj_rider);
-			System.out.println(result);
 			return result;
 		} catch (Exception e) {
 			return 0;

@@ -4,15 +4,21 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mtbcraft.dto.CC_Event;
 import com.mtbcraft.dto.Club;
+import com.mtbcraft.dto.Club_Calender;
 import com.mtbcraft.dto.Club_Join;
 import com.mtbcraft.service.CommunityService;
 
@@ -62,6 +68,7 @@ public class CommunityController {
 		return "/community/club/success";
 	}
 	
+	//클럽명 중복 검사
 	@RequestMapping(value = "/community/club/create/check", method = RequestMethod.GET)
 	@ResponseBody
 	public String checkClubName(String cb_name){
@@ -109,13 +116,83 @@ public class CommunityController {
 		return "/community/club/myclub/clubboard/posting";
 	}
 
-	// 클럽 캘린더
-	@RequestMapping(value = "/community/club/myclub/calender", method = RequestMethod.GET)
-	public String clubcalender() {
-		return "/community/club/myclub/calender";
+	// 클럽 캘린더 페이지로 이동
+	@RequestMapping(value = "/community/club/calender", method = RequestMethod.GET)
+	public String clubcalender() throws ParseException {
+		return "/community/club/calender";
 	}
 	
+	// 클럽 캘린더 일정 조회
+	@RequestMapping(value = "/community/club/calender/{cc_club}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<CC_Event> getCC(@PathVariable int cc_club) {
+		
+		List<Club_Calender> list = communityService.getCCList(cc_club); 
+		
+		List<CC_Event> result = new ArrayList<CC_Event>();
+		for(int i=0; i<list.size();i++) {
+			CC_Event cce = new CC_Event();
+			
+			cce.set_id(list.get(i).getCc_num());
+			cce.setTitle(list.get(i).getCc_content());
+			cce.setStart(list.get(i).getCc_start());
+			cce.setEnd(list.get(i).getCc_end());
+			cce.setUsername(list.get(i).getCc_rider());
+			cce.setBackgroundColor(list.get(i).getCc_color());
+			cce.setAllDay( list.get(i).getCc_allday()==1 ? true : false );
+			
+			result.add(cce);
+		}
+		
+		return result; 
+	}
 	
+	// 클럽 캘린더 일정 등록
+	@RequestMapping(value = "/community/club/calender/{cc_club}", method = RequestMethod.POST)
+	@ResponseBody
+	public String postCC(@PathVariable int cc_club, CC_Event cc_e) {
+		
+		Club_Calender cc = new Club_Calender();
+		cc.setCc_club(cc_club);
+		cc.setCc_rider(cc_e.getUsername());
+		cc.setCc_content(cc_e.getTitle());
+		cc.setCc_start(cc_e.getStart());
+		cc.setCc_end(cc_e.getEnd());
+		cc.setCc_color(cc_e.getBackgroundColor());
+		cc.setCc_allday( cc_e.isAllDay() ? 1 : 0 );
+		
+		communityService.postCC(cc);
+		
+		return "success";
+	}
+	
+	// 클럽 캘린더 일정 수정
+	@RequestMapping(value = "/community/club/calender/{cc_club}", method = RequestMethod.PUT)
+	@ResponseBody
+	public String updateCC(@PathVariable int cc_club, CC_Event cc_e, int _id) {
+		
+		Club_Calender cc = new Club_Calender();
+		cc.setCc_num(_id);
+		cc.setCc_content(cc_e.getTitle());
+		cc.setCc_start(cc_e.getStart());
+		cc.setCc_end(cc_e.getEnd());
+		cc.setCc_color(cc_e.getBackgroundColor());
+		cc.setCc_allday( cc_e.isAllDay() ? 1 : 0 );
+		
+		communityService.updateCC(cc);
+		return "success";
+	}
+	
+	// 클럽 캘린더 일정 삭제
+	@RequestMapping(value = "/community/club/calender/{cc_club}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public String deleteCC(@PathVariable int cc_club, int cc_num) {
+
+		communityService.deleteCC(cc_num);
+		
+		return "success";
+	}
+		
 	//  SNS
 	@RequestMapping(value = "/community/sns", method = RequestMethod.GET)
 	public String snsget() {
