@@ -63,14 +63,15 @@ public class RidingController {
 	}
 
 	// RR_NUM으로 GPX파일 조회
-	@RequestMapping(value="/getGpxByRR_Num", method = RequestMethod.GET)
-	@ResponseBody
-	public Gpx getGpxByRR_Num(int rr_num) throws Exception {
-		String gpxFile = ridingService.getGpxFileByRR_Num(rr_num);
-		Gpx gpx = new Gpx();
-		makeGpx(gpx, gpxFile);
-		return gpx;
-	}
+		@RequestMapping(value="/getGpxByRR_Num", method = RequestMethod.GET)
+		@ResponseBody
+		public Gpx getGpxByRR_Num(int rr_num) throws Exception {
+			String gpxFile = ridingService.getGpxFileByRR_Num(rr_num);
+			Gpx gpx = new Gpx();
+			makeGpx(gpx, gpxFile);
+			gpx.setRr_num(rr_num);
+			return gpx;
+		}
 	
 	//RR_NUM으로 RIDINGRECORD 조회
 	@RequestMapping(value="/getRidingRecordByRR_Num", method = RequestMethod.GET)
