@@ -68,4 +68,37 @@ public class RidingService {
 	public List<Course> getScrapCourse(String rr_rider) throws Exception{
 		return ridingMapper.getScrapCourse(rr_rider);
 	}
+<<<<<<< HEAD
+=======
+	
+	// 사용자 스크랩 코스 추가
+	public void postScrapCourse(@Param("ss_rider") String ss_rider, @Param("ss_rnum") int ss_rnum) {
+		ridingMapper.postScrapCourse(ss_rider, ss_rnum);
+	}
+	
+	// 사용자 스크랩 코스 삭제
+	public void deleteScrapCourse(@Param("ss_rider") String ss_rider, @Param("ss_rnum") int ss_rnum) {
+		ridingMapper.deleteScrapCourse(ss_rider, ss_rnum);
+	}
+	
+	//라이딩 넘버로 리뷰 조회
+	public List<Course_Review> getCourseReviews(int cr_rnum) throws Exception{
+		return ridingMapper.getCourseReviews(cr_rnum);
+	}
+	
+	//리뷰 등록
+	public void postCourseReview(Course_Review cr) throws Exception{
+		ridingMapper.postCourseReview(cr);
+	}
+	
+	//리뷰 삭제
+	public void deleteCourseReview(int cr_num) throws Exception{
+		ridingMapper.deleteCourseReview(cr_num);
+	}
+	
+	//리뷰 수정
+	public void updateCourseReview(int cr_num, String cr_content) throws Exception{
+		ridingMapper.updateCourseReview(cr_num, cr_content);
+	}
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 }

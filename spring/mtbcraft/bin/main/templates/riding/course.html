@@ -61,8 +61,25 @@
 </div>
 <div id="box_courseInfo">
 	<h2>선택한 코스 정보</h2>
+<<<<<<< HEAD
 	<div id="courseInfo"></div>
 	<button id="bt_Open" onclick="changeOpen()"></button>
+=======
+	<div id="courseInfo">
+	</div>
+	<button id="bt_mode" onclick="change()">스크랩하기</button>
+	<h2>코스 한줄평</h2>
+	<div id="courseReview">
+	</div>
+	<h3>리뷰 작성하기</h3>
+	<form id="postReview"  action="/riding/review" method="post"  enctype="multipart/form-data">
+		<input type="text" size="50" id="cr_content" name="cr_content">
+		<input type="file" id="cr_images" name="files">
+		<input type="hidden" id="cr_rider" name="cr_rider">
+		<input type="hidden" id="cr_rnum" name="cr_rnum">
+	</form>
+	<button type="button" onclick="postReview()">리뷰 등록하기</button>
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 	<input type="hidden" id="bt_rr_open">
 	<input type="hidden" id="bt_rr_num">
 </div>

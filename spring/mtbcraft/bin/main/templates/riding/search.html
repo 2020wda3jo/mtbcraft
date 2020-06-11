@@ -1,5 +1,74 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header"></head>
+<<<<<<< HEAD
+=======
+<link rel="stylesheet" href="/css/riding/course.css"/>
+<div id="sub_img"></div>
+<!-- 위는 로컬에 적용하는 KEY, 아래는 서버에 적용하는 KEY입니다. 로컬에서는 상단KEY를 쓰고 아래 KEY를 주석처리해주세요.-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbb047c9e9b46e285f76df6669c00d7f&libraries=services"></script>
+
+<!-- 메인 기능 버튼 -->
+<div>
+	<input type="button" value="내 정보보기" onclick="moveMyInfo()">
+	<input type="button" value="코스 검색하기" onclick="moveSearchCourse()">
+	<input type="button" value="위험지역등록하기" onclick="show_post_DA()">
+	<label for="chk_DA">위험지역 보기</label> <input id="chk_DA" name="DA" type="checkbox">
+</div>
+	
+<div id="mainbox">
+
+	<div id="box_search_course">
+			<form id="form_search" onsubmit="searchPlaces(); return false;">
+				<label for="search_loation">장소 검색</label><input id="keyword" name="search_loation" type="text" value="">
+				<!-- <button id="btn_search_course">검색하기</button> -->
+				<button type="submit">검색하기</button>
+			</form>
+			<ul id="placesList"></ul>
+	       	<div id="pagination"></div>
+	</div>
+	
+	<div id="map" style="width:75%; height:600px;"></div>
+	
+	<div id="box_post_DA">
+		<form id="form_post_DA" action="/riding/DA" method="post">
+			<label>위도</label><input type="text" id="DA_Lat" name="da_latitude" size="18">
+			<label>경도</label><input type="text" id="DA_Lon" name="da_longitude" size="18">
+			<label>등록주소</label><input type="text" id="DA_addr" name="da_addr" size="8" required>
+			<label>한줄평</label><input type="text" id="DA_content" name="da_content" size="40" required>
+			<label>이미지첨부</label><input type="file" id="DA_Image" name="da_image" accept="image/*">
+			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
+			<input type="hidden" name="page" th:value="search">
+			<input type="submit" value="등록신청">
+			<button type="button" onclick="cancel_post_DA()">취소</button>
+		</form>
+	</div>
+	
+</div>
+
+<div id="box_courseInfo">
+	<h2>선택한 코스 정보</h2>
+	<div id="courseInfo">
+	</div>
+	<button id="bt_mode" onclick="change()">스크랩하기</button>
+	<h2>코스 한줄평</h2>
+	<div id="courseReview">
+	</div>
+	<h3>리뷰 작성하기</h3>
+	<form id="postReview"  action="/riding/review" method="post"  enctype="multipart/form-data">
+		<input type="text" size="50" id="cr_content" name="cr_content">
+		<input type="file" id="cr_images" name="files">
+		<input type="hidden" id="cr_rider" name="cr_rider">
+		<input type="hidden" id="cr_rnum" name="cr_rnum">
+	</form>
+	<button type="button" onclick="postReview()">리뷰 등록하기</button>
+	<input type="hidden" id="bt_rr_open">
+	<input type="hidden" id="selected_rr_num">
+</div>
+
+<script type="text/javascript" src="/js/riding/basic.js"></script>
+<script type="text/javascript" src="/js/riding/search.js"></script>
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 
 <footer th:replace="footer"></footer>

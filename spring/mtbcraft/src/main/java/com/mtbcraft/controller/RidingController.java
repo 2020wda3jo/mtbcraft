@@ -32,7 +32,11 @@ public class RidingController {
 		for(int i=0;i<rrlist.size();i++) {
 			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
 		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
+<<<<<<< HEAD
 		List<Course> scraplist = ridingService.getScrapCourse(rider);
+=======
+		List<RidingRecord> scraplist = ridingService.getScrapCourse(rider);
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);
 		return "riding/course";
