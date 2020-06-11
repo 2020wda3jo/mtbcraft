@@ -1,5 +1,7 @@
 package com.mtbcraft.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.Club;
@@ -15,4 +17,13 @@ public interface CommunityMapper {
 	public int checkClubName(String cb_name);
 	
 	public void insertCJ(Club_Join cb_join);
+	
+	// 클럽 멤버 조회
+	public int getMember(Club cb_num);
+	
+	// 클럽 조회
+	public List<Club> getClub(Club cb_num);
+	
+	// 클럽 가입
+	public void signClub(Club_Join cb_join);
 }
