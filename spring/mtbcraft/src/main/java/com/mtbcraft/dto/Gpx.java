@@ -8,7 +8,15 @@ public class Gpx {
 	private double minLat;
 	private double maxLon;
 	private double minLon;
+	private int rr_num;
 	private List<Info_GPX> infos;
+	
+	public int getRr_num() {
+		return rr_num;
+	}
+	public void setRr_num(int rr_num) {
+		this.rr_num = rr_num;
+	}
 	public double getMaxLat() {
 		return maxLat;
 	}

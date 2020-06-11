@@ -42,6 +42,7 @@
         <activity android:name="com.mtbcraft.Activity.Riding.FollowStart"/>
         <activity android:name="com.mtbcraft.Activity.Scrap.MyScrap"/>
         <activity android:name="com.mtbcraft.Activity.Scrap.MyScrapDetail"/>
+        <activity android:name="com.mtbcraft.Activity.Course.CourseSearch" />
 
 
     </application>
