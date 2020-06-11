@@ -92,6 +92,9 @@
 	<update id="updateCourseReview">
 		UPDATE COURSE_RIVIEW SET CR_CONTENT=#{cr_content}, CR_TIME=SYSTIMESTAMP+9/24 WHERE CR_NUM=#{cr_num}
 	</update>
+<<<<<<< HEAD
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
+=======
 >>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 </mapper>
 

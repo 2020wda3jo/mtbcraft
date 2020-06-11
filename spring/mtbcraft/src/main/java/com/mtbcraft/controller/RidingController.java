@@ -36,6 +36,9 @@ public class RidingController {
 		List<Course> scraplist = ridingService.getScrapCourse(rider);
 =======
 		List<RidingRecord> scraplist = ridingService.getScrapCourse(rider);
+<<<<<<< HEAD
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
+=======
 >>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);

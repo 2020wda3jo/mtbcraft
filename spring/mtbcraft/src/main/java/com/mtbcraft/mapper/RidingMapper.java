@@ -62,5 +62,8 @@ public interface RidingMapper {
 	//리뷰 수정
 	public void updateCourseReview(@Param("cr_num") int cr_num, @Param("cr_content") String cr_content) throws Exception;
 
+<<<<<<< HEAD
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
+=======
 >>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 }

@@ -100,5 +100,8 @@ public class RidingService {
 	public void updateCourseReview(int cr_num, String cr_content) throws Exception{
 		ridingMapper.updateCourseReview(cr_num, cr_content);
 	}
+<<<<<<< HEAD
+>>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
+=======
 >>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
 }
