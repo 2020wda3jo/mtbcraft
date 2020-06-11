@@ -93,20 +93,5 @@
 	<update id="updateCourseReview">
 		UPDATE COURSE_RIVIEW SET CR_CONTENT=#{cr_content}, CR_TIME=SYSTIMESTAMP+9/24 WHERE CR_NUM=#{cr_num}
 	</update>
-	
-	<!-- 코스 추천 -->
-	<insert id="postLS" parameterType="com.mtbcraft.dto.Like_Status">
-		INSERT INTO LIKE_STATUS VALUES (#{ls_rider}, #{ls_rnum})
-	</insert>
-	
-	<!-- 코스 추천수 조회 -->
-	<select id="getRR_Like" parameterType="int" resultType="int">
-		SELECT COUNT(*) FROM LIKE_STATUS WHERE LS_RNUM=#{ls_rnum}
-	</select>
-	
-	<!-- 코스 추천 취소 -->
-	<delete id="deleteLS" parameterType="com.mtbcraft.dto.Like_Status">
-		DELETE FROM LIKE_STATUS WHERE LS_RNUM=#{ls_rnum} and LS_RIDER=#{ls_rider}
-	</delete>
 </mapper>
 

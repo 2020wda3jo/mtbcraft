@@ -50,6 +50,23 @@ public class MemberController {
 	public String joinPOST(HttpServletRequest request, @RequestParam("userphoto") MultipartFile profile) throws Exception{
 		Member member  = new Member();
 		
+		String path = "/home/ec2-user/data/gpx";
+		String fileName = "";
+
+		if (!profile.isEmpty()) { // 첨부파일이 존재?
+			fileName = profile.getOriginalFilename();
+			try {
+				// 디렉토리 생성
+				new File(path).mkdir();
+				// 지정된 업로드 경로로 저장됨
+				profile.transferTo(new File(path + "/" + fileName));
+				System.out.println();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	
+		/*
 		if( !profile.isEmpty() ) {
 			//파일명
 	        String originalFile = profile.getOriginalFilename();
@@ -68,7 +85,7 @@ public class MemberController {
 	        
 	        member.setR_image(originalFile);
 		}
-		
+		*/
 		member.setR_id(request.getParameter("userid"));
 		member.setR_pw(request.getParameter("userpw"));
 		member.setR_name(request.getParameter("username"));
@@ -78,6 +95,7 @@ public class MemberController {
 		member.setR_gender(request.getParameter("usergender"));
 		member.setR_addr(request.getParameter("useraddr"));
 		member.setR_addr2(request.getParameter("useraddr2"));
+		member.setR_image(fileName);
 		member.setR_type(request.getParameter("usertype"));
 	
 		memberService.memberInsert(member);

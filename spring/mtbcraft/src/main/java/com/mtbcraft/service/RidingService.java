@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
-import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.mapper.RidingMapper;
 
@@ -106,20 +105,5 @@ public class RidingService {
 	//리뷰 수정
 	public void updateCourseReview(int cr_num, String cr_content) throws Exception{
 		ridingMapper.updateCourseReview(cr_num, cr_content);
-	}
-	
-	//코스 추천
-	public void postLS(Like_Status ls) {
-		ridingMapper.postLS(ls);
-	}
-	
-	//코스 추천수 조회
-	public int getRR_Like(int rr_num) {
-		return ridingMapper.getRR_Like(rr_num);
-	}
-
-	// 코스 추천 취소
-	public void deleteLS(Like_Status ls) {
-		ridingMapper.deleteLS(ls);
 	}
 }

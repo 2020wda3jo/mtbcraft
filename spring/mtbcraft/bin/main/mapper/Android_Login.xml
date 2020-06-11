@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="com.mtbcraft.mapper.AndroidMapper">
-<!-- 안드로이드 로그인 -->
-	<select id="login" parameterType="String" resultType="com.mtbcraft.dto.Login">
-		select r_id, r_pw from rider where r_id = #{userId} and r_pw= #{userPw}
-	</select>
-</mapper>

@@ -31,7 +31,6 @@ import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Gpx;
-import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
@@ -48,15 +47,8 @@ public class RidingController {
 		List<RidingRecord> rrlist = ridingService.getRidingRecord(rider);
 		for(int i=0;i<rrlist.size();i++) {
 			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
-			int like = ridingService.getRR_Like(rrlist.get(i).getRr_num());
-			rrlist.get(i).setRr_like(like);
 		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
 		List<RidingRecord> scraplist = ridingService.getScrapCourse(rider);
-		for(int i=0;i<scraplist.size();i++) {
-			scraplist.get(i).setRr_gpx(scraplist.get(i).getRr_dateYYYYMMDD());
-			int like = ridingService.getRR_Like(scraplist.get(i).getRr_num());
-			scraplist.get(i).setRr_like(like);
-		}
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);
 		return "riding/course";
@@ -85,11 +77,7 @@ public class RidingController {
 	@RequestMapping(value="/getRidingRecordByRR_Num", method = RequestMethod.GET)
 	@ResponseBody
 	public RidingRecord getRidingRecordByRR_Num(int rr_num) throws Exception {
-		System.out.println(rr_num);
-		RidingRecord rr = ridingService.getRidingRecordDetail(rr_num);
-		int like = ridingService.getRR_Like(rr_num);
-		rr.setRr_like(like);
-		return rr;
+		return ridingService.getRidingRecordDetail(rr_num);
 	}
 
 	// 사용자 주행 기록 공개비공개
@@ -313,41 +301,6 @@ public class RidingController {
 	public String comeon() {
 
 		return "/riding/comeon";
-	}
-	
-	//코스 추천
-	@RequestMapping(value = "/riding/like", method = RequestMethod.POST)
-	@ResponseBody
-	public String postLS(Like_Status ls) {
-		System.out.println(ls.getLs_rider());
-		System.out.println(ls.getLs_rnum());
-		try {
-			
-			List<RidingRecord> list = ridingService.getRidingRecord(ls.getLs_rider());
-			
-			for(int i=0;i<list.size();i++) {
-				if(list.get(i).getRr_num()==ls.getLs_rnum()) {
-					return "myrr";
-				}
-			}
-			
-			ridingService.postLS(ls);
-			
-		} catch (Exception e) {
-			return "already";
-		}
-		
-		return "success";
-	}
-	
-	//코스 추천 취소
-	@RequestMapping(value = "/riding/like", method = RequestMethod.DELETE)
-	@ResponseBody
-	public String deleteLS(Like_Status ls) {
-		
-		ridingService.deleteLS(ls);
-		
-		return "success";
 	}
 	
 	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
