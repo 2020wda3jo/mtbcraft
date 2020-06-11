@@ -4,18 +4,14 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mtbcraft.dto.Board;
 import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.Club_Join;
 import com.mtbcraft.service.CommunityService;
@@ -24,7 +20,7 @@ import com.mtbcraft.service.CommunityService;
 public class CommunityController {
 	@Autowired
 	private CommunityService communityService;
-
+	
 	// 커뮤니티
 	@RequestMapping(value = "/community", method = RequestMethod.GET)
 	public String comunity() {
@@ -34,10 +30,10 @@ public class CommunityController {
 	// 커뮤니티 클럽
 	@RequestMapping(value = "/community/club", method = RequestMethod.GET)
 	public String comunityclub() {
-
+		
 		return "/community/club/club";
 	}
-
+	
 	// 커뮤니티 클럽 만들기 페이지
 	@RequestMapping(value = "/community/club/create", method = RequestMethod.GET)
 	public String moveClubCreatePage() {
@@ -47,12 +43,12 @@ public class CommunityController {
 	// 커뮤니티 클럽 만들기
 	@RequestMapping(value = "/community/club/create", method = RequestMethod.POST)
 	public String clubcreate(Club club, MultipartFile uploadfile) throws Exception {
-
+	
 		String filename = uploadfile.getOriginalFilename();
-		// String directory = "/home/ec2-user/data/club"; // 서버
+		//String directory = "/home/ec2-user/data/club"; // 서버
 		String directory = "C:\\ServerFiles"; // 로컬
 		String filepath = Paths.get(directory, filename).toString();
-
+		
 		club.setCb_image(filename);
 		communityService.insertClub(club);
 		Club_Join cb_join = new Club_Join();
@@ -62,21 +58,20 @@ public class CommunityController {
 		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
 		stream.write(uploadfile.getBytes());
 		stream.close();
-
+		
 		return "/community/club/success";
 	}
-
-	// 커뮤니티 클럽 생성
+	
 	@RequestMapping(value = "/community/club/create/check", method = RequestMethod.GET)
 	@ResponseBody
-	public String checkClubName(String cb_name) {
-		int result = 0;
+	public String checkClubName(String cb_name){
+		int result=0;
 		try {
 			result = communityService.checkClubName(cb_name);
-			System.out.println(cb_name + "/" + result);
-			if (result == 1) {
+			System.out.println(cb_name+"/"+result);
+			if(result==1) {
 				return "fail";
-			} else {
+			}else {
 				return "success";
 			}
 		} catch (Exception e) {
@@ -84,36 +79,16 @@ public class CommunityController {
 		}
 	}
 
-//	// 커뮤니티 클럽 가입
-//	@RequestMapping(value = "/community/club/join", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String getClub(Club club) {
-//		communityService.getClub(club);
-//		return "/community/club/join";
-//	}
-
-//	// 커뮤니티 클럽 가입
-//	@RequestMapping(value = "/community/club/join", method = RequestMethod.GET)
-//	public String clubjoin() {
-//		return "/community/club/join";
-//	}
-	// 커뮤니티 클럽 가입 페이지
+	// 커뮤니티 클럽 가입
 	@RequestMapping(value = "/community/club/join", method = RequestMethod.GET)
-	public String moveClubBoard(Club cb_num, Model model) {
-		List<Club> list = communityService.getClub(cb_num);
-		model.addAttribute("list", list);
-		model.addAttribute("cb_num", cb_num); // 클럽 번호 전달
+	public String clubjoin() {
 		return "/community/club/join";
 	}
 
 	// 커뮤니티 클럽 가입
-	@RequestMapping(value = "/join/decision/{cb_num}/{cj_rider}", method = RequestMethod.GET)
-	public String clubSignUp(@PathVariable int cb_num, @PathVariable String cj_rider) throws Exception {
-		Club_Join cj = new Club_Join();
-		cj.setCj_club(cb_num);
-		cj.setCj_rider(cj_rider);
-		communityService.signClub(cj);
-		return "/community/club/success";
+	@RequestMapping(value = "/community/club/join", method = RequestMethod.POST)
+	public String clubjoinpost() {
+		return "/community/club/join";
 	}
 
 	// 클럽 게시판
@@ -139,13 +114,14 @@ public class CommunityController {
 	public String clubcalender() {
 		return "/community/club/myclub/calender";
 	}
-
-	// SNS
+	
+	
+	//  SNS
 	@RequestMapping(value = "/community/sns", method = RequestMethod.GET)
 	public String snsget() {
 		return "/community/sns";
 	}
-
+		
 	// SNS
 	@RequestMapping(value = "/community/sns", method = RequestMethod.POST)
 	public String snspost() {
