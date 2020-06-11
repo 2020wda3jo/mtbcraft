@@ -15,7 +15,7 @@
 		#{r_phone,jdbcType=VARCHAR},
 		#{r_gender,jdbcType=VARCHAR},
 		#{r_addr,jdbcType=VARCHAR},
-		#{r_addr2,jdbcType=VARCHAR}, #{r_image,jdbcType=VARCHAR},
+		#{r_addr2,jdbcType=VARCHAR}, #{r_image},
 		#{r_type,jdbcType=INTEGER})
 	</select>
 

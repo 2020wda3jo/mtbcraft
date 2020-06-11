@@ -28,9 +28,8 @@
 		select r_id, r_pw from rider where r_id = #{r_id} and r_pw = #{r_pw}
 	</select>
 	
-	<!-- 내 기록 가져오기 -->
 	<select id="readRecord" parameterType="String" resultType="com.mtbcraft.dto.App_RidingRecord">
-	select * from riding_record where rr_rider = #{rr_rider} order by rr_date desc
+	select * from riding_record where rr_rider = #{rr_rider}
 		
 	</select>
 	
@@ -57,20 +56,20 @@
 	<!-- 코스 스크랩 -->
 	<select id="insertScrap" parameterType="com.mtbcraft.dto.Scrap_Status">
 		insert into scrap_status
-		(ss_rider, ss_rnum) values (
+		(ss_rider, ss_course) values (
 		#{ss_rider},
-		#{ss_rnum} )
+		#{ss_course} )
 	</select>
 	
 	<!-- 내 스크립 리스트 -->
 	<select id="getScrap" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
-		select ss_rider, ss_rnum, rr_distance, rr_area from riding_record INNER JOIN
-		scrap_status ON(scrap_status.ss_rnum = riding_record.rr_num and scrap_status.SS_RIDER=#{ss_rider})
+		select ss_rider, ss_course, c_distance, c_level, c_area from course INNER JOIN
+		scrap_status ON(scrap_status.SS_COURSE = course.C_NUM and scrap_status.SS_RIDER=#{ss_rider} );
 	</select>
 	
 	<!--  내 스크랩 코스 보기 -->
 	<select id="getScrapDetail" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
-		select * from riding_record where rr_num = #{ss_rnum}
+		select * from course where c_num = #{c_num}
 	</select>
 	
 	<!-- 주행기록전체보기 -->

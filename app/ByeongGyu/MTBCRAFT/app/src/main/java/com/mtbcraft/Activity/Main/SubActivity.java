@@ -85,8 +85,6 @@ public class SubActivity extends AppCompatActivity {
                 case R.id.nav_course_search:
                     Intent coursesearch=new Intent(SubActivity.this, CourseSearch.class);
                     startActivity(coursesearch);
-                    finish();
-                    break;
                 //스크랩 보관함
                 case R.id.nav_course_get:
                     Intent courseget=new Intent(SubActivity.this, MyScrap.class);
