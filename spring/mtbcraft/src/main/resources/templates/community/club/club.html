@@ -7,6 +7,7 @@
 <input type="hidden" id="userclub" name="userclub">
 <button onclick="goBoard()">클럽게시판</button>
 <input type="hidden" id="cb_manager" name="cb_manager">
+<button onclick="goJoinClub()">클럽 가입</button>
 
 <script>
 $(document).ready(function() {
@@ -26,7 +27,8 @@ $(document).ready(function() {
 
 function goBoard() {
 	if($("#userclub").val()==0) {
-		alert("클럽에 가입되어 있지 않습니다.");
+		// 클럽 게시판으로 이동하는데 소속된 클럽이 존재해야 갈 수 있다. 고로 유저의 클럽번호가 0이면 소속된 클럽이 없다는 뜻이므로 게시판으로 이동할 수 없다.
+		alert("이미 클럽에 소속되어 있거나 로그인 중이 아닙니다.");
 		return;
 	}
 	location.href = "/community/club/club_board/"+ $("#userclub").val();
@@ -38,6 +40,16 @@ function goCreateClub() {
 		return;
 	}
 	location.href = "/community/club/create";
+}
+
+function goJoinClub() {
+	// 유저 클럽번호가 0이 아닐 때(이미 클럽에 가입한 경우), 공백이나 널일때(비로그인)
+	if($("#userclub").val()!=0 || $("#userclub").val()=="" || $("#userclub").val()== null
+			|| $("#cb_manager").val()=="" || $("#cb_manager").val()== null) { 
+		alert("이미 클럽에 소속되어 있거나 로그인 중이 아닙니다.");
+		return;
+	}
+	location.href="/community/club/join";
 }
 
 </script>
