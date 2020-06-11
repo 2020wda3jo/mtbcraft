@@ -163,7 +163,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		var cnt = 0;
 		for(var i=0;i<rr_numlist.length;i++){
 			$.ajax({
-				url : "/getGpxFileByRR_Num", // 제이슨오브젝트값을 가져옴
+				url : "/getGpxByRR_Num", // 제이슨오브젝트값을 가져옴
 				data : {rr_num : rr_numlist[i]},
 				type : "GET",
 				dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음

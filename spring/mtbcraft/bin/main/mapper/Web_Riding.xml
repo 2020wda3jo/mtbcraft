@@ -27,6 +27,11 @@
 		UPDATE RIDING_RECORD SET RR_OPEN=#{rr_open} WHERE RR_NUM=#{rr_num}
 	</update>
 	
+	<!-- 라이딩 기록 이름 변경 -->
+	<update id="updateRidingRecordName">
+		UPDATE RIDING_RECORD SET RR_NAME=#{rr_name} WHERE RR_NUM=#{rr_num}
+	</update>
+	
 	<!-- 등록된 위험지역 조회 -->
 	<select id="getDangerousArea" resultType="com.mtbcraft.dto.DangerousArea">
 		SELECT * FROM DANGEROUS_AREA
@@ -49,10 +54,8 @@
 	
 	<!-- 사용자 스크랩 코스 조회 -->
 	<select id="getScrapCourse" parameterType="String"
-		resultType="com.mtbcraft.dto.Course">
-		select * from course where exists (select ss_course from
-		SCRAP_STATUS where SS_RIDER=#{rr_rider} and
-		course.C_NUM=SCRAP_STATUS.SS_COURSE)
+		resultType="com.mtbcraft.dto.RidingRecord">
+		select * from riding_record a where exists (select ss_rnum from scrap_status where ss_rider=#{rr_rider} and ss_rnum =a.rr_num)
 	</select>
 	
 	<!-- 현재는 코스가 아닌 주행기록을 조회하기에 협의 후 최종결정 --> 
@@ -60,8 +63,6 @@
 	<select id="getCourses" resultType="com.mtbcraft.dto.RidingRecord">
 		SELECT * FROM RIDING_RECORD WHERE RR_OPEN=1
 	</select>
-<<<<<<< HEAD
-=======
 	
 	<!-- 사용자 스크랩 코스 추가 -->
 	<insert id="postScrapCourse">
@@ -92,9 +93,20 @@
 	<update id="updateCourseReview">
 		UPDATE COURSE_RIVIEW SET CR_CONTENT=#{cr_content}, CR_TIME=SYSTIMESTAMP+9/24 WHERE CR_NUM=#{cr_num}
 	</update>
-<<<<<<< HEAD
->>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
-=======
->>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
+	
+	<!-- 코스 추천 -->
+	<insert id="postLS" parameterType="com.mtbcraft.dto.Like_Status">
+		INSERT INTO LIKE_STATUS VALUES (#{ls_rider}, #{ls_rnum})
+	</insert>
+	
+	<!-- 코스 추천수 조회 -->
+	<select id="getRR_Like" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM LIKE_STATUS WHERE LS_RNUM=#{ls_rnum}
+	</select>
+	
+	<!-- 코스 추천 취소 -->
+	<delete id="deleteLS" parameterType="com.mtbcraft.dto.Like_Status">
+		DELETE FROM LIKE_STATUS WHERE LS_RNUM=#{ls_rnum} and LS_RIDER=#{ls_rider}
+	</delete>
 </mapper>
 

@@ -8,6 +8,8 @@
 <button onclick="goBoard()">클럽게시판</button>
 <input type="hidden" id="cb_manager" name="cb_manager">
 
+<button onclick="moveCalender()">클럽캘린더</button>
+
 <script>
 $(document).ready(function() {
 	//로그인 했을때만 로그인한 사용자아이디 가져옴
@@ -38,6 +40,14 @@ function goCreateClub() {
 		return;
 	}
 	location.href = "/community/club/create";
+}
+
+function moveCalender(){
+	if($("#userclub").val()==0) {
+		alert("클럽에 가입되어 있지 않습니다.");
+		return;
+	}
+	location.href="/community/club/calender";
 }
 
 </script>

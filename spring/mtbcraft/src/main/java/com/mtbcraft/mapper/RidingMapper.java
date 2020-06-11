@@ -5,7 +5,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.RidingRecord;
 
 @Repository("com.mtbcraft.mapper.RidingMapper")
@@ -25,6 +27,9 @@ public interface RidingMapper {
 	//라이딩 기록 공개/비공개 전환
 	public void updateRidingRecord(@Param("rr_num")int rr_num, @Param("rr_open") int rr_open) throws Exception;
 	
+	//라이딩 기록 이름 변경
+	public void updateRidingRecordName(@Param("rr_num") int rr_num, @Param("rr_name") String rr_name) throws Exception;
+		
 	//등록된 위험 지역 조회
 	public List<DangerousArea> getDangerousArea() throws Exception;
 	
@@ -39,9 +44,6 @@ public interface RidingMapper {
 	public List<RidingRecord> getCourses() throws Exception;
 	
 	//사용자 스크랩 코스 조회
-<<<<<<< HEAD
-	public List<Course> getScrapCourse(String rr_rider) throws Exception;
-=======
 	public List<RidingRecord> getScrapCourse(String rr_rider) throws Exception;
 	
 	// 사용자 스크랩 코스 추가
@@ -61,9 +63,13 @@ public interface RidingMapper {
 	
 	//리뷰 수정
 	public void updateCourseReview(@Param("cr_num") int cr_num, @Param("cr_content") String cr_content) throws Exception;
+	
+	//코스 추천
+	public void postLS(Like_Status ls);
+	
+	//코스 추천수 조회
+	public int getRR_Like(int rr_num);
 
-<<<<<<< HEAD
->>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
-=======
->>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
+	//코스 추천 취소
+	public void deleteLS(Like_Status ls);
 }

@@ -48,23 +48,27 @@ public class MemberController {
 	// 일반회원가입 처리
 	@RequestMapping(value = "/member/general_join", method = RequestMethod.POST)
 	public String joinPOST(HttpServletRequest request, @RequestParam("userphoto") MultipartFile profile) throws Exception{
-		
-		//파일명
-        String originalFile = profile.getOriginalFilename();
-        //파일명 중 확장자만 추출                                                //lastIndexOf(".") - 뒤에 있는 . 의 index번호
-        String originalFileExtension = originalFile.substring(originalFile.lastIndexOf("."));
-        //업무에서 사용하는 리눅스, UNIX는 한글지원이 안 되는 운영체제 
-        //파일업로드시 파일명은 ASCII코드로 저장되므로, 한글명으로 저장 필요
-        //UUID클래스 - (특수문자를 포함한)문자를 랜덤으로 생성                    "-"라면 생략으로 대체
-        String storedFileName = UUID.randomUUID().toString().replaceAll("-", "") + originalFileExtension;
-        String filePath =  request.getSession().getServletContext().getRealPath("/upload");
-        //파일을 저장하기 위한 파일 객체 생성
-        File file = new File(filePath + storedFileName);
-        
-        //파일 저장
-        profile.transferTo(file);
-        
 		Member member  = new Member();
+		
+		if( !profile.isEmpty() ) {
+			//파일명
+	        String originalFile = profile.getOriginalFilename();
+	        //파일명 중 확장자만 추출                                                //lastIndexOf(".") - 뒤에 있는 . 의 index번호
+	        String originalFileExtension = originalFile.substring(originalFile.lastIndexOf("."));
+	        //업무에서 사용하는 리눅스, UNIX는 한글지원이 안 되는 운영체제 
+	        //파일업로드시 파일명은 ASCII코드로 저장되므로, 한글명으로 저장 필요
+	        //UUID클래스 - (특수문자를 포함한)문자를 랜덤으로 생성                    "-"라면 생략으로 대체
+	        String storedFileName = UUID.randomUUID().toString().replaceAll("-", "") + originalFileExtension;
+	        String filePath =  request.getSession().getServletContext().getRealPath("/upload");
+	        //파일을 저장하기 위한 파일 객체 생성
+	        File file = new File(filePath + storedFileName);
+	        
+	        //파일 저장
+	        profile.transferTo(file);
+	        
+	        member.setR_image(originalFile);
+		}
+		
 		member.setR_id(request.getParameter("userid"));
 		member.setR_pw(request.getParameter("userpw"));
 		member.setR_name(request.getParameter("username"));
@@ -72,11 +76,11 @@ public class MemberController {
 		member.setR_birth(request.getParameter("userbirth"));
 		member.setR_phone(request.getParameter("userphone"));
 		member.setR_gender(request.getParameter("usergender"));
-		member.setR_image(originalFile);
 		member.setR_addr(request.getParameter("useraddr"));
 		member.setR_addr2(request.getParameter("useraddr2"));
 		member.setR_type(request.getParameter("usertype"));
 	
+		memberService.memberInsert(member);
 		return "redirect:/";
 	}
 

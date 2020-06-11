@@ -3,12 +3,16 @@ package com.mtbcraft.service;
 import java.util.List;
 
 import javax.annotation.Resource;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.mapper.RidingMapper;
 
@@ -44,6 +48,11 @@ public class RidingService {
 		ridingMapper.updateRidingRecord(rr_num, rr_open);
 	}
 	
+	//라이딩 기록 이름 변경
+	public void updateRidingRecordName(int rr_num, String rr_name) throws Exception{
+		ridingMapper.updateRidingRecordName(rr_num, rr_name);
+	}
+	
 	//등록된 위험지역 조회
 	public List<DangerousArea> getDangerousArea() throws Exception{
 		return ridingMapper.getDangerousArea();
@@ -65,11 +74,9 @@ public class RidingService {
 	}
 	
 	//코스스크랩 조회
-	public List<Course> getScrapCourse(String rr_rider) throws Exception{
+	public List<RidingRecord> getScrapCourse(String rr_rider) throws Exception{
 		return ridingMapper.getScrapCourse(rr_rider);
 	}
-<<<<<<< HEAD
-=======
 	
 	// 사용자 스크랩 코스 추가
 	public void postScrapCourse(@Param("ss_rider") String ss_rider, @Param("ss_rnum") int ss_rnum) {
@@ -100,8 +107,19 @@ public class RidingService {
 	public void updateCourseReview(int cr_num, String cr_content) throws Exception{
 		ridingMapper.updateCourseReview(cr_num, cr_content);
 	}
-<<<<<<< HEAD
->>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
-=======
->>>>>>> parent of 3b60609... 웹_ 코스 추천 기능 추가
+	
+	//코스 추천
+	public void postLS(Like_Status ls) {
+		ridingMapper.postLS(ls);
+	}
+	
+	//코스 추천수 조회
+	public int getRR_Like(int rr_num) {
+		return ridingMapper.getRR_Like(rr_num);
+	}
+
+	// 코스 추천 취소
+	public void deleteLS(Like_Status ls) {
+		ridingMapper.deleteLS(ls);
+	}
 }
