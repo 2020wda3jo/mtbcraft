@@ -1,5 +1,6 @@
 package com.mtbcraft.Activity.Course;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -40,11 +41,11 @@ public class CourseList extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     ArrayList<RidingRecord> arrlist = new ArrayList<>();
     RecyclerView recyclerView;
-    SharedPreferences auto;
+
     String LoginId;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_courselist);
+        setContentView(R.layout.courselist);
         recyclerView= findViewById(R.id.recyclerView);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,6 +53,9 @@ public class CourseList extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        RidingRecord rrr = new RidingRecord();
+        Intent intent = new Intent(this.getIntent());
+        rrr.setLoginId(intent.getStringExtra("rider_id")); ;
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -151,7 +155,6 @@ public class CourseList extends AppCompatActivity {
                 for(RidingRecord item: items){
                     itemList.add(item);
                 }
-
                 CourseAdapter adapter = new CourseAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);

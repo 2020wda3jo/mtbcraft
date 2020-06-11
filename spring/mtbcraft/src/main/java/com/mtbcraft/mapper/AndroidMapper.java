@@ -10,6 +10,7 @@ import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
@@ -63,4 +64,9 @@ public interface AndroidMapper {
 	public List<CompClub> getCompClub(int cs_comp) throws Exception;
 
 	public String RidingOpenSet(RidingRecord record) throws Exception;
+
+	public List<Course> delScrap(String ss_rnum) throws Exception;
+
+	//좋아요
+	public String likeput(Like_Status likestatus) throws Exception;
 }

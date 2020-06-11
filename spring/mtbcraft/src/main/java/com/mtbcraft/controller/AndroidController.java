@@ -38,6 +38,7 @@ import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Gpx;
+import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
@@ -224,7 +225,24 @@ public class AndroidController {
 			@PathVariable(value = "ss_course") String ss_course) throws Exception {
 		return androidService.getScrapDetail(rr_rider, ss_course);
 	}
+	
+	//스크랩 삭제
+	@RequestMapping(value = "/app/riding/scrap/{ss_rnum}", method = RequestMethod.GET)
+	public @ResponseBody List<Course> delScrap(@PathVariable(value = "ss_rnum") String ss_rnum) throws Exception {
+		return androidService.delScrap(ss_rnum);
+	}
 
+	//좋아요
+	@RequestMapping(value = "/app/riding/course/like", method = RequestMethod.POST)
+	public @ResponseBody  Map<String, String> likeput(HttpServletRequest request) throws Exception {
+
+
+		System.out.println(request.getParameter("ls_rider") + " " +request.getParameter("ls_rnum"));
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("Status", "Ok");
+
+		return result;
+	}
 	// 파일 다운로드
 	@RequestMapping(value = "/app/getGPX/{file_dir}/{file_name}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName, @PathVariable("file_dir") String fileDir ) throws IOException {

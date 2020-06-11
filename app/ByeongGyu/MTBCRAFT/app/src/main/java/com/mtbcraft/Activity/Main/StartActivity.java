@@ -66,14 +66,15 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     TextView reststatus, nowspeed, avgspeed, maxspeed, godo, dis, timeView, getGodo, resttime, courseinfo;
 
     Thread timeThread = null;
-    LinearLayout layout, layout2, layout3, layout4, layout5, layout6, layout7, layout8, m_status, layout9, layout10, map_view;
+    LinearLayout layout, layout2, layout3, layout4, layout5, layout6, layout7, layout8, m_status, layout9, layout10, map_layout;
 
     //각종 변수
-    double latitude, lonngitude, getgodo, getSpeed=0, hap = 0, getgodoval = 0, intime=0, avg=0, maX=0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
+    double latitude, lonngitude, getgodo, getSpeed=0, hap = 0, getgodoval = 0, intime=0, avg=0, maX=0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000, total_time;
     int cnt=0, restcnt = 0;
     ArrayList<Double> witch_lat = new ArrayList<>();
     ArrayList<Double> witch_lon = new ArrayList<>();
     ArrayList<Double> ele = new ArrayList<>();
+    ArrayList<Float> godoArray = new ArrayList<>();
 
     //휴식시간 계산
     int hour, min, sec;
@@ -84,7 +85,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mainstart);
+        setContentView(R.layout.riding_start);
 
         // ...
 
@@ -137,7 +138,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         layout9 = (LinearLayout)findViewById(R.id.statuslayout4);
         layout10 = (LinearLayout)findViewById(R.id.statusvaluelayout5);
         m_status = (LinearLayout) findViewById(R.id.m_status);
-
+        map_layout = (LinearLayout) findViewById(R.id.map_layout);
         layout.setVisibility(View.INVISIBLE);
         layout2.setVisibility(View.INVISIBLE);
         layout3.setVisibility(View.INVISIBLE);
@@ -187,8 +188,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
                 alert.show();
 
             }else{
-
-                Intent intent = new Intent(StartActivity.this, endActivity.class);
+            Intent intent = new Intent(StartActivity.this, endActivity.class);
             intent.putExtra("cha_dis",cha_dis); //이동거리(소수점X)
             intent.putExtra("cha_max",cha_max); //최대속도(소수점X)
             intent.putExtra("cha_avg",cha_avg); //평균속도(소수점X)
@@ -203,6 +203,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
             intent.putExtra("restsectime",String.valueOf(m_rest.getText())); //휴식시간(초)
             intent.putExtra("witch_lat", witch_lat); //위도
             intent.putExtra("witch_lon", witch_lon); //경도
+            intent.putExtra("godoarray", godoArray);
             intent.putExtra("ele", ele); //고도
             intent.putExtra("maxLat", maxLat); //최대위도
             intent.putExtra("minLat", minLat); //최소위도
@@ -223,14 +224,14 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (lastKnownLocation != null) {
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000,10, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,10, this);
     }
 
 
     private void changeView(int index) {
         switch (index) {
             case 0 :
-                map_view.setVisibility(View.VISIBLE);
+                map_layout.setVisibility(View.VISIBLE);
                 m_status.setVisibility(View.VISIBLE);
                 m_time.setVisibility(View.VISIBLE);
                 layout.setVisibility(View.INVISIBLE);
@@ -244,7 +245,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
                 layout9.setVisibility(View.INVISIBLE);
                 break ;
             case 1 :
-                map_view.setVisibility(View.GONE);
+                map_layout.setVisibility(View.GONE);
                 m_status.setVisibility(View.INVISIBLE);
                 m_time.setVisibility(View.INVISIBLE);
                 layout.setVisibility(View.VISIBLE);
@@ -273,6 +274,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
 
             @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
             @SuppressLint("DefaultLocale") String result2 =  String.format("%02d",sectotal);
+            total_time = Double.parseDouble(result2);
             timeView.setText(result); //현재시간
             m_time.setText(result); //현재시간(상단뷰)
             m_t.setText(result2); //초만표시
@@ -330,6 +332,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         // 위도 경도 정보 배열 저장
         witch_lat.add(latitude);
         witch_lon.add(lonngitude);
+        godoArray.add((float) location.getAltitude());
 
         // 최대 최소 위도 경도 계산
         if ( maxLat <  latitude ) maxLat =  latitude;
@@ -343,12 +346,23 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         //km당 알림주는거
 
         //현재속도
-        getSpeed = Double.parseDouble(String.format("%.1f", location.getSpeed()));
+        getSpeed = Double.parseDouble(String.format("%.1f", location.getSpeed() * 3600 / 1000));
         nowspeed.setText(String.format("%.1f", getSpeed));  //Get Speed
         m_speed.setText(String.format("%.1f", getSpeed)+"km/h");
 
-        Log.i("onchange",location.getLatitude() + "  "+location.getLongitude());
-        // 위치 변경이 두번째로 변경된 경우 계산에 의해 속도 계산
+        //만약 속도가 0.1미만이라면 휴식시간이 늘어남(뭔가 이상함)
+        if(getSpeed < 0.0){
+            restcnt = restcnt + 1;
+            reststatus.setText("일시정지");
+            sec=restcnt;
+            min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
+            resttime.setText(String.valueOf(hour+":"+min+":"+sec));
+            m_rest.setText(String.valueOf(restcnt));
+        }else{ //그게 아니면 경과시간이 늘어남
+            intime = intime+1;
+            reststatus.setText("열심히^^");
+        }
+
         if(mLastlocation != null) {
             /*폴리라인 그리기 */
             PathOverlay path = new PathOverlay();
@@ -359,26 +373,13 @@ public class StartActivity extends AppCompatActivity implements LocationListener
             path.setMap(map);
             path.setWidth(30);
             path.setColor(Color.RED);
-            Log.i("onchange",mLastlocation.getLatitude() + "  "+mLastlocation.getLongitude());
             //최대속도(5.12 값 틀림)
             if(getSpeed > maX){
                 maX = getSpeed;
                 maxspeed.setText(String.format("%.1f", maX));
                 cha_max = String.format("%.0f", maX);
             }
-            //만약 속도가 0.1미만이라면 휴식시간이 늘어남(뭔가 이상함)
-            if(getSpeed < 0.1){
-                restcnt = restcnt + 1;
-                reststatus.setText("일시정지");
-                sec=restcnt;
-                min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
-                resttime.setText(String.valueOf(hour+":"+min+":"+sec));
-                m_rest.setText(String.valueOf(restcnt));
-            }else{ //그게 아니면 경과시간이 늘어남
-                intime = intime+1;
-                reststatus.setText("열심히^^");
-            }
-            ;
+
 
             //이동거리
             hap = hap+mLastlocation.distanceTo(location);
@@ -388,7 +389,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
             dis.setText(String.format("%.2f",hap));
 
             //평균속도
-            avg= hap/cnt;
+            avg= hap/total_time;
             avgspeed.setText(String.format("%.1f", Double.parseDouble(String.valueOf(avg))));
             cha_avg = String.format("%.0f", (avg));
 

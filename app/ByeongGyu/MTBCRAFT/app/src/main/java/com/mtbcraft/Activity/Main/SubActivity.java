@@ -32,20 +32,6 @@ public class SubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submain);
 
-        /*이건 그냥 업데이트 기록 다이얼로그 창 */
-        // 다이얼로그 바디
-        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
-        // 메세지
-        alert_confirm.setMessage("문제 및 수정예정 : \n - 라이딩 시작시 현재속도 불일치 \n  - 단위계산 \n- 웹서버 통신 클래스\n - 레이아웃 정리(폰크기마다 차이 \n - 로그인 방식?  \n - IP서버로 변환중");
-        // 확인 버튼 리스너
-        alert_confirm.setPositiveButton("확인", null);
-        // 다이얼로그 생성
-        AlertDialog alert = alert_confirm.create();
-        // 다이얼로그 타이틀
-        alert.setTitle("업데이트 로그");
-        // 다이얼로그 보기
-        alert.show();
-
         /* 로그인 정보 가져오기 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String LoginId = auto.getString("LoginId","");
@@ -79,6 +65,7 @@ public class SubActivity extends AppCompatActivity {
                 //코스보기
                 case R.id.nav_courselist:
                     Intent courselist=new Intent(SubActivity.this, CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색

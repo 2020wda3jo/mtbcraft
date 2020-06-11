@@ -14,6 +14,7 @@ import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
@@ -99,6 +100,13 @@ public class AndroidService {
 	
 	public List<CompClub> getCompClub(int cs_comp) throws Exception {
 		return androidMapper.getCompClub(cs_comp);
+	}
+	public List<Course> delScrap(String ss_rnum) throws Exception {
+		return androidMapper.delScrap(ss_rnum);
+	}
+	public String likeput(Like_Status likestatus) throws Exception {
+		return androidMapper.likeput(likestatus);
+		
 	}
 	
 }

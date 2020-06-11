@@ -1,7 +1,12 @@
 package com.mtbcraft.Recycler.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.R;
 import com.mtbcraft.Activity.Course.CourseDetail;
+import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Activity.Main.endActivity;
 import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.network.HttpClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
 
     public Context mContext;
@@ -29,13 +40,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
     @NonNull
     @Override
     public CourseHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_couseitem , viewGroup,false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_item , viewGroup,false);
 
         return new CourseHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final CourseHolder testViewHolder, final int position) {
+
         int hour;
         int min;
         int sec;
@@ -61,8 +73,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         testViewHolder.c_avg.setText(String.valueOf(itemList.get(position).getRr_avgspeed())+"km");
         testViewHolder.c_getgodo.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
         testViewHolder.c_dis.setText(total);
+        testViewHolder.c_date.setText(itemList.get(position).getRr_date());
+        testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
        // testViewHolder.mapView();
-
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
             Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
@@ -77,9 +90,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
 
         });
     }
-
-
-
     @Override
     public int getItemCount() {
         return itemList.size();

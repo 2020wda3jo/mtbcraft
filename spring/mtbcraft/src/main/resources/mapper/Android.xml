@@ -61,16 +61,28 @@
 		#{ss_rider},
 		#{ss_rnum} )
 	</select>
+	<!-- 좋아요 -->
+	<select id="likeput" parameterType="com.mtbcraft.dto.Like_Status">
+		insert into like_status
+		(ls_rider, ls_rnum) values (
+		#{ls_rider},
+		#{ls_rnum} )
+	</select>
 	
 	<!-- 내 스크립 리스트 -->
-	<select id="getScrap" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
-		select ss_rider, ss_rnum, rr_distance, rr_area from riding_record INNER JOIN
+	<select id="getScrap" parameterType="Map" resultType="com.mtbcraft.dto.Scrap_Status">
+select ss_rider, rr_rider, rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, rr_time, rr_area, rr_gpx from riding_record INNER JOIN
 		scrap_status ON(scrap_status.ss_rnum = riding_record.rr_num and scrap_status.SS_RIDER=#{ss_rider})
 	</select>
 	
 	<!--  내 스크랩 코스 보기 -->
 	<select id="getScrapDetail" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
 		select * from riding_record where rr_num = #{ss_rnum}
+	</select>
+	
+	<!-- 스크랩 코스 삭제 -->
+	<select id="delScrap" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
+		delete from scrap_status where ss_rnum = #{ss_rnum}
 	</select>
 	
 	<!-- 주행기록전체보기 -->

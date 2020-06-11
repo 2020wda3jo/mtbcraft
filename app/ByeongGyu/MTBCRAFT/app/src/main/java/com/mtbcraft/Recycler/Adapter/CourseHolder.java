@@ -16,8 +16,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class CourseHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
 
-    public TextView c_rider_name, c_name, c_time, c_avg, c_getgodo, c_dis;
-    public ImageView imageView;
+    public TextView c_rider_name, c_name, c_time, c_avg, c_getgodo, c_dis, c_date, like_count;
+    public ImageView likebt;
     public LinearLayout viewClick;
     public View mView;
     public GoogleMap map;
@@ -34,7 +34,10 @@ public class CourseHolder extends RecyclerView.ViewHolder implements OnMapReadyC
         c_avg = itemView.findViewById(R.id.c_avg);
         c_getgodo = itemView.findViewById(R.id.c_getgodo);
         c_dis = itemView.findViewById(R.id.c_dis);
-        imageView = itemView.findViewById(R.id.imageView);
+        c_date = itemView.findViewById(R.id.c_date);
+       // imageView = itemView.findViewById(R.id.imageView);
+        likebt = itemView.findViewById(R.id.likeimg);
+        like_count = itemView.findViewById(R.id.like_count);
         viewClick = itemView.findViewById(R.id.viewClick);
         mapView = itemView.findViewById(R.id.map);
 
