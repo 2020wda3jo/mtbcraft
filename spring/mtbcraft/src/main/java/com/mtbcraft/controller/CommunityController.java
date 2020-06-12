@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,8 +52,8 @@ public class CommunityController {
 	public String clubcreate(Club club, MultipartFile uploadfile) throws Exception {
 	
 		String filename = uploadfile.getOriginalFilename();
-		//String directory = "/home/ec2-user/data/club"; // 서버
-		String directory = "C:\\ServerFiles"; // 로컬
+		String directory = "/home/ec2-user/data/club"; // 서버
+		//String directory = "C:\\ServerFiles"; // 로컬
 		String filepath = Paths.get(directory, filename).toString();
 		
 		club.setCb_image(filename);
@@ -86,18 +87,25 @@ public class CommunityController {
 		}
 	}
 
-	// 커뮤니티 클럽 가입
+	// 커뮤니티 클럽 가입 페이지
 	@RequestMapping(value = "/community/club/join", method = RequestMethod.GET)
-	public String clubjoin() {
-		return "community/club/join";
+	public String moveClubBoard(Club cb_num, Model model) {
+		List<Club> list = communityService.getClub(cb_num);
+		model.addAttribute("list", list);
+		model.addAttribute("cb_num", cb_num); // 클럽 번호 전달
+		return "/community/club/join";
 	}
 
 	// 커뮤니티 클럽 가입
-	@RequestMapping(value = "/community/club/join", method = RequestMethod.POST)
-	public String clubjoinpost() {
-		return "community/club/join";
+	@RequestMapping(value = "/join/decision/{cb_num}/{cj_rider}", method = RequestMethod.GET)
+	public String clubSignUp(@PathVariable int cb_num, @PathVariable String cj_rider) throws Exception {
+		Club_Join cj = new Club_Join();
+		cj.setCj_club(cb_num);
+		cj.setCj_rider(cj_rider);
+		communityService.signClub(cj);
+		return "/community/club/success";
 	}
-
+	
 	// 클럽 게시판
 	@RequestMapping(value = "/community/club/clubboard", method = RequestMethod.GET)
 	public String clubboard() {

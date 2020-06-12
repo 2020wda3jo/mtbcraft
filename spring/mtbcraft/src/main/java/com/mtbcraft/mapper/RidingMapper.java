@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.RidingRecord;
 
 @Repository("com.mtbcraft.mapper.RidingMapper")
@@ -63,4 +64,12 @@ public interface RidingMapper {
 	//리뷰 수정
 	public void updateCourseReview(@Param("cr_num") int cr_num, @Param("cr_content") String cr_content) throws Exception;
 
+	//코스 추천
+	public void postLS(Like_Status ls);
+	
+	//코스 추천수 조회
+	public int getRR_Like(int rr_num);
+
+	//코스 추천 취소
+	public void deleteLS(Like_Status ls);
 }
