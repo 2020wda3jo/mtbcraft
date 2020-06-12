@@ -37,5 +37,17 @@
 	<delete id="deleteCC" parameterType="int">
 		DELETE FROM CLUB_CALENDER WHERE CC_NUM=#{cc_num}
 	</delete>
+	
+	<select id="getMember" parameterType="int" resultType="com.mtbcraft.dto.Club">
+		select * from club order by cb_num where cb_num=#{cb_num}
+	</select>
+	
+	<select id="getClub" parameterType="String" resultType="com.mtbcraft.dto.Club">
+		select * from club order by cb_num
+	</select>	
+	
+	<insert id="signClub" parameterType="com.mtbcraft.dto.Club_Join">
+		insert into club_join(cj_rider, cj_club, cj_join, cj_num) values(#{cj_rider}, #{cj_club}, (SYSDATE+9/24), SEQ_JOIN.nextval)
+	</insert>
 </mapper>
 

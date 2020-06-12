@@ -30,8 +30,8 @@ public class BoardController {
 
 		String filename = uploadfile.getOriginalFilename();
 
-		// String directory = "/home/ec2-user/data/club";
-		String directory = "C:\\ServerFiles";
+		String directory = "/home/ec2-user/data/club";
+		//String directory = "C:\\ServerFiles";
 		String filepath = Paths.get(directory, filename).toString();
 
 		board.setB_file(filename);
