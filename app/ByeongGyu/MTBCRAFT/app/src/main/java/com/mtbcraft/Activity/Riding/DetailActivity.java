@@ -66,7 +66,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mydetail);
+        setContentView(R.layout.myreport_detail);
 
 
         mapView = new MapView(this);

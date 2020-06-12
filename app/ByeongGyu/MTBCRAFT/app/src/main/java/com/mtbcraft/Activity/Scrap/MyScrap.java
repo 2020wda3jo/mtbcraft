@@ -39,7 +39,7 @@ public class MyScrap extends AppCompatActivity  {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_myreport);
+        setContentView(R.layout.myreport);
         recyclerView= findViewById(R.id.recyclerView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

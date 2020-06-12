@@ -50,7 +50,7 @@ public class MemberController {
 	public String joinPOST(HttpServletRequest request, @RequestParam("userphoto") MultipartFile profile) throws Exception{
 		Member member  = new Member();
 		
-		String path = "/home/ec2-user/data/gpx";
+		String path = "/home/ec2-user/data/rider";
 		String fileName = "";
 
 		if (!profile.isEmpty()) { // 첨부파일이 존재?

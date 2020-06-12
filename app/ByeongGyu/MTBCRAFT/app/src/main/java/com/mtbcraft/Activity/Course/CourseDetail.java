@@ -66,7 +66,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coursedetail);
+        setContentView(R.layout.coursedetail);
 
         mapView = new MapView(CourseDetail.this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);

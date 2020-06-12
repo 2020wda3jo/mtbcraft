@@ -101,7 +101,7 @@ public class FollowStart extends AppCompatActivity implements
     String cha_dis="", cha_max="", cha_avg="";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flow);
+        setContentView(R.layout.flow);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분");
         Date time = new Date();
