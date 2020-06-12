@@ -41,8 +41,18 @@
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
-        </LinearLayout>
 
+        </LinearLayout>
+        <TextView
+            android:id="@+id/c_date"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="C DATE"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginLeft="5dp"/>
         <GridLayout
             android:verticalSpacing="30dp"
             android:layout_gravity="right"
@@ -154,16 +164,6 @@
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:layout_marginLeft="5dp"/>
-            <TextView
-                android:id="@+id/c_date"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:text="C DATE"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:layout_marginLeft="5dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -190,9 +190,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_weight="1"
-
-                app:srcCompat="@drawable/unlike" />
-
+                app:srcCompat="@drawable/like_bt" />
             <TextView
                 android:id="@+id/like_count"
                 android:layout_width="match_parent"
@@ -200,10 +198,6 @@
                 android:layout_weight="1"
                 android:text="TextView" />
         </LinearLayout>
-
-
-
-
     </LinearLayout>
 
 

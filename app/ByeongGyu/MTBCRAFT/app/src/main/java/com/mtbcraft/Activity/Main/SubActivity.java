@@ -27,6 +27,7 @@ import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 
 public class SubActivity extends AppCompatActivity {
+    TextView hello_user;
     private DrawerLayout mDrawerLayout;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,8 @@ public class SubActivity extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(LoginId+"환영합니다");
+        hello_user = (TextView) findViewById(R.id.hello_user);
+        hello_user.setText(LoginId+"님 안녕하세요");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();

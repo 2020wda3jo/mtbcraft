@@ -55,8 +55,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CourseDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
-    String c_num, gpx, c_name;
-    TextView textView1, textView2, textView3, det_title;
+    String c_num, course_name, gpx;
+    TextView c_rider_name, c_name, c_date, c_addr, c_dis, c_avg, c_getgodo, like_count;
     Button button,button2;
     int Sta;
     private DrawerLayout mDrawerLayout;
@@ -67,6 +67,25 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.coursedetail);
+
+        c_rider_name = (TextView)findViewById(R.id.c_rider_name);
+        c_name = (TextView)findViewById(R.id.c_name );
+        c_date = (TextView)findViewById(R.id.c_date );
+        c_addr = (TextView)findViewById(R.id.c_addr);
+        c_dis = (TextView)findViewById(R.id.c_dis);
+        c_avg = (TextView)findViewById(R.id.c_avg);
+        c_getgodo = (TextView)findViewById(R.id.c_getgodo);
+        like_count = (TextView)findViewById(R.id.like_count);
+
+        button = (Button)findViewById(R.id.scrap_bt);
+        button2 = (Button)findViewById(R.id.follow_bt);
+
+        Intent intent = new Intent(this.getIntent());
+
+        c_num = intent.getStringExtra("c_num");
+        gpx = intent.getStringExtra("c_gpx");
+        course_name = intent.getStringExtra("c_name");
+
 
         mapView = new MapView(CourseDetail.this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
@@ -137,16 +156,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             return true;
         });
 
-        textView1 = (TextView)findViewById(R.id.course_add);
-        textView2 = (TextView)findViewById(R.id.course_dis );
-        textView3 = (TextView)findViewById(R.id.course_level );
-        det_title = (TextView)findViewById(R.id.deta_title);
-        button = (Button)findViewById(R.id.scrap_bt);
-        button2 = (Button)findViewById(R.id.follow_bt);
-        Intent intent = new Intent(this.getIntent());
-        c_num = intent.getStringExtra("c_num");
-        gpx = intent.getStringExtra("c_gpx");
-        c_name = intent.getStringExtra("c_name");
+
 
 
         MapPolyline polyline = new MapPolyline();
@@ -226,7 +236,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         button2.setOnClickListener(v->{
             Intent intent2=new Intent(CourseDetail.this, FollowStart.class);
             intent2.putExtra("gpx",gpx);
-            intent2.putExtra("c_name",c_name);
+            intent2.putExtra("c_name",course_name);
             startActivity(intent2);
 
             finish();
@@ -307,24 +317,33 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
                     //json값을 받기위한 변수들
 
-                    String c_distance = "";
-                    String c_area = "";
-                    String c_title="";
-                    String c_avg="";
 
+                    String dis = "";
+                    String addr = "";
+                    String name = "";
+                    String avg = "";
+                    String godo="";
+                    String like="";
+                    String date = "";
                     JSONArray jarray = new JSONArray(tempData);
                     for (int i = 0; i < jarray.length(); i++) {
                         JSONObject jObject = jarray.getJSONObject(i);
-                        c_distance = jObject.getString("rr_distance");
-                        c_area = jObject.getString("rr_area");
-                        c_title = jObject.getString("rr_name");
-                        c_avg = jObject.getString("rr_avgspeed");
+                        dis = jObject.getString("rr_distance");
+                        addr = jObject.getString("rr_area");
+                        name = jObject.getString("rr_name");
+                        avg = jObject.getString("rr_avgspeed");
+                        godo = jObject.getString("rr_high");
+                        date = jObject.getString("rr_date");
+                        like = jObject.getString("rr_like");
                     }
+                    c_name.setText(name);
+                    c_date.setText(date);
+                    c_addr.setText(addr);
+                    c_dis.setText(dis);
+                    c_avg.setText(avg);
+                    c_getgodo.setText(godo);
+                    like_count.setText(like);
 
-                    textView1.setText(c_area);
-                    textView2.setText(c_distance);
-                    textView3.setText(c_avg);
-                    det_title.setText(c_title);
                 } catch (Exception e) {
                     e.printStackTrace();
 
