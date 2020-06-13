@@ -110,4 +110,8 @@ select ss_rider, rr_rider, rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, 
 	<select id="getCompClub" parameterType="Integer" resultType="com.mtbcraft.dto.CompClub">
 		select cs_club, cs_score, cb_name, cb_image from competition_status, club where cs_club = cb_num and cs_comp = #{cs_comp} order by cs_score desc
 	</select>
+	
+	<select id="getDanger" parameterType="String" resultType="com.mtbcraft.dto.DangerousArea">
+		select * from DANGEROUS_AREA
+	</select>
 </mapper>

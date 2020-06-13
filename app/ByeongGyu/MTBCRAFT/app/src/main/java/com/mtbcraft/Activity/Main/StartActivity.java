@@ -7,38 +7,56 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.capston.mtbcraft.R;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 import com.mtbcraft.Activity.Course.CourseDetail;
+import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.network.HttpClient;
 
+import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapLayout;
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,14 +66,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class StartActivity extends AppCompatActivity implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
+public class StartActivity extends FragmentActivity
+        implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
 
+
+    private static final MapPoint CUSTOM_MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.537229, 127.005515);
+    private MapView mMapView;
+    private MapPOIItem mCustomMarker;
     private LocationManager locationManager;
-    MapView mapView;
     private Location mLastlocation = null;
     private Boolean isRunning = true;
 
-    /*레이아웃 관련*/
     //뷰에서 상단정보
     TextView m_speed, m_distance, m_time, m_t, m_rest;
 
@@ -65,7 +86,7 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     Thread timeThread = null;
     LinearLayout map_layout, speed_tap;
     GridLayout speed_pre;
-
+    String test, test2, test3;
     //각종 변수
     double latitude, lonngitude, getgodo, getSpeed = 0, hap = 0, getgodoval = 0, intime = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000, total_time;
     int cnt = 0, restcnt = 0;
@@ -81,25 +102,45 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     //형변환용변수
     String cha_dis = "", cha_max = "", cha_avg = "";
 
+    // CalloutBalloonAdapter 인터페이스 구현
+    class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
+        private final View mCalloutBalloon;
+
+        public CustomCalloutBalloonAdapter() {
+            mCalloutBalloon = getLayoutInflater().inflate(R.layout.custom_callout_balloon, null);
+        }
+
+        @Override
+        public View getCalloutBalloon(MapPOIItem poiItem) {
+            ((ImageView) mCalloutBalloon.findViewById(R.id.badge)).setImageResource(R.drawable.danger_icon);
+            ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
+            return mCalloutBalloon;
+        }
+
+        @Override
+        public View getPressedCalloutBalloon(MapPOIItem poiItem) {
+            return null;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.riding_start);
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분");
-        Date time = new Date();
-        String time2 = format.format(time);
-
-        //지도띄우기
-        mapView = new MapView(this);
+        // MapLayout mapLayout = new MapLayout(this);
+        mMapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
-        mapViewContainer.addView(mapView);
+        mapViewContainer.addView(mMapView);
+        mMapView.setCurrentLocationEventListener(this);
+        mMapView.setShowCurrentLocationMarker(true);
+        mMapView.setMapViewEventListener(this);
+        mMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
 
-        mapView.setCurrentLocationEventListener(this);
-        mapView.setShowCurrentLocationMarker(true);
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-
-        //뷰에서 상단에 위치
+        // 구현한 CalloutBalloonAdapter 등록
+        mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
+        //createCustomMarker(mMapView);
+//뷰에서 상단에 위치
         m_speed = (TextView) findViewById(R.id.m_speed); //현재속도
         m_distance = (TextView) findViewById(R.id.m_distance); //이동거리
         m_time = (TextView) findViewById(R.id.m_time); //라이딩 시간
@@ -200,17 +241,13 @@ public class StartActivity extends AppCompatActivity implements LocationListener
 
         //위험지역 가져오기
         try {
-            /*
+
             GetTask getTask = new GetTask();
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("c_num", c_num);
-            getTask.execute(params);*/
+            getTask.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
     private void changeView(int index) {
         switch (index) {
             case 0:
@@ -242,6 +279,61 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
     }
 
+    public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/riding/danger");
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                Log.d("JSON_RESULT", s);
+                String tempData = s;
+
+                String test = "";
+                String test2="";
+
+                JSONArray jarray = new JSONArray(tempData);
+                for (int i = 0; i < jarray.length(); i++) {
+                    JSONObject jObject = jarray.getJSONObject(i);
+                    test = jObject.getString("da_latitude");
+                    test2 = jObject.getString("da_longitude");
+                    test3 = jObject.getString("da_content");
+                    Log.d("위험지역", test + " " + test2 + test3);
+
+                    mCustomMarker = new MapPOIItem();
+                    String name = "Custom Marker";
+                    mCustomMarker.setItemName(test3);
+                    mCustomMarker.setTag(1);
+                    mCustomMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(test), Double.parseDouble(test2)));
+
+                    mCustomMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+
+                    mCustomMarker.setCustomImageResourceId(R.drawable.custom_marker_red);
+                    mCustomMarker.setCustomImageAutoscale(false);
+                    mCustomMarker.setCustomImageAnchor(0.5f, 1.0f);
+
+                    mMapView.addPOIItem(mCustomMarker);
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         @Override
@@ -261,42 +353,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
             m_t.setText(result2); //초만표시
         }
     };
-
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
-    @Override
-    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-
-    }
-
-    @Override
-    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-
-    }
-
-    @Override
-    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdateFailed(MapView mapView) {
-
-    }
-
-    @Override
-    public void onCurrentLocationUpdateCancelled(MapView mapView) {
-
-    }
 
     public class timeThread implements Runnable {
         @Override
@@ -327,6 +383,71 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         }
     }
 
+
+    @Override
+    public void onMapViewInitialized(MapView mapView) {
+
+    }
+
+
+    @Override
+    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+
+    }
+
+    @Override
+    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+
+    }
+
+    @Override
+    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
+        Toast.makeText(this, "Clicked " + mapPOIItem.getItemName() + " Callout Balloon", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
+
+    }
+
+    @Override
+    public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
+    }
     @Override
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
@@ -374,13 +495,13 @@ public class StartActivity extends AppCompatActivity implements LocationListener
         polyline.setLineColor(Color.argb(128,255,51,0));
 
         polyline.addPoint(MapPoint.mapPointWithGeoCoord(latitude,lonngitude));
-        mapView.addPolyline(polyline);
-        mapView.isShowingCurrentLocationMarker();
+        mMapView.addPolyline(polyline);
+        mMapView.isShowingCurrentLocationMarker();
 
         // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
         int padding = 50; // px
-        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,padding,2,3));
+        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,padding,2,3));
 
 
         if (mLastlocation != null) {
@@ -389,12 +510,12 @@ public class StartActivity extends AppCompatActivity implements LocationListener
             MapPolyline polyline2 = new MapPolyline();
             polyline.setLineColor(Color.argb(128,255,51,0));
             polyline.addPoint(MapPoint.mapPointWithGeoCoord(mLastlocation.getLatitude(),mLastlocation.getLongitude()));
-            mapView.addPolyline(polyline);
+            mMapView.addPolyline(polyline);
 
             // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
             MapPointBounds mapPointBounds2 = new MapPointBounds(polyline.getMapPoints());
             int padding2 = 50; // px
-            mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding,2,3));
+            mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding,2,3));
 
             if (getSpeed > maX) {
                 maX = getSpeed;
@@ -430,12 +551,6 @@ public class StartActivity extends AppCompatActivity implements LocationListener
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
@@ -461,22 +576,33 @@ public class StartActivity extends AppCompatActivity implements LocationListener
 
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
 
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
     }
 
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
+    }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
 
     }
 }

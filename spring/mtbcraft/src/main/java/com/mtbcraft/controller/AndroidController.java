@@ -37,6 +37,7 @@ import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Login;
@@ -320,6 +321,12 @@ public class AndroidController {
 	public String CourseSearch() throws Exception{
 		
 		return "/riding/Android_CourseSearch";
+	}
+	
+	//위험지역 마커
+	@RequestMapping("/app/riding/danger")
+	public @ResponseBody List<DangerousArea> RidingDanger() throws Exception {
+		return androidService.getDanger();
 	}
 
 }

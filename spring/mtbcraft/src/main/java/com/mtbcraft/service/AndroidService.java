@@ -14,6 +14,7 @@ import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.RidingRecord;
@@ -107,6 +108,10 @@ public class AndroidService {
 	public String likeput(Like_Status likestatus) throws Exception {
 		return androidMapper.likeput(likestatus);
 		
+	}
+	public List<DangerousArea> getDanger() throws Exception {
+		// TODO Auto-generated method stub
+		return androidMapper.getDanger();
 	}
 	
 }

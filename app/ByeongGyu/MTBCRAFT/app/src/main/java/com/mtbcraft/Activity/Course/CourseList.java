@@ -147,7 +147,6 @@ public class CourseList extends AppCompatActivity {
              Log.d("로그: ",s);
             try{
                 String tempData = s;
-
                 Gson gson = new Gson();
                 ArrayList<RidingRecord> itemList = new ArrayList<>();
                 RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
