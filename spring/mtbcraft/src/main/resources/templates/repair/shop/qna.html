@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header"></head>
+<h3>문의글 상세 페이지</h3>
+<form action="/repair/shop/qna" method="post">
+	<input type="hidden" name="qa_num" th:value="${qna.qa_num}">
+	<input type="hidden" name="qa_shop" th:value="${qna.qa_shop}">
+	<label>제목</label><input type="text" name="qa_title" th:value="${qna.qa_title}" readonly>
+	<br>
+	<label>작성자</label><input type="text" name="qa_rider" th:value="${qna.qa_rider}" readonly>
+	<br>
+	<label>작성일자</label><input type="text" name="shop_time" th:value="${qna.shop_time}" readonly>
+	<br>
+	<label>내용</label><br>
+	<textarea rows="6" cols="100" name="qa_content" th:text="${qna.qa_content}" readonly></textarea>
+	<br>
+	<label>답변</label><br>
+	<textarea rows="6" cols="100" name="qa_answer" th:text="${qna.qa_answer}"></textarea>
+	<br>
+	<button type="submit">답변하기</button><button type="button">돌아가기</button>
+</form>
+<footer th:replace="footer"></footer>

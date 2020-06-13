@@ -24,25 +24,25 @@ public class MemberController {
 	// 회원가입 종류 선택
 	@RequestMapping(value = "/member/join_select", method = RequestMethod.GET)
 	public String join_select() {
-		return "/member/join_select";
+		return "member/join_select";
 	}
 
 	// 일반회원가입
 	@RequestMapping("/member/general_join")
 	public String general_join() {
-		return "/member/general_join";
+		return "member/general_join";
 	}
 	
 	// 아이디 중복 체크
 		@RequestMapping(value = "/member/id_check", method = RequestMethod.POST)
 		public String idCheck(int result, String userid) {
-			return "/member/id_check";
+			return "member/id_check";
 		}
 
 		// 도로명 주소 찾기
 		@RequestMapping(value = "/member/address_find", method = RequestMethod.GET)
 		public String addressFind(int result) {
-			return "/member/address_find";
+			return "member/address_find";
 		}
 	
 	// 일반회원가입 처리
