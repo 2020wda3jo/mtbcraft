@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,11 +23,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.capston.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
-import com.mtbcraft.Activity.Competition.Competition;
+
+import com.mtbcraft.Activity.Competition.CompetitionList;
+import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.FollowStart;
 import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
+import com.mtbcraft.dto.Competition;
 import com.mtbcraft.gpxparser.GPXParser;
 import com.mtbcraft.gpxparser.Gpx;
 import com.mtbcraft.gpxparser.Track;
@@ -55,34 +59,114 @@ import java.util.List;
 import java.util.Map;
 
 public class CourseDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
-    String c_num, gpx;
-    TextView textView1, textView2, textView3;
+    String c_num, course_name, gpx;
+    TextView c_rider_name, c_name, c_date, c_addr, c_dis, c_avg, c_getgodo, like_count;
     Button button,button2;
     int Sta;
     private DrawerLayout mDrawerLayout;
     GPXParser mParser = new GPXParser();
     Gpx parsedGpx = null;
     MapView mapView;
+    String LoginId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coursedetail);
+        setContentView(R.layout.coursedetail);
 
-        mapView = new MapView(this);
+        c_rider_name = (TextView)findViewById(R.id.c_rider_name);
+        c_name = (TextView)findViewById(R.id.c_name );
+        c_date = (TextView)findViewById(R.id.c_date );
+        c_addr = (TextView)findViewById(R.id.c_addr);
+        c_dis = (TextView)findViewById(R.id.c_dis);
+        c_avg = (TextView)findViewById(R.id.c_avg);
+        c_getgodo = (TextView)findViewById(R.id.c_getgodo);
+        like_count = (TextView)findViewById(R.id.like_count);
+
+        button = (Button)findViewById(R.id.scrap_bt);
+        button2 = (Button)findViewById(R.id.follow_bt);
+
+        Intent intent = new Intent(this.getIntent());
+
+        c_num = intent.getStringExtra("c_num");
+        gpx = intent.getStringExtra("c_gpx");
+        course_name = intent.getStringExtra("c_name");
+
+
+        mapView = new MapView(CourseDetail.this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
         mapView.setCurrentLocationEventListener(this);
         mapView.isShowingCurrentLocationMarker();
 
+
+        /* 로그인 정보 가져오기 */
+        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        LoginId = auto.getString("LoginId","");
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View header = navigationView.getHeaderView(0);
+        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        InFoUserId.setText(LoginId+"님 환영합니다.");
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+
+            int id = menuItem.getItemId();
+            switch (id) {
+                //홈
+                case R.id.nav_home:
+                    Intent home=new Intent(getApplicationContext(), SubActivity.class);
+                    startActivity(home);
+                    break;
+                //라이딩 기록
+                case R.id.nav_mylist:
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    startActivity(mylist);
+                    break;
+                //코스보기
+                case R.id.nav_courselist:
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
+                    startActivity(courselist);
+                    break;
+                //코스검색
+                case R.id.nav_course_search:
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    startActivity(coursesearch);
+                    break;
+                //스크랩 보관함
+                case R.id.nav_course_get:
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    startActivity(courseget);
+                    break;
+                //경쟁전
+                case R.id.nav_comp:
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    startActivity(comp);
+                    break;
+                //미션
+                case R.id.nav_mission:
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    startActivity(mission);
+                    break;
+            }
+            return true;
+        });
+
+
+
+
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(255, 255, 51, 0)); // Polyline 컬러 지정.
-
-
-
-
-
 
         Thread uThread = new Thread() {
 
@@ -92,7 +176,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
                 try {
                     //서버에 올려둔 이미지 URL
-                    URL url = new URL("http://100.92.32.8/and.gpx");
+                    URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+gpx);
                     //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
                     /* URLConnection 생성자가 protected로 선언되어 있으므로
                      개발자가 직접 HttpURLConnection 객체 생성 불가 */
@@ -124,11 +208,10 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
                                 }
                             }
                         }
-
                         // Polyline 지도에 올리기.
                         mapView.addPolyline(polyline);
 
-// 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                        // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
                         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
                         int padding = 100; // px
                         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
@@ -146,76 +229,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         };
         uThread.start(); // 작업 Thread 실행
 
-        /* 로그인관련 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId","");
-        Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
-
-        /*네비게이션 바 */
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
-            menuItem.setChecked(true);
-            mDrawerLayout.closeDrawers();
-
-            int id = menuItem.getItemId();
-            switch (id) {
-                //홈
-                case R.id.nav_home:
-                    Intent home=new Intent(CourseDetail.this, MyReport.class);
-                    startActivity(home);
-                    break;
-                //라이딩 기록
-                case R.id.nav_mylist:
-                    Intent mylist=new Intent(CourseDetail.this, MyReport.class);
-                    startActivity(mylist);
-                    break;
-                //코스보기
-                case R.id.nav_courselist:
-                    Intent courselist=new Intent(CourseDetail.this, CourseList.class);
-                    startActivity(courselist);
-                    finish();
-                    break;
-                //코스검색
-                case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(CourseDetail.this, CourseSearch.class);
-                    startActivity(coursesearch);
-                    //스크랩 보관함
-                case R.id.nav_course_get:
-                    Intent courseget=new Intent(CourseDetail.this, MyScrap.class);
-                    startActivity(courseget);
-                    break;
-                //경쟁전
-                case R.id.nav_comp:
-                    Intent comp=new Intent(CourseDetail.this, Competition.class);
-                    startActivity(comp);
-                    break;
-                //미션
-                case R.id.nav_mission:
-                    Intent mission=new Intent(CourseDetail.this, Mission.class);
-                    startActivity(mission);
-                    break;
-            }
-            return true;
-        });
-
-        textView1 = (TextView)findViewById(R.id.course_add);
-        textView2 = (TextView)findViewById(R.id.course_dis );
-        textView3 = (TextView)findViewById(R.id.course_level );
-        button = (Button)findViewById(R.id.scrap_bt);
-        button2 = (Button)findViewById(R.id.follow_bt);
-        Intent intent = new Intent(this.getIntent());
-        c_num = intent.getStringExtra("c_num");
-        gpx = intent.getStringExtra("c_gpx");
-
         button.setOnClickListener(v -> {
             ScrapTask scrap = new ScrapTask();
             Map<String, String> params = new HashMap<String, String>();
@@ -228,6 +241,11 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         button2.setOnClickListener(v->{
             Intent intent2=new Intent(CourseDetail.this, FollowStart.class);
             intent2.putExtra("gpx",gpx);
+            intent2.putExtra("c_name",course_name);
+            startActivity(intent2);
+
+            finish();
+            mapViewContainer.removeAllViews();
         });
 
         try {
@@ -239,7 +257,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             e.printStackTrace();
         }
     }
-
 
 
     public class ScrapTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -305,21 +322,33 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
                     //json값을 받기위한 변수들
 
-                    String c_distance = "";
-                    String c_level = "";
-                    String c_area = "";
 
+                    String dis = "";
+                    String addr = "";
+                    String name = "";
+                    String avg = "";
+                    String godo="";
+                    String like="";
+                    String date = "";
                     JSONArray jarray = new JSONArray(tempData);
                     for (int i = 0; i < jarray.length(); i++) {
                         JSONObject jObject = jarray.getJSONObject(i);
-                        c_distance = jObject.getString("c_distance");
-                        c_level = jObject.getString("c_level");
-                        c_area = jObject.getString("c_area");
+                        dis = jObject.getString("rr_distance");
+                        addr = jObject.getString("rr_area");
+                        name = jObject.getString("rr_name");
+                        avg = jObject.getString("rr_avgspeed");
+                        godo = jObject.getString("rr_high");
+                        date = jObject.getString("rr_date");
+                        like = jObject.getString("rr_like");
                     }
+                    c_name.setText(name);
+                    c_date.setText(date);
+                    c_addr.setText(addr);
+                    c_dis.setText(dis);
+                    c_avg.setText(avg);
+                    c_getgodo.setText(godo);
+                    like_count.setText(like);
 
-                    textView1.setText(c_area);
-                    textView2.setText(c_distance);
-                    textView3.setText(c_level);
                 } catch (Exception e) {
                     e.printStackTrace();
 
@@ -348,11 +377,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
 
     @Override
     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
@@ -383,4 +407,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
 
     }
+
+
 }

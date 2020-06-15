@@ -1,7 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="header"></head>
+<head th:replace="header">
+</head>
+<div><a href="/entertainment/compIng"><img src="/imgs/visual2.png" style="width:1920px; height:400px; margin-left:auto; margin-right:auto; display:block;"/></a></div>
 <body>
-	<h1>경쟁전페이지입니다.</h1>
+
+<a href="/entertainment/history"><button id="history">지난 경쟁전보기</button></a>
+<a href="/entertainment/missions"><button id="mission">미션 보기</button></a>
+<a href="/entertainment/compIng"><button id="compIng">진행중인 경쟁전 보기</button></a>
+<button id="getGuide">경쟁전 미션 가이드</button>
+
 </body>
+
+<a href="/entertainment/badge" style="float:right"><button id="badge">배지 보기</button></a>
 <footer th:replace="footer"></footer>
+</html>

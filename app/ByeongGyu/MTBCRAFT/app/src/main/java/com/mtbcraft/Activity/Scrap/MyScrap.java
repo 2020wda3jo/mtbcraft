@@ -42,7 +42,7 @@ public class MyScrap extends AppCompatActivity  {
     String LoginId;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_myreport);
+        setContentView(R.layout.myreport);
         recyclerView= findViewById(R.id.recyclerView);
 
         /* 로그인 정보 가져오기 */

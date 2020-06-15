@@ -8,11 +8,16 @@ import javax.persistence.Id;
 public class Scrap_Status {
 	private String ss_rider;
 	private int ss_rnum;
-	private int c_num;
-	private int c_distance;
-	private int c_level;
-	private String c_area;
-	private String c_gpx;
+	//아래 rr_은 앱에서 받기위한 변수임
+	private String rr_rider;
+	private String rr_name;
+	private int rr_avgspeed;
+	private int rr_distance;
+	private int rr_high;
+	private String rr_area;
+	private int rr_time;
+	private String rr_gpx;
+
 	
 	public String getSs_rider() {
 		return ss_rider;
@@ -26,37 +31,54 @@ public class Scrap_Status {
 	public void setSs_rnum(int ss_rnum) {
 		this.ss_rnum = ss_rnum;
 	}
-	public int getC_distance() {
-		return c_distance;
+	public String getRr_rider() {
+		return rr_rider;
 	}
-	public void setC_distance(int c_distance) {
-		this.c_distance = c_distance;
-	}
-	public int getC_level() {
-		return c_level;
-	}
-	public void setC_level(int c_level) {
-		this.c_level = c_level;
-	}
-	public String getC_area() {
-		return c_area;
-	}
-	public void setC_area(String c_area) {
-		this.c_area = c_area;
-	}
-	public int getC_num() {
-		return c_num;
-	}
-	public void setC_num(int c_num) {
-		this.c_num = c_num;
-	}
-	public String getC_gpx() {
-		return c_gpx;
-	}
-	public void setC_gpx(String c_gpx) {
-		this.c_gpx = c_gpx;
+	public void setRr_rider(String rr_rider) {
+		this.rr_rider = rr_rider;
 	}
 	
-	
+	public String getRr_name() {
+		return rr_name;
+	}
+	public void setRr_name(String rr_name) {
+		this.rr_name = rr_name;
+	}
+	public int getRr_avgspeed() {
+		return rr_avgspeed;
+	}
+	public void setRr_avgspeed(int rr_avgspeed) {
+		this.rr_avgspeed = rr_avgspeed;
+	}
+	public int getRr_distance() {
+		return rr_distance;
+	}
+	public void setRr_distance(int rr_distance) {
+		this.rr_distance = rr_distance;
+	}
+	public int getRr_high() {
+		return rr_high;
+	}
+	public void setRr_high(int rr_high) {
+		this.rr_high = rr_high;
+	}
+	public String getRr_area() {
+		return rr_area;
+	}
+	public void setRr_area(String rr_area) {
+		this.rr_area = rr_area;
+	}
+	public int getRr_time() {
+		return rr_time;
+	}
+	public void setRr_time(int rr_time) {
+		this.rr_time = rr_time;
+	}
+	public String getRr_gpx() {
+		return rr_gpx;
+	}
+	public void setRr_gpx(String rr_gpx) {
+		this.rr_gpx = rr_gpx;
+	}
 	
 }

@@ -11,11 +11,11 @@
 		#{r_pw,jdbcType=VARCHAR},
 		#{r_name,jdbcType=VARCHAR},
 		#{r_nickname,jdbcType=VARCHAR},
-		#{r_birth,jdbcType=DATE},
+		TO_DATE(#{r_birth,jdbcType=DATE}, 'YYYY-MM-DD'),
 		#{r_phone,jdbcType=VARCHAR},
 		#{r_gender,jdbcType=VARCHAR},
 		#{r_addr,jdbcType=VARCHAR},
-		#{r_addr2,jdbcType=VARCHAR}, #{r_image},
+		#{r_addr2,jdbcType=VARCHAR}, #{r_image,jdbcType=VARCHAR},
 		#{r_type,jdbcType=INTEGER})
 	</select>
 
