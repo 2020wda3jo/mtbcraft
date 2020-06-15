@@ -246,8 +246,8 @@ public class RidingController {
 		
 		if(!files.isEmpty()) {
 			String filename = files.getOriginalFilename();
-	        String directory = "/home/ec2-user/data/review/";
-	        //String directory = "C:\\Users\\TACK\\Desktop\\study\\review\\";
+	        //String directory = "/home/ec2-user/data/review/";
+	        String directory = "C:\\Users\\TACK\\Desktop\\study\\review\\";
 	        String filepath = Paths.get(directory, filename).toString();             
 	        
 	        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
@@ -349,8 +349,8 @@ public class RidingController {
 	}
 	
 	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
-		String path = "/home/ec2-user/data/gpx/"+gpxFile;
-		//String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
+		//String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
 		File file = new File(path);
 		String txt = "";
 		FileInputStream fis = new FileInputStream(file); 
@@ -370,16 +370,16 @@ public class RidingController {
 	@GetMapping(value = "/image/review/{imageFile}")
 	public @ResponseBody byte[] getImage(@PathVariable String imageFile) throws IOException {
 		InputStream in = null;
-	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/review/"+imageFile)); 
-	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\study\\review\\"+imageFile)); 
+	    //in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/review/"+imageFile)); 
+	    in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\study\\review\\"+imageFile)); 
 	    return IOUtils.toByteArray(in);
 	}
 		
 	//이미지 업로드
 	private void uploadImage(MultipartFile uploadfile) throws IOException {
 		String filename = uploadfile.getOriginalFilename();
-		String directory = "/home/ec2-user/data/review";
-		//String directory = "C:\\Users\\TACK\\Desktop\\study\\review";
+		//String directory = "/home/ec2-user/data/review";
+		String directory = "C:\\Users\\TACK\\Desktop\\study\\review";
 		String filepath = Paths.get(directory, filename).toString();
 		
 		// Save the file locally
