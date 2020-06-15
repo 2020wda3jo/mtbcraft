@@ -20,12 +20,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.capston.mtbcraft.*;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.mtbcraft.GpxInfo;
+import com.capston.mtbcraft.R;
 import com.mtbcraft.SendGPXFile;
 import com.mtbcraft.network.HttpClient;
 
@@ -69,11 +65,11 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
     LinearLayout openset;
     TextView riding_nameinput;
     CharSequence riding_name;
-    private LineChart lineChart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.riding_end);
+        setContentView(R.layout.activity_mainend);
 
         //로그인정보 받아오기
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -89,7 +85,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         MaxSpeed = intent.getStringExtra("endmax"); //최대속도
         AvgSpeed = intent.getStringExtra("endavg"); //평균속도
         Getgodo = intent.getStringExtra("getgodo"); //획득고도
-        RestTime = intent.getStringExtra("m_rest"); //휴식시간
+        RestTime = intent.getStringExtra("resttime"); //휴식시간
         IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
         endsec = intent.getStringExtra("endsec"); //라이딩 시간(초)
         restsectime = intent.getStringExtra("restsectime"); //휴식시간(초)
@@ -98,30 +94,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
         ArrayList<Double> witch_lon = (ArrayList<Double>)intent.getSerializableExtra("witch_lon");
         ArrayList<Double> ele = (ArrayList<Double>)intent.getSerializableExtra("ele");
-
-        //그래프 그리기 위한 변수
-        ArrayList<Float> godolist = (ArrayList<Float>)intent.getSerializableExtra("godoarray");
         double maxLat = intent.getExtras().getDouble("maxLat",0);
         double maxLon = intent.getExtras().getDouble("maxLon", 0);
         double minLat = intent.getExtras().getDouble("minLat", 0);
         double minLon = intent.getExtras().getDouble("minLon", 0);
-
-
-            //선 그래프
-            ArrayList<Entry> entry_chart = new ArrayList<>();
-            lineChart = (LineChart) findViewById(R.id.chart);//layout의 id
-            LineData chartData = new LineData();
-            for(int g=0; g<godolist.size(); g++){
-                entry_chart.add(new Entry(g, godolist.get(g)));
-            }
-
-            /* 만약 (2, 3) add하고 (2, 5)한다고해서
-            기존 (2, 3)이 사라지는게 아니라 x가 2인곳에 y가 3, 5의 점이 찍힘 */
-            LineDataSet lineDataSet = new LineDataSet(entry_chart, "고도상승");
-            chartData.addDataSet(lineDataSet);
-
-            lineChart.setData(chartData);
-            lineChart.invalidate();
 
 
         mapView = new MapView(this);
@@ -162,24 +138,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         avgsoeed.setText(AvgSpeed); //평균속도
         maxspeed.setText(MaxSpeed); //최대속도
         getgodo.setText(Getgodo); //획득고도
-
-
-        int hour;
-        int min;
-        int sec = Integer.parseInt(restsectime);
-
-        min = sec/60;
-        hour = min/60;
-        sec = sec % 60;
-        min = min % 60;
-        if(hour == 0){
-            hour=00;
-        }
-        if(min==0){
-            min=00;
-        }
-
-        resttime.setText(String.valueOf(hour+":"+min+":"+sec)); //휴식시간
+        resttime.setText(RestTime); //휴식시간
         ingtime.setText(IngTime); //지속시간
         distence.setText(Distence); //이동거리
         // gpx파일 제목을 위해 현재 시간 구하기
@@ -202,8 +161,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
             switch (selectedValue){
                 case "비공개":
                     value="0";
-                case "전체 공개":
+                case "클럽 공개":
                     value="1";
+                case "전체 공개":
+                    value="2";
             }
             open = value;
         });
@@ -233,7 +194,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         trkObj.setTrkseg(trksegObj);
 
         List<GpxInfo.trkpt> trkptArray = new ArrayList<GpxInfo.trkpt>();
-        ArrayList<Entry> entries = new ArrayList<>();
+
         for ( int i = 0; i < witch_lat.size() ; i++){
             GpxInfo.trkpt trkptObj = new GpxInfo.trkpt(witch_lat.get(i), witch_lon.get(i), ele.get(i));
             trkptArray.add(trkptObj);
@@ -284,7 +245,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 NetworkTask2 networkTask1 = new NetworkTask2();
                 Map<String, String> params = new HashMap<String, String>();
 
-                Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
+              Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
                 params.put("rr_rider", LoginId);
                 params.put("rr_distance", cha_dis);
                 params.put("rr_topspeed", cha_max);
@@ -329,9 +290,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
             try{
                 Log.d("JSON_RESULT", s);
                 Toast.makeText(getApplicationContext(), "기록이 저장되었습니다.", Toast.LENGTH_LONG).show();
-                Intent intent2 = new Intent(endActivity.this, SubActivity.class);
-                startActivity(intent2);
-                finish();
+                ActivityCompat.finishAffinity(endActivity.this);
             }catch(Exception e){
                 Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
             }

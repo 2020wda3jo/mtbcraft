@@ -21,14 +21,4 @@
         </shape>
     </item>
 
-    <!-- 종료 -->
-    <item android:state_focused="false" android:state_pressed="false">
-        <shape>
-            <solid android:color="#8636be" />
-            <corners android:radius="1000dp" />
-            <padding android:bottom="30dp" android:left="30dp"
-                android:right="30dp" android:top="3dp" />
-        </shape>
-    </item>
-
 </selector>

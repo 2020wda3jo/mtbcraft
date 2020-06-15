@@ -19,7 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.capston.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
-import com.mtbcraft.Activity.Competition.CompetitionList;
+import com.mtbcraft.Activity.Competition.Competition;
 import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Course.CourseSearch;
 import com.mtbcraft.Activity.Mission.Mission;
@@ -27,11 +27,24 @@ import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 
 public class SubActivity extends AppCompatActivity {
-    TextView hello_user;
     private DrawerLayout mDrawerLayout;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submain);
+
+        /*이건 그냥 업데이트 기록 다이얼로그 창 */
+        // 다이얼로그 바디
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
+        // 메세지
+        alert_confirm.setMessage("문제 및 수정예정 : \n - 라이딩 시작시 현재속도 불일치 \n  - 단위계산 \n- 웹서버 통신 클래스\n - 레이아웃 정리(폰크기마다 차이 \n - 로그인 방식?  \n - IP서버로 변환중");
+        // 확인 버튼 리스너
+        alert_confirm.setPositiveButton("확인", null);
+        // 다이얼로그 생성
+        AlertDialog alert = alert_confirm.create();
+        // 다이얼로그 타이틀
+        alert.setTitle("업데이트 로그");
+        // 다이얼로그 보기
+        alert.show();
 
         /* 로그인 정보 가져오기 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -48,8 +61,6 @@ public class SubActivity extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(LoginId+"환영합니다");
-        hello_user = (TextView) findViewById(R.id.hello_user);
-        hello_user.setText(LoginId+"님 안녕하세요");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -58,38 +69,35 @@ public class SubActivity extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(getApplicationContext(), SubActivity.class);
-                    startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist=new Intent(SubActivity.this, MyReport.class);
                     startActivity(mylist);
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
-                    courselist.putExtra("rider_id", LoginId);
+                    Intent courselist=new Intent(SubActivity.this, CourseList.class);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch=new Intent(SubActivity.this, CourseSearch.class);
                     startActivity(coursesearch);
-                    break;
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget=new Intent(SubActivity.this, MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp=new Intent(SubActivity.this, Competition.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission=new Intent(SubActivity.this, Mission.class);
                     startActivity(mission);
                     break;
             }

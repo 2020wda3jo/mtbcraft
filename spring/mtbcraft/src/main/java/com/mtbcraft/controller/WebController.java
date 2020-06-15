@@ -30,13 +30,6 @@ public class WebController {
 	}
 	
 	// 여기서부터 테스트입니다.
-		@RequestMapping("/testWeb")
-		public String testbwe() {
-			return "testWeb";
-		}
-		
-		
-	// 여기서부터 테스트입니다.
 	@RequestMapping("/test2")
 	public String testServer() {
 		return "test2";

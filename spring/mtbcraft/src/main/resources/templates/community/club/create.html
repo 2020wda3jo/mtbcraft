@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header"></head>
-
-<h1>클럽 생성 페이지</h1>
 <form action="/community/club/create" method="post" enctype="multipart/form-data" >
 	<input id="cb_name" name="cb_name">
 	<button type="button" onclick="chkname()">중복체크</button>
-	<input id="cb_manager" name="cb_manager" type="hidden">
+	<input id="cb_manager" name="cb_manager" type="text">
 	<input id="cb_image" name="uploadfile" type="file">
 	<input type="submit" value="클럽생성하기">
 </form>
@@ -40,6 +38,7 @@
 					alert('이미 사용중인 클럽명입니다.');
 				}
 			}
+			
 		});
 	}
 		

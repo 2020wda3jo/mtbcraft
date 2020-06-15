@@ -1,6 +1,5 @@
 package com.mtbcraft.Activity.Course;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -8,8 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capston.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.mtbcraft.Activity.Competition.CompetitionList;
-import com.mtbcraft.Activity.Main.SubActivity;
+import com.mtbcraft.Activity.Competition.Competition;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
@@ -34,36 +30,39 @@ import com.mtbcraft.gpxparser.GPXParser;
 import com.mtbcraft.gpxparser.Gpx;
 import com.mtbcraft.network.HttpClient;
 
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapReverseGeoCoder;
+import net.daum.mf.map.api.MapView;
+
 import java.util.ArrayList;
 import java.util.Map;
-public class CourseList extends AppCompatActivity {
+public class CourseList extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     GPXParser mParser = new GPXParser();
     Gpx parsedGpx = null;
+
     private RecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
     ArrayList<RidingRecord> arrlist = new ArrayList<>();
     RecyclerView recyclerView;
-    private TextView hello_user;
+    SharedPreferences auto;
+    String LoginId;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.courselist);
+        setContentView(R.layout.activity_courselist);
         recyclerView= findViewById(R.id.recyclerView);
-
-        /* 로그인 정보 가져오기 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId","");
-
-        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        View header = navigationView.getHeaderView(0);
-        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        InFoUserId.setText(LoginId+"님 환영합니다.");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -72,38 +71,34 @@ public class CourseList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(getApplicationContext(), SubActivity.class);
+                    Intent home=new Intent(CourseList.this, MyReport.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist=new Intent(CourseList.this, MyReport.class);
                     startActivity(mylist);
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
-                    courselist.putExtra("rider_id", LoginId);
-                    startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch=new Intent(CourseList.this, CourseSearch.class);
                     startActivity(coursesearch);
-                    break;
-                //스크랩 보관함
+                    //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget=new Intent(CourseList.this, MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp=new Intent(CourseList.this, Competition.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission=new Intent(CourseList.this, Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -152,6 +147,7 @@ public class CourseList extends AppCompatActivity {
              Log.d("로그: ",s);
             try{
                 String tempData = s;
+
                 Gson gson = new Gson();
                 ArrayList<RidingRecord> itemList = new ArrayList<>();
                 RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
@@ -159,6 +155,7 @@ public class CourseList extends AppCompatActivity {
                 for(RidingRecord item: items){
                     itemList.add(item);
                 }
+
                 CourseAdapter adapter = new CourseAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);
@@ -187,6 +184,36 @@ public class CourseList extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
     }
 }
 

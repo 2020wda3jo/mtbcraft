@@ -63,24 +63,17 @@
                   <li><a href="/community/trade">중고거래</a></li>
             	</ul>
             </li>
-            <li class="drop-down"><a href="#">엔터테인먼트</a>
+            <li class="drop-down"><a href="">엔터테인먼트</a>
                 <ul>
                   <li><a href="/entertainment/competitions">경쟁전</a></li>
                   <li><a href="/entertainment/missions">미션</a></li>
-                  <li><a href="#" id="li_badge">나의 배지 보기</a></li>
-                  <form id="form_badge" action="/entertainment/mybadge" method="post">
-            			<input type="hidden" name="rider" th:value="${#authentication.name}">
-            		</form>
             	</ul>
             </li>
             
-            <li class="drop-down"><a id="a_repair" href="#" >정비</a>
-            	<form id="form_repair" action="/repair" method="post">
-            			<input type="hidden" name="rider" th:value="${#authentication.name}">
-            		</form>
+            <li class="drop-down"><a href="">정비</a>
                 <ul>
-                  <li><a href="/repair/guide">정비소 검색</a></li>
-                  <li><a href="/repair/s">문의 및 신청하기</a></li>
+                  <li><a href="/repair/guide">일반회원</a></li>
+                  <li><a href="/repair/s">정비소회원</a></li>
             	</ul>
             </li>
 
@@ -99,11 +92,5 @@
 	<script>
 		$("#li_course").click(function(){
 			$("#form_course").submit();
-		});
-		$("#li_badge").click(function(){
-			$("#form_badge").submit();
-		});
-		$("#a_repair").click(function(){
-			$("#form_repair").submit();
 		});
 	</script>

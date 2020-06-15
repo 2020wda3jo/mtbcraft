@@ -17,7 +17,6 @@ public class RidingRecord {
     private int rr_comp;
     private int rr_like;
     private String rr_name;
-    private String LoginId;
     public String getRr_num() {
         return rr_num;
     }
@@ -107,14 +106,6 @@ public class RidingRecord {
     }
     public void setRr_name(String rr_name) {
         this.rr_name = rr_name;
-    }
-
-    public String getLoginId() {
-        return LoginId;
-    }
-
-    public void setLoginId(String loginId) {
-        LoginId = loginId;
     }
 }
 

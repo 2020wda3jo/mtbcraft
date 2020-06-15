@@ -5,15 +5,25 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
+@Entity
+@Table(name="DANGEROUS_AREA")
 public class DangerousArea {
+	@Id
+	@Column
 	private int da_num;
+	@Column
 	private String da_rider;
+	@Column
 	private String da_latitude;
+	@Column
 	private String da_longitude;
+	@Column
 	private String da_addr;
+	@Column
 	private String da_image;
+	@Column
 	private String da_status;
+	@Column
 	private String da_content;
 	
 	public int getDa_num() {

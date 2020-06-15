@@ -21,6 +21,27 @@ private String comp_period;
 private String comp_content;
 @Column
 private String comp_image;
+@Column
+private String c_gpx;
+@Column
+private String c_name;
+
+
+
+
+
+public String getC_name() {
+	return c_name;
+}
+public void setC_name(String c_name) {
+	this.c_name = c_name;
+}
+public String getC_gpx() {
+	return c_gpx;
+}
+public void setC_gpx(String c_gpx) {
+	this.c_gpx = c_gpx;
+}
 public int getComp_num() {
 	return comp_num;
 }

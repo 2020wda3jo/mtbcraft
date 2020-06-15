@@ -35,7 +35,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
     @Override
     public MyRecordHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.myreport_item , viewGroup,false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_myreportitem , viewGroup,false);
 
         return new MyRecordHolder(v);
     }
@@ -82,7 +82,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
             Intent intent = new Intent(v.getContext(), DetailActivity.class);
             intent.putExtra("rr_num",itemList.get(position).getRr_num());
             intent.putExtra("rr_rider",itemList.get(position).getRr_rider());
-            intent.putExtra("open",itemList.get(position).getRr_open());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Log.d("보잡",itemList.get(position).getRr_num()+itemList.get(position).getRr_rider());
             v.getContext().startActivity(intent);

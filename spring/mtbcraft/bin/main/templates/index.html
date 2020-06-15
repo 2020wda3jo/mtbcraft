@@ -5,6 +5,13 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!-- kakaoAPI를 쓰기위한 KEY -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbb047c9e9b46e285f76df6669c00d7f&libraries=services"></script>
+<script>
+
+   window.open("update", "진행내역", "width=600, height=500");
+
+  //URL : 팝업 위치, Title : 팝업제목(없을시 ""으로 생략 가능), "width~ : 팝업창의 옵션설정.. 여러가지 설정값이 있다. 설정값은 아래쪽에..
+
+</script>
 <!-- VISUAL IMAGE -->
 <!-- 
 비주얼 슬라이드 추가 예정
@@ -140,11 +147,6 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 			dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
 			cache : false, // 이걸 안쓰거나 true하면 수정해도 값반영이 잘안댐
 			success : function(data) {
-				if(data.length==0){
-					$("#myRR").html('<h4>최근 주행기록이 없습니다</h4>');
-					$("#ri_more_bt").hide();
-					return;
-				}
 				var rr_numlist = [];
 				part_ridingrecord = "";
 				for(var i=0;i<data.length;i++){
@@ -161,7 +163,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		var cnt = 0;
 		for(var i=0;i<rr_numlist.length;i++){
 			$.ajax({
-				url : "/getGpxByRR_Num", // 제이슨오브젝트값을 가져옴
+				url : "/getGpxFileByRR_Num", // 제이슨오브젝트값을 가져옴
 				data : {rr_num : rr_numlist[i]},
 				type : "GET",
 				dataType : "json", // 데이터 타입을 제이슨 꼭해야함, 다른방법도 2가지있음
@@ -200,13 +202,4 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 		polyline.setMap(map);
 		map.setBounds(bounds);
 	}
-	
-	var repairmapContainer = document.getElementById('repair_map'), // 지도를 표시할 div 
-	repairmapOption = { 
-        center: new kakao.maps.LatLng(35.8933601651954, 128.61959337978482), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
-
-	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-	var repairmap = new kakao.maps.Map(repairmapContainer, repairmapOption); 
 </script>

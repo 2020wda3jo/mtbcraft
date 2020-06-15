@@ -6,7 +6,6 @@ public class Mission {
 	private String m_name;
 	private String m_content;
 	private int m_type;
-	
 	public int getM_num() {
 		return m_num;
 	}

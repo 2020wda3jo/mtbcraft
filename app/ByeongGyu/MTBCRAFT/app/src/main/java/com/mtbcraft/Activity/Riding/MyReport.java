@@ -43,7 +43,7 @@ public class MyReport extends AppCompatActivity  {
     String LoginId;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.myreport);
+        setContentView(R.layout.activity_myreport);
         recyclerView= findViewById(R.id.recyclerView);
 
         /* 로그인 정보 가져오기 */
@@ -145,7 +145,7 @@ public class MyReport extends AppCompatActivity  {
            // Log.d("로그: ",s);
             try{
 
-
+                JSONArray jsonArray = new JSONArray(s);
                 Log.d("마이리포트",s+"\n");
                 StringBuffer sb = new StringBuffer();
                 String tempData = s;
