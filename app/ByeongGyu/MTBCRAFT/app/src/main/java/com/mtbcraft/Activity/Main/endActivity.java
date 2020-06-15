@@ -85,9 +85,6 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         cha_dis= intent.getStringExtra("cha_dis"); //이동거리(소수점X)
         cha_max =  intent.getStringExtra("cha_max"); //최대속도(소수점X)
         cha_avg = intent.getStringExtra("cha_avg"); //평균속도(소수점X)
-        cha_dis = intent.getStringExtra("cha_dis");
-        cha_avg = intent.getStringExtra("cha_avg");
-        cha_max = intent.getStringExtra("cha_max");
         Distence = intent.getStringExtra("distence"); //이동거리
         MaxSpeed = intent.getStringExtra("endmax"); //최대속도
         AvgSpeed = intent.getStringExtra("endavg"); //평균속도
@@ -131,8 +128,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
-        mapView.setCurrentLocationEventListener(this);
-        mapView.isShowingCurrentLocationMarker();
+
 
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
@@ -314,7 +310,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237:8080/api/upload");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://100.92.32.8:8080/api/upload");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

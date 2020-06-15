@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header"></head>
+
+
+<body>
+<form action="/entertainment/badgeUpload/test" method="post" enctype="multipart/form-data">
+ 
+       배지 이름 : <input type="text" id="bg_name" name="bg_name"><br> 
+   	배지 이미지 <input type="file" name="files"><br> 
+ <input type="submit" value="등록">
+ 
+ </form>
+</body>
+
+
+
+<footer th:replace="footer"></footer>

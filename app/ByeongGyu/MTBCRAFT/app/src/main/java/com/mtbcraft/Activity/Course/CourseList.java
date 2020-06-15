@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capston.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.mtbcraft.Activity.Competition.Competition;
+import com.mtbcraft.Activity.Competition.CompetitionList;
+import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
@@ -36,33 +39,31 @@ import java.util.Map;
 public class CourseList extends AppCompatActivity {
     GPXParser mParser = new GPXParser();
     Gpx parsedGpx = null;
-
     private RecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
     ArrayList<RidingRecord> arrlist = new ArrayList<>();
     RecyclerView recyclerView;
-
-    String LoginId;
+    private TextView hello_user;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.courselist);
         recyclerView= findViewById(R.id.recyclerView);
+
+        /* 로그인 정보 가져오기 */
+        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        String LoginId = auto.getString("LoginId","");
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        RidingRecord rrr = new RidingRecord();
-        Intent intent = new Intent(this.getIntent());
-        rrr.setLoginId(intent.getStringExtra("rider_id")); ;
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View header = navigationView.getHeaderView(0);
+        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        InFoUserId.setText(LoginId+"님 환영합니다.");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -71,34 +72,38 @@ public class CourseList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(CourseList.this, MyReport.class);
+                    Intent home=new Intent(getApplicationContext(), SubActivity.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(CourseList.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
                     break;
                 //코스보기
                 case R.id.nav_courselist:
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
+                    startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(CourseList.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
-                    //스크랩 보관함
+                    break;
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(CourseList.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(CourseList.this, Competition.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(CourseList.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }

@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,9 +15,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,46 +25,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-
 import com.capston.mtbcraft.R;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
-import com.mtbcraft.Activity.Course.CourseDetail;
-import com.mtbcraft.dto.DangerousArea;
-import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.network.HttpClient;
-
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.CameraUpdateFactory;
-import net.daum.mf.map.api.MapLayout;
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
-
-
 public class StartActivity extends FragmentActivity
-        implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener{
+        implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener,TextToSpeech.OnInitListener{
 
 
     private static final MapPoint CUSTOM_MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.537229, 127.005515);
@@ -76,6 +54,12 @@ public class StartActivity extends FragmentActivity
     private LocationManager locationManager;
     private Location mLastlocation = null;
     private Boolean isRunning = true;
+    private TextToSpeech textToSpeech;
+    String meter;
+    String value;
+    float distance;
+    JSONArray jarray;
+    JSONObject jObject;
 
     //뷰에서 상단정보
     TextView m_speed, m_distance, m_time, m_t, m_rest;
@@ -94,13 +78,11 @@ public class StartActivity extends FragmentActivity
     ArrayList<Double> witch_lon = new ArrayList<>();
     ArrayList<Double> ele = new ArrayList<>();
     ArrayList<Float> godoArray = new ArrayList<>();
-
+    private TextToSpeech tts;
     //휴식시간 계산
     int hour, min, sec;
-
-
     //형변환용변수
-    String cha_dis = "", cha_max = "", cha_avg = "";
+    String cha_dis = "0", cha_max = "0", cha_avg = "0";
 
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
@@ -126,8 +108,10 @@ public class StartActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.riding_start);
+
+
+
         // MapLayout mapLayout = new MapLayout(this);
         mMapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
@@ -248,6 +232,7 @@ public class StartActivity extends FragmentActivity
             e.printStackTrace();
         }
     }
+
     private void changeView(int index) {
         switch (index) {
             case 0:
@@ -303,12 +288,9 @@ public class StartActivity extends FragmentActivity
                 Log.d("JSON_RESULT", s);
                 String tempData = s;
 
-                String test = "";
-                String test2="";
-
-                JSONArray jarray = new JSONArray(tempData);
+                jarray = new JSONArray(tempData);
                 for (int i = 0; i < jarray.length(); i++) {
-                    JSONObject jObject = jarray.getJSONObject(i);
+                    jObject = jarray.getJSONObject(i);
                     test = jObject.getString("da_latitude");
                     test2 = jObject.getString("da_longitude");
                     test3 = jObject.getString("da_content");
@@ -448,11 +430,64 @@ public class StartActivity extends FragmentActivity
     @Override
     public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
     }
+
+
     @Override
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
         lonngitude = location.getLongitude();
 
+        Location A = new Location("pointA");
+        A.setLatitude(latitude);
+        A.setLongitude(lonngitude);
+
+        try {
+        for (int i = 0; i < jarray.length(); i++) {
+                jObject = jarray.getJSONObject(i);
+                test = jObject.getString("da_latitude");
+                test2 = jObject.getString("da_longitude");
+                test3 = jObject.getString("da_content");
+                //Log.d("위험지역", test + " " + test2 + test3);
+
+            Location B = new Location("pointA");
+            B.setLatitude(Double.parseDouble(test));
+            B.setLongitude(Double.parseDouble(test2));
+            distance = A.distanceTo(B);
+            Log.d(test3+"거리는", String.valueOf(distance));
+            //float를 정수로
+            int a = (int) distance;
+            //정수로바꾼거를 문자열로
+            String cut_format = String.valueOf(a);
+            //문자열의 길이를 구한다
+            int leget = cut_format.length();
+            //
+
+            if(leget==2) {
+                String get = cut_format.substring(cut_format.length()-2);
+                String get2 = get.substring(0,1);
+                if(get2.equals("7")) {
+                    value = test3 + "위험구간이 "+get+"미터 앞입니다. 주의하세요";
+                    textToSpeech = new TextToSpeech(this,this);
+
+                    Log.d("십의자리숫자","70m 전방에 주의구간입니동");
+                }
+            }
+            if(leget==3){
+                String get = cut_format.substring(cut_format.length()-3);
+                String get2 = get.substring(0,1);
+                if(get2.equals("3")) {
+                    value="300m앞에 위험구간입니다";
+                    textToSpeech = new TextToSpeech(this,this);
+                    Log.d("십의자리숫자","300m 전방에 주의구간입니동");
+                }
+            }
+
+
+            }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         // 위도 경도 정보 배열 저장
         witch_lat.add(latitude);
@@ -474,6 +509,7 @@ public class StartActivity extends FragmentActivity
         getSpeed = Double.parseDouble(String.format("%.1f", location.getSpeed() * 3600 / 1000));
         nowspeed.setText(String.format("%.1f", getSpeed));  //Get Speed
         m_speed.setText(String.format("%.1f", getSpeed) + "km/h");
+
 
         //만약 속도가 0.1미만이라면 휴식시간이 늘어남(뭔가 이상함)
         if (getSpeed < 0.0) {
@@ -530,6 +566,14 @@ public class StartActivity extends FragmentActivity
 
             int testhap = 0;
             dis.setText(String.format("%.2f", hap));
+            m_distance.setText(String.format("%.1f", hap)+"m");
+
+            double killlo;
+            if(hap>=1000){
+                killlo = hap/1000.0;
+                dis.setText(String.format("%.2f", killlo));
+                m_distance.setText(String.format("%.1f", killlo)+"km");
+            }
 
             //평균속도
             avg = hap / total_time;
@@ -551,6 +595,17 @@ public class StartActivity extends FragmentActivity
     }
 
     @Override
+    public void onInit(int i) {
+        if (i == TextToSpeech.SUCCESS) {
+            textToSpeech.setLanguage(Locale.KOREAN);
+            textToSpeech.setPitch(0.6f);
+            textToSpeech.setSpeechRate(1f);
+            textToSpeech.speak(value, TextToSpeech.QUEUE_FLUSH,null);
+        }
+    }
+
+
+    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
@@ -570,7 +625,15 @@ public class StartActivity extends FragmentActivity
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
     }
-
+    // 메모리 누출을 방지하게 위해 TTS를 중지
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+    }
     @Override
     public void onProviderDisabled(String provider) {
 
