@@ -68,6 +68,11 @@ public class AndroidService {
 		return androidMapper.getRidingRecordDetail(rr_rider, rr_num);
 	}
 	
+	public String RidingOpenSet(RidingRecord record) throws Exception {
+		// TODO Auto-generated method stub
+		return androidMapper.RidingOpenSet(record);
+	}
+	
 	//코스가져오기
 	public List<App_RidingRecord> getCourse() throws Exception{
 		return androidMapper.getCourse();

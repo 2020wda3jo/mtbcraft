@@ -43,6 +43,7 @@ import com.mtbcraft.dto.Competition_Status;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Gpx;
+import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.LoginInfo;
 import com.mtbcraft.dto.Mission;
@@ -149,13 +150,31 @@ public class AndroidController {
 		return androidService.readRecord(rr_rider);
 	}
 
-	// 주행기록 가져오기
+	// 주행기록 상세보기
 	@RequestMapping(value = "/api/get/{rr_rider}/{rr_num}")
 	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable String rr_rider,
 			@PathVariable String rr_num) throws Exception {
 		RidingRecord record = new RidingRecord();
 		return androidService.getRidingRecordDetail(rr_rider, rr_num);
 	}
+	
+	//주행기록 상세보기(공개여부설정)
+		@RequestMapping(value = "/android/recordset/open")
+		public @ResponseBody Map<String, String> RidingOpenSet(HttpServletRequest request) throws Exception {
+			RidingRecord record = new RidingRecord();
+			record.setRr_num(Integer.parseInt(request.getParameter("rr_num")));
+			record.setRr_rider(request.getParameter("rr_rider"));
+			record.setRr_open(Integer.parseInt(request.getParameter("open")));
+			System.out.println(request.getParameter("rr_num")+ " "+ request.getParameter("rr_rider")+" "+request.getParameter("open"));
+			
+			androidService.RidingOpenSet(record);
+			// 안드로이드에게 전달하는 데이터
+			Map<String, String> result = new HashMap<String, String>();
+			result.put("data1", "성공했쩡");
+			
+			return result;
+		}
+	
 
 	@RequestMapping(value = "/android/fileUpload", method = RequestMethod.POST)
 	public String upload(HttpServletRequest request, MultipartFile file1) {
@@ -202,11 +221,12 @@ public class AndroidController {
 	public @ResponseBody Map<String, String> coursescrap(HttpServletRequest request) throws Exception {
 		Scrap_Status scrap = new Scrap_Status();
 		scrap.setSs_rnum(Integer.parseInt(request.getParameter("c_num")));
-		scrap.setSs_rider(request.getParameter("r_rider"));
+		scrap.setSs_rider(request.getParameter("ss_rider"));
+		
 		androidService.insertScrap(scrap);
 
 		System.out.println(request.getParameter("c_num"));
-		System.out.println(request.getParameter("r_rider"));
+		System.out.println(request.getParameter("ss_rider"));
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("Status", "Ok");
 
@@ -215,8 +235,8 @@ public class AndroidController {
 
 	// 사용자 스크랩 코스 조회
 	@RequestMapping(value = "/app/riding/scrap/{rr_rider}")
-	public @ResponseBody List<Course> getScrap(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
-		return memberService.getScrapCourse(rr_rider);
+	public @ResponseBody List<Scrap_Status> getScrap(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
+		return androidService.getScrap(rr_rider);
 	}
 
 	// 사용자 스크랩 코스 상세보기
@@ -225,7 +245,24 @@ public class AndroidController {
 			@PathVariable(value = "ss_course") String ss_course) throws Exception {
 		return androidService.getScrapDetail(rr_rider, ss_course);
 	}
+	
+	//스크랩 삭제
+	@RequestMapping(value = "/app/riding/scrap/{ss_rnum}", method = RequestMethod.GET)
+	public @ResponseBody List<Course> delScrap(@PathVariable(value = "ss_rnum") String ss_rnum) throws Exception {
+		return androidService.delScrap(ss_rnum);
+	}
 
+	//좋아요
+	@RequestMapping(value = "/app/riding/course/like", method = RequestMethod.POST)
+	public @ResponseBody  Map<String, String> likeput(HttpServletRequest request) throws Exception {
+
+
+		System.out.println(request.getParameter("ls_rider") + " " +request.getParameter("ls_rnum"));
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("Status", "Ok");
+
+		return result;
+	}
 	// 파일 다운로드
 	@RequestMapping(value = "/app/getGPX/{file_dir}/{file_name}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName, @PathVariable("file_dir") String fileDir ) throws IOException {
@@ -293,6 +330,13 @@ public class AndroidController {
 		gpx.setting(txt);
 	}
 	
+
+	
+	@RequestMapping("/app/getCompClub/{cs_comp}")
+	public @ResponseBody List<CompClub> getCompClub( @PathVariable(value = "cs_comp") int cs_comp) throws Exception {
+		return androidService.getCompClub(cs_comp);
+	}
+	
 	//코스검색
 	@RequestMapping("/riding/Android_CourseSearch")
 	public String CourseSearch() throws Exception{
@@ -304,11 +348,6 @@ public class AndroidController {
 	@RequestMapping("/app/riding/danger")
 	public @ResponseBody List<DangerousArea> RidingDanger() throws Exception {
 		return androidService.getDanger();
-	}
-	
-	@RequestMapping("/app/getCompClub/{cs_comp}")
-	public @ResponseBody List<CompClub> getCompClub( @PathVariable(value = "cs_comp") int cs_comp) throws Exception {
-		return androidService.getCompClub(cs_comp);
 	}
 
 	@RequestMapping("app/getCompBadge/{comp_badge}")

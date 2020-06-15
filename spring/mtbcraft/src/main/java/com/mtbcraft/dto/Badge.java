@@ -23,6 +23,6 @@ public class Badge {
 	public void setBg_image(String bg_image) {
 		this.bg_image = bg_image;
 	}
-	
+
 	
 }
