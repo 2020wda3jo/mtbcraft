@@ -1,13 +1,13 @@
 $(document).ready(function() {
-		$('#box_courseInfo').hide();
+		$('#courseInfo').hide();
 		$('#box_post_DA').hide();
 });
 
-var userId = $("#nav_t_login ul li span").text();
+var userId = $("#hiddenID").val();
 
 var da_makers = []; // 위험지역을 담을 배열
 
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+var mapContainer = document.getElementById('mymap'), // 지도를 표시할 div 
 mapOption = { 
     center: new kakao.maps.LatLng(35.89617906303501, 128.62171907592318), // 지도의 중심좌표
     level: 5 // 지도의 확대 레벨
@@ -121,7 +121,7 @@ function change() {
 	var mode = $("#bt_mode").text();
 	if(mode=="스크랩하기"){	//스크랩 모드
 		$.ajax({
-			url : "/riding/scrap/"+$("#selected_rr_num").val()+"/"+$("#nav_t_login ul li b span").html(),
+			url : "/riding/scrap/"+$("#selected_rr_num").val()+"/"+userId,
 			type : "post",
 			cache : false,
 			complete : function(data){
@@ -139,7 +139,7 @@ function change() {
 			url : "/riding/scrap",
 			type : "delete",
 			data : {
-				ss_rider : $("#nav_t_login ul li b span").html(),
+				ss_rider : userId,
 				ss_rnum : $("#selected_rr_num").val()
 			},
 			cache : false,
@@ -196,25 +196,25 @@ function getRidingRecordByRR_Num(rr_num, mode){
 			cache : false, 
 			success : function(data) {
 				getReviewsByRR_Num(data.rr_num);
-				var str = "<label for='rr_name'>코스 : </label><input type='text' id='rr_name' name='rr_name' ";
 				if(mode=="course"){
-					str += "readonly><br>전체거리 : "+data.rr_distance
-					+ "<br>주행시간 : "+data.rr_time
-					+ "<br>평균속도 : "+data.rr_distance
-					+ "<br>획득고도 : "+data.rr_high
-					+ "<br>추천수 : "+data.rr_like;
+					$("#cif_name").text(data.rr_name); 
+					$("#cif_total").text(data.rr_distance); 
+					$("#cif_avg").text(data.rr_avgspeed); 
+					$("#cif_high").text(data.rr_high); 
+					$("#cif_like").text(data.rr_like);
 					$('#bt_mode').text("스크랩하기");
 				}else if(mode=="ridingrecord"){
-					str += "><button onclick='changeRR_Name()'>코스 이름 변경하기</button>" 
-					+"<br>라이딩 일시 : "+data.rr_date
-					+ "<br>전체거리 : "+data.rr_distance
-					+ "<br>위치 : "+data.rr_area
-					+ "<br>주행시간 : "+data.rr_distance
-					+ "<br>휴식시간 : "+data.rr_distance
-					+ "<br>최고속도 : "+data.rr_topspeed
-					+ "<br>평균속도 : "+data.rr_distance
-					+ "<br>획득고도 : "+data.rr_high
-					+ "<br>추선수 : "+data.rr_like;
+					$("#cif_name").text(data.rr_name); 
+					$("#cif_total").text(data.rr_distance); 
+					$("#cif_avg").text(data.rr_avgspeed); 
+					$("#cif_high").text(data.rr_high); 
+					$("#cif_like").text(data.rr_like);
+					$("#cif_date").text(data.rr_date);
+					$("#cif_time").text(data.rr_time);
+					$("#cif_top").text(data.rr_topspeed);
+					$("#cif_break").text(data.rr_breaktime);
+					$("#box_courseInfo").append("<button id='chrrnamebtn'  onclick='changeRR_Name()'>코스명 변경하기</button>");
+					
 					if(data.rr_open==1){
 						$('#bt_mode').text("비공개로 전환하기");
 					}else{
@@ -229,7 +229,7 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					$('#bt_mode').text("스크랩취소하기");
 				}
 				
-				$('#courseInfo').html(str);
+				$('#courseInfo').show();
 				$("#bt_rr_open").val(data.rr_open);
 				$("#selected_rr_num").val(data.rr_num);
 				$("#rr_name").val(data.rr_name);
@@ -270,39 +270,55 @@ function getRidingRecordByRR_Num(rr_num, mode){
  
 //rr_num으로 리뷰 조회
  function getReviewsByRR_Num(rr_num){
-	 $("#courseReview").html("");
+	 $("#courseReview ul").html("");
 	 $.ajax({
 		 url : "/riding/reviews/"+rr_num,
 		 type : "GET",
 		 dataType : "json",
 		 cache : false,
 		 success : function(data) {
+			 console.log(data);
 			for(var i=0;i<data.length;i++){
-				if(data[i].cr_images != null){
-					$("#courseReview").append("<img src='/image/review/"+data[i].cr_images+"'>");
-				}
-				$("#courseReview").append("<p>"+data[i].cr_rider+"/"+(data[i].cr_time).substring(0,10)+"/</p>");
+				var code = "<li class='comment'><div class='vcard bio'>";
 				
-				if(data[i].cr_rider==userId){
-					$("#courseReview").append("<input type='text' id='new_cr_content' value="+data[i].cr_content+">");
-					$("#courseReview").append("<button onclick='updateReview("+data[i].cr_num+")'>수정</button>");
-					$("#courseReview").append("<button onclick='deleteReview("+data[i].cr_num+")'>삭제</button>");
-				}else{
-					$("#courseReview").append("<p>"+data[i].cr_content+"</p>");
-
+				// 유저 이미지
+				if(data[i].cr_images != null){
+					code += "<img src='/test/images/person_1.jpg' alt='Image placeholder'>";
+				}else {
+					code += "<img src='/imgs/test001.png' alt='Image placeholder'>";
 				}
-				$("#courseReview").append("<hr>");
+				
+				code += "</div><div class='comment-body'>"
+					+"<h3>"+data[i].cr_rider+"</h3>"
+					+"<div class='meta mb-2'>"+data[i].cr_time+"</div>"
+					+"<p>"+data[i].cr_content+"</p>";
+					
+				if(data[i].cr_rider==userId){
+					code += "<p><a href='#' class='reply'>수정</a> <a href='#' class='reply'>삭제</a></p>";
+				}
+				if(data[i].cr_images != null){
+					code += "<img class='reviewimg' src='/image/review/"+data[i].cr_images+"'>";
+				}
+				code += "</div></li>";
+				$("ul.comment-list").append(code);
 			}	
 		}
 	});
  }
  
  function moveMyInfo(){
-	 alert('정보보기로 이동');
-	 $("#form_course").submit();
+	 var form = document.createElement("form");
+	form.setAttribute("method", "Post");  
+	form.setAttribute("action", "/riding/course"); 
+  	var hiddenField = document.createElement("input");
+	hiddenField.setAttribute("type", "hidden");
+	hiddenField.setAttribute("name", "rider");
+    hiddenField.setAttribute("value", $("#hiddenID").val());
+     form.appendChild(hiddenField);
+     document.body.appendChild(form);
+     form.submit();
  }
  function moveSearchCourse(){
-	 alert('코스검색으로 이동');
 	 location.href = "/riding/search";
  }
 

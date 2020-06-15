@@ -1,7 +1,7 @@
 //나의 기록 클릭시
 $(".li_rr").click(function(){
 	drawPolylineByRR_Num(polyline, this.id);
-	$("#box_courseInfo").show();
+	$("#courseInfo").show();
 	//rr_num을 이용하여 라이딩상세 기록 조회
 	var mode = "ridingrecord";
 	getRidingRecordByRR_Num(this.id, mode);
@@ -10,7 +10,7 @@ $(".li_rr").click(function(){
 //스크랩코스 클릭시 
 $(".li_sc").click(function(){
 	drawPolylineByRR_Num(polyline, this.id);
-	$("#box_courseInfo").show();
+	$("#courseInfo").show();
 	//rr_num을 이용하여 라이딩상세 기록 조회
 	var mode = "scrap";
 	getRidingRecordByRR_Num(this.id, mode);

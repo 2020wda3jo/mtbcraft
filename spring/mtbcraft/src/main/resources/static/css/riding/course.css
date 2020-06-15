@@ -1,13 +1,20 @@
 @charset "UTF-8";
 
+#ridingmainbtn{
+	position: relative;
+}
+
 #mainbox {
 	width : 95%;
-	height: 800px;
+	height: 1200px;
+	max-height: 1800px;
+	position: relative;
 }
 
 #myInfoBox {
-	float :left;
-	width : 25%;
+	float : left;
+	width : 29%;
+	height: 100%;
 }
 #box_search_course{
 	float :left;
@@ -19,10 +26,177 @@
 	overflow: auto;
 }
 
-#map {
-	float :left;
+#mymap {
+	float: right;
 }
 
 #box_courseInfo{
-	width : 80%;
+	float : right;
+	width : 69%;
+}
+
+#ridingmainbtn {
+	display: flex;
+	align-items:center;
+	 justify-content:center;
+}
+
+#ridingmainbtn input {
+	width: 20%;
+	border-width : 0.7px;
+	border-radius : 20px;
+	background-color: #ffffff;	
+    background-color: rgba( 255, 255, 255, 0.5 );
+    font-size : 1.2em;
+    font-weight : 700;
+    margin-bottom: 1%;
+}
+
+#ridingmainbtn input:hover {
+	border: none;
+	background-color: #ffa323;
+	color: white;	
+}
+
+#ridingmainbtn > * {
+  margin: 1%;
+}
+#showDAbtn {
+	position : absolute;
+	text-align : center;
+	font-weight : 700;
+	color : white;
+	background-color: rgba( 0, 0, 0, 0.4 );
+	right: 2%;
+	top : 2%;
+	z-index: 2;
+	width : 150px;
+	height : 50px;
+	line-height: 50px;
+	border-radius: 15px;
+	
+}
+#showDAbtn * {
+	padding: 0;
+	margin: 0;
+}
+
+#myRecords ul {
+	list-style: none;
+	padding : 0;
+}
+
+#myRecords ul li {
+	margin-left : 30px;
+	display: block;
+}
+
+#myRecords ul li:hover {
+	color: #ffd60e;
+}
+
+.float_R {
+	float: right;
+	margin-right: 15%;
+	position: relative;
+}
+#box_courseInfo {
+	margin-top: 2%;
+	height: auto;
+	min-height: 500px;
+}
+
+#courseInfo ul {
+	padding: 0;
+	list-style: none;
+}
+
+#courseInfo ul li {
+	display: inline-block;
+	margin-right: 20px;
+	padding: 0;
+}
+
+#courseInfo .csn {
+	margin-left: 30px;
+	margin-right: 20%;
+	width: 50%;
+}
+
+
+
+#newfooter {
+	margin-top : 2%;
+	float : left;
+	width: 100%;
+	height: 450px;
+}
+
+#bt_mode, #bt_like, .btnregreview, #chrrnamebtn {
+	width : 170px;
+	border-radius: 10px;
+	background-color: #ffa323;
+	color: white;
+	font-weight: 700;
+	border: 0;
+	margin-bottom: 3%;
+}
+
+.btnregreview {
+	position: relative;
+	right: -93%;
+}
+#box_courseInfo > h2 {
+	margin-top: 2%;
+}
+
+#courseReview .reviewimg {
+	width: 200px;
+	height: 200px;
+}
+
+#courseReview p {
+	margin: 0;
+	padding: 0;
+	display: block;
+}
+
+#courseReview .redate{
+	text-align: right;
+}
+
+#postReview input {
+	margin: 1%;
+}
+
+#courseReview {
+	position: relative;
+}
+table.type09 {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+    margin-bottom: 3%;
+}
+
+table.type09 thead th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    color: #369;
+    border-bottom: 3px solid #036;
+}
+table.type09 tbody th {
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    background: #f3f6f7;
+}
+table.type09 td {
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
 }

@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+#courseReview {
+	width: 69%;
+	float: right;
+}
+
+#postReview {
+	width: 69%;
+	float: right;
+}
+
+#rvbtnbox {
+	width : 100%;
+	position: relative;
+	float: right;
+}
+
+.btnregreview {
+	position: absolute;
+	right: 1%;
+	bottom: -30px;
+}
