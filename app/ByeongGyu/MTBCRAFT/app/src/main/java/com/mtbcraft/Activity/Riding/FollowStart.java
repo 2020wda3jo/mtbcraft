@@ -134,7 +134,8 @@ public class FollowStart extends AppCompatActivity implements
 
         mapView.setCurrentLocationEventListener(this);
         mapView.isShowingCurrentLocationMarker();
-
+        mapView.setShowCurrentLocationMarker(true);
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
 
         Intent intentt = new Intent(this.getIntent());
         intentt.getStringExtra("c_name");
@@ -277,6 +278,7 @@ public class FollowStart extends AppCompatActivity implements
             intent.putExtra("minLon", minLon); //최소경도
             startActivity(intent);
             finish();
+            mapViewContainer.removeAllViews();
         });
         //권한 체크
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -325,14 +327,11 @@ public class FollowStart extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-        mapView.setShowCurrentLocationMarker(true);
     }
 
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint currentLocation, float accuracyInMeters) {
-        MapPoint.GeoCoordinate mapPointGeo = currentLocation.getMapPointGeoCoord();
-        Log.i(LOG_TAG, String.format("MapView onCurrentLocationUpdate (%f,%f) accuracy (%f)", mapPointGeo.latitude, mapPointGeo.longitude, accuracyInMeters));
+
     }
 
     @Override
@@ -346,80 +345,15 @@ public class FollowStart extends AppCompatActivity implements
 
     @Override
     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-        mapReverseGeoCoder.toString();
-        onFinishReverseGeoCoding(s);
+
+
     }
 
     @Override
     public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-        onFinishReverseGeoCoding("Fail");
+
     }
 
-    private void onFinishReverseGeoCoding(String result) {
-//        Toast.makeText(LocationDemoActivity.this, "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
-    }
-
-    /*
-     * ActivityCompat.requestPermissions를 사용한 퍼미션 요청의 결과를 리턴받는 메소드입니다.
-     */
-    @Override
-    public void onRequestPermissionsResult(int permsRequestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grandResults) {
-
-        if ( permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
-            // 요청 코드가 PERMISSIONS_REQUEST_CODE 이고, 요청한 퍼미션 개수만큼 수신되었다면
-            boolean check_result = true;
-            // 모든 퍼미션을 허용했는지 체크합니다.
-            for (int result : grandResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    check_result = false;
-                    break;
-                }
-            }
-            if ( check_result ) {
-                Log.d("@@@", "start");
-                //위치 값을 가져올 수 있음
-                mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
-            }
-            else {
-                // 거부한 퍼미션이 있다면 앱을 사용할 수 없는 이유를 설명해주고 앱을 종료합니다.2 가지 경우가 있습니다.
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])) {
-                    Toast.makeText(FollowStart.this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
-                    finish();
-                }else {
-                    Toast.makeText(FollowStart.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
-
-
-
-    //여기부터는 GPS 활성화를 위한 메소드들
-    private void showDialogForLocationServiceSetting() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(FollowStart.this);
-        builder.setTitle("위치 서비스 비활성화");
-        builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
-                + "위치 설정을 수정하실래요?");
-        builder.setCancelable(true);
-        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                Intent callGPSSettingIntent
-                        = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE);
-            }
-        });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        builder.create().show();
-    }
 
 
     @SuppressLint("HandlerLeak")
@@ -528,7 +462,6 @@ public class FollowStart extends AppCompatActivity implements
                 intime = intime+1;
                 reststatus.setText("열심히^^");
             }
-            ;
 
             //이동거리
             hap = hap+mLastlocation.distanceTo(location);
@@ -536,26 +469,6 @@ public class FollowStart extends AppCompatActivity implements
 
             int testhap=0;
             dis.setText(String.format("%.2f",hap));
-            /*
-            if(hap>1000){
-                hap = hap/1000;
-                m_distance.setText((String.format("%.1f",hap)+"km"));
-                dis.setText(String.format("%.1f",hap));
-            }else{
-                m_distance.setText((String.format("%.2f",hap)+"m"));
-                dis.setText(String.format("%.2f",hap));
-            }
-
-             */
-            if(hap>1000){
-                //알림주고
-                Toast toast = Toast.makeText(getApplicationContext(), hap+"임", Toast.LENGTH_SHORT); toast.show();
-                //1000을 올려
-                testhap = (int) (testhap+(hap+1000));
-            }else{ //그럼 hap>2000인데 크지 않으면
-                //알림X
-
-            }
             //평균속도
             avg= hap/cnt;
             avgspeed.setText(String.format("%.1f", Double.parseDouble(String.valueOf(avg))));
@@ -580,55 +493,22 @@ public class FollowStart extends AppCompatActivity implements
     }
     @Override
     public void onProviderEnabled(String provider) {
-        //권한 체크
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+// 위치정보 업데이트
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        // 위치정보 업데이트
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,5, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
     }
 
     @Override
     public void onProviderDisabled(String provider) {
 
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //권한 체크
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        // 위치정보 업데이트
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,5, this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // 위치정보 가져오기 제거
-        locationManager.removeUpdates(this);
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //권한이 없을 경우 최초 권한 요청 또는 사용자에 의한 재요청 확인
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                // 권한 재요청
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-                return;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-                return;
-            }
-        }
-    }
-
-
 }

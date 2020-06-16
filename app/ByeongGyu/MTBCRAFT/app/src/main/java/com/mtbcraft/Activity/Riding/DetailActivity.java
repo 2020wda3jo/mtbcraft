@@ -303,7 +303,8 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                     @Override
                     public void run() {
                         try {
-                            URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+gpx);
+                            URL url = new URL("http://100.92.32.8/"+gpx);
+                            //URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+gpx);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                             conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
                             conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
@@ -333,7 +334,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                                 // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
                                 MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
                                 int padding = 100; // px
-                                mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+                                mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding,2,3 ));
 
                             } else {
                                 Log.e("error","Error parsing gpx track!");

@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Course.CourseSearch;
+import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
@@ -64,17 +65,19 @@ public class CompetitionList extends AppCompatActivity {
 
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId","");
-        Nickname = auto.getString("LoginId", "");
-
-        memberId = findViewById(R.id.memberId);
-        memberId.setText(Nickname + " 님");
-
-        recycleView = findViewById(R.id.recycleView1);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Nickname = auto.getString("r_nickname", "");
         ingBt = findViewById(R.id.ing_bt);
         finishBt = findViewById(R.id.finish_bt);
         joinedBt = findViewById(R.id.joined_bt);
+        memberId = findViewById(R.id.memberId);
+        memberId.setText(LoginId + " 님");
+
+        recycleView = findViewById(R.id.recycleView1);
+
+        /* 로그인 정보 가져오기 */
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -84,7 +87,6 @@ public class CompetitionList extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(LoginId+"환영합니다");
-
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -93,35 +95,38 @@ public class CompetitionList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
+                    Intent home=new Intent(getApplicationContext(), SubActivity.class);
+                    startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(CompetitionList.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
-
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(CompetitionList.this, CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(CompetitionList.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
-                    //스크랩 보관함
+                    break;
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(CompetitionList.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(CompetitionList.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(CompetitionList.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -146,7 +151,7 @@ public class CompetitionList extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/competition/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/competition/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -191,7 +196,7 @@ public class CompetitionList extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://100.92.32.8:8080/app/competition");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/competition");
             // Parameter 를 전송한다.
 
             //Http 요청 전송
