@@ -43,6 +43,11 @@ public class EntertainController {
 	public String competitions() {
 		return "entertainment/competitions";
 	}
+	// 경쟁전
+	@RequestMapping(value="/entertainment/competitions", method = RequestMethod.POST)
+	public String competitions2(String rider) {
+		return "entertainment/competitions";
+	}
 
 	//경쟁전 기록 페이지
 	@RequestMapping("/entertainment/history")
