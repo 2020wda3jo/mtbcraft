@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,15 +39,34 @@ public class EntertainController {
 	
 	private EntertainmentService entertainmentService;
 
-	// 경쟁전
-	@RequestMapping("/entertainment/competitions")
-	public String competitions() {
+	// 엔터테인먼트 메인
+	@RequestMapping(value="/entertainment", method = RequestMethod.POST)
+	public String competitions2(String rider) {
+		return "entertainment/main";
+	}
+
+	// 엔터테인먼트 메인테스트
+	@RequestMapping(value="/entertainmenttest", method = RequestMethod.GET)
+	public String competitions22() {
 		return "entertainment/competitions";
 	}
+	
 	// 경쟁전
-	@RequestMapping(value="/entertainment/competitions", method = RequestMethod.POST)
-	public String competitions2(String rider) {
-		return "entertainment/competitions";
+	@RequestMapping(value="/entertainment/competition", method = RequestMethod.POST)
+	public String competitions(String rider) {
+		return "entertainment/competition";
+	}
+	
+	// 경쟁전 더보기 페이지
+	@RequestMapping(value="/entertainment/competition/history", method = RequestMethod.GET)
+	public String competitiongallery() {
+		return "entertainment/competitiongallery";
+	}
+	
+	// 경쟁전 상세보기 페이지
+	@RequestMapping(value="/entertainment/competition/{comp_num}", method = RequestMethod.GET)
+	public String competitioDetail(@PathVariable String comp_num) {
+		return "entertainment/competitiondetail";
 	}
 
 	//경쟁전 기록 페이지

@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+.row {
+	display: flex;
+	justify-content: space-around;
+}
+
+.ftco-section.chap1 {
+	background: white;
+}
