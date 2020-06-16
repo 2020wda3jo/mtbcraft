@@ -42,14 +42,14 @@ public class BoardController {
 		stream.write(uploadfile.getBytes());
 		stream.close();
 
-		return "/community/club/success";
+		return "community/club/success";
 	}
 
 	// 글쓰기 페이지
 	@RequestMapping(value = "/community/club/createBoard/{b_club}", method = RequestMethod.GET)
 	public String moveCreateBoard(@PathVariable int b_club, Model model) {
 		model.addAttribute("b_club", b_club);
-		return "/community/club/createBoard";
+		return "community/club/createBoard";
 	}
 
 	// 클럽 게시판 페이지
@@ -58,7 +58,7 @@ public class BoardController {
 		List<Board> list = boardService.getBoardList(b_club);
 		model.addAttribute("list", list);
 		model.addAttribute("b_club", b_club); // 클럽 번호 전달
-		return "/community/club/club_board";
+		return "community/club/club_board";
 	}
 
 	// 클럽 정보 가져오기

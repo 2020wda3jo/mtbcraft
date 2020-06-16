@@ -41,13 +41,13 @@ public class EntertainController {
 	// 경쟁전
 	@RequestMapping("/entertainment/competitions")
 	public String competitions() {
-		return "/entertainment/competitions";
+		return "entertainment/competitions";
 	}
 
 	//경쟁전 기록 페이지
 	@RequestMapping("/entertainment/history")
 	public String history() {
-		return "/entertainment/history";
+		return "entertainment/history";
 	}
 
 	// 경쟁전 기록보기
@@ -59,7 +59,7 @@ public class EntertainController {
 	// 미션 페이지
 	@RequestMapping("/entertainment/missions")
 	public String missions() {
-		return "/entertainment/missions";
+		return "entertainment/missions";
 	}
 
 	// 미션 데이터
@@ -71,7 +71,7 @@ public class EntertainController {
 	// 미션 완료확인 페이지
 	@RequestMapping("/entertainment/missionComplete")
 	public String missionComplete() {
-		return "/entertainment/missionComplete";
+		return "entertainment/missionComplete";
 	}
 
 	// 미션 완료여부 조회 데이터
@@ -94,7 +94,7 @@ public class EntertainController {
 		List<CompIng> list = entertainmentService.getCompIng();
 		System.out.println(list.size());
 		model.addAttribute("list", list);
-		return "/entertainment/compIng";
+		return "entertainment/compIng";
 	}
 	
 	
@@ -107,27 +107,27 @@ public class EntertainController {
 //		case 0: 
 //					
 //		}
-		return "/entertainment/compDetail";
+		return "entertainment/compDetail";
 	}
 
 	// 미션 등록페이지
 	@RequestMapping("/entertainment/missionUpload")
 	public String missionUpload() {
-		return "/entertainment/missionUpload";
+		return "entertainment/missionUpload";
 	}
 
 	// 미션 등록
 	@RequestMapping(value = "/entertainment/missionUpload", method = RequestMethod.POST)
 	public String fileUpload(Mission mission) throws Exception {
 		entertainmentService.missionUpload(mission);
-		return "/entertainment/success";
+		return "entertainment/success";
 
 	}
 
 	// 배지 조회페이지
 	@RequestMapping("/entertainment/badge")
 	public String badge() {
-		return "/entertainment/badge";
+		return "entertainment/badge";
 	}
 
 	// 등록된 배지
@@ -139,7 +139,7 @@ public class EntertainController {
 	// 배지 등록 페이지
 	@RequestMapping("/entertainment/badgeUpload")
 	public String badgeUpload() {
-		return "/entertainment/badgeUpload";
+		return "entertainment/badgeUpload";
 	}
 
 	// 배지 이미지, 값 등록
@@ -155,7 +155,7 @@ public class EntertainController {
 		stream.write(files.getBytes());
 		stream.close();
 
-		return "/entertainment/success";
+		return "entertainment/success";
 
 	}
 	
