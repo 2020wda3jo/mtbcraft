@@ -1,8 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="header"></head>
-<div id="sub_img"></div>
+<head th:replace="header2"></head>
+
+<link rel="stylesheet" href="/css/main/login.css">
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+	<div class="overlay"></div>
+	<div class="container">
+	  <div class="row no-gutters slider-text align-items-end justify-content-center">
+	    <div class="col-md-9 ftco-animate text-center">
+	      <h1 class="mb-2 bread">Reservation</h1>
+	      <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Reservation <i class="ion-ios-arrow-forward"></i></span></p>
+	    </div>
+	  </div>
+	</div>
+</section>
 
 <div id="login_form">
 <h2>로그인</h2>
@@ -18,8 +31,10 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
                 <script>alert("아이디 및 비밀번호를 확인해주세요");</script>
             </div>
 			<div id="log_box_bot">
-				<button type="submit" id="">LOGIN</button>
+			<br>
+				<button class="btn btn-primary py-3 px-5 log" type="submit" id="">LOGIN</button>
 			</div>
 		</form>
 </div>
-<footer th:replace="footer"></footer>
+
+<footer th:replace="footer2"></footer>

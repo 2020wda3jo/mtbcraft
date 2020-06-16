@@ -31,14 +31,23 @@ public class CommunityController {
 	// 커뮤니티
 	@RequestMapping(value = "/community", method = RequestMethod.GET)
 	public String comunity() {
-		return "/community";
+		//return "/community";
+		return "community/community2";
 	}
+	
+	// 커뮤니티 로그인 후
+	@RequestMapping(value = "/community", method = RequestMethod.POST)
+	public String comunity(String rider) {
+		//return "/community";
+		return "community/community2";
+	}
+	
 
 	// 커뮤니티 클럽
 	@RequestMapping(value = "/community/club", method = RequestMethod.GET)
 	public String comunityclub() {
-		
-		return "community/club/club";
+		//return "community/club/club";
+		return "community/club/club2";
 	}
 	
 	// 커뮤니티 클럽 만들기 페이지

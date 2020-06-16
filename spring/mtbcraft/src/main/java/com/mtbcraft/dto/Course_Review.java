@@ -9,8 +9,14 @@ public class Course_Review {
 	private int cr_rnum;
 	private String cr_content;
 	private String cr_images;
+	private String riderimg;
 	
-	
+	public String getRiderimg() {
+		return riderimg;
+	}
+	public void setRiderimg(String riderimg) {
+		this.riderimg = riderimg;
+	}
 	public String getCr_images() {
 		return cr_images;
 	}

@@ -59,7 +59,29 @@ public class RidingController {
 		}
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);
-		return "riding/course";
+		//return "riding/course";
+		return "riding/course2";
+	}
+	
+	// 코스 메뉴 진입
+	@RequestMapping(value = "/riding/course2")
+	public String course2(Model model) throws Exception {
+		String rider = "1801317";
+		List<RidingRecord> rrlist = ridingService.getRidingRecord(rider);
+		for(int i=0;i<rrlist.size();i++) {
+			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
+			int like = ridingService.getRR_Like(rrlist.get(i).getRr_num());
+			rrlist.get(i).setRr_like(like);
+		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
+		List<RidingRecord> scraplist = ridingService.getScrapCourse(rider);
+		for(int i=0;i<scraplist.size();i++) {
+			scraplist.get(i).setRr_gpx(scraplist.get(i).getRr_dateYYYYMMDD());
+			int like = ridingService.getRR_Like(scraplist.get(i).getRr_num());
+			scraplist.get(i).setRr_like(like);
+		}
+		model.addAttribute("ridingrecords", rrlist);
+		model.addAttribute("scrapcourses", scraplist);
+		return "riding/course2";
 	}
 	
 	// 메인화면 구성을 위한 최신주행기록 3개 조회
@@ -246,8 +268,8 @@ public class RidingController {
 		
 		if(!files.isEmpty()) {
 			String filename = files.getOriginalFilename();
-	        //String directory = "/home/ec2-user/data/review/";
-	        String directory = "C:\\Users\\TACK\\Desktop\\study\\review\\";
+	        String directory = "/home/ec2-user/data/review/";
+	        //String directory = "C:\\Users\\TACK\\Desktop\\study\\review\\";
 	        String filepath = Paths.get(directory, filename).toString();             
 	        
 	        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
@@ -290,7 +312,13 @@ public class RidingController {
 	// 코스 검색 진입
 	@RequestMapping(value = "/riding/search", method = RequestMethod.GET)
 	public String coursesearch() {
-		return "riding/search";
+		//return "riding/search";
+		return "riding/search2";
+	}
+	// 코스 검색 진입
+	@RequestMapping(value = "/riding/search2", method = RequestMethod.GET)
+	public String coursesearch2() {
+		return "riding/search2";
 	}
 	
 	//코스 추천
@@ -349,8 +377,8 @@ public class RidingController {
 	}
 	
 	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
-		//String path = "/home/ec2-user/data/gpx/"+gpxFile;
-		String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
+		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		//String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
 		File file = new File(path);
 		String txt = "";
 		FileInputStream fis = new FileInputStream(file); 
@@ -370,16 +398,16 @@ public class RidingController {
 	@GetMapping(value = "/image/review/{imageFile}")
 	public @ResponseBody byte[] getImage(@PathVariable String imageFile) throws IOException {
 		InputStream in = null;
-	    //in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/review/"+imageFile)); 
-	    in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\study\\review\\"+imageFile)); 
+	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/review/"+imageFile)); 
+	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\study\\review\\"+imageFile)); 
 	    return IOUtils.toByteArray(in);
 	}
 		
 	//이미지 업로드
 	private void uploadImage(MultipartFile uploadfile) throws IOException {
 		String filename = uploadfile.getOriginalFilename();
-		//String directory = "/home/ec2-user/data/review";
-		String directory = "C:\\Users\\TACK\\Desktop\\study\\review";
+		String directory = "/home/ec2-user/data/review";
+		//String directory = "C:\\Users\\TACK\\Desktop\\study\\review";
 		String filepath = Paths.get(directory, filename).toString();
 		
 		// Save the file locally

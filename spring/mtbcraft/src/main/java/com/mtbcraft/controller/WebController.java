@@ -16,9 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class WebController {
 	
+	//index2 > index로 변경시 지워도됨
+	@RequestMapping("/")
+	public String main() {
+		return "index2";
+	}
+	
 	@RequestMapping("/index")
 	public String index() {
-		return "index";
+		//return "index";
+		return "index2";
 	}
 	@RequestMapping("/intro")
 	public String intro() {
@@ -30,16 +37,16 @@ public class WebController {
 	}
 	
 	// 여기서부터 테스트입니다.
-		@RequestMapping("/testWeb")
-		public String testbwe() {
-			return "testWeb";
-		}
-		
+	@RequestMapping("/testWeb")
+	public String testbwe() {
+		return "testWeb";
+	}
+	
 		
 	// 여기서부터 테스트입니다.
 	@RequestMapping("/test2")
 	public String testServer() {
-		return "test2";
+		return "index2";
 	}
 	
 	@RequestMapping(value = "/uploadFileToServer", method = RequestMethod.POST)
