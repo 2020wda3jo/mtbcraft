@@ -2,6 +2,7 @@ package com.mtbcraft.Activity.Competition;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -90,6 +92,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
         /* 로그인관련 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String LoginId = auto.getString("LoginId", "");
+        String Nickname = auto.getString("r_nickname","");
 
         /*네비게이션 바 */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -112,6 +115,9 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
         joinButton = findViewById(R.id.compjoin_button);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View header = navigationView.getHeaderView(0);
+        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        InFoUserId.setText(Nickname+"님 환영합니다");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -187,17 +193,17 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
             is = new FileInputStream(new File(getFilesDir().getPath() + "/" + c_gpx));
             StringBuffer strBuffer = new StringBuffer();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            line="";
-            boolean stop = false;
-            while((line=reader.readLine())!=null && stop == false){
-                if ( line.contains("trkpt lat=")) {
-                    a = line.split("\"");
-                    stop = true;
+                line="";
+                boolean stop = false;
+                while((line=reader.readLine())!=null && stop == false){
+                    if ( line.contains("trkpt lat=")) {
+                        a = line.split("\"");
+                        stop = true;
+                    }
                 }
-            }
 
-            reader.close();
-            is.close();
+                reader.close();
+                is.close();
 
             Toast.makeText(CompetitionDetail.this, "gpx 위도" + a[1] + "경도" + a[3] , Toast.LENGTH_LONG).show();
         } catch (Exception e) {
@@ -217,33 +223,42 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
         joinButton.setOnClickListener( v -> {
 
-            double latitude = lastKnownLocation.getLatitude();
-            double longitude = lastKnownLocation.getLongitude();
+                double latitude = lastKnownLocation.getLatitude();
+                double longitude = lastKnownLocation.getLongitude();
 
-            double kmLat = 1 / 88.74;
-            double kmLot = 1 / 109.958489129649955;
+                double kmLat = 1 / 88.74;
+                double kmLot = 1 / 109.958489129649955;
 
-            Toast.makeText(CompetitionDetail.this, "현재위치 \n위도 " + latitude + "\n경도 " + longitude, Toast.LENGTH_LONG).show();
+                if ( (Double.parseDouble(a[1])-kmLat) < latitude && latitude < ( Double.parseDouble(a[1] ) + kmLat ) &&
+                        ( Double.parseDouble(a[3])-kmLot) < longitude && longitude < ( Double.parseDouble(a[3]) + kmLot ))
+                {
 
-            if ( (Double.parseDouble(a[1])-kmLat) < latitude && latitude < ( Double.parseDouble(a[1] ) + kmLat ) &&
-                    ( Double.parseDouble(a[3])-kmLot) < longitude && longitude < ( Double.parseDouble(a[3]) + kmLot ))
-            {
+                    Context context = v.getContext();
+                    Intent intent3 = new Intent(v.getContext(), FollowStart.class);
+                    intent3.putExtra("comp_num", comp_num);
+                    intent3.putExtra("check", 1);
+                    intent3.putExtra("comp_gpx", c_gpx);
+                    intent3.putExtra("c_name", c_name);
+                    intent3.putExtra("comp_name", comp_name);
+                    intent3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    v.getContext().startActivity(intent3);
 
-                Context context = v.getContext();
-                Intent intent3 = new Intent(v.getContext(), FollowStart.class);
-                intent3.putExtra("comp_num", comp_num);
-                intent3.putExtra("check", 1);
-                intent3.putExtra("comp_gpx", c_gpx);
-                intent3.putExtra("c_name", c_name);
-                intent3.putExtra("comp_name", comp_name);
-                intent3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                v.getContext().startActivity(intent3);
-
-                finish();
-            }
-            else{
-                Toast.makeText(CompetitionDetail.this, "현재위치 \n위도 " + latitude + "\n경도 " + longitude, Toast.LENGTH_LONG).show();
-            }
+                    finish();
+                }
+                else{
+                    // 다이얼로그 바디
+                    AlertDialog.Builder alert_confirm = new AlertDialog.Builder((Context) v.getContext());
+                    // 메세지
+                    alert_confirm.setMessage("지정된 코스 위치가 아닙니다\n\n현재 위치 : " + latitude + "\n경도 : " + longitude);
+                    // 확인 버튼 리스너
+                    alert_confirm.setPositiveButton("확인", null);
+                    // 다이얼로그 생성
+                    AlertDialog alert = alert_confirm.create();
+                    // 다이얼로그 타이틀
+                    alert.setTitle("코스 위치를 확인해주십시요");
+                    // 다이얼로그 보기
+                    alert.show();
+                }
 
         });
 
@@ -277,6 +292,27 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onProviderEnabled(String provider) {
         //권한 체크
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -300,7 +336,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getCompClub/" + comp_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompClub/" + comp_num);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -350,7 +386,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getCompBadge/" + comp_badge);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompBadge/" + comp_badge);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -402,7 +438,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getCompScore/" + comp_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompScore/" + comp_num);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -471,7 +507,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
                 recyclerView2.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView2.setAdapter(adapter);
 
-            }catch(Exception e){
+        }catch(Exception e){
                 e.printStackTrace();
             }
         }
@@ -531,28 +567,6 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
                 e.printStackTrace();
             }
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

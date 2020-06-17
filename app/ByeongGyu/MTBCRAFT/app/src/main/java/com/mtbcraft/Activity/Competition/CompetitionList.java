@@ -3,12 +3,15 @@ package com.mtbcraft.Activity.Competition;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -24,7 +27,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Course.CourseSearch;
-import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.MyReport;
 import com.mtbcraft.Activity.Scrap.MyScrap;
@@ -54,9 +56,11 @@ public class CompetitionList extends AppCompatActivity {
 
     Button ingBt, finishBt, joinedBt;
 
-    String LoginId, Nickname;
+    String LoginId, Nickname, Image, Save_Path;
 
     ArrayList<String> joinedList = new ArrayList<>();
+
+    ImageView imageView;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -66,18 +70,20 @@ public class CompetitionList extends AppCompatActivity {
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId","");
         Nickname = auto.getString("r_nickname", "");
-        ingBt = findViewById(R.id.ing_bt);
-        finishBt = findViewById(R.id.finish_bt);
-        joinedBt = findViewById(R.id.joined_bt);
+        Image = auto.getString("r_image", "");
+        Save_Path = getFilesDir().getPath();
+        Bitmap mem_Image = BitmapFactory.decodeFile(new File(Save_Path + "/" + Image).getAbsolutePath());
+
         memberId = findViewById(R.id.memberId);
-        memberId.setText(LoginId + " 님");
+        memberId.setText(Nickname + " 님");
 
         recycleView = findViewById(R.id.recycleView1);
 
-        /* 로그인 정보 가져오기 */
-
-        /* 드로우 레이아웃 네비게이션 부분들 */
+        imageView = findViewById(R.id.comp_mem_image);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        ingBt = findViewById(R.id.ing_bt);
+        finishBt = findViewById(R.id.finish_bt);
+        joinedBt = findViewById(R.id.joined_bt);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -86,7 +92,9 @@ public class CompetitionList extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        InFoUserId.setText(LoginId+"환영합니다");
+        InFoUserId.setText(Nickname+"님 환영합니다");
+        imageView.setImageBitmap(mem_Image);
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -95,38 +103,35 @@ public class CompetitionList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(getApplicationContext(), SubActivity.class);
-                    startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist=new Intent(CompetitionList.this, MyReport.class);
                     startActivity(mylist);
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
-                    courselist.putExtra("rider_id", LoginId);
+                    Intent courselist=new Intent(CompetitionList.this, CourseList.class);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch=new Intent(CompetitionList.this, CourseSearch.class);
                     startActivity(coursesearch);
-                    break;
-                //스크랩 보관함
+                    //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget=new Intent(CompetitionList.this, MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp=new Intent(CompetitionList.this, CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission=new Intent(CompetitionList.this, Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -151,7 +156,7 @@ public class CompetitionList extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/competition/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/competition/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -196,7 +201,7 @@ public class CompetitionList extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/competition");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/competition");
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -223,7 +228,6 @@ public class CompetitionList extends AppCompatActivity {
                 ArrayList<Competition> pastItemList = new ArrayList<>();
                 Competition[] items = gson.fromJson(tempData, Competition[].class);
                 String File_Name="";
-                String Save_Path = getFilesDir().getPath();
 
                 for(Competition item: items){
                     for ( int i = 0; i<joinedList.size(); i++){

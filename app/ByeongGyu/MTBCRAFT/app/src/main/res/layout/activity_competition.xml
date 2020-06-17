@@ -41,11 +41,11 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textView4"
-                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintStart_toEndOf="@+id/comp_mem_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/comp_mem_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="16dp"
@@ -64,7 +64,7 @@
                 android:layout_marginTop="8dp"
                 android:text="클럽원과 함께 경쟁전에 참여해보세요!"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintStart_toEndOf="@+id/comp_mem_image"
                 app:layout_constraintTop_toBottomOf="@+id/memberId" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

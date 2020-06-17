@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,12 +23,12 @@ import com.google.gson.Gson;
 import com.mtbcraft.Activity.Competition.CompetitionList;
 import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Course.CourseSearch;
-import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Scrap.MyScrap;
 import com.mtbcraft.Recycler.Adapter.RecyclerAdapter;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.network.HttpClient;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,21 +44,16 @@ public class MyReport extends AppCompatActivity  {
         setContentView(R.layout.myreport);
         recyclerView= findViewById(R.id.recyclerView);
 
-        /* 로그인 정보 가져오기 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        LoginId = auto.getString("LoginId","");
-
-        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        View header = navigationView.getHeaderView(0);
-        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        InFoUserId.setText(LoginId+"님 환영합니다.");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -69,47 +62,49 @@ public class MyReport extends AppCompatActivity  {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(getApplicationContext(), SubActivity.class);
+                    Intent home=new Intent(MyReport.this, MyReport.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist=new Intent(MyReport.this, MyReport.class);
                     startActivity(mylist);
+                    finish();
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
-                    courselist.putExtra("rider_id", LoginId);
+                    Intent courselist=new Intent(MyReport.this, CourseList.class);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch=new Intent(MyReport.this, CourseSearch.class);
                     startActivity(coursesearch);
-                    break;
-                //스크랩 보관함
+                    //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget=new Intent(MyReport.this, MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp=new Intent(MyReport.this, CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission=new Intent(MyReport.this, Mission.class);
                     startActivity(mission);
                     break;
             }
             return true;
         });
 
+
         try{
             GetTask getTask = new GetTask();
             Map<String, String> params = new HashMap<String, String>();
+            auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+            LoginId  = auto.getString("LoginId","");
             params.put("rr_rider", LoginId);
             getTask.execute(params);
         }catch(Exception e){

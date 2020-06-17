@@ -54,7 +54,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
+public class endActivity extends AppCompatActivity {
 
     //스타트 액티비티에서 가져오는 String형변수
     String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, endsec, restsectime, rr_comp;
@@ -133,28 +133,25 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
 
         //선 그래프
-       // ArrayList<Entry> entry_chart = new ArrayList<>();
-        //lineChart = (LineChart) findViewById(R.id.chart);//layout의 id
-       // LineData chartData = new LineData();
-       // for(int g=0; g<godolist.size(); g++){
-           // entry_chart.add(new Entry(g, godolist.get(g)));
-       // }
+        ArrayList<Entry> entry_chart = new ArrayList<>();
+        lineChart = (LineChart) findViewById(R.id.chart);//layout의 id
+        LineData chartData = new LineData();
+        for(int g=0; g<godolist.size(); g++){
+            entry_chart.add(new Entry(g, godolist.get(g)));
+        }
 
             /* 만약 (2, 3) add하고 (2, 5)한다고해서
             기존 (2, 3)이 사라지는게 아니라 x가 2인곳에 y가 3, 5의 점이 찍힘 */
-       // LineDataSet lineDataSet = new LineDataSet(entry_chart, "고도상승");
-        //chartData.addDataSet(lineDataSet);
+        LineDataSet lineDataSet = new LineDataSet(entry_chart, "고도상승");
+        chartData.addDataSet(lineDataSet);
 
-        //lineChart.setData(chartData);
-        //lineChart.invalidate();
+        lineChart.setData(chartData);
+        lineChart.invalidate();
 
 
         mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
-
-        mapView.setCurrentLocationEventListener(this);
-        mapView.isShowingCurrentLocationMarker();
 
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
@@ -199,14 +196,28 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         sec = sec % 60;
         min = min % 60;
         if(hour == 0){
-            hour=00;
+            hour=0;
         }
         if(min==0){
-            min=00;
+            min=0;
         }
 
+        int r_sec = Integer.parseInt(endsec);
+        int r_hour;
+        int r_min;
+
+        r_min = r_sec/60;
+        r_hour = r_min/60;
+        r_sec = r_sec%60;
+        r_min = r_min % 60;
+        if(r_hour == 0){
+            r_hour=00;
+        }
+        if(r_min==0){
+            r_min=00;
+        }
         resttime.setText(String.valueOf(hour+":"+min+":"+sec)); //휴식시간
-        ingtime.setText(IngTime); //지속시간
+        ingtime.setText(String.valueOf(r_hour+":"+r_min+":"+r_sec)); //지속시간
         distence.setText(Distence); //이동거리
         // gpx파일 제목을 위해 현재 시간 구하기
         long now = System.currentTimeMillis();
@@ -388,7 +399,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://53.92.32.2:8080/app/updateCompScore");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateCompScore");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -415,7 +426,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getCompAllScore/" + rr_comp);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompAllScore/" + rr_comp);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -492,7 +503,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://53.92.32.2:8080/app/updateRank/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateRank/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -518,7 +529,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getMissionStatus/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getMissionStatus/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -578,7 +589,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getNoClearMission/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getNoClearMission/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -724,7 +735,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://53.92.32.2:8080/app/updateMissionStatus/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateMissionStatus/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -748,7 +759,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://53.92.32.2:8080/app/insertMissionCom/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/insertMissionCom/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -768,29 +779,4 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         }
     }
 
-
-    @Override
-    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-
-    }
-    @Override
-    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-
-    }
-    @Override
-    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-
-    }
-    @Override
-    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
-
-    }
-    @Override
-    public void onCurrentLocationUpdateFailed(MapView mapView) {
-
-    }
-    @Override
-    public void onCurrentLocationUpdateCancelled(MapView mapView) {
-
-    }
 }
