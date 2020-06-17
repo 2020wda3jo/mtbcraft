@@ -7,6 +7,25 @@ public class Mission {
 	private String m_content;
 	private int m_type;
 	
+	private String m_img;
+	private String m_time;
+	
+	
+	public String getM_time() {
+		String date = this.m_time.split(" ")[0];
+		String time = this.m_time.split(" ")[1];
+				
+		return date.split("/")[0]+"년 "+date.split("/")[1]+"월 "+date.split("/")[2]+"일 "+time;
+	}
+	public void setM_time(String m_time) {
+		this.m_time = m_time;
+	}
+	public String getM_img() {
+		return m_img;
+	}
+	public void setM_img(String m_img) {
+		this.m_img = m_img;
+	}
 	public int getM_num() {
 		return m_num;
 	}

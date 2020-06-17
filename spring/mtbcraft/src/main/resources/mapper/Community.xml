@@ -49,5 +49,15 @@
 	<insert id="signClub" parameterType="com.mtbcraft.dto.Club_Join">
 		insert into club_join(cj_rider, cj_club, cj_join, cj_num) values(#{cj_rider}, #{cj_club}, (SYSDATE+9/24), SEQ_JOIN.nextval)
 	</insert>
+	
+	<!-- 가입 클럽 조회 -->
+	<select id="getJoinCLub" parameterType="String" resultType="int">
+		<![CDATA[select cj_club from (select * from club_join where cj_rider=#{cj_rider} order by cj_join desc) where rownum < 2 and cj_withdraw is null]]>
+	</select>
+	
+	<!-- 클럽 넘버로 클럽 정보 조회 -->
+	<select id="getClubInfo" parameterType="int" resultType="com.mtbcraft.dto.Club">
+		select * from club where cb_num = #{c_num}
+	</select>
 </mapper>
 

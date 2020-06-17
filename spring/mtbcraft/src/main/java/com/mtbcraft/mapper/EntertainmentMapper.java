@@ -40,7 +40,22 @@ public interface EntertainmentMapper {
 	//배지 등록
 	public void BadgeUpload(Badge badge)throws Exception;
 
+	//참여한 최근 경쟁전 3개 조회
+	public List<Competition> getRecentComp3(String rider);
+	
+	//참여한 최근 경쟁전 4개 조회
+	public List<Competition> getRecentComp4(String rider);
+	
+	// 진행중인 경쟁전 2개 조회
+	public List<Competition> getIngComp2();
 
-
+	// 종료된 경쟁전 2개 조회
+	public List<Competition> getEndComp2();
+	
+	//번호로 경쟁전 조회
+	public Competition getComp(int comp_num);
+	
+	//성공한 미션 조회
+	public List<Mission> getCompleteMission(String rider);
 
 }

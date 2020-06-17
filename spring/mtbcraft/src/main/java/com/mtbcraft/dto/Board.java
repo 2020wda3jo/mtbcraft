@@ -1,6 +1,7 @@
 package com.mtbcraft.dto;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class Board {
 
@@ -19,6 +20,20 @@ public class Board {
 	private String b_file;
 
 	private int b_club;
+
+	private String date;
+	
+	
+	
+	public String getDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+		date = sdf.format(this.b_day);
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
 
 	public int getB_club() {
 		return b_club;

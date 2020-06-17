@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
+import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.Mission;
 import com.mtbcraft.dto.MissionComplete;
 import com.mtbcraft.service.EntertainmentService;
@@ -36,12 +37,17 @@ import com.mtbcraft.service.MemberService;
 public class EntertainController {
 
 	@Autowired
-	
 	private EntertainmentService entertainmentService;
 
 	// 엔터테인먼트 메인
 	@RequestMapping(value="/entertainment", method = RequestMethod.POST)
-	public String competitions2(String rider) {
+	public String competitions2(String rider, Model model) {
+		List<Competition> complist = entertainmentService.getRecentComp3(rider);
+		List<Mission> missionlist = entertainmentService.getCompleteMission(rider);
+		
+		model.addAttribute("complist", complist);
+		model.addAttribute("missionlist", missionlist);
+		
 		return "entertainment/main";
 	}
 
@@ -53,7 +59,17 @@ public class EntertainController {
 	
 	// 경쟁전
 	@RequestMapping(value="/entertainment/competition", method = RequestMethod.POST)
-	public String competitions(String rider) {
+	public String competitions(String rider, Model model) {
+		List<Competition> complist = entertainmentService.getRecentComp4(rider);
+		List<Competition> compinglist = entertainmentService.getIngComp2();
+		List<Competition> compendlist = entertainmentService.getEndComp2();
+		
+		model.addAttribute("complist", complist);
+		model.addAttribute("comping1", compinglist.get(0));
+		model.addAttribute("comping2", compinglist.get(1));
+		model.addAttribute("compend1", compendlist.get(0));
+		model.addAttribute("compend2", compendlist.get(1));
+
 		return "entertainment/competition";
 	}
 	
@@ -65,8 +81,20 @@ public class EntertainController {
 	
 	// 경쟁전 상세보기 페이지
 	@RequestMapping(value="/entertainment/competition/{comp_num}", method = RequestMethod.GET)
-	public String competitioDetail(@PathVariable String comp_num) {
+	public String competitioDetail(@PathVariable int comp_num, Model model) {
+		
+		model.addAttribute("comp", entertainmentService.getComp(comp_num));
+		
 		return "entertainment/competitiondetail";
+	}
+	
+	//경쟁전 코스 좌표 요청
+	@RequestMapping(value="/getInfoByGpxFile/{gpxfile}", method = RequestMethod.GET)
+	@ResponseBody
+	public Gpx getGpxByRR_Num(@PathVariable String gpxfile) throws Exception {
+		Gpx gpx = new Gpx();
+		makeGpx(gpx, gpxfile);
+		return gpx;
 	}
 
 	//경쟁전 기록 페이지
@@ -192,5 +220,22 @@ public class EntertainController {
 		in = new BufferedInputStream(new FileInputStream("C:\\Users\\zfrzf\\Desktop\\badge.png"));
 		return IOUtils.toByteArray(in);
 	}
-
+	
+	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
+		//String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		String path = "C:\\Users\\TACK\\Desktop\\study\\"+gpxFile;
+		File file = new File(path);
+		String txt = "";
+		FileInputStream fis = new FileInputStream(file); 
+		while(true) { 
+			int res = fis.read(); 
+			if(res<0) { 
+				break; 
+			}else { 
+				txt += ((char)res);
+			}
+		}
+		fis.close();
+		gpx.setting(txt);
+	}
 }

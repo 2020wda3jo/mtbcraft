@@ -1,40 +1,41 @@
 package com.mtbcraft.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 public class Competition {
-@Id
-@Column
+
 private int comp_num;
-@Column
 private int comp_course;
-@Column
 private int comp_badge;
-@Column
 private String comp_name;
-@Column
 private String comp_period;
-@Column
 private String comp_content;
-@Column
 private String comp_image;
-@Column
+
+private String start;
+private String end;
+private String c_area;
 private String c_gpx;
-@Column
+private String c_distance;
 private String c_name;
 
 
 
-
-
+public String getC_distance() {
+	return c_distance;
+}
+public void setC_distance(String c_distance) {
+	this.c_distance = c_distance;
+}
 public String getC_name() {
 	return c_name;
 }
 public void setC_name(String c_name) {
 	this.c_name = c_name;
+}
+public String getC_area() {
+	return c_area;
+}
+public void setC_area(String c_area) {
+	this.c_area = c_area;
 }
 public String getC_gpx() {
 	return c_gpx;
@@ -42,6 +43,23 @@ public String getC_gpx() {
 public void setC_gpx(String c_gpx) {
 	this.c_gpx = c_gpx;
 }
+public String getStart() {
+	this.start =this.comp_period.substring(0, 8);
+	start = start.substring(0, 4)+"년 "+start.substring(4, 6)+"월 "+start.substring(6)+"일";
+	return start;
+}
+public void setStart(String start) {
+	this.start = start;
+}
+public String getEnd() {
+	this.end =this.comp_period.substring(8);
+	end = end.substring(0, 4)+"년 "+end.substring(4, 6)+"월 "+end.substring(6)+"일";
+	return end;
+}
+public void setEnd(String end) {
+	this.end = end;
+}
+
 public int getComp_num() {
 	return comp_num;
 }

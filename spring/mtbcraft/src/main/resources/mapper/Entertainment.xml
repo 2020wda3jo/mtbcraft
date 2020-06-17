@@ -41,7 +41,38 @@
 		select * from competition where (SUBSTR(comp_period,9,16))
 		&lt; (select to_char(SYSDATE,'YYYYMMDD')from dual)
 	</select>
+	
+	<!-- 참여한 최근 경쟁전 조회 -->
+	<select id="getRecentComp3" parameterType="String" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select COMPETITION.COMP_NUM, COMPETITION.COMP_CONTENT, COMPETITION.COMP_PERIOD, COMPETITION.COMP_IMAGE, COMPETITION.COMP_NAME from RIDING_RECORD, COMPETITION where RIDING_RECORD.RR_COMP=COMPETITION.COMP_NUM and RR_RIDER=#{rider} and RR_COMP is not null ORDER BY RR_DATE desc) where rownum<=3 ]]>
+	</select>
+	
+	<!-- 참여한 최근 경쟁전4 조회 -->
+	<select id="getRecentComp4" parameterType="String" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select COMPETITION.COMP_NUM, COMPETITION.COMP_CONTENT, COMPETITION.COMP_PERIOD, COMPETITION.COMP_IMAGE, COMPETITION.COMP_NAME from RIDING_RECORD, COMPETITION where RIDING_RECORD.RR_COMP=COMPETITION.COMP_NUM and RR_RIDER=#{rider} and RR_COMP is not null ORDER BY RR_DATE desc) where rownum<=4 ]]>
+	</select>
+	
+	<!-- 진행중인 경쟁전 2개 조회 -->
+	<select id="getIngComp2" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') > sysdate order by comp_num desc ) where rownum<=2 ]]>
+	</select>
 
-
-
+	<!-- 종료된 경쟁전 2개 조회 -->
+	<select id="getEndComp2" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') < sysdate order by comp_num desc ) where rownum<=2 ]]>
+	</select>
+	
+	<!-- 번호로 경쟁전 조회 -->
+	<select id="getComp" parameterType="int" resultType="com.mtbcraft.dto.Competition">
+		select * from COMPETITION, COURSE where COMPETITION.COMP_COURSE = c_num and comp_num=#{comp_num}
+	</select>
+	
+	<!-- 성공한 미션 조회 -->
+	<select id="getCompleteMission" parameterType="String" resultType="com.mtbcraft.dto.Mission">
+		select BADGE.BG_IMAGE as m_img, MISSION.M_CONTENT, MISSION.M_NAME as m_name, SUBSTR(MISSION_COMPLETE.MC_TIME,0,17) as m_time from MISSION, MISSION_COMPLETE, BADGE where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION.M_BADGE=BADGE.BG_NUM and MISSION_COMPLETE.MC_RIDER=#{rider}
+	</select>
+	
+	
+	
+	
 </mapper>

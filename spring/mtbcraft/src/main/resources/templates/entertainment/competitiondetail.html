@@ -29,13 +29,13 @@
 		         <div class="col-md-12 ftco-animate">
 		           <div class="blog-entry">
 		             <div class="text pt-3">
-		               <h1 class="heading"><a href="#">용평 MTB 축제</a></h1>
+		               <h1 class="heading"><a href="#" th:text="${comp.comp_name}">용평 MTB 축제</a></h1>
 		             </div>
 		           </div>
-		           <a href="blog-single.html" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
+		           <a href="blog-single.html" class="block-20" style="background-image: url('/test/images/image_1.jpg'); th:with="url = 'background-image: url(/test/images/'+${comp.comp_image}+')'" th:style="${url}"">
 		             </a>
 		             
-		             <p class="text pt-3 pd-4">2020년 6월 17일부터 20일까지 부산 벡스코에서 '2020 부산MTB쇼'가 개최된다.</p>
+		             <p class="text pt-3 pd-4" th:text="${comp.comp_content}">2020년 6월 17일부터 20일까지 부산 벡스코에서 '2020 부산MTB쇼'가 개최된다.</p>
 		             <p>#MTB #산악자전거 #우리 #모두 #달려요</p>
 		             
 		             <hr>
@@ -49,14 +49,14 @@
 					    <tbody>
 					    <tr>
 					        <th scope="row">시작일</th>
-					        <td>2020.06.17</td>
+					        <td th:text="${comp.start}">2020.06.17</td>
 					        
 					        <th scope="row">종료일</th>
-					        <td>2020.06.30</td>
+					        <td th:text="${comp.end}">2020.06.30</td>
 					    </tr>
 					    <tr>
 					        <th scope="row">주소</th>
-					        <td>부산광역시 해운대구 APEC로 55</td>
+					        <td th:text="${comp.c_area}">부산광역시 해운대구 APEC로 55</td>
 					        
 					        <th scope="row">라이딩장소</th>
 					        <td>부산 BEXCO 제 1전시장</td>
@@ -70,10 +70,10 @@
 					    </tr>
 					    <tr>
 					        <th scope="row">코스</th>
-					        <td>운봉산 초입 제3지점까지</td>
+					        <td th:text="${comp.c_name}">운봉산 초입 제3지점까지</td>
 					        
 					        <th scope="row">거리</th>
-					        <td>9.7km</td>
+					        <td th:text="${comp.c_distance}">9.7km</td>
 					    </tr>
 					    </tbody>
 					</table>
@@ -267,7 +267,7 @@
 	</section>
 
 	<!-- 코스번호 -->
-	<input type="hidden" id="c_num" name="c_num" value="2">
+	<input type="hidden" id="c_gpx" name="c_gpx" th:value="${comp.c_gpx}">
 
 	<footer th:replace="footer2"></footer>
 	
@@ -316,11 +316,10 @@
 		});
 		
 		//rr_num으로 지도에 경로 그리기
-		 function drawPolylineByRR_Num(polyline, rr_num){
+		 function drawPolylineByRR_Num(polyline, gpx_file){
 			 $.ajax({
-				 url : "/getGpxByRR_Num",
+				 url : "/getInfoByGpxFile/"+gpx_file,
 				 type : "GET",
-				 data : {rr_num : rr_num},
 				 dataType : "json",
 				 cache : false,
 				 success : function(data) {
@@ -358,8 +357,6 @@
 							}
 						}
 						
-						
-						
 						// 지도에 선을 표시합니다 
 						polyline.setPath(linePath);
 						// 지도에 선을 표시합니다 
@@ -371,8 +368,8 @@
 		 }
 		
 		 $(document).ready(function(){
-			var c_num = $("#c_num").val();
-			drawPolylineByRR_Num(polyline, c_num);
+			var c_gpx = $("#c_gpx").val();
+			drawPolylineByRR_Num(polyline, c_gpx);
 		 });
 
 	</script>

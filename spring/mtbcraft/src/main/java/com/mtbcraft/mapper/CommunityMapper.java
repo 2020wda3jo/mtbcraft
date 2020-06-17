@@ -40,4 +40,10 @@ public interface CommunityMapper {
 
 	// 클럽 가입
 	public void signClub(Club_Join cb_join);
+	
+	//가입 클럽 조회
+	public int getJoinCLub(String rider);
+	
+	//클럽 넘버로 클럽 정보 조회
+	public Club getClubInfo(int c_num);
 }

@@ -70,5 +70,13 @@ public class CommunityService {
 	public void signClub(Club_Join cb_join) {
 		communityMapper.signClub(cb_join);
 	}
-
+	
+	//가입 클럽 조회
+	public int getJoinCLub(String rider) {
+		return communityMapper.getJoinCLub(rider);
+	}
+	//클럽 넘버로 클럽 정보 조회
+	public Club getClubInfo(int c_num) {
+		return communityMapper.getClubInfo(c_num);
+	}
 }

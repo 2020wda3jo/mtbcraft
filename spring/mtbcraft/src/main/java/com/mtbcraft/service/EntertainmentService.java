@@ -41,7 +41,7 @@ public class EntertainmentService {
 		return entertainmentMapper.getMission();
 	}
 	
-	//완료한 미션보기
+	//완료한 미션 조회
 	public List<MissionComplete> getMissionComplete(String rr_rider) throws Exception{
 		return entertainmentMapper.getMissionComplete(rr_rider);
 	}
@@ -62,6 +62,35 @@ public class EntertainmentService {
 		return entertainmentMapper.getCompIng();
 	}
 	
+	//참여한 최근 경쟁전 3개조회
+	public List<Competition> getRecentComp3(String rider){
+		return entertainmentMapper.getRecentComp3(rider);
+	}
+	
+	//참여한 최근 경쟁전 4개 조회
+	public List<Competition> getRecentComp4(String rider){
+		return entertainmentMapper.getRecentComp4(rider);
+	}
+	
+	// 진행중인 경쟁전 2개 조회
+	public List<Competition> getIngComp2(){
+		return entertainmentMapper.getIngComp2();
+	}
+
+	// 종료된 경쟁전 2개 조회
+	public List<Competition> getEndComp2(){
+		return entertainmentMapper.getEndComp2();
+	}
+	
+	//번호로 경쟁전 조회
+	public Competition getComp(int comp_num) {
+		return entertainmentMapper.getComp(comp_num);
+	}
+	
+	//성공한 미션 조회
+	public List<Mission> getCompleteMission(String rider){
+		return entertainmentMapper.getCompleteMission(rider);
+	}
 	
 	
 }

@@ -21,12 +21,15 @@ import com.mtbcraft.dto.CC_Event;
 import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.Club_Calender;
 import com.mtbcraft.dto.Club_Join;
+import com.mtbcraft.service.BoardService;
 import com.mtbcraft.service.CommunityService;
 
 @Controller
 public class CommunityController {
 	@Autowired
 	private CommunityService communityService;
+	@Autowired
+	private BoardService boardService;
 	
 	// 커뮤니티
 	@RequestMapping(value = "/community", method = RequestMethod.GET)
@@ -37,8 +40,15 @@ public class CommunityController {
 	
 	// 커뮤니티 로그인 후
 	@RequestMapping(value = "/community", method = RequestMethod.POST)
-	public String comunity(String rider) {
-		//return "/community";
+	public String comunity(String rider, Model model) {
+		int club = 0;
+		try {
+			club = communityService.getJoinCLub(rider);
+			System.out.println(club);
+		} catch(Exception e) {
+			
+		}
+		model.addAttribute("club", club);
 		return "community/community2";
 	}
 	
@@ -48,6 +58,24 @@ public class CommunityController {
 	public String comunityclub() {
 		//return "community/club/club";
 		return "community/club/club2";
+	}
+	// 커뮤니티 클럽 캘린더 이동
+	@RequestMapping(value = "/community/club/calender/{c_num}", method = RequestMethod.GET)
+	public String comunityclub2(@PathVariable int c_num,  Model model) {
+		
+		model.addAttribute("cb_num", c_num);
+		
+		return "community/club/club_calender";
+	}
+	
+	// 커뮤니티 클럽 게시판 이동
+	@RequestMapping(value = "/community/club/{c_num}", method = RequestMethod.GET)
+	public String comunityclubtest(@PathVariable int c_num, Model model) {
+		
+		model.addAttribute("club", communityService.getClubInfo(c_num));
+		model.addAttribute("postlist", boardService.getBoardList(c_num));
+		
+		return "community/club/club_main";
 	}
 	
 	// 커뮤니티 클럽 만들기 페이지
@@ -104,6 +132,12 @@ public class CommunityController {
 		model.addAttribute("cb_num", cb_num); // 클럽 번호 전달
 		return "/community/club/join";
 	}
+	
+	// 테스트
+	@RequestMapping(value = "/community/club/testeeee", method = RequestMethod.GET)
+	public String moveClubBoardssssss() {
+		return "community/club/index";
+	}
 
 	// 커뮤니티 클럽 가입
 	@RequestMapping(value = "/join/decision/{cb_num}/{cj_rider}", method = RequestMethod.GET)
@@ -140,7 +174,7 @@ public class CommunityController {
 	}
 	
 	// 클럽 캘린더 일정 조회
-	@RequestMapping(value = "/community/club/calender/{cc_club}", method = RequestMethod.GET)
+	@RequestMapping(value = "/community/calender/{cc_club}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<CC_Event> getCC(@PathVariable int cc_club) {
 		
@@ -165,7 +199,7 @@ public class CommunityController {
 	}
 	
 	// 클럽 캘린더 일정 등록
-	@RequestMapping(value = "/community/club/calender/{cc_club}", method = RequestMethod.POST)
+	@RequestMapping(value = "/community/calender/{cc_club}", method = RequestMethod.POST)
 	@ResponseBody
 	public String postCC(@PathVariable int cc_club, CC_Event cc_e) {
 		

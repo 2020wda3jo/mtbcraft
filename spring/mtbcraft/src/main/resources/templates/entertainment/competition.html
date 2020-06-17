@@ -48,69 +48,22 @@
 		<div class="container">
 			<div class="row">
 
-		         <div class="col-md-4 ftco-animate">
+		         <div class="col-md-4 ftco-animate" th:each="comp:${complist}">
 		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
+		             <a href="#" th:href="'/entertainment/competition/'+${comp.comp_num}" class="block-20" style="background-image: url('/test/images/image_1.jpg');" th:with="url = 'background-image: url(/test/images/'+${comp.comp_image}+')'" th:style="${url}">
 		             </a>
 		             <div class="text pt-3 pb-4">
 		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
+		                 <div><a href="#">
+		                 	<span th:text="${comp.start}"></span>
+		                 	<span> ~ </span>
+		                 	<span th:text="${comp.end}"></span>
+	                 	</a></div>
 		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
+		               <h3 class="heading"><a href="#" th:text="${comp.comp_name}">용평 MTB 축제</a></h3>
 		               <p class="clearfix">
 		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
-		               </p>
-		             </div>
-		           </div>
-		         </div>
-		         
-         		<div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
-		             </a>
-		             <div class="text pt-3 pb-4">
-		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
-		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
-		               <p class="clearfix">
-		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
-		               </p>
-		             </div>
-		           </div>
-		         </div>
-		         
-		         <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
-		             </a>
-		             <div class="text pt-3 pb-4">
-		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
-		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
-		               <p class="clearfix">
-		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
-		               </p>
-		             </div>
-		           </div>
-		         </div>
-		         
-		         <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
-		             </a>
-		             <div class="text pt-3 pb-4">
-		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
-		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
-		               <p class="clearfix">
-		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
+		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
 		               </p>
 		             </div>
 		           </div>
@@ -128,149 +81,161 @@
 		<div class="container">
 			<div class="row">
 			
-		         <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
-		             </a>
-		             <div class="text pt-3 pb-4">
-		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
-		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
-		               <p class="clearfix">
-		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
-		               </p>
-		             </div>
-		           </div>
-		         </div>
+				<div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <a href="#" th:href="'/entertainment/competition/'+${comping1.comp_num}" class="block-20" style="background-image: url('/test/images/image_1.jpg');" th:with="url = 'background-image: url(/test/images/'+${comping1.comp_image}+')'" th:style="${url}">
+			             </a>
+			             <div class="text pt-3 pb-4">
+			               <div class="meta">
+			                 <div><a href="#">
+			                 	<span th:text="${comping1.start}"></span>
+			                 	<span> ~ </span>
+			                 	<span th:text="${comping1.end}"></span>
+		                 	</a></div>
+			               </div>
+			               <h3 class="heading"><a href="#" th:text="${comping1.comp_name}">용평 MTB 축제</a></h3>
+			               <p class="clearfix">
+			                 <a href="#" class="float-left read">자세히보기</a>
+			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			               </p>
+			             </div>
+			           </div>
+			         </div>
+			         
+	         		<div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <div class="text pt-3 pb-4">
+			             	<table class="type09">
+			             		<thead>
+			             			<tr>
+			             			<th scope="cols" class="r">순위</th>
+			             			<th scope="cols" >클럽</th>
+			             			<th scope="cols" class="j">참여</th>
+			             			<th scope="cols">점수</th>
+			             			</tr>
+			             		</thead>
+			             		<tbody>
+			             		
+			             			<tr>
+			             			<td scope="row" class="r">1위</td>
+			             			<td class="c">3조</td>
+			             			<td class="j">24</td>
+			             			<td>28963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">2위</td>
+			             			<td class="c">독수리</td>
+			             			<td class="j">37</td>
+			             			<td>26163</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">3위</td>
+			             			<td class="c">바위</td>
+			             			<td class="j">24</td>
+			             			<td>20963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">4위</td>
+			             			<td class="c">부엉이</td>
+			             			<td class="j">24</td>
+			             			<td>18263</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">5위</td>
+			             			<td class="c">날개</td>
+			             			<td class="cnt">24</td>
+			             			<td>18027</td>
+			             			</tr>
+			             			
+			             		</tbody>
+			             	</table>
+			             </div>
+			           </div>
+			         </div>
+			         
+			         <div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <a href="#" th:href="'/entertainment/competition/'+${comping2.comp_num}" class="block-20" style="background-image: url('/test/images/image_1.jpg');" th:with="url = 'background-image: url(/test/images/'+${comping2.comp_image}+')'" th:style="${url}">
+			             </a>
+			             <div class="text pt-3 pb-4">
+			               <div class="meta">
+			                 <div><a href="#">
+			                 	<span th:text="${comping2.start}"></span>
+			                 	<span> ~ </span>
+			                 	<span th:text="${comping2.end}"></span>
+		                 	</a></div>
+			               </div>
+			               <h3 class="heading"><a href="#" th:text="${comping2.comp_name}">용평 MTB 축제</a></h3>
+			               <p class="clearfix">
+			                 <a href="#" class="float-left read">자세히보기</a>
+			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			               </p>
+			             </div>
+			           </div>
+			         </div>
+			         
+	         		<div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <div class="text pt-3 pb-4">
+			             	<table class="type09">
+			             		<thead>
+			             			<tr>
+			             			<th scope="cols" class="r">순위</th>
+			             			<th scope="cols" >클럽</th>
+			             			<th scope="cols" class="j">참여</th>
+			             			<th scope="cols">점수</th>
+			             			</tr>
+			             		</thead>
+			             		<tbody>
+			             		
+			             			<tr>
+			             			<td scope="row" class="r">1위</td>
+			             			<td class="c">3조</td>
+			             			<td class="j">24</td>
+			             			<td>28963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">2위</td>
+			             			<td class="c">독수리</td>
+			             			<td class="j">37</td>
+			             			<td>26163</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">3위</td>
+			             			<td class="c">바위</td>
+			             			<td class="j">24</td>
+			             			<td>20963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">4위</td>
+			             			<td class="c">부엉이</td>
+			             			<td class="j">24</td>
+			             			<td>18263</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">5위</td>
+			             			<td class="c">날개</td>
+			             			<td class="cnt">24</td>
+			             			<td>18027</td>
+			             			</tr>
+			             			
+			             		</tbody>
+			             	</table>
+			             </div>
+			           </div>
+			         </div>
+			       
+		     </div>
+	        
 		         
-         		<div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <div class="text pt-3 pb-4">
-		             	<table class="type09">
-		             		<thead>
-		             			<tr>
-		             			<th scope="cols" class="r">순위</th>
-		             			<th scope="cols" >클럽</th>
-		             			<th scope="cols" class="j">참여</th>
-		             			<th scope="cols">점수</th>
-		             			</tr>
-		             		</thead>
-		             		<tbody>
-		             		
-		             			<tr>
-		             			<td scope="row" class="r">1위</td>
-		             			<td class="c">3조</td>
-		             			<td class="j">24</td>
-		             			<td>28963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">2위</td>
-		             			<td class="c">독수리</td>
-		             			<td class="j">37</td>
-		             			<td>26163</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">3위</td>
-		             			<td class="c">바위</td>
-		             			<td class="j">24</td>
-		             			<td>20963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">4위</td>
-		             			<td class="c">부엉이</td>
-		             			<td class="j">24</td>
-		             			<td>18263</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">5위</td>
-		             			<td class="c">날개</td>
-		             			<td class="cnt">24</td>
-		             			<td>18027</td>
-		             			</tr>
-		             			
-		             		</tbody>
-		             	</table>
-		             </div>
-		           </div>
-		         </div>
-		         
-		         <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
-		             </a>
-		             <div class="text pt-3 pb-4">
-		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
-		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
-		               <p class="clearfix">
-		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
-		               </p>
-		             </div>
-		           </div>
-		         </div>
-         
-        		 <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <div class="text pt-3 pb-4">
-		             	<table class="type09">
-		             		<thead>
-		             			<tr>
-		             			<th scope="cols" class="r">순위</th>
-		             			<th scope="cols" >클럽</th>
-		             			<th scope="cols" class="j">참여</th>
-		             			<th scope="cols">점수</th>
-		             			</tr>
-		             		</thead>
-		             		<tbody>
-		             		
-		             			<tr>
-		             			<td scope="row" class="r">1위</td>
-		             			<td class="c">3조</td>
-		             			<td class="j">24</td>
-		             			<td>28963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">2위</td>
-		             			<td class="c">독수리</td>
-		             			<td class="j">37</td>
-		             			<td>26163</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">3위</td>
-		             			<td class="c">바위</td>
-		             			<td class="j">24</td>
-		             			<td>20963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">4위</td>
-		             			<td class="c">부엉이</td>
-		             			<td class="j">24</td>
-		             			<td>18263</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">5위</td>
-		             			<td class="c">날개</td>
-		             			<td class="cnt">24</td>
-		             			<td>18027</td>
-		             			</tr>
-		             			
-		             		</tbody>
-		             	</table>
-		             </div>
-		           </div>
-		         </div>
          
 			</div>
 		</div>
@@ -284,149 +249,161 @@
 		<div class="container">
 			<div class="row">
 			
-		         <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
-		             </a>
-		             <div class="text pt-3 pb-4">
-		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
-		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
-		               <p class="clearfix">
-		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
-		               </p>
-		             </div>
-		           </div>
-		         </div>
+			         <div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <a href="#" th:href="'/entertainment/competition/'+${compend1.comp_num}" class="block-20" style="background-image: url('/test/images/image_1.jpg');" th:with="url = 'background-image: url(/test/images/'+${compend1.comp_image}+')'" th:style="${url}">
+			             </a>
+			             <div class="text pt-3 pb-4">
+			               <div class="meta">
+			                 <div><a href="#">
+			                 	<span th:text="${compend1.start}"></span>
+			                 	<span> ~ </span>
+			                 	<span th:text="${compend1.end}"></span>
+		                 	</a></div>
+			               </div>
+			               <h3 class="heading"><a href="#" th:text="${compend1.comp_name}">용평 MTB 축제</a></h3>
+			               <p class="clearfix">
+			                 <a href="#" class="float-left read">자세히보기</a>
+			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			               </p>
+			             </div>
+			           </div>
+			         </div>
+			         
+	         		<div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <div class="text pt-3 pb-4">
+			             	<table class="type09">
+			             		<thead>
+			             			<tr>
+			             			<th scope="cols" class="r">순위</th>
+			             			<th scope="cols" >클럽</th>
+			             			<th scope="cols" class="j">참여</th>
+			             			<th scope="cols">점수</th>
+			             			</tr>
+			             		</thead>
+			             		<tbody>
+			             		
+			             			<tr>
+			             			<td scope="row" class="r">1위</td>
+			             			<td class="c">3조</td>
+			             			<td class="j">24</td>
+			             			<td>28963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">2위</td>
+			             			<td class="c">독수리</td>
+			             			<td class="j">37</td>
+			             			<td>26163</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">3위</td>
+			             			<td class="c">바위</td>
+			             			<td class="j">24</td>
+			             			<td>20963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">4위</td>
+			             			<td class="c">부엉이</td>
+			             			<td class="j">24</td>
+			             			<td>18263</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">5위</td>
+			             			<td class="c">날개</td>
+			             			<td class="cnt">24</td>
+			             			<td>18027</td>
+			             			</tr>
+			             			
+			             		</tbody>
+			             	</table>
+			             </div>
+			           </div>
+			         </div>
+			         
+			         <div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <a href="#" th:href="'/entertainment/competition/'+${compend2.comp_num}" class="block-20" style="background-image: url('/test/images/image_1.jpg');" th:with="url = 'background-image: url(/test/images/'+${compend2.comp_image}+')'" th:style="${url}">
+			             </a>
+			             <div class="text pt-3 pb-4">
+			               <div class="meta">
+			                 <div><a href="#">
+			                 	<span th:text="${compend2.start}"></span>
+			                 	<span> ~ </span>
+			                 	<span th:text="${compend2.end}"></span>
+		                 	</a></div>
+			               </div>
+			               <h3 class="heading"><a href="#" th:text="${compend2.comp_name}">용평 MTB 축제</a></h3>
+			               <p class="clearfix">
+			                 <a href="#" class="float-left read">자세히보기</a>
+			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			               </p>
+			             </div>
+			           </div>
+			         </div>
+			         
+	         		<div class="col-md-4 ftco-animate">
+			           <div class="blog-entry">
+			             <div class="text pt-3 pb-4">
+			             	<table class="type09">
+			             		<thead>
+			             			<tr>
+			             			<th scope="cols" class="r">순위</th>
+			             			<th scope="cols" >클럽</th>
+			             			<th scope="cols" class="j">참여</th>
+			             			<th scope="cols">점수</th>
+			             			</tr>
+			             		</thead>
+			             		<tbody>
+			             		
+			             			<tr>
+			             			<td scope="row" class="r">1위</td>
+			             			<td class="c">3조</td>
+			             			<td class="j">24</td>
+			             			<td>28963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">2위</td>
+			             			<td class="c">독수리</td>
+			             			<td class="j">37</td>
+			             			<td>26163</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">3위</td>
+			             			<td class="c">바위</td>
+			             			<td class="j">24</td>
+			             			<td>20963</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">4위</td>
+			             			<td class="c">부엉이</td>
+			             			<td class="j">24</td>
+			             			<td>18263</td>
+			             			</tr>
+			             			
+			             			<tr>
+			             			<td scope="row" class="r">5위</td>
+			             			<td class="c">날개</td>
+			             			<td class="cnt">24</td>
+			             			<td>18027</td>
+			             			</tr>
+			             			
+			             		</tbody>
+			             	</table>
+			             </div>
+			           </div>
+			         </div>
+			       
+		     </div>
+		     
 		         
-         		<div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <div class="text pt-3 pb-4">
-		             	<table class="type09">
-		             		<thead>
-		             			<tr>
-		             			<th scope="cols" class="r">순위</th>
-		             			<th scope="cols" >클럽</th>
-		             			<th scope="cols" class="j">참여</th>
-		             			<th scope="cols">점수</th>
-		             			</tr>
-		             		</thead>
-		             		<tbody>
-		             		
-		             			<tr>
-		             			<td scope="row" class="r">1위</td>
-		             			<td class="c">3조</td>
-		             			<td class="j">24</td>
-		             			<td>28963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">2위</td>
-		             			<td class="c">독수리</td>
-		             			<td class="j">37</td>
-		             			<td>26163</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">3위</td>
-		             			<td class="c">바위</td>
-		             			<td class="j">24</td>
-		             			<td>20963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">4위</td>
-		             			<td class="c">부엉이</td>
-		             			<td class="j">24</td>
-		             			<td>18263</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">5위</td>
-		             			<td class="c">날개</td>
-		             			<td class="cnt">24</td>
-		             			<td>18027</td>
-		             			</tr>
-		             			
-		             		</tbody>
-		             	</table>
-		             </div>
-		           </div>
-		         </div>
-		         
-		         <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <a href="/entertainment/competition/10" class="block-20" style="background-image: url('/test/images/image_1.jpg');">
-		             </a>
-		             <div class="text pt-3 pb-4">
-		               <div class="meta">
-		                 <div><a href="#">June 25, 2019 ~ June 25, 2019</a></div>
-		               </div>
-		               <h3 class="heading"><a href="#">용평 MTB 축제</a></h3>
-		               <p class="clearfix">
-		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 0</a>
-		               </p>
-		             </div>
-		           </div>
-		         </div>
-         
-        		 <div class="col-md-4 ftco-animate">
-		           <div class="blog-entry">
-		             <div class="text pt-3 pb-4">
-		             	<table class="type09">
-		             		<thead>
-		             			<tr>
-		             			<th scope="cols" class="r">순위</th>
-		             			<th scope="cols" >클럽</th>
-		             			<th scope="cols" class="j">참여</th>
-		             			<th scope="cols">점수</th>
-		             			</tr>
-		             		</thead>
-		             		<tbody>
-		             		
-		             			<tr>
-		             			<td scope="row" class="r">1위</td>
-		             			<td class="c">3조</td>
-		             			<td class="j">24</td>
-		             			<td>28963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">2위</td>
-		             			<td class="c">독수리</td>
-		             			<td class="j">37</td>
-		             			<td>26163</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">3위</td>
-		             			<td class="c">바위</td>
-		             			<td class="j">24</td>
-		             			<td>20963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">4위</td>
-		             			<td class="c">부엉이</td>
-		             			<td class="j">24</td>
-		             			<td>18263</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row" class="r">5위</td>
-		             			<td class="c">날개</td>
-		             			<td class="cnt">24</td>
-		             			<td>18027</td>
-		             			</tr>
-		             			
-		             		</tbody>
-		             	</table>
-		             </div>
-		           </div>
-		         </div>
          
 			</div>
 		</div>
