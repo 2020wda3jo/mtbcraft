@@ -46,8 +46,6 @@ import java.util.Locale;
 import java.util.Map;
 public class StartActivity extends FragmentActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener,TextToSpeech.OnInitListener{
-
-
     private static final MapPoint CUSTOM_MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.537229, 127.005515);
     private MapView mMapView;
     private MapPOIItem mCustomMarker;
@@ -68,7 +66,7 @@ public class StartActivity extends FragmentActivity
     TextView reststatus, nowspeed, avgspeed, maxspeed, godo, dis, timeView, getGodo, resttime, courseinfo;
 
     Thread timeThread = null;
-    LinearLayout map_layout, speed_tap;
+    LinearLayout map_layout, speed_tap, status_layout;
     GridLayout speed_pre;
     String test, test2, test3;
     //각종 변수
@@ -150,10 +148,12 @@ public class StartActivity extends FragmentActivity
         speed_pre = (GridLayout) findViewById(R.id.speed_pre);
         map_layout = (LinearLayout) findViewById(R.id.map_layout);
         speed_tap = (LinearLayout) findViewById(R.id.speed_tap);
+        status_layout = (LinearLayout) findViewById(R.id.status_layout);
 
         map_layout.setVisibility(View.VISIBLE); //지도
         speed_pre.setVisibility(View.VISIBLE); //지도탭에서 보여지는거
         speed_tap.setVisibility(View.GONE); //속도계
+        status_layout.setVisibility(View.GONE);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -270,7 +270,7 @@ public class StartActivity extends FragmentActivity
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://192.168.0.3:8080/app/riding/danger");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/danger");
 
             //Http 요청 전송
             HttpClient post = http.create();
