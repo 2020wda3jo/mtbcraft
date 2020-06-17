@@ -90,12 +90,27 @@
 		#{ss_rnum} )
 	</select>
 	<!-- 좋아요 -->
-	<select id="likeput" parameterType="com.mtbcraft.dto.Like_Status">
-		insert into like_status
-		(ls_rider, ls_rnum) values (
-		#{ls_rider},
-		#{ls_rnum} )
+	
+	<select id="insertLike" parameterType="com.mtbcraft.dto.RidingRecord">
+		{call
+		declare
+		begin
+		update riding_record set rr_like = #{rr_like}+1 where rr_num = #{rr_num};
+		insert into like_status (ls_rider, ls_rnum) values (#{rr_rider}, #{rr_num});
+		end
+	}
 	</select>
+	
+	<!-- 좋아요 가져오기 -->
+	<select id="getLikeCount" parameterType="com.mtbcraft.dto.RidingRecord">
+	select rr_num, rr_like, rr_rider from riding_record inner join like_status on(like_status.ls_rnum=riding_record.rr_num and like_status.ls_rider=#{rr_rider})
+	</select>
+	
+	<!-- 좋아요 상태가져오기 -->
+	<select id="getLikeStatus" parameterType="Map" resultType="com.mtbcraft.dto.Like_Status">
+		select * from like_status where ls_rider=#{ls_rider} and ls_rnum=#{ls_rnum}
+	</select>
+	
 	
 	<!-- 내 스크립 리스트 -->
 	<select id="getScrap" parameterType="Map" resultType="com.mtbcraft.dto.Scrap_Status">

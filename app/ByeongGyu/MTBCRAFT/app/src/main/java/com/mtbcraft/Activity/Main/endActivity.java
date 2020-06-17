@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.capston.mtbcraft.*;
+import com.capston.mtbcraft.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -54,7 +54,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class endActivity extends AppCompatActivity {
+public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
 
     //스타트 액티비티에서 가져오는 String형변수
     String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, endsec, restsectime, rr_comp;
@@ -153,6 +153,9 @@ public class endActivity extends AppCompatActivity {
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
+        mapView.setCurrentLocationEventListener(this);
+        mapView.isShowingCurrentLocationMarker();
+
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
@@ -196,28 +199,14 @@ public class endActivity extends AppCompatActivity {
         sec = sec % 60;
         min = min % 60;
         if(hour == 0){
-            hour=0;
+            hour=00;
         }
         if(min==0){
-            min=0;
+            min=00;
         }
 
-        int r_sec = Integer.parseInt(endsec);
-        int r_hour;
-        int r_min;
-
-        r_min = r_sec/60;
-        r_hour = r_min/60;
-        r_sec = r_sec%60;
-        r_min = r_min % 60;
-        if(r_hour == 0){
-            r_hour=00;
-        }
-        if(r_min==0){
-            r_min=00;
-        }
         resttime.setText(String.valueOf(hour+":"+min+":"+sec)); //휴식시간
-        ingtime.setText(String.valueOf(r_hour+":"+r_min+":"+r_sec)); //지속시간
+        ingtime.setText(IngTime); //지속시간
         distence.setText(Distence); //이동거리
         // gpx파일 제목을 위해 현재 시간 구하기
         long now = System.currentTimeMillis();
@@ -368,7 +357,7 @@ public class endActivity extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://53.92.32.2:8080/api/upload");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237:8080/api/upload");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -779,4 +768,29 @@ public class endActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+
+    }
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
+    }
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
+    }
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
+    }
 }

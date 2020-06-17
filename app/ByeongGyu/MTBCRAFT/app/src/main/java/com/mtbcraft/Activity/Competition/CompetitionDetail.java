@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -117,7 +118,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        InFoUserId.setText(Nickname+"님 환영합니다");
+        InFoUserId.setText(LoginId+"님 환영합니다");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -336,7 +337,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompClub/" + comp_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getCompClub/" + comp_num);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -386,7 +387,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompBadge/" + comp_badge);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getCompBadge/" + comp_badge);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -438,7 +439,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompScore/" + comp_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://53.92.32.2:8080/app/getCompScore/" + comp_num);
             // Parameter 를 전송한다.
 
             //Http 요청 전송

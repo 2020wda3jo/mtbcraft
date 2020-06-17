@@ -204,7 +204,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237:8080/android/recordset/open");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.3:8080/android/recordset/open");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

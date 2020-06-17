@@ -210,6 +210,7 @@
                         android:orientation="vertical">
 
                         <ImageView
+                            android:id="@+id/like_push"
                             android:layout_width="74dp"
                             android:layout_height="54dp"
                             android:layout_gravity="center"

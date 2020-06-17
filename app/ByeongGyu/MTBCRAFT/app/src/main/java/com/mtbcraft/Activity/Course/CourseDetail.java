@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.capston.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.CompetitionList;
+import com.mtbcraft.Activity.Main.endActivity;
 import com.mtbcraft.Activity.Mission.Mission;
 import com.mtbcraft.Activity.Riding.FollowStart;
 import com.mtbcraft.Activity.Riding.MyReport;
@@ -57,12 +60,13 @@ import java.util.Map;
 public class CourseDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     String c_num, course_name, gpx;
     TextView c_rider_name, c_name, c_date, c_addr, c_dis, c_avg, c_getgodo, like_count;
+    ImageView like_push;
     Button button,button2;
     int Sta;
     private DrawerLayout mDrawerLayout;
     GPXParser mParser = new GPXParser();
     Gpx parsedGpx = null;
-    MapView mapView;
+    MapView mapView;String LoginId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +80,9 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         c_avg = (TextView)findViewById(R.id.c_avg);
         c_getgodo = (TextView)findViewById(R.id.c_getgodo);
         like_count = (TextView)findViewById(R.id.like_count);
-
         button = (Button)findViewById(R.id.scrap_bt);
         button2 = (Button)findViewById(R.id.follow_bt);
-
+        like_push = (ImageView)findViewById(R.id.like_push);
         Intent intent = new Intent(this.getIntent());
 
         c_num = intent.getStringExtra("c_num");
@@ -97,7 +100,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
         /* 로그인관련 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId","");
+        LoginId = auto.getString("LoginId","");
         Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
 
         /*네비게이션 바 */
@@ -156,8 +159,33 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             return true;
         });
 
+        try{
+            GetLikeTask liketask = new GetLikeTask();
+            liketask.execute();
+
+            GetLikeStatusTask likestatustask = new GetLikeStatusTask();
+            likestatustask.execute();
 
 
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        like_push.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    LikeTask liketask = new LikeTask();
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("rr_rider", LoginId);
+                    params.put("rr_num", c_num);
+                    liketask.execute(params);
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
 
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
@@ -351,6 +379,92 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             }
         }
 
+    public class LikeTask extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237:8080/app/riding/course/like");
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                Log.d("JSON_RESULT", s);
+
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public class GetLikeTask extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/course/"+c_num);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                Log.d("좋아요가져오기", s);
+
+
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public class GetLikeStatusTask extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/course/like/"+c_num+"/"+LoginId);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                Log.d("좋아요 상태", s);
+
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);

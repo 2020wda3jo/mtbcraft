@@ -13,10 +13,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.R;
+import com.google.gson.Gson;
 import com.mtbcraft.Activity.Course.CourseDetail;
+import com.mtbcraft.Activity.Course.CourseList;
 import com.mtbcraft.Activity.Main.SubActivity;
 import com.mtbcraft.Activity.Main.endActivity;
 import com.mtbcraft.dto.RidingRecord;
@@ -75,7 +78,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         testViewHolder.c_dis.setText(total);
         testViewHolder.c_date.setText(itemList.get(position).getRr_date());
         testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
-       // testViewHolder.mapView();
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
             Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
@@ -90,6 +92,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
 
         });
     }
+
     @Override
     public int getItemCount() {
         return itemList.size();

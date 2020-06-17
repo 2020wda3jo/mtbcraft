@@ -168,4 +168,18 @@ public class AndroidService {
 	public void insertMissionCom ( String LoginId, int mc_mission, Timestamp mc_time ) throws Exception {
 		androidMapper.insertMissionCom(LoginId, mc_mission, mc_time);
 	}
+
+	public void insertLike(RidingRecord record) {
+		androidMapper.insertLike(record);
+		
+	}
+
+	public List<RidingRecord> getLikeCount(int rr_num) {
+		return androidMapper.getLikeCount(rr_num);
+	}
+
+	public List<Like_Status> getLikeStatus(int ls_rnum, String ls_rider) {
+		// TODO Auto-generated method stub
+		return androidMapper.getLikeStatus(ls_rnum, ls_rider);
+	}
 }

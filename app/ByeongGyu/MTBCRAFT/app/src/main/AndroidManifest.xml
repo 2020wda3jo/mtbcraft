@@ -23,7 +23,6 @@
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="frzpsowm1l" />
         <meta-data
-
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCa8UBfxfwsrydbQwFng-J7D_O1lnOUOss"/>
         <activity android:name="com.mtbcraft.Activity.Main.MainActivity">
@@ -47,5 +46,9 @@
         <activity android:name="com.mtbcraft.Activity.Course.CourseSearch"/>
         <activity android:name="com.mtbcraft.Activity.Competition.CompetitionDetail" />
         <activity android:name="com.mtbcraft.Activity.Competition.CompetitionList" />
+
+
     </application>
+
+
 </manifest>

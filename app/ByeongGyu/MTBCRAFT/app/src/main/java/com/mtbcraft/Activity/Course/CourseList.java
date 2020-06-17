@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +41,7 @@ public class CourseList extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     ArrayList<RidingRecord> arrlist = new ArrayList<>();
     RecyclerView recyclerView;
+    ImageView likeimg;
 
     String LoginId;
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +59,7 @@ public class CourseList extends AppCompatActivity {
         rrr.setLoginId(intent.getStringExtra("rider_id")); ;
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-
-
-
+        likeimg = (ImageView) findViewById(R.id.likeimg);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
@@ -103,10 +103,6 @@ public class CourseList extends AppCompatActivity {
             return true;
         });
 
-
-
-
-
         try{
             GetTask getTask = new GetTask();
             getTask.execute();
@@ -114,8 +110,6 @@ public class CourseList extends AppCompatActivity {
 
         }
     }
-
-
 
     public class GetTask extends AsyncTask<Map<String, String>, Integer, String>{
 

@@ -111,4 +111,11 @@ public interface AndroidMapper {
 										@Param("typeScore2") int typeScore2) throws Exception;
 	
 	public void insertMissionCom ( @Param("LoginId") String LoginId, @Param("mc_mission") int mc_mission, @Param("mc_time") Timestamp mc_time ) throws Exception;
+
+	public String insertLike(RidingRecord record);
+
+	
+	public List<RidingRecord> getLikeCount(@Param("rr_num") int rr_num);
+
+	public List<Like_Status> getLikeStatus(@Param("ls_rnum") int ls_rnum, @Param("ls_rider")String ls_rider);
 }

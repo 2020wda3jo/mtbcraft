@@ -26,7 +26,7 @@ public class CourseSearch extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     WebView webview;
-    private static final String ENTRY_URL = "http://13.209.229.237:8080/riding/Android_CourseSearch";
+    private static final String ENTRY_URL = "http://192.168.0.3:8080/riding/Android_CourseSearch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

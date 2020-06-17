@@ -255,14 +255,29 @@ public class AndroidController {
 	//좋아요
 	@RequestMapping(value = "/app/riding/course/like", method = RequestMethod.POST)
 	public @ResponseBody  Map<String, String> likeput(HttpServletRequest request) throws Exception {
-
-
-		System.out.println(request.getParameter("ls_rider") + " " +request.getParameter("ls_rnum"));
+		System.out.println(request.getParameter("rr_rider") + " " +request.getParameter("rr_num"));
+		RidingRecord record = new RidingRecord();
+		record.setRr_rider(request.getParameter("rr_rider"));
+		record.setRr_num(Integer.parseInt(request.getParameter("rr_num")));
+		androidService.insertLike(record);
 		Map<String, String> result = new HashMap<String, String>();
 		result.put("Status", "Ok");
 
 		return result;
 	}
+	
+	//좋아요 읽기
+	@RequestMapping(value = "/app/riding/course/like/{rr_num}", method = RequestMethod.GET)
+	public @ResponseBody List<RidingRecord> getLikeCount(@PathVariable(value = "rr_num") int rr_num) throws Exception {
+		return androidService.getLikeCount(rr_num);
+	}
+	
+	//좋아요 상태
+		@RequestMapping(value = "/app/riding/course/like/{ls_rnum}/{ls_rider}", method = RequestMethod.GET)
+		public @ResponseBody List<Like_Status> getLikeStatus(@PathVariable(value = "ls_rnum") int ls_rnum, @PathVariable(value = "ls_rider") String ls_rider) throws Exception {
+			return androidService.getLikeStatus(ls_rnum, ls_rider);
+		}
+		
 	// 파일 다운로드
 	@RequestMapping(value = "/app/getGPX/{file_dir}/{file_name}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName, @PathVariable("file_dir") String fileDir ) throws IOException {
