@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +35,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_RidingRecord;
+import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompClub;
+import com.mtbcraft.dto.CompScore;
 import com.mtbcraft.dto.Competition;
+import com.mtbcraft.dto.Competition_Status;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Login;
+import com.mtbcraft.dto.LoginInfo;
+import com.mtbcraft.dto.Mission;
+import com.mtbcraft.dto.Mission_Status;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.AndroidService;
@@ -75,6 +82,13 @@ public class AndroidController {
 			return result;
 		}
 	}
+	
+	//안드로이드 로그인 후 유저 정보 가져오기
+	@RequestMapping(value = "/android/getLoginInfo/{LoginId}")
+	public @ResponseBody LoginInfo getLoginInfo(@PathVariable String LoginId) throws Exception{
+		return androidService.getLoginInfo(LoginId);
+	}
+
 
 	// 주행기록 등록(안드로이드)
 	@RequestMapping(value = "/api/upload")
@@ -103,8 +117,12 @@ public class AndroidController {
 		record.setRr_area(request.getParameter("rr_area"));
 		record.setRr_like(Integer.parseInt(request.getParameter("rr_like")));
 		record.setRr_name(request.getParameter("rr_name"));
-
-		androidService.insertRecord(record);
+		if ( !request.getParameter("rr_comp").equals("null")) {
+			record.setRr_comp(Integer.parseInt(request.getParameter("rr_comp")));
+			androidService.insertRecordWithComp(record);
+		}
+		else
+			androidService.insertRecord(record);
 		// 안드로이드로부터 받은 데이터
 		System.out.println("rr_rider " + request.getParameter("rr_rider")); // 회원아이디
 		System.out.println("rr_distance " + request.getParameter("rr_distance")); // 오늘날짜
@@ -117,6 +135,7 @@ public class AndroidController {
 		System.out.println("rr_time " + request.getParameter("rr_time")); // 공개여부
 		System.out.println("rr_area " + request.getParameter("rr_area")); // 획득고도
 		System.out.println("rr_name"+request.getParameter("rr_name"));
+		System.out.println("rr_comp "+request.getParameter("rr_comp"));
 
 		// 안드로이드에게 전달하는 데이터
 		Map<String, String> result = new HashMap<String, String>();
@@ -274,7 +293,7 @@ public class AndroidController {
 	
 	//경쟁전 참가내역 가져오기
 	@RequestMapping(value = "/app/competition/{rr_rider}")
-	public @ResponseBody String getjoinedComp(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
+	public @ResponseBody List<String> getjoinedComp(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
 		return androidService.getjoinedComp(rr_rider);
 	}
 	
@@ -311,6 +330,8 @@ public class AndroidController {
 		gpx.setting(txt);
 	}
 	
+
+	
 	@RequestMapping("/app/getCompClub/{cs_comp}")
 	public @ResponseBody List<CompClub> getCompClub( @PathVariable(value = "cs_comp") int cs_comp) throws Exception {
 		return androidService.getCompClub(cs_comp);
@@ -329,4 +350,53 @@ public class AndroidController {
 		return androidService.getDanger();
 	}
 
+	@RequestMapping("app/getCompBadge/{comp_badge}")
+	public @ResponseBody List<Badge> getCompBadge ( @PathVariable(value = "comp_badge") int comp_badge) throws Exception {
+		return androidService.getCompBadge(comp_badge);
+	}
+	
+	@RequestMapping("app/getCompScore/{comp_num}")
+	public @ResponseBody List<CompScore> getCompScore ( @PathVariable("comp_num") int comp_num) throws Exception {
+		return androidService.getCompScore(comp_num);
+	}
+	
+	@RequestMapping(value = "/app/updateCompScore", method = RequestMethod.PUT)
+	@ResponseBody
+	public void updateCompScore(int avg_speed, int rr_comp, int r_club, String LoginId) throws Exception{
+
+		androidService.updateCompScore(avg_speed, rr_comp, r_club, LoginId);
+	}
+	
+	@RequestMapping(value = "/app/getCompAllScore/{comp_num}")
+	public @ResponseBody List<Competition_Status> getCompAllScore( @PathVariable(value="comp_num") int comp_num ) throws Exception {
+		return androidService.getCompAllScore(comp_num);
+	}
+	
+	@RequestMapping(value = "/app/updateRank", method = RequestMethod.PUT)
+	@ResponseBody
+	public void updateRank (int rr_comp, int r_club, int score, int rank) throws Exception {
+		androidService.updateRank(rr_comp, r_club, score, rank);
+	}
+	
+	@RequestMapping(value = "app/getMissionStatus/{LoginId}")
+	public @ResponseBody List<Mission_Status> getMissionStatus ( @PathVariable(value="LoginId") String LoginId ) throws Exception {
+		return androidService.getMissionStatus(LoginId);
+	}
+	
+	@RequestMapping(value = "app/getNoClearMission/{LoginId}")
+	public @ResponseBody List<Mission> getNoClearMission ( @PathVariable(value="LoginId") String LoginId ) throws Exception {
+		return androidService.getNoClearMission(LoginId);
+	}
+	
+	@RequestMapping(value = "/app/updateMissionStatus", method = RequestMethod.PUT)
+	@ResponseBody
+	public void updateMissionStatus ( String LoginId, int typeScore1, int typeScore2 ) throws Exception {
+		androidService.updateMissionStatus(LoginId, typeScore1, typeScore2);
+	}
+	
+	@RequestMapping(value = "/app/insertMissionCom", method = RequestMethod.PUT)
+	@ResponseBody
+	public void insertMissionCom ( String LoginId, int mc_mission, Timestamp mc_time ) throws Exception {
+		androidService.insertMissionCom(LoginId, mc_mission, mc_time);
+	}
 }
