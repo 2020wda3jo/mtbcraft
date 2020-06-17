@@ -11,7 +11,7 @@
 	<script  src="https://code.jquery.com/jquery-3.5.1.js"  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="  crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="/css/community/club_calender.css?after">
 	
-	<input type="hidden" id="hiddenCLUB" value="0" th:value="${cb_num}">
+	<input type="hidden" id="hiddenCLUB" value="0" th:value="${club.cb_num}">
 	
 	<script>
 		
@@ -74,16 +74,16 @@
 			
 				<div class="col-lg-4 sidebar ftco-animate">
 					<div class="sidebar-box clubinfo">
-		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
+		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');" th:style="'background-image: url(/imgs/'+${club.cb_image}+');'">
 		              </div>
 		              
-		              <h2>클럽명</h2>
-		              
+		              <h2 th:text="${club.cb_name}">클럽명</h2>
+		              <input type="hidden" id="hiddenCLUB" th:value="${club.cb_num}">
 		            </div>
 		            
 		            <div class="sidebar-box clubinfo">
-		            	<a href="#">게시판</a>
-		            	<a href="#">캘린더</a>
+		            	<a href="/community/club" th:href="'/community/club/'+${club.cb_num}">게시판</a>
+		            	<a href="#" th:href="'/community/club/calender/'+${club.cb_num}">캘린더</a>
 		            </div>
 		            
 				</div>

@@ -63,7 +63,7 @@ public class CommunityController {
 	@RequestMapping(value = "/community/club/calender/{c_num}", method = RequestMethod.GET)
 	public String comunityclub2(@PathVariable int c_num,  Model model) {
 		
-		model.addAttribute("cb_num", c_num);
+		model.addAttribute("club", communityService.getClubInfo(c_num));
 		
 		return "community/club/club_calender";
 	}
