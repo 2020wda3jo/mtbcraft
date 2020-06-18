@@ -30,19 +30,23 @@ public class BoardController {
 
 		String filename = uploadfile.getOriginalFilename();
 
-		String directory = "/home/ec2-user/data/club";
-		//String directory = "C:\\ServerFiles";
-		String filepath = Paths.get(directory, filename).toString();
+		/*
+		 * String directory = "/home/ec2-user/data/club"; //String directory =
+		 * "C:\\ServerFiles"; String filepath = Paths.get(directory,
+		 * filename).toString();
+		 */
 
 		board.setB_file(filename);
 		boardService.insertBoard(board);
 
 		// Save the file locally
-		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
-		stream.write(uploadfile.getBytes());
-		stream.close();
+		/*
+		 * BufferedOutputStream stream = new BufferedOutputStream(new
+		 * FileOutputStream(new File(filepath))); stream.write(uploadfile.getBytes());
+		 * stream.close();
+		 */
 
-		return "community/club/success";
+		return "redirect:/community/club/"+board.getB_club();
 	}
 
 	// 글쓰기 페이지

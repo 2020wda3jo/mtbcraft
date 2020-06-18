@@ -59,6 +59,7 @@ public class CommunityController {
 		//return "community/club/club";
 		return "community/club/club2";
 	}
+	
 	// 커뮤니티 클럽 캘린더 이동
 	@RequestMapping(value = "/community/club/calender/{c_num}", method = RequestMethod.GET)
 	public String comunityclub2(@PathVariable int c_num,  Model model) {
@@ -76,6 +77,16 @@ public class CommunityController {
 		model.addAttribute("postlist", boardService.getBoardList(c_num));
 		
 		return "community/club/club_main";
+	}
+	
+	// 커뮤니티 클럽 게시판 이동
+	@RequestMapping(value = "/community/club/write/{c_num}", method = RequestMethod.GET)
+	public String comunityBoardWrite(@PathVariable int c_num, Model model) {
+		
+		model.addAttribute("club", communityService.getClubInfo(c_num));
+		
+		
+		return "community/club/boardWrite";
 	}
 	
 	// 커뮤니티 클럽 만들기 페이지

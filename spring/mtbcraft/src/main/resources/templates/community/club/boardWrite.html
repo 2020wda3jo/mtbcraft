@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header2"></head>
 
-	<link rel="stylesheet" href="/css/community/club_main.css?after">
+	<link rel="stylesheet" href="/css/community/boardwrite.css?after">
 	
 	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
@@ -39,44 +39,49 @@
 				
 				<div class="col-lg-8 ftco-animate board">
 					<h1>클럽 게시판</h1>
-					<p>오늘은 어떤 소식이 있을까요?</p>
-					<table class="type09">
-	             		<thead>
-	             			<tr>
-	             			<th scope="cols" class="r">분류</th>
-	             			<th scope="cols" >제목</th>
-	             			<th scope="cols" class="j">글쓴이</th>
-	             			<th scope="cols" class="j">작성일</th>
-	             			<th scope="cols">조회</th>
-	             			</tr>
-	             		</thead>
-	             		<tbody>
-	             			<tr th:each="post:${postlist}">
-	             			<td scope="row" class="r">자유</td>
-	             			<td class="c" th:text="${post.b_title}">오늘 기온 장난아닙니다ㅠㅠ</td>
-	             			<td class="j" th:text="${post.b_rider}">180137</td>
-	             			<td class="j" th:text="${post.date}">2020-06-07</td>
-	             			<td>21</td>
-	             			<input type="hidden" id="b_num" th:value="${post.b_num}">
-	             			</tr>
-	             			
-	             		</tbody>
-	             	</table>
-	             	
-	             	<div class="pageclub">
-		             	<a href="#">이전</a>
-		             	<a href="#">1</a>
-		             	<a href="#">2</a>
-		             	<a href="#">3</a>
-		             	<a href="#">4</a>
-		             	<a href="#">5</a>
-		             	<a href="#">다음</a>
-	             	</div>
+					<p>어떤 이야기를 들려주실 건가요?</p>
+					<form action="/createBoard/check" id="boardform" method="post" enctype="multipart/form-data">
+					
+						<table class="type09">
+		             		<thead>
+		             			<tr>
+		             			<th scope="cols" class="r">구분</th>
+		             			<th scope="cols" >내용</th>
+		             			</tr>
+		             		</thead>
+		             		<tbody>
+		             			<tr>
+		             			<td scope="row">제목</td>
+		             			<td class="c" ><input type="text" name="b_title" class="full"></td>
+		             			</tr>
+		             			<tr>
+		             			<td scope="row" class="r">분류</td>
+		             				<td class="c" >
+			             				<select class="inputModal" name="color" id="">
+						                    <option value="#D25565">자유</option>
+						                    <option value="#9775fa">라이딩</option>
+						                    <option value="#ffa94d">질문</option>
+				                    	</select>
+			                    	</td>
+		             			</tr>
+		             			<tr>
+		             			<td scope="row" class="r">내용</td>
+		             			<td class="c" ><textarea class="full" name="b_content"></textarea> </td>
+		             			</tr>
+		             			<tr>
+		             			<td scope="row" class="r">첨부파일</td>
+		             			<td class="c" ><input type="file" name="uploadfile"></td>
+		             			</tr>
+		             			
+		             		</tbody>
+		             	</table>
+		             	<input type="hidden" name="b_rider" id="b_rider">
+		             	<input type="hidden" name="b_club" id="b_club" th:value="${club.cb_num}">
+	             	</form>
 	             	
 	             	<div class="search">
-		             	<input type="text" class="bar">
-		             	<input type="button" class="btn" value="검색">
-		             	<input type="button" class="btn" value="글쓰기">
+		             	<input type="button" class="btn" value="작성">
+		             	<input type="button" class="btn" value="취소">
 	             	</div>
 				</div>
 			</div>
@@ -106,13 +111,23 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="/test/js/google-map.js"></script>
   <script src="/test/js/main.js"></script>
+  
+  <script>
+	$(document).ready(function() {
+		//로그인 했을때만 로그인한 사용자아이디 가져옴
+		$("#b_rider").val($("#hiddenID").val());
+	});
+	
+	$(".btn").click(function(){
+		if(this.value=="작성"){
+			$("#boardform").submit();
+		}else {
+			location.href = "/community/club/"+$("#b_club").val();
+		}
+	})
+</script>
 
-<script>
-$(".btn").click(function(){
-	if(this.value=="글쓰기"){
-		location.href = "/community/club/write/"+$("#hiddenCLUB").val();
-	}
-});
+
 </script>
     
   </body>

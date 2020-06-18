@@ -26,8 +26,7 @@ public class Board {
 	
 	
 	public String getDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
-		date = sdf.format(this.b_day);
+		date = (b_day.toString().split(" "))[0];
 		return date;
 	}
 
