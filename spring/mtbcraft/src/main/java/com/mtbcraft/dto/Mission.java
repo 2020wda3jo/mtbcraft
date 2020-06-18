@@ -12,10 +12,7 @@ public class Mission {
 	
 	
 	public String getM_time() {
-		String date = this.m_time.split(" ")[0];
-		String time = this.m_time.split(" ")[1];
-				
-		return date.split("/")[0]+"년 "+date.split("/")[1]+"월 "+date.split("/")[2]+"일 "+time;
+		return m_time;
 	}
 	public void setM_time(String m_time) {
 		this.m_time = m_time;

@@ -72,7 +72,7 @@
 	
 	<!-- 성공한 미션 조회 -->
 	<select id="getCompleteMission" parameterType="String" resultType="com.mtbcraft.dto.Mission">
-		select MISSION.M_NUM,BADGE.BG_IMAGE as m_img, MISSION.M_CONTENT, MISSION.M_NAME as m_name, SUBSTR(MISSION_COMPLETE.MC_TIME,0,17) as m_time from MISSION, MISSION_COMPLETE, BADGE where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION.M_BADGE=BADGE.BG_NUM and MISSION_COMPLETE.MC_RIDER=#{rider}
+		select MISSION.M_NUM,BADGE.BG_IMAGE as m_img, MISSION.M_CONTENT, MISSION.M_NAME as m_name, to_char(MC_TIME, 'YYYY-MM-DD  HH24:MI:SS') as m_time from MISSION, MISSION_COMPLETE, BADGE where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION.M_BADGE=BADGE.BG_NUM and MISSION_COMPLETE.MC_RIDER=#{rider}
 	</select>
 	
 	
