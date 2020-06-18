@@ -42,6 +42,7 @@
 	        	<li class="nav-item mm" id="/community"><a href="#" class="nav-link">Community</a></li>
 	        	<li class="nav-item mm" id="/entertainment"><a href="#" class="nav-link">Entertainment</a></li>
 		        <li class="nav-item mm" id="/repair"><a href="#" class="nav-link">Repair</a></li>
+		        <li class="nav-item mm" id="/mypage/badge"><a href="#" class="nav-link">Mypage</a></li>
 		        <li class="nav-item cta">
 		          	<a href="#" th:unless="${#authorization.expr('isAuthenticated()')}" th:href="@{/login}" class="nav-link">Login</a>
 		          	<a href="#" th:if="${#authorization.expr('isAuthenticated()')}" class="nav-link logout">Logout</a>

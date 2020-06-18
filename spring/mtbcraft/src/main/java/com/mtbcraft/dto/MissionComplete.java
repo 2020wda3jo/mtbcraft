@@ -4,8 +4,23 @@ public class MissionComplete {
 	private int mc_num;
 	private String mc_rider;
 	private int mc_mission;
-	private int mc_complete;
 	private String mc_time;
+	
+	private String m_content;
+	private String m_name;
+	
+	public String getM_content() {
+		return m_content;
+	}
+	public void setM_content(String m_content) {
+		this.m_content = m_content;
+	}
+	public String getM_name() {
+		return m_name;
+	}
+	public void setM_name(String m_name) {
+		this.m_name = m_name;
+	}
 	public int getMc_num() {
 		return mc_num;
 	}
@@ -23,12 +38,6 @@ public class MissionComplete {
 	}
 	public void setMc_mission(int mc_mission) {
 		this.mc_mission = mc_mission;
-	}
-	public int getMc_complete() {
-		return mc_complete;
-	}
-	public void setMc_complete(int mc_complete) {
-		this.mc_complete = mc_complete;
 	}
 	public String getMc_time() {
 		return mc_time;

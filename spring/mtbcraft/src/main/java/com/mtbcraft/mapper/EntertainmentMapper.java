@@ -28,14 +28,11 @@ public interface EntertainmentMapper {
 	// 등록된 미션 조회
 	public List<Mission> getMission() throws Exception;
 
-	// 미션 성공여부 조회
-	public List<MissionComplete> getMissionComplete(String rr_rider) throws Exception;
-
 	// 미션 등록
 	public void missionUpload(Mission mission) throws Exception;
 	
 	//배지 조회
-	public List<Badge> getBadge() throws Exception;
+	public List<Badge> getBadge(String rider);
 	
 	//배지 등록
 	public void BadgeUpload(Badge badge)throws Exception;
@@ -57,5 +54,5 @@ public interface EntertainmentMapper {
 	
 	//성공한 미션 조회
 	public List<Mission> getCompleteMission(String rider);
-
+	
 }

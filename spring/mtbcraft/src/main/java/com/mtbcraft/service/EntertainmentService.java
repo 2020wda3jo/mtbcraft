@@ -28,8 +28,8 @@ public class EntertainmentService {
 	
 	
 	//배지 조회
-	public List<Badge> getBadge() throws Exception{
-		return entertainmentMapper.getBadge();
+	public List<Badge> getBadge(String rider) throws Exception{
+		return entertainmentMapper.getBadge(rider);
 	}
 	
 	//배지 등록
@@ -40,12 +40,6 @@ public class EntertainmentService {
 	public List<Mission> getMission() throws Exception{
 		return entertainmentMapper.getMission();
 	}
-	
-	//완료한 미션 조회
-	public List<MissionComplete> getMissionComplete(String rr_rider) throws Exception{
-		return entertainmentMapper.getMissionComplete(rr_rider);
-	}
-
 	
 	//지난 경쟁전 보기
 	public List<Competition> getCompetition() throws Exception{
@@ -91,6 +85,5 @@ public class EntertainmentService {
 	public List<Mission> getCompleteMission(String rider){
 		return entertainmentMapper.getCompleteMission(rider);
 	}
-	
 	
 }

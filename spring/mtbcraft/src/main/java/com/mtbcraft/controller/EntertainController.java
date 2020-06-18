@@ -42,8 +42,17 @@ public class EntertainController {
 	// 엔터테인먼트 메인
 	@RequestMapping(value="/entertainment", method = RequestMethod.POST)
 	public String competitions2(String rider, Model model) {
+		
 		List<Competition> complist = entertainmentService.getRecentComp3(rider);
 		List<Mission> missionlist = entertainmentService.getCompleteMission(rider);
+		
+		for(int i=0;i<complist.size();i++) {
+			System.out.println(complist.get(i).getComp_name());
+		}
+		for(int i=0;i<missionlist.size();i++) {
+			System.out.println(missionlist.get(i).getM_img());
+			System.out.println(missionlist.get(i).getM_name());
+		}
 		
 		model.addAttribute("complist", complist);
 		model.addAttribute("missionlist", missionlist);
@@ -52,7 +61,7 @@ public class EntertainController {
 	}
 
 	// 엔터테인먼트 메인테스트
-	@RequestMapping(value="/entertainmenttest", method = RequestMethod.GET)
+	@RequestMapping(value="/entertainment", method = RequestMethod.GET)
 	public String competitions22() {
 		return "entertainment/competitions";
 	}
@@ -110,9 +119,13 @@ public class EntertainController {
 	}
 
 	// 미션 페이지
-	@RequestMapping("/entertainment/missions")
-	public String missions() {
-		return "entertainment/missions";
+	@RequestMapping(value="/entertainment/mission", method = RequestMethod.POST)
+	public String missions(String rider, Model model) {
+		
+		model.addAttribute("missionList", entertainmentService.getCompleteMission(rider));
+		
+		
+		return "entertainment/mission";
 	}
 
 	// 미션 데이터
@@ -126,14 +139,6 @@ public class EntertainController {
 	public String missionComplete() {
 		return "entertainment/missionComplete";
 	}
-
-	// 미션 완료여부 조회 데이터
-	@RequestMapping("/entertainment/missions/test2")
-	public @ResponseBody List<MissionComplete> getMissionComplete(String mc_rider) throws Exception {
-		return entertainmentService.getMissionComplete(mc_rider);
-	}
-
-
 
 //	// 진행중인 경쟁전 데이터
 //	@RequestMapping("/entertainment/compIng/test")
@@ -177,17 +182,15 @@ public class EntertainController {
 
 	}
 
-	// 배지 조회페이지
-	@RequestMapping("/entertainment/badge")
-	public String badge() {
+	// 배지 조회페이지 수정필요
+	@RequestMapping("/mypage/badge")
+	public String badge(String rider, Model model) throws Exception {
+		
+		model.addAttribute("badgeList", entertainmentService.getBadge(rider));
+		
 		return "entertainment/badge";
 	}
 
-	// 등록된 배지
-	@RequestMapping("/entertainment/badge/test")
-	public @ResponseBody List<Badge> getBadge() throws Exception {
-		return entertainmentService.getBadge();
-	}
 
 	// 배지 등록 페이지
 	@RequestMapping("/entertainment/badgeUpload")
