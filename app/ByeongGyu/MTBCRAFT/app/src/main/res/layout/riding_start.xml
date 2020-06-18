@@ -70,13 +70,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="50dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="평균속도"
-                    android:textColor="#000"
-                    android:textSize="25dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="현재속도"
+                android:textColor="#000"
+                android:textSize="25dp" />
                 <TextView
                     android:id="@+id/m_speed"
                     android:layout_width="wrap_content"

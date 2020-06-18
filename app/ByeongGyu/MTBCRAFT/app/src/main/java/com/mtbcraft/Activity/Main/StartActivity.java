@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -42,6 +44,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 public class StartActivity extends FragmentActivity
@@ -80,8 +83,10 @@ public class StartActivity extends FragmentActivity
     //휴식시간 계산
     int hour, min, sec;
     //형변환용변수
-    String cha_dis = "0", cha_max = "0", cha_avg = "0";
+    String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value="";
 
+    List<Address> addr=null;
+    Geocoder gCoder;
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
@@ -197,13 +202,13 @@ public class StartActivity extends FragmentActivity
                 intent.putExtra("cha_dis", cha_dis); //이동거리(소수점X)
                 intent.putExtra("cha_max", cha_max); //최대속도(소수점X)
                 intent.putExtra("cha_avg", cha_avg); //평균속도(소수점X)
-
                 intent.putExtra("distence", String.valueOf(dis.getText())); //이동거리
                 intent.putExtra("endmax", String.valueOf(maxspeed.getText())); //최대속도
                 intent.putExtra("endavg", String.valueOf(avgspeed.getText())); //평균속도
                 intent.putExtra("getgodo", String.valueOf(getGodo.getText())); //획득고도
                 intent.putExtra("resttime", String.valueOf(resttime.getText())); //휴식시간
                 intent.putExtra("ingtime", String.valueOf(timeView.getText())); //경과시간
+                intent.putExtra("addr",adress_value);
                 intent.putExtra("endsec", String.valueOf(m_t.getText())); //라이딩 시간(초)
                 intent.putExtra("restsectime", String.valueOf(m_rest.getText())); //휴식시간(초)
                 intent.putExtra("witch_lat", witch_lat); //위도
@@ -539,6 +544,19 @@ public class StartActivity extends FragmentActivity
         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
         int padding = 50; // px
         mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,padding,2,3));
+
+        gCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try{
+            addr=gCoder.getFromLocation(latitude,lonngitude,1);
+            Address a = addr.get(0);
+
+            adress_value = a.getAddressLine(0);
+
+            Log.d("주소",adress_value+"\n");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
 
 
         if (mLastlocation != null) {
