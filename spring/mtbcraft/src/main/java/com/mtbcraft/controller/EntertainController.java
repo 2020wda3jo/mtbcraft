@@ -43,14 +43,25 @@ public class EntertainController {
 	@RequestMapping(value="/entertainment", method = RequestMethod.POST)
 	public String competitions2(String rider, Model model) {
 		
-		model.addAttribute("complist", entertainmentService.getRecentComp3(rider));
-		model.addAttribute("missionlist", entertainmentService.getCompleteMission(rider));
+		List<Competition> complist = entertainmentService.getRecentComp3(rider);
+		List<Mission> missionlist = entertainmentService.getCompleteMission(rider);
+		
+		for(int i=0;i<complist.size();i++) {
+			System.out.println(complist.get(i).getComp_name());
+		}
+		for(int i=0;i<missionlist.size();i++) {
+			System.out.println(missionlist.get(i).getM_img());
+			System.out.println(missionlist.get(i).getM_name());
+		}
+		
+		model.addAttribute("complist", complist);
+		model.addAttribute("missionlist", missionlist);
 		
 		return "entertainment/main";
 	}
 
 	// 엔터테인먼트 메인테스트
-	@RequestMapping(value="/entertainmenttest", method = RequestMethod.GET)
+	@RequestMapping(value="/entertainment", method = RequestMethod.GET)
 	public String competitions22() {
 		return "entertainment/competitions";
 	}
