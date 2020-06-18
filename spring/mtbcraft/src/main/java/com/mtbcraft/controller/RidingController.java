@@ -43,30 +43,8 @@ public class RidingController {
 	private RidingService ridingService;
 
 	// 코스 메뉴 진입
-	@RequestMapping(value = "/riding/course")
+	@RequestMapping(value = "/riding/course", method = RequestMethod.POST)
 	public String course(String rider, Model model) throws Exception {
-		List<RidingRecord> rrlist = ridingService.getRidingRecord(rider);
-		for(int i=0;i<rrlist.size();i++) {
-			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
-			int like = ridingService.getRR_Like(rrlist.get(i).getRr_num());
-			rrlist.get(i).setRr_like(like);
-		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
-		List<RidingRecord> scraplist = ridingService.getScrapCourse(rider);
-		for(int i=0;i<scraplist.size();i++) {
-			scraplist.get(i).setRr_gpx(scraplist.get(i).getRr_dateYYYYMMDD());
-			int like = ridingService.getRR_Like(scraplist.get(i).getRr_num());
-			scraplist.get(i).setRr_like(like);
-		}
-		model.addAttribute("ridingrecords", rrlist);
-		model.addAttribute("scrapcourses", scraplist);
-		//return "riding/course";
-		return "riding/course2";
-	}
-	
-	// 코스 메뉴 진입
-	@RequestMapping(value = "/riding/course2")
-	public String course2(Model model) throws Exception {
-		String rider = "1801317";
 		List<RidingRecord> rrlist = ridingService.getRidingRecord(rider);
 		for(int i=0;i<rrlist.size();i++) {
 			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
@@ -193,21 +171,25 @@ public class RidingController {
 	}
 	
 	// 위험지역 등록 신청
-	@RequestMapping(value = "/riding/DA", method = RequestMethod.POST)
-	public String postDangerousArea(DangerousArea da, String page, Model model) throws Exception {
+	@RequestMapping(value = "/riding/da", method = RequestMethod.POST)
+	@ResponseBody
+	public  String postDangerousArea(DangerousArea da) throws Exception {
+		
 		ridingService.postDangerousArea(da);
-		if(page.equals("search")) {
-			return "riding/search";
-		}else{
-			List<RidingRecord> rrlist = ridingService.getRidingRecord(da.getDa_rider());
-			for(int i=0;i<rrlist.size();i++) {
-				rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
-			}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
-			List<RidingRecord> scraplist = ridingService.getScrapCourse(da.getDa_rider());
-			model.addAttribute("ridingrecords", rrlist);
-			model.addAttribute("scrapcourses", scraplist);
-			return "riding/course";
-		}
+		
+		return "success";
+		
+	}
+	
+	// 위험지역 등록 신청
+	@RequestMapping(value = "/dangerousArea", method = RequestMethod.POST)
+	@ResponseBody
+	public  String regDangerousArea(DangerousArea da) throws Exception {
+		
+		ridingService.postDangerousArea(da);
+		
+		return "success";
+		
 	}
 		
 	// 사용자 등록 위험 지역 삭제

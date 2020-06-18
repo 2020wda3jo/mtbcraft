@@ -44,12 +44,9 @@
 	</select>
 	
 	<!-- 위험지역신청 등록 -->
-	<insert id="postDangerousArea"
-		parameterType="com.mtbcraft.dto.DangerousArea">
-		insert into dangerous_area(da_num, da_rider,
-		da_latitude, da_addr, da_status, da_content, da_longitude, da_image)
-		values(SEQ_DANGEROUSAREA.nextval, #{da_rider}, #{da_latitude},
-		#{da_addr}, 0, #{da_content}, #{da_longitude}, #{da_image})
+	<insert id="postDangerousArea"	parameterType="com.mtbcraft.dto.DangerousArea">
+		insert into dangerous_area(da_num, da_rider,da_latitude, da_addr, da_status, da_content, da_longitude, da_image)
+		values(SEQ_DANGEROUSAREA.nextval, #{da_rider,jdbcType=VARCHAR}, #{da_latitude,jdbcType=VARCHAR},	#{da_addr,jdbcType=VARCHAR}, 0, #{da_content,jdbcType=VARCHAR}, #{da_longitude,jdbcType=VARCHAR}, #{da_image,jdbcType=VARCHAR})
 	</insert>
 	
 	<!-- 사용자 스크랩 코스 조회 -->

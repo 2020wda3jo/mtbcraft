@@ -52,38 +52,43 @@ var selectedPolyline = new kakao.maps.Polyline({
 //위험지역 표시 체크 클릭시
 $("#chk_DA").click(function(){
 	if( $("#chk_DA").is(":checked") ){
-		da_makers = [];
-		$.ajax({
-			url : "/riding/DA",
-			type : "GET",
-			cache : false,
-			success : function(data) {
-				for (var i = 0; i < data.length; i ++) {
-				    // 마커를 생성합니다
-				    var marker = new kakao.maps.Marker({
-				        map: map, // 마커를 표시할 지도
-				        position: new kakao.maps.LatLng(data[i].da_latitude, data[i].da_longitude) // 마커의 위치
-				    });
-				    
-				    da_makers.push(marker);
-
-				    // 마커에 표시할 인포윈도우를 생성합니다 
-				    var infowindow = new kakao.maps.InfoWindow({
-				        content: data[i].da_content // 인포윈도우에 표시할 내용
-				    });
-
-				    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-				    // 이벤트 리스너로는 클로저를 만들어 등록합니다 
-				    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-				    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-				    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-				}
-			}
-		});			
+		getDA();
 	}else{
 		hideMarkers();
 	}
 });
+
+//위험지역 조회
+function getDA(){
+	da_makers = [];
+	$.ajax({
+		url : "/riding/DA",
+		type : "GET",
+		cache : false,
+		success : function(data) {
+			for (var i = 0; i < data.length; i ++) {
+			    // 마커를 생성합니다
+			    var marker = new kakao.maps.Marker({
+			        map: map, // 마커를 표시할 지도
+			        position: new kakao.maps.LatLng(data[i].da_latitude, data[i].da_longitude) // 마커의 위치
+			    });
+			    
+			    da_makers.push(marker);
+
+			    // 마커에 표시할 인포윈도우를 생성합니다 
+			    var infowindow = new kakao.maps.InfoWindow({
+			        content: data[i].da_content // 인포윈도우에 표시할 내용
+			    });
+
+			    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+			    // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+			    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+			    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+			    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+			}
+		}
+	});		
+}
 
 // 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
 function setMarkers(map) {
@@ -196,6 +201,7 @@ function getRidingRecordByRR_Num(rr_num, mode){
 			cache : false, 
 			success : function(data) {
 				getReviewsByRR_Num(data.rr_num);
+				$("#chrrnamebtn").hide();
 				if(mode=="course"){
 					$("#cif_name").text(data.rr_name); 
 					$("#cif_total").text(data.rr_distance); 
@@ -213,20 +219,19 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					$("#cif_time").text(data.rr_time);
 					$("#cif_top").text(data.rr_topspeed);
 					$("#cif_break").text(data.rr_breaktime);
-					$("#box_courseInfo").append("<button id='chrrnamebtn'  onclick='changeRR_Name()'>코스명 변경하기</button>");
-					
+					$("#chrrnamebtn").show();
 					if(data.rr_open==1){
 						$('#bt_mode').text("비공개로 전환하기");
 					}else{
 						$('#bt_mode').text("공개로 전환하기");
 					}
 				}else if(mode=="scrap"){
-					str += "readonly><br>전체거리 : "+data.rr_distance
-					+ "<br>주행시간 : "+data.rr_time
-					+ "<br>평균속도 : "+data.rr_distance
-					+ "<br>획득고도 : "+data.rr_high
-					+ "<br>추천수 : "+data.rr_like;
-					$('#bt_mode').text("스크랩취소하기");
+					$("#cif_name").text(data.rr_name); 
+					$("#cif_total").text(data.rr_distance); 
+					$("#cif_avg").text(data.rr_avgspeed); 
+					$("#cif_high").text(data.rr_high); 
+					$("#cif_like").text(data.rr_like);
+					$("#bt_mode").text("스크랩취소하기");
 				}
 				
 				$('#courseInfo').show();
@@ -385,6 +390,8 @@ function getRidingRecordByRR_Num(rr_num, mode){
 	 var form = $("#postReview")[0];
 	 var formdata = new FormData(form);
 	 
+	 console.log(formdata);
+	 
 	 $.ajax({
 		 url : "/riding/review",
 		 type : "POST",
@@ -437,7 +444,6 @@ function getRidingRecordByRR_Num(rr_num, mode){
 			 ls_rnum : rr_num,
 			 ls_rider : userId
 		 },
-		 cache : false,
 		 success : function(data) {
 			 if(data=="success"){
 				 alert("해당 코스를 추천하였습니다.");
@@ -467,6 +473,28 @@ function getRidingRecordByRR_Num(rr_num, mode){
 			 if(data=="success"){
 				 alert("해당 코스에 대한 추천을 취소하였습니다.");
 			 }
+		}
+	});
+ }
+ 
+ //위험지역 등록신청 버튼 클릭
+ function regDA(){
+	 
+	 var form = $("#form_post_DA")[0];
+	 var formdata = new FormData(form);
+	 
+	 $.ajax({
+		 url : "/dangerousArea",
+		 type : "post",
+		 data : formdata,
+		 processData: false,
+         contentType: false,
+		 cache : false,
+		 success : function(data) {
+			 alert("위험지역 등록을 완료하였습니다.");
+			 hideMarkers();
+			 getDA();
+			 cancel_post_DA();
 		}
 	});
  }
