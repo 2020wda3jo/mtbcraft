@@ -1,58 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header2"></head>
+	
+	<!-- 수정해야함 -->
+	<link rel="stylesheet" href="/css/etc/badge.css">
 
-<head th:replace="header"></head>
-<script>
-$(document).ready(function() {
-	$.ajax({
-		url : "/entertainment/badge/test", 
-		dataType : "json", 
-		cache : false, 
-		success : function(data) {
-				var records = "";
-				for (var i=0 ; i<data.length ; i++){
-					records += "<tr><th>" +data[i].bg_num +"</th><th>" +  data[i].bg_name + "</th><th>" + data[i].bg_image + "</th></tr>";					
-				}
-				$("#result5").html(records);
-			}
-		});	
-});
-</script>
 <body>
+	
+	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+	   <div class="overlay"></div>
+	   <div class="container">
+	     <div class="row no-gutters slider-text align-items-end justify-content-center">
+	       <div class="col-md-9 ftco-animate text-center">
+	       		<h1 class="mb-2 bread">BADGE</h1>
+	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">MYPAGE <i class="ion-ios-arrow-forward"></i></a></span> <span>BADGE <i class="ion-ios-arrow-forward"></i></span></p>
+	       </div>
+	     </div>
+	   </div>
+	</section>
 
-<div class="root">
-	<table class = "table" id="badge" width="100%" cellspacing="0">
-		<thead>
-		<tr>
-		<th>#번호</th>
-		
-		<th>배지 이름</th>
-		
-		<th>배지 이미지</th>
-		</tr>
-		</thead>
-		
-		<tfoot>
-		<tr>
-		<th>#번호</th>
-		
-		<th>배지 이름</th>
-		
-		<th>배지 이미지</th>
-		</tr>
-		
-		</tfoot>
-		
-		<tbody id = "result5">
+
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row">
 			
-		
-		</tbody>
-	</table>
-	</div>
-	<div>
-		<a href="/entertainment/badgeUpload"><button id="bgUpload" style="float:right">배지 등록</button></a>
-	</div>
+				<div class="col-lg-4 sidebar ftco-animate">
+					<div class="sidebar-box clubinfo">
+		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
+		              </div>
+		              
+		              <h2>사용자명</h2>
+		            </div>
+		            
+		            <div class="sidebar-box clubinfo">
+		            	<a href="#">내가 쓴 게시글</a>
+		            	<a href="#">내가 쓴 댓글</a>
+		            	<a href="#">내 배지 보기</a>
+		            </div>
+		            
+				</div>
+				
+				
+				<div class="col-lg-8 ftco-animate board">
+					<h1>내 배지 보기</h1>
+					<p>벌써 배지를 이만큼 모으셨군요?!</p>
+					
+					<div class="flex">
+						<div class="badgeitem" th:each="badge:${badgeList}">
+							<div><img alt="" src="#" th:src="'/imgs/badge/'+${badge.bg_image}"> </div>
+							<p th:text="${badge.bg_name}"></p>
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+	</section>
 
 
+
+<footer th:replace="footer2"></footer>
+	<!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="/test/js/jquery.min.js"></script>
+  <script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="/test/js/popper.min.js"></script>
+  <script src="/test/js/bootstrap.min.js"></script>
+  <script src="/test/js/jquery.easing.1.3.js"></script>
+  <script src="/test/js/jquery.waypoints.min.js"></script>
+  <script src="/test/js/jquery.stellar.min.js"></script>
+  <script src="/test/js/owl.carousel.min.js"></script>
+  <script src="/test/js/jquery.magnific-popup.min.js"></script>
+  <script src="/test/js/aos.js"></script>
+  <script src="/test/js/jquery.animateNumber.min.js"></script>
+  <script src="/test/js/bootstrap-datepicker.js"></script>
+  <script src="/test/js/jquery.timepicker.min.js"></script>
+  <script src="/test/js/scrollax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="/test/js/google-map.js"></script>
+  <script src="/test/js/main.js"></script>
 </body>
-<footer th:replace="footer"></footer>
+</html>
