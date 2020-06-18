@@ -59,7 +59,7 @@ public class endActivity extends AppCompatActivity {
     //스타트 액티비티에서 가져오는 String형변수
     String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, endsec, restsectime, rr_comp;
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
-    TextView avgsoeed, maxspeed, getgodo, resttime, ingtime, distence, result;
+    TextView avgsoeed, maxspeed, getgodo, resttime, ingtime, distence, addr;
 
     int check, clearCount=0;
 
@@ -75,7 +75,7 @@ public class endActivity extends AppCompatActivity {
     int r_club;
 
     //형 변환
-    String cha_dis, cha_avg, cha_max, clear, comp_name;
+    String cha_dis, cha_avg, cha_max, clear, comp_name, adress_value;
 
     Intent intent;
 
@@ -118,6 +118,7 @@ public class endActivity extends AppCompatActivity {
         check = intent.getIntExtra("check", 0);
         rr_comp = intent.getStringExtra("rr_comp");
         comp_name = intent.getStringExtra("comp_name");
+        adress_value = intent.getStringExtra("addr");
 
 
         ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
@@ -177,6 +178,7 @@ public class endActivity extends AppCompatActivity {
         ingtime = (TextView) findViewById(R.id.ending);
         distence = (TextView) findViewById(R.id.enddis);
         riding_nameinput = (EditText)findViewById(R.id.riding_nameinput); //라이딩 이름 넣기
+        addr = (TextView) findViewById(R.id.addr);
 
         Button save = (Button) findViewById(R.id.saveriding);
         RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
@@ -185,7 +187,8 @@ public class endActivity extends AppCompatActivity {
         avgsoeed.setText(AvgSpeed); //평균속도
         maxspeed.setText(MaxSpeed); //최대속도
         getgodo.setText(Getgodo); //획득고도
-
+        String text=adress_value.replace("대한민국","");
+        addr.setText(text);
 
         int hour;
         int min;
@@ -326,7 +329,7 @@ public class endActivity extends AppCompatActivity {
                 params.put("rr_open", open);
                 params.put("rr_breaktime", restsectime);
                 params.put("rr_time", endsec);
-                params.put("rr_area", "대구 북구");
+                params.put("rr_area", adress_value);
                 params.put("rr_like", "0");
                 params.put("rr_name", riding_nameinput.getText().toString());
                 params.put("rr_comp", rr_comp);
