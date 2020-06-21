@@ -7,7 +7,7 @@ import android.os.Handler;
 
 import com.capston.mtbcraft.R;
 
-public class MainActivity extends Activity {
+public class Splash extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
     private class splashhandler implements Runnable{
         public void run(){
             startActivity(new Intent(getApplication(), SubActivity.class)); //로딩이 끝난 후, ChoiceFunction 이동
-            MainActivity.this.finish(); // 로딩페이지 Activity stack에서 제거
+            Splash.this.finish(); // 로딩페이지 Activity stack에서 제거
         }
     }
 

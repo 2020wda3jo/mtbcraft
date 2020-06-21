@@ -121,7 +121,7 @@ public class SubActivity extends AppCompatActivity {
         startbt.setOnClickListener(v -> {
 
             Intent intent=new Intent(SubActivity.this, StartActivity.class);
-            startActivity(intent);
+            startService(intent);
         });
 
     }

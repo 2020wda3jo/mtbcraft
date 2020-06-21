@@ -127,7 +127,7 @@ public class StartActivity extends FragmentActivity
         // 구현한 CalloutBalloonAdapter 등록
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
         //createCustomMarker(mMapView);
-//뷰에서 상단에 위치
+        //뷰에서 상단에 위치
         m_speed = (TextView) findViewById(R.id.m_speed); //현재속도
         m_distance = (TextView) findViewById(R.id.m_distance); //이동거리
         m_time = (TextView) findViewById(R.id.m_time); //라이딩 시간
@@ -182,7 +182,7 @@ public class StartActivity extends FragmentActivity
 
         button2.setOnClickListener(v -> {
             //형변환한거
-            if (cha_dis.equals("")) {
+            if (hap==0) {
                 /*이동거리가 0이면 라이딩 기록 종료시키면 액티비티 종료 */
                 AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
                 alert_confirm.setMessage("수집 데이터가 너무 적어 저장하지 않습니다");

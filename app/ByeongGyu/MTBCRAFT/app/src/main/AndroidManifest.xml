@@ -1,54 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.capston.mtbcraft">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="true"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="true" />
+
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <service
+            android:name="com.mtbcraft.Activity.Main.RidingService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name="com.mtbcraft.Activity.Main.SubActivity"
+            android:enabled="true"
+            android:exported="true" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="8819eab741cd2e061a5bb0e04dbe8a96"/>
+            android:value="8819eab741cd2e061a5bb0e04dbe8a96" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="frzpsowm1l" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCa8UBfxfwsrydbQwFng-J7D_O1lnOUOss"/>
+            android:value="AIzaSyCa8UBfxfwsrydbQwFng-J7D_O1lnOUOss" />
+
         <activity android:name="com.mtbcraft.Activity.Main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!---액티비티 등록 -->
+        </activity> <!-- -액티비티 등록 -->
+        <activity android:name="com.mtbcraft.Activity.Main.LoginActivity" />
         <activity android:name="com.mtbcraft.network.LoginAccess" />
         <activity android:name="com.mtbcraft.Activity.Main.SubActivity" />
-        <activity android:name="com.mtbcraft.Activity.Main.StartActivity"/>
-        <activity android:name="com.mtbcraft.Activity.Riding.DetailActivity"/>
-        <activity android:name="com.mtbcraft.Activity.Riding.MyReport"/>
-        <activity android:name="com.mtbcraft.Activity.Main.endActivity"/>
-        <activity android:name="com.mtbcraft.Activity.Course.CourseList"/>
-        <activity android:name="com.mtbcraft.Activity.Course.CourseDetail"/>
-        <activity android:name="com.mtbcraft.Activity.Riding.FollowStart"/>
-        <activity android:name="com.mtbcraft.Activity.Scrap.MyScrap"/>
-        <activity android:name="com.mtbcraft.Activity.Scrap.MyScrapDetail"/>
-        <activity android:name="com.mtbcraft.Activity.Course.CourseSearch"/>
+        <activity android:name="com.mtbcraft.Activity.Main.StartActivity" />
+        <activity android:name="com.mtbcraft.Activity.Riding.DetailActivity" />
+        <activity android:name="com.mtbcraft.Activity.Riding.MyReport" />
+        <activity android:name="com.mtbcraft.Activity.Main.endActivity" />
+        <activity android:name="com.mtbcraft.Activity.Course.CourseList" />
+        <activity android:name="com.mtbcraft.Activity.Course.CourseDetail" />
+        <activity android:name="com.mtbcraft.Activity.Riding.FollowStart" />
+        <activity android:name="com.mtbcraft.Activity.Scrap.MyScrap" />
+        <activity android:name="com.mtbcraft.Activity.Scrap.MyScrapDetail" />
+        <activity android:name="com.mtbcraft.Activity.Course.CourseSearch" />
         <activity android:name="com.mtbcraft.Activity.Competition.CompetitionDetail" />
         <activity android:name="com.mtbcraft.Activity.Competition.CompetitionList" />
-
-
     </application>
-
 
 </manifest>
