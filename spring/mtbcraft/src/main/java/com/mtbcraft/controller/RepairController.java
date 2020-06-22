@@ -25,6 +25,7 @@ public class RepairController {
 			model.addAttribute("applyList", repairService.getRepairApply(rider));
 			model.addAttribute("noQnaList", repairService.getNoAnserQNA(rider));
 			model.addAttribute("noApplyList", repairService.getNoConfirmRepairApply(rider));
+			model.addAttribute("shop", repairService.getRepairShopDetail(rider));
 			return "repair/shop/main";
 		}else {
 			model.addAttribute("qnaList", repairService.rider_getQNA(rider));
@@ -120,8 +121,8 @@ public class RepairController {
 	}
 
 	// 정비소 회원 정비 신청 수락
-	@RequestMapping(value = "/repair/shop/apply/{ra_num}", method = RequestMethod.POST)
-	public String s_repairApplyPut(int ra_num, Repair_Apply ra, Model model) {
+	@RequestMapping(value = "/repair/shop/apply", method = RequestMethod.POST)
+	public String s_repairApplyPut(Repair_Apply ra, Model model) {
 		ra.setRa_confirm(1);
 		repairService.updateRepairApply(ra);
 		model.addAttribute("rider", ra.getRa_shop());
@@ -129,7 +130,7 @@ public class RepairController {
 	}
 	
 	// 정비소 회원 정비 신청 거절
-	@RequestMapping("/repair/shop/noapply")
+	@RequestMapping(value = "/repair/shop/noapply", method = RequestMethod.POST)
 	public String noapply(Repair_Apply ra, Model model) {
 		ra.setRa_confirm(2);
 		repairService.updateRepairApply(ra);

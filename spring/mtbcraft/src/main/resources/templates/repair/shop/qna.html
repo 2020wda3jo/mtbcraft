@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header2"></head>
 
-	<!-- 고쳐야한다 -->
-	<link rel="stylesheet" href="/css/community/boardwrite.css?after">
+	<link rel="stylesheet" href="/css/repair/shopQNA.css">
 
 	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
@@ -11,82 +10,76 @@
 	     <div class="row no-gutters slider-text align-items-end justify-content-center">
 	       <div class="col-md-9 ftco-animate text-center">
 	       		<h1 class="mb-2 bread">QNA</h1>
-	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Repair <i class="ion-ios-arrow-forward"></i></a></span> <span>QNA <i class="ion-ios-arrow-forward"></i></span></p>
+	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">repair <i class="ion-ios-arrow-forward"></i></a></span> <span>Qna <i class="ion-ios-arrow-forward"></i></span></p>
 	       </div>
 	     </div>
 	   </div>
 	</section>
 	
 	<section class="ftco-section">
-		<div class="container">
-			<div class="row">
+			<div class="main">
+			<h3>문의 답변하기</h3>
+				<table class="tb_apply">
+					<thead>
+						<tr>
+							<th>분류</th>
+							<th>내용</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>문의번호</td>
+							<td th:text="${qna.qa_num}"></td>
+						</tr>
+						<tr>
+							<td>문의자</td>
+							<td th:text="${qna.qa_rider}"></td>
+						</tr>
+						<tr>
+							<td>문의제목</td>
+							<td th:text="${qna.qa_title}"></td>
+						</tr>
+						<tr>
+							<td>문의일시</td>
+							<td th:text="${qna.shop_time}"></td>
+						</tr>
+						<tr>
+							<td>문의내용</td>
+							<td><textarea rows="6" cols="100" name="ra_content" th:text="${qna.qa_content}" readonly></textarea></td>
+						</tr>
+						<tr>
+							<td>답변내용</td>
+							<td><textarea rows="6" cols="100" id="newanswer" th:text="${qna.qa_answer}"></textarea></td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+				<div class="btnbox">
+					<a href="#" id="1" class="btn_apy">답변하기</a>
+					<a href="#"  id="2" class="btn_apy">돌아가기</a>
+				</div>
 			
-				<div class="col-lg-4 sidebar ftco-animate">
-					<div class="sidebar-box clubinfo">
-		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
-		              </div>
-		              
-		              <h2>가게이름</h2>
-		              <h3>가게정보</h3>
-		              <h3>휴무일?</h3>
-		            </div>
-		            
-		            <div class="sidebar-box clubinfo">
-		            	<a href="/community/club">문의</a>
-		            	<a href="#">정비신청</a>
-		            </div>
-		            
-				</div>
-				
-				
-				<div class="col-lg-8 ftco-animate board">
-					<h1>클럽 게시판</h1>
-					<p>어떤 이야기를 들려주실 건가요?</p>
-						<form action="/repair/shop/qna" method="post">
-							<input type="hidden" name="qa_num" th:value="${qna.qa_num}">
-							<input type="hidden" name="qa_shop" th:value="${qna.qa_shop}">
-						<table class="type09">
-		             		<thead>
-		             			<tr>
-		             			<th scope="cols" class="r">구분</th>
-		             			<th scope="cols" >내용</th>
-		             			</tr>
-		             		</thead>
-		             		<tbody>
-		             			<tr>
-		             			<td scope="row">제목</td>
-		             			<td class="c" ><input type="text" name="b_title" class="full" th:value="${qna.qa_title}" readonly></td>
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">작성자</td>
-		             				<td class="c" ><input type="text" name="qa_rider" th:value="${qna.qa_rider}" readonly></td>
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">방문시간</td>
-		             				<td class="c" ><input type="text" name="shop_time" th:value="${qna.shop_time}" readonly></td>
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">내용</td>
-		             			<td class="c" ><textarea class="full" name="b_content" th:text="${qna.qa_content}" readonly></textarea> </td>
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">답변</td>
-		             			<td class="c" ><textarea rows="6" cols="100" name="qa_answer" th:text="${qna.qa_answer}"></textarea></td>
-		             			</tr>
-		             			
-		             		</tbody>
-		             	</table>
-	             	
-	             	
-	             	<div class="search">
-		             	<button type="submit">답변하기</button></form>
-		             	<button type="button" class="mm" id="/repair">돌아가기</button>
-	             	</div>
-				</div>
-			</div>
 		</div>
 	</section>
-
+	
+	<form action="/repair/shop/qna" id="form1" method="post">
+		<input type="hidden" name="qa_num" th:value="${qna.qa_num}">
+		<input type="hidden" name="qa_shop" th:value="${qna.qa_shop}">
+		<input type="hidden" name="qa_answer" id="qa_answer" th:value="${qna.qa_answer}">
+	</form>
+	<form  action="/repair" method="post" id="form2" >
+		<input type="hidden" name="rider" th:value="${qna.qa_shop}">
+	</form>	
+	
+	<script>
+		$(".btnbox a").click(function(){
+			if(this.id==1){
+				$("#qa_answer").val( $("#newanswer").val() );
+			}
+			$("#form"+this.id).submit();
+		});
+	</script>
+	
 <footer th:replace="footer2"></footer>
 	
 	<!-- loader -->
