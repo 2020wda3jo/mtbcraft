@@ -16,9 +16,14 @@ private String c_area;
 private String c_gpx;
 private String c_distance;
 private String c_name;
+private String bg_image;
 
-
-
+public String getBg_image() {
+	return bg_image;
+}
+public void setBg_image(String bg_image) {
+	this.bg_image = bg_image;
+}
 public String getC_distance() {
 	return c_distance;
 }

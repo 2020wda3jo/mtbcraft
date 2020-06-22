@@ -3,7 +3,7 @@
 <head th:replace="header2"></head>
 	
 	<!-- 수정해야함 -->
-	<link rel="stylesheet" href="/css/etc/badge.css">
+	<link rel="stylesheet" href="/css/etc/badge.css?a">
 
 <body>
 	
@@ -29,7 +29,8 @@
 		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
 		              </div>
 		              
-		              <h2>사용자명</h2>
+		              <h2 th:text="${rider}+'님'">사용자명</h2>
+		              <h2>안라하세요!</h2>
 		            </div>
 		            
 		            <div class="sidebar-box clubinfo">
@@ -47,7 +48,11 @@
 					
 					<div class="flex">
 						<div class="badgeitem" th:each="badge:${badgeList}">
-							<div><img alt="" src="#" th:src="'/imgs/badge/'+${badge.bg_image}"> </div>
+							<div class="bgimg">
+								<img alt="" src="#" th:if="${#strings.substring(badge.bg_image,0,4)}=='comp'" th:src="|/entertainment/img/badge/${badge.bg_image}1.png|"> 
+								<img alt="" src="#" th:unless="${#strings.substring(badge.bg_image,0,4)}=='comp'" th:src="|/entertainment/img/badge/${badge.bg_image}|"> 
+								 
+							</div>
 							<p th:text="${badge.bg_name}"></p>
 						</div>
 					</div>

@@ -111,4 +111,9 @@ div.menus.d-flex > div {
 	border: none;
 	background-color: #ffa323;
 }
+
+.block-20 {
+	height: 500px;
+	background-size: contain;
+}
 	

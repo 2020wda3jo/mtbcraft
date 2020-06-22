@@ -46,14 +46,6 @@ public class EntertainController {
 		List<Competition> complist = entertainmentService.getRecentComp3(rider);
 		List<Mission> missionlist = entertainmentService.getCompleteMission(rider);
 		
-		for(int i=0;i<complist.size();i++) {
-			System.out.println(complist.get(i).getComp_name());
-		}
-		for(int i=0;i<missionlist.size();i++) {
-			System.out.println(missionlist.get(i).getM_img());
-			System.out.println(missionlist.get(i).getM_name());
-		}
-		
 		model.addAttribute("complist", complist);
 		model.addAttribute("missionlist", missionlist);
 		
@@ -150,7 +142,6 @@ public class EntertainController {
 	@RequestMapping(value = "/entertainment/compIng" , method = RequestMethod.GET)
 	public String getCompIng(Model model) throws Exception {
 		List<CompIng> list = entertainmentService.getCompIng();
-		System.out.println(list.size());
 		model.addAttribute("list", list);
 		return "entertainment/compIng";
 	}
@@ -185,7 +176,7 @@ public class EntertainController {
 	// 배지 조회페이지 수정필요
 	@RequestMapping("/mypage/badge")
 	public String badge(String rider, Model model) throws Exception {
-		
+		model.addAttribute("rider", rider);
 		model.addAttribute("badgeList", entertainmentService.getBadge(rider));
 		
 		return "entertainment/badge";
@@ -240,5 +231,14 @@ public class EntertainController {
 		}
 		fis.close();
 		gpx.setting(txt);
+	}
+	
+	//이미지 로딩
+	@GetMapping(value = "/entertainment/img/{path}/{imageFile}")
+	public @ResponseBody byte[] getImage(@PathVariable String path, @PathVariable String imageFile) throws IOException {
+		InputStream in = null;
+	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+path+"/"+imageFile)); 
+	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\"+path+"\\"+imageFile)); 
+	    return IOUtils.toByteArray(in);
 	}
 }
