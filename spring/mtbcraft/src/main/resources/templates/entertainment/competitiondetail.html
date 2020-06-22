@@ -73,7 +73,7 @@
 					        <td th:text="${comp.c_name}">운봉산 초입 제3지점까지</td>
 					        
 					        <th scope="row">거리</th>
-					        <td th:text="${comp.c_distance}">9.7km</td>
+					        <td th:text="|${comp.c_distance} km|">9.7km</td>
 					    </tr>
 					    </tbody>
 					</table>
@@ -199,10 +199,11 @@
 					              <div class="menu-img img" style="background-image: url(/test/images/breakfast-1.jpg);" th:style="'background-image: url(/entertainment/img/badge/'+${comp.bg_image}+'1.png)'"></div>
 					              
 					              <div class="text">
-					                	<h4>용평은 우리가 접-수</h4>
+					                	<h4 th:text="${comp.bg_name}">용평은 우리가 접-수</h4>
 			                	  </div>
 			                	  <div class="text">
-						              	<p><span>용평MTB축제 1위에게 주어지는 배지</span></p>
+						              	<p th:text="|`${comp.comp_name}`|">용평MTB축제</p>
+						              	<p>1위에게 주어지는 배지</p>
 					              </div>
 					            </div>
 	        				</div>
@@ -215,10 +216,11 @@
 					              <div class="menu-img img" style="background-image: url(/test/images/breakfast-1.jpg);" th:style="'background-image: url(/entertainment/img/badge/'+${comp.bg_image}+'2.png)'"></div>
 					              
 					              <div class="text">
-					                	<h4>용평은 우리가 접-수</h4>
+					                	<h4 th:text="${comp.bg_name}">용평은 우리가 접-수</h4>
 			                	  </div>
 			                	  <div class="text">
-						              	<p><span>용평MTB축제 2위에게 주어지는 배지</span></p>
+						              	<p th:text="|`${comp.comp_name}`|">용평MTB축제</p>
+						              	<p>2위에게 주어지는 배지</p>
 					              </div>
 					            </div>
 	        				</div>
@@ -231,10 +233,11 @@
 					              <div class="menu-img img" style="background-image: url(/test/images/breakfast-1.jpg);" th:style="'background-image: url(/entertainment/img/badge/'+${comp.bg_image}+'3.png)'"></div>
 					              
 					              <div class="text">
-					                	<h4>용평은 우리가 접-수</h4>
+					                	<h4 th:text="${comp.bg_name}">용평은 우리가 접-수</h4>
 			                	  </div>
 			                	  <div class="text">
-						              	<p><span>용평MTB축제 3위에게 주어지는 배지</span></p>
+						              	<p th:text="|`${comp.comp_name}`|">용평MTB축제</p>
+						              	<p>3위에게 주어지는 배지</p>
 					              </div>
 					            </div>
 	        				</div>
@@ -244,7 +247,7 @@
 				        			<h3>입상</h3>
 				        		</div>
 				        		<div class="menus d-flex ftco-animate">
-					              <div class="menu-img img" style="background-image: url(/test/images/breakfast-1.jpg);"></div>
+					              <div class="menu-img img" style="background-image: url(/entertainment/img/badge/missionbg15.png);"></div>
 					              
 					              <div class="text">
 					                	<h4>우리도 선두야</h4>

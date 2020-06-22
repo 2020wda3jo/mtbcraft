@@ -17,7 +17,14 @@ private String c_gpx;
 private String c_distance;
 private String c_name;
 private String bg_image;
+private String bg_name;
 
+public String getBg_name() {
+	return bg_name;
+}
+public void setBg_name(String bg_name) {
+	this.bg_name = bg_name;
+}
 public String getBg_image() {
 	return bg_image;
 }
@@ -25,6 +32,9 @@ public void setBg_image(String bg_image) {
 	this.bg_image = bg_image;
 }
 public String getC_distance() {
+	int a = Integer.parseInt(c_distance)/1000;
+	int b = (Integer.parseInt(c_distance)-a*1000)/100;
+	c_distance = a+"."+b;
 	return c_distance;
 }
 public void setC_distance(String c_distance) {
