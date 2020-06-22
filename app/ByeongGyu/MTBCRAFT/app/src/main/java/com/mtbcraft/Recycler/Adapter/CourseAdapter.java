@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.capston.mtbcraft.R;
+import com.mtbcraft.R;
 import com.google.gson.Gson;
 import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.Activity.Course.CourseList;

@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
 
-        applicationId "com.example.gpstest"
+        applicationId "com.mtbcraft"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1

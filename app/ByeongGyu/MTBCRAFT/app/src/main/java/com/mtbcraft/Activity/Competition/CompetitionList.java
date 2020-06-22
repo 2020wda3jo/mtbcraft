@@ -22,7 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.capston.mtbcraft.R;
+import com.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.mtbcraft.Activity.Course.CourseList;

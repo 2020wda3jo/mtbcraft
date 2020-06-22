@@ -27,11 +27,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
-import com.capston.mtbcraft.R;
+
+import com.mtbcraft.R;
 import com.google.android.material.tabs.TabLayout;
 import com.mtbcraft.network.HttpClient;
+
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPOIItem;
@@ -40,21 +43,25 @@ import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 public class StartActivity extends FragmentActivity
-        implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener,TextToSpeech.OnInitListener{
+        implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
     private static final MapPoint CUSTOM_MARKER_POINT = MapPoint.mapPointWithGeoCoord(37.537229, 127.005515);
     private MapView mMapView;
     private MapPOIItem mCustomMarker;
     private LocationManager locationManager;
     private Location mLastlocation = null;
     private Boolean isRunning = true;
+    private Boolean isRunning2 = true;
     private TextToSpeech textToSpeech;
     String meter;
     String value;
@@ -69,6 +76,7 @@ public class StartActivity extends FragmentActivity
     TextView reststatus, nowspeed, avgspeed, maxspeed, godo, dis, timeView, getGodo, resttime, courseinfo;
 
     Thread timeThread = null;
+    Thread restTime = null;
     LinearLayout map_layout, speed_tap, status_layout;
     GridLayout speed_pre;
     String test, test2, test3;
@@ -83,10 +91,11 @@ public class StartActivity extends FragmentActivity
     //휴식시간 계산
     int hour, min, sec;
     //형변환용변수
-    String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value="";
+    String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "";
 
-    List<Address> addr=null;
+    List<Address> addr = null;
     Geocoder gCoder;
+
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
@@ -112,7 +121,6 @@ public class StartActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.riding_start);
-
 
 
         // MapLayout mapLayout = new MapLayout(this);
@@ -182,7 +190,7 @@ public class StartActivity extends FragmentActivity
 
         button2.setOnClickListener(v -> {
             //형변환한거
-            if (hap==0) {
+            if (hap == 0) {
                 /*이동거리가 0이면 라이딩 기록 종료시키면 액티비티 종료 */
                 AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
                 alert_confirm.setMessage("수집 데이터가 너무 적어 저장하지 않습니다");
@@ -208,7 +216,7 @@ public class StartActivity extends FragmentActivity
                 intent.putExtra("getgodo", String.valueOf(getGodo.getText())); //획득고도
                 intent.putExtra("resttime", String.valueOf(resttime.getText())); //휴식시간
                 intent.putExtra("ingtime", String.valueOf(timeView.getText())); //경과시간
-                intent.putExtra("addr",adress_value);
+                intent.putExtra("addr", adress_value);
                 intent.putExtra("endsec", String.valueOf(m_t.getText())); //라이딩 시간(초)
                 intent.putExtra("restsectime", String.valueOf(m_rest.getText())); //휴식시간(초)
                 intent.putExtra("witch_lat", witch_lat); //위도
@@ -288,9 +296,10 @@ public class StartActivity extends FragmentActivity
             String body = post.getBody();
             return body;
         }
+
         @Override
         protected void onPostExecute(String s) {
-            try{
+            try {
                 Log.d("JSON_RESULT", s);
                 String tempData = s;
 
@@ -316,7 +325,7 @@ public class StartActivity extends FragmentActivity
 
                     mMapView.addPOIItem(mCustomMarker);
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -448,52 +457,51 @@ public class StartActivity extends FragmentActivity
         A.setLongitude(lonngitude);
 
         try {
-        for (int i = 0; i < jarray.length(); i++) {
+            for (int i = 0; i < jarray.length(); i++) {
                 jObject = jarray.getJSONObject(i);
                 test = jObject.getString("da_latitude");
                 test2 = jObject.getString("da_longitude");
                 test3 = jObject.getString("da_content");
                 //Log.d("위험지역", test + " " + test2 + test3);
 
-            Location B = new Location("pointA");
-            B.setLatitude(Double.parseDouble(test));
-            B.setLongitude(Double.parseDouble(test2));
-            distance = A.distanceTo(B);
-            Log.d(test3+"거리는", String.valueOf(distance));
-            //float를 정수로
-            int a = (int) distance;
-            //정수로바꾼거를 문자열로
-            String cut_format = String.valueOf(a);
-            //문자열의 길이를 구한다
-            int leget = cut_format.length();
-            //
+                Location B = new Location("pointA");
+                B.setLatitude(Double.parseDouble(test));
+                B.setLongitude(Double.parseDouble(test2));
+                distance = A.distanceTo(B);
+               // Log.d(test3 + "거리는", String.valueOf(distance));
+                //float를 정수로
+                int a = (int) distance;
+                //정수로바꾼거를 문자열로
+                String cut_format = String.valueOf(a);
+                //문자열의 길이를 구한다
+                int leget = cut_format.length();
+                //
 
-            if(leget==2) {
-                String get = cut_format.substring(cut_format.length()-2);
-                String get2 = get.substring(0,1);
-                if(get2.equals("7")) {
-                    value = test3 + "위험구간이 "+get+"미터 앞입니다. 주의하세요";
-                    textToSpeech = new TextToSpeech(this,this);
-
-                    Log.d("십의자리숫자","70m 전방에 주의구간입니동");
+                if (leget == 2) {
+                    String get = cut_format.substring(cut_format.length() - 2);
+                    String get2 = get.substring(0, 1);
+                    if (get2.equals("7")) {
+                        value = test3 + "위험구간이 " + get + "미터 앞입니다. 주의하세요";
+                        textToSpeech = new TextToSpeech(this, this);
+                       // Log.d("십의자리숫자", "70m 전방에 주의구간입니동");
+                    }
                 }
-            }
-            if(leget==3){
-                String get = cut_format.substring(cut_format.length()-3);
-                String get2 = get.substring(0,1);
-                if(get2.equals("3")) {
-                    value="300m앞에 위험구간입니다";
-                    textToSpeech = new TextToSpeech(this,this);
-                    Log.d("십의자리숫자","300m 전방에 주의구간입니동");
+                if (leget == 3) {
+                    String get = cut_format.substring(cut_format.length() - 3);
+                    String get2 = get.substring(0, 1);
+                    if (get2.equals("3")) {
+                        value = "300m앞에 위험구간입니다";
+                        textToSpeech = new TextToSpeech(this, this);
+                       // Log.d("십의자리숫자", "300m 전방에 주의구간입니동");
+                    }
                 }
-            }
 
 
             }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // 위도 경도 정보 배열 저장
         witch_lat.add(latitude);
@@ -508,8 +516,6 @@ public class StartActivity extends FragmentActivity
 
         // 고도 정보 저장
         ele.add(location.getAltitude());
-        cnt = cnt + 1;
-        //km당 알림주는거
 
         //현재속도
         getSpeed = Double.parseDouble(String.format("%.1f", location.getSpeed() * 3600 / 1000));
@@ -518,59 +524,52 @@ public class StartActivity extends FragmentActivity
 
 
         //만약 속도가 0.1미만이라면 휴식시간이 늘어남(뭔가 이상함)
-        if (getSpeed < 0.0) {
-            restcnt = restcnt + 1;
-            reststatus.setText("일시정지");
-            sec = restcnt;
-            min = sec / 60;
-            hour = min / 60;
-            sec = sec % 60;
-            min = min % 60;
-            resttime.setText(String.valueOf(hour + ":" + min + ":" + sec));
-            m_rest.setText(String.valueOf(restcnt));
-        } else { //그게 아니면 경과시간이 늘어남
-            intime = intime + 1;
-            reststatus.setText("열심히^^");
-        }
 
         MapPolyline polyline = new MapPolyline();
-        polyline.setLineColor(Color.argb(128,255,51,0));
+        polyline.setLineColor(Color.argb(128, 255, 51, 0));
 
-        polyline.addPoint(MapPoint.mapPointWithGeoCoord(latitude,lonngitude));
+        polyline.addPoint(MapPoint.mapPointWithGeoCoord(latitude, lonngitude));
         mMapView.addPolyline(polyline);
         mMapView.isShowingCurrentLocationMarker();
 
         // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
         MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
         int padding = 50; // px
-        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,padding,2,3));
+        mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding, 2, 3));
 
         gCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-        try{
-            addr=gCoder.getFromLocation(latitude,lonngitude,1);
+        try {
+            addr = gCoder.getFromLocation(latitude, lonngitude, 1);
             Address a = addr.get(0);
 
             adress_value = a.getAddressLine(0);
 
-            Log.d("주소",adress_value+"\n");
-        }catch(Exception e){
+            Log.d("주소", adress_value + "\n");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-
         if (mLastlocation != null) {
+            if (getSpeed==0.0) {
+                restTime = new Thread(new restTime());
+                restTime.start();
+
+            } else {
+                isRunning2 = !isRunning2;
+                reststatus.setText("열심히^^");
+            }
 
             /*폴리라인 그리기 */
             MapPolyline polyline2 = new MapPolyline();
-            polyline.setLineColor(Color.argb(128,255,51,0));
-            polyline.addPoint(MapPoint.mapPointWithGeoCoord(mLastlocation.getLatitude(),mLastlocation.getLongitude()));
+            polyline.setLineColor(Color.argb(128, 255, 51, 0));
+            polyline.addPoint(MapPoint.mapPointWithGeoCoord(mLastlocation.getLatitude(), mLastlocation.getLongitude()));
             mMapView.addPolyline(polyline);
 
             // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
             MapPointBounds mapPointBounds2 = new MapPointBounds(polyline.getMapPoints());
             int padding2 = 50; // px
-            mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2,padding,2,3));
+            mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2, padding, 2, 3));
 
             if (getSpeed > maX) {
                 maX = getSpeed;
@@ -585,13 +584,13 @@ public class StartActivity extends FragmentActivity
 
             int testhap = 0;
             dis.setText(String.format("%.2f", hap));
-            m_distance.setText(String.format("%.1f", hap)+"m");
+            m_distance.setText(String.format("%.1f", hap) + "m");
 
             double killlo;
-            if(hap>=1000){
-                killlo = hap/1000.0;
+            if (hap >= 1000) {
+                killlo = hap / 1000.0;
                 dis.setText(String.format("%.2f", killlo));
-                m_distance.setText(String.format("%.1f", killlo)+"km");
+                m_distance.setText(String.format("%.1f", killlo) + "km");
             }
 
             //평균속도
@@ -613,13 +612,61 @@ public class StartActivity extends FragmentActivity
         mLastlocation = location;
     }
 
+    @SuppressLint("HandlerLeak2")
+    Handler handler2 = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            int sectotal = (msg.arg1 / 100);
+            int mSec = msg.arg1 % 100;
+            int sec = (msg.arg1 / 100) % 60;
+            int min = (msg.arg1 / 100) / 60;
+            int hour = (msg.arg1 / 100) / 360;
+            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
+
+            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
+            @SuppressLint("DefaultLocale") String result2 = String.format("%02d", sectotal);
+            //resttime.setText(result);
+            Log.d("휴식시간",result);
+
+        }
+    };
+
+    public class restTime implements Runnable {
+        @Override
+        public void run() {
+            int i = 0;
+
+            while (true) {
+                while (isRunning2) { //일시정지를 누르면 멈춤
+                    Message msg = new Message();
+                    msg.arg1 = i++;
+                    handler2.sendMessage(msg);
+
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //timeView.setText("");
+                                //timeView.setText("00:00:00:00");
+                            }
+                        });
+                        return; // 인터럽트 받을 경우 return
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onInit(int i) {
         if (i == TextToSpeech.SUCCESS) {
             textToSpeech.setLanguage(Locale.KOREAN);
             textToSpeech.setPitch(0.6f);
             textToSpeech.setSpeechRate(1f);
-            textToSpeech.speak(value, TextToSpeech.QUEUE_FLUSH,null);
+            textToSpeech.speak(value, TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 
@@ -644,15 +691,7 @@ public class StartActivity extends FragmentActivity
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
     }
-    // 메모리 누출을 방지하게 위해 TTS를 중지
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (textToSpeech != null) {
-            textToSpeech.stop();
-            textToSpeech.shutdown();
-        }
-    }
+
     @Override
     public void onProviderDisabled(String provider) {
 
@@ -686,5 +725,38 @@ public class StartActivity extends FragmentActivity
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("onDestroy","onDestroy");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("onPause","onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("onResume","OnResume");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+        Log.d("다른화면임","다른화면임");
     }
 }

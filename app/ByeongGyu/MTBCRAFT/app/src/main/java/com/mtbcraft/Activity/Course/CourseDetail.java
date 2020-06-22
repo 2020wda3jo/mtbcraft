@@ -22,7 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.capston.mtbcraft.R;
+import com.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.CompetitionList;
 import com.mtbcraft.Activity.Main.endActivity;

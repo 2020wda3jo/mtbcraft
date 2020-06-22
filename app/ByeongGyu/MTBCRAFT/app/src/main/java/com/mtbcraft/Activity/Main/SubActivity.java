@@ -21,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.capston.mtbcraft.R;
+import com.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
 import com.mtbcraft.Activity.Competition.CompetitionList;
 import com.mtbcraft.Activity.Course.CourseList;
@@ -103,25 +103,14 @@ public class SubActivity extends AppCompatActivity {
             return true;
         });
 
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.example.gpstest", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+
 
         Button startbt = (Button)findViewById(R.id.ridingstart);
         //라이딩 시작
         startbt.setOnClickListener(v -> {
 
             Intent intent=new Intent(SubActivity.this, StartActivity.class);
-            startService(intent);
+            startActivity(intent);
         });
 
     }

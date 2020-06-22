@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mtbcraft.network.LoginAccess;
-import com.capston.mtbcraft.R;
+import com.mtbcraft.R;
 
 public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {

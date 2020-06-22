@@ -26,7 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.capston.mtbcraft.R;
+import com.mtbcraft.R;
 import com.google.android.material.tabs.TabLayout;
 import com.mtbcraft.Activity.Course.CourseDetail;
 import com.mtbcraft.Activity.Main.endActivity;
