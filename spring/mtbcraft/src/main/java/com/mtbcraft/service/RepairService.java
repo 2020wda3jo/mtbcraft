@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.dto.Qna;
 import com.mtbcraft.dto.Repair_Apply;
+import com.mtbcraft.dto.Repair_History;
+import com.mtbcraft.dto.Repair_Shop;
 import com.mtbcraft.mapper.RepairMapper;
 
 @Service
@@ -63,5 +65,40 @@ public class RepairService {
 	//신청번호로 신청 수락 및 거절
 	public void updateRepairApply(Repair_Apply ra) {
 		repairMapper.updateRepairApply(ra);
+	}
+	
+	//사용자 문의 내역 조회
+	public List<Qna> rider_getQNA(String rider){
+		return repairMapper.rider_getQNA(rider);
+	}
+	
+	//사용자 신청 내역 조회
+	public List<Repair_Apply> rider_getRepairApply(String rider){
+		return repairMapper.rider_getRepairApply(rider);
+	}
+	
+	//정비소 조회(임시)
+	public List<Repair_Shop> getRepairShop(){
+		return repairMapper.getRepairShop();
+	}
+	
+	//정비소 상세정보 조회
+	public Repair_Shop getRepairShopDetail(String rs_id) {
+		return repairMapper.getRepairShopDetail(rs_id);
+	}
+	
+	//정비소 리뷰 조회
+	public List<Repair_History> getRepairHistory(String ra_shop){
+		return repairMapper.getRepairHistory(ra_shop);
+	}
+	
+	//사용자 문의 등록
+	public void postRider_QNA(Qna qa) {
+		repairMapper.postRider_QNA(qa);
+	}
+	
+	//사용자 신청 등록
+	public void postRider_Apply(Repair_Apply ra) {
+		repairMapper.postRider_Apply(ra);
 	}
 }

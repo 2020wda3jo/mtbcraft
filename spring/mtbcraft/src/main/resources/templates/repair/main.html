@@ -4,7 +4,7 @@
 <body>
 	
 	<!-- 고쳐야한다 -->
-	<link rel="stylesheet" href="/css/community/club_main.css?after">
+	<link rel="stylesheet" href="/css/repair/main.css?after">
 
 	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
@@ -27,14 +27,14 @@
 		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
 		              </div>
 		              
-		              <h2>내이름</h2>
+		              <h2 th:text="${rider}+'님!'">내이름</h2>
 		              <h3>안전한 라이딩의 시작</h3>
 		              <h3>바로 정기점검입니다.</h3>
 		            </div>
 		            
 		            <div class="sidebar-box clubinfo">
-		            	<a href="/community/club">문의하기</a>
-		            	<a href="#">정비 신청하기</a>
+		            	<a href="/repair/search">문의하기</a>
+		            	<a href="/repair/search">정비 신청하기</a>
 		            </div>
 		            
 				</div>
@@ -43,40 +43,22 @@
 				<div class="col-lg-8 ftco-animate board">
 					<div>
 						<h1>나의 문의</h1>
-						<table class="type09">
+						<table class="type09 myqna">
 		             		<thead>
 		             			<tr>
-		             			<th scope="cols" class="r">분류</th>
+		             			<th scope="cols" class="r">상태</th>
 		             			<th scope="cols" >제목</th>
 		             			<th scope="cols" class="j">글쓴이</th>
 		             			<th scope="cols" class="j">작성일</th>
-		             			<th scope="cols">조회</th>
 		             			</tr>
 		             		</thead>
 		             		<tbody>
-		             			<tr>
-		             			<td scope="row" class="r">자유</td>
-		             			<td class="c">오늘 기온 장난아닙니다ㅠㅠ</td>
-		             			<td class="j">180137</td>
-		             			<td class="j">2020-06-07</td>
-		             			<td>21</td>
-		             			<input type="hidden" id="b_num">
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">자유</td>
-		             			<td class="c">오늘 기온 장난아닙니다ㅠㅠ</td>
-		             			<td class="j">180137</td>
-		             			<td class="j">2020-06-07</td>
-		             			<td>21</td>
-		             			<input type="hidden" id="b_num">
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">자유</td>
-		             			<td class="c">오늘 기온 장난아닙니다ㅠㅠ</td>
-		             			<td class="j">180137</td>
-		             			<td class="j">2020-06-07</td>
-		             			<td>21</td>
-		             			<input type="hidden" id="b_num">
+		             			<tr th:each="qna : ${qnaList}">
+		             			<td scope="row" class="r" th:if="${qna.qa_answer}==null" th:text="답변대기">자유</td>
+		             			<td scope="row" class="r" th:unless="${qna.qa_answer}==null" th:text="답변완료">자유</td>
+		             			<td class="c"><a href="#" th:text="${qna.qa_title}" th:id="${qna.qa_num}"></a></td>
+		             			<td class="j" th:text="${qna.qa_rider}">180137</td>
+		             			<td class="j" th:text="${qna.rider_time}">2020-06-07</td>
 		             			</tr>
 		             		</tbody>
 		             	</table>
@@ -87,45 +69,20 @@
 						<table class="type09">
 		             		<thead>
 		             			<tr>
-		             			<th scope="cols" class="r">분류</th>
+		             			<th scope="cols" class="r">상태</th>
 		             			<th scope="cols" >제목</th>
 		             			<th scope="cols" class="j">글쓴이</th>
-		             			<th scope="cols" class="j">작성일</th>
-		             			<th scope="cols">조회</th>
+		             			<th scope="cols" class="j">방문일시</th>
 		             			</tr>
 		             		</thead>
 		             		<tbody>
-		             			<tr>
-		             			<td scope="row" class="r">자유</td>
-		             			<td class="c">오늘 기온 장난아닙니다ㅠㅠ</td>
-		             			<td class="j">180137</td>
-		             			<td class="j">2020-06-07</td>
-		             			<td>21</td>
-		             			<input type="hidden" id="b_num">
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">자유</td>
-		             			<td class="c">오늘 기온 장난아닙니다ㅠㅠ</td>
-		             			<td class="j">180137</td>
-		             			<td class="j">2020-06-07</td>
-		             			<td>21</td>
-		             			<input type="hidden" id="b_num">
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">자유</td>
-		             			<td class="c">오늘 기온 장난아닙니다ㅠㅠ</td>
-		             			<td class="j">180137</td>
-		             			<td class="j">2020-06-07</td>
-		             			<td>21</td>
-		             			<input type="hidden" id="b_num">
-		             			</tr>
-		             			<tr>
-		             			<td scope="row" class="r">자유</td>
-		             			<td class="c">오늘 기온 장난아닙니다ㅠㅠ</td>
-		             			<td class="j">180137</td>
-		             			<td class="j">2020-06-07</td>
-		             			<td>21</td>
-		             			<input type="hidden" id="b_num">
+		             			<tr th:each="apply : ${applyList}">
+		             			<td scope="row" class="r" th:if="${apply.ra_confirm}==0" th:text="접수중">자유</td>
+		             			<td scope="row" class="r" th:if="${apply.ra_confirm}==1" th:text="접수완료">자유</td>
+		             			<td scope="row" class="r" th:if="${apply.ra_confirm}==2" th:text="수리불가">자유</td>
+		             			<td class="c"><a href="#" th:text="${apply.ra_content}" th:id="${apply.ra_num}"></a> </td>
+		             			<td class="j" th:text="${apply.ra_rider}">180137</td>
+		             			<td class="j" th:text="${apply.shop_time}">2020-06-07</td>
 		             			</tr>
 		             		</tbody>
 		             	</table>

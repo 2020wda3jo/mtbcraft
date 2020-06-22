@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.Qna;
 import com.mtbcraft.dto.Repair_Apply;
+import com.mtbcraft.dto.Repair_History;
+import com.mtbcraft.dto.Repair_Shop;
 
 @Repository("com.mtbcraft.mapper.RepairMapper")
 public interface RepairMapper {
@@ -35,4 +37,25 @@ public interface RepairMapper {
 	
 	//신청번호로 신청 수락 및 거절
 	public void updateRepairApply(Repair_Apply ra);
+	
+	//사용자 문의 내역 조회
+	public List<Qna> rider_getQNA(String rider);
+	
+	//사용자 신청 내역 조회
+	public List<Repair_Apply> rider_getRepairApply(String rider);
+	
+	//정비소 조회 (임시)
+	public List<Repair_Shop> getRepairShop();
+	
+	//정비소 상세정보 조회
+	public Repair_Shop getRepairShopDetail(String rs_id);
+	
+	//정비소 리뷰 조회
+	public List<Repair_History> getRepairHistory(String ra_shop);
+	
+	//사용자 문의 등록
+	public void postRider_QNA(Qna qa);
+
+	//사용자 신청 등록
+	public void postRider_Apply(Repair_Apply ra);
 }

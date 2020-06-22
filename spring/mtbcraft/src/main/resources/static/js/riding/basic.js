@@ -58,6 +58,7 @@ $("#chk_DA").click(function(){
 	}
 });
 
+
 //위험지역 조회
 function getDA(){
 	da_makers = [];
@@ -204,22 +205,23 @@ function getRidingRecordByRR_Num(rr_num, mode){
 				$("#chrrnamebtn").hide();
 				if(mode=="course"){
 					$("#cif_name").text(data.rr_name); 
-					$("#cif_total").text(data.rr_distance); 
-					$("#cif_avg").text(data.rr_avgspeed); 
-					$("#cif_high").text(data.rr_high); 
+					$("#cif_total").text( (parseInt(data.rr_distance)/1000).toString().substring(0,3)+ " km"  ); 
+					$("#cif_avg").text(data.rr_avgspeed +" km/h"); 
+					$("#cif_high").text(data.rr_high+" m"); 
 					$("#cif_like").text(data.rr_like);
 					$('#bt_mode').text("스크랩하기");
 				}else if(mode=="ridingrecord"){
 					$("#cif_name").text(data.rr_name); 
-					$("#cif_total").text(data.rr_distance); 
-					$("#cif_avg").text(data.rr_avgspeed); 
-					$("#cif_high").text(data.rr_high); 
+					$("#cif_total").text( (parseInt(data.rr_distance)/1000).toString().substring(0,3)+ " km" ); 
+					$("#cif_avg").text(data.rr_avgspeed+" km/h"); 
+					$("#cif_high").text(data.rr_high+" m"); 
 					$("#cif_like").text(data.rr_like);
 					$("#cif_date").text(data.rr_date);
-					$("#cif_time").text(data.rr_time);
-					$("#cif_top").text(data.rr_topspeed);
-					$("#cif_break").text(data.rr_breaktime);
+					$("#cif_time").text( hourminsec(data.rr_time) );
+					$("#cif_top").text(data.rr_topspeed+" km/h");
+					$("#cif_break").text( hourminsec(data.rr_breaktime) );
 					$("#chrrnamebtn").show();
+					hourminsec(data.rr_time);
 					if(data.rr_open==1){
 						$('#bt_mode').text("비공개로 전환하기");
 					}else{
@@ -227,10 +229,14 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					}
 				}else if(mode=="scrap"){
 					$("#cif_name").text(data.rr_name); 
-					$("#cif_total").text(data.rr_distance); 
-					$("#cif_avg").text(data.rr_avgspeed); 
-					$("#cif_high").text(data.rr_high); 
+					$("#cif_total").text( (parseInt(data.rr_distance)/1000).toString().substring(0,3)+ " km" ); 
+					$("#cif_avg").text(data.rr_avgspeed+" km/h"); 
+					$("#cif_high").text(data.rr_high+" m"); 
 					$("#cif_like").text(data.rr_like);
+					$("#cif_date").text(" - ");
+					$("#cif_time").text(" - ");
+					$("#cif_top").text(" - ");
+					$("#cif_break").text(" - ");
 					$("#bt_mode").text("스크랩취소하기");
 				}
 				
@@ -241,6 +247,22 @@ function getRidingRecordByRR_Num(rr_num, mode){
 			}
 	});
  }
+
+
+//시간단위 초 > 시분초
+function hourminsec(text){
+	var sec = parseInt(text);
+	var hour = parseInt(sec / (60*60));
+	var min = parseInt( ( sec - (hour*60*60) ) / 60 );
+	sec = sec - (hour*60*60) - ( min*60 );
+	if(hour==0 && min == 0){
+		return sec+"초";
+	}else if(hour==0 && min != 0){
+		return min+"분 "+sec+"초";
+	}else {
+		return hour+"시 "+min+"분 "+sec+"초";
+	}
+}
 
 //rr_num으로 지도에 경로 그리기
  function drawPolylineByRR_Num(polyline, rr_num){
@@ -299,7 +321,7 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					+"<p>"+data[i].cr_content+"</p>";
 					
 				if(data[i].cr_rider==userId){
-					code += "<p><a href='#' class='reply'>수정</a> <a href='#' class='reply'>삭제</a></p>";
+					code += "<p><a href='#' class='reply' onclick='updateReview("+data[i].cr_num+")'>수정</a> <a href='#' class='reply' onclick='deleteReview("+data[i].cr_num+")'>삭제</a></p>";
 				}
 				if(data[i].cr_images != null){
 					code += "<img class='reviewimg' src='/image/review/"+data[i].cr_images+"'>";
@@ -400,11 +422,14 @@ function getRidingRecordByRR_Num(rr_num, mode){
          contentType: false,
 		 cache : false,
 		 success : function(data) {
+			 $("#cr_content").val("");
 			 getReviewsByRR_Num($("#selected_rr_num").val());
 		}
 	});
  }
 
+
+ 
  //리뷰 삭제
  function deleteReview(cr_num){
 	 $.ajax({
@@ -420,18 +445,26 @@ function getRidingRecordByRR_Num(rr_num, mode){
  
  //리뷰 수정
  function updateReview(cr_num){
-	 $.ajax({
-		 url : "/riding/review",
-		 type : "put",
-		 data : { 
-			 cr_num : cr_num,
-			 cr_content : $("#new_cr_content").val()
-		 },
-		 cache : false,
-		 success : function(data) {
-			 getReviewsByRR_Num($("#selected_rr_num").val());
-		}
-	});
+	 var newreply = prompt("수정할 댓글을 입력하세요");
+	 if(newreply==null || newreply == ""){
+		 return;
+	 }
+	 var check = confirm(newreply+"로 수정하시겠습니까?");
+	 if(check){
+		 $.ajax({
+			 url : "/riding/review",
+			 type : "put",
+			 data : { 
+				 cr_num : cr_num,
+				 cr_content : newreply
+			 },
+			 cache : false,
+			 success : function(data) {
+				 getReviewsByRR_Num($("#selected_rr_num").val());
+			}
+		});
+	 }
+	 
  }
  
 //추천 눌렀을 때

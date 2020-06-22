@@ -2,6 +2,7 @@ package com.mtbcraft.dto;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Qna {
 	private int qa_num;
@@ -13,7 +14,17 @@ public class Qna {
 	private String qa_shop;
 	
 	private String shop_time;
+	private String rider_time;
 	
+	
+	public String getRider_time() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		rider_time = sdf.format(qa_time);
+		return rider_time;
+	}
+	public void setRider_time(String rider_time) {
+		this.rider_time = rider_time;
+	}
 	public String getShop_time() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		shop_time = sdf.format(qa_time);
