@@ -3,21 +3,24 @@
 <head th:replace="header2"></head>
 <input type="hidden" id="hiddenCLUB" th:value="${club}"> 
 
-<!-- 백그라운드 이미지 포지션 설정(각 페이지마다 값이 다름) -->
 <style>
-  .img_position {
-    background-position:0% 70%;
-  }
-  </style>
-<section class="hero-wrap hero-wrap-2 img_position" style="background-image: url('/test/images/community_img.jpg');" data-stellar-background-ratio="0.5">
-   <div class="overlay"></div>
-   <div class="container">
-     <div class="row no-gutters slider-text align-items-end justify-content-center">
-       <div class="col-md-9 ftco-animate text-center">
-       </div>
-     </div>
-   </div>
-</section>
+	.hero-wrap.hero-wrap-2 {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+</style>
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/community_img.jpg');" data-stellar-background-ratio="0.5">
+	   <div class="overlay"></div>
+	   <div class="container">
+	     <div class="row no-gutters slider-text align-items-end justify-content-center">
+	       <div class="col-md-9 ftco-animate text-center">
+	       		<h1 class="mb-2 bread">COMMUNITY</h1>
+	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">HOME <i class="ion-ios-arrow-forward"></i></a></span> <span>COMMUNITY <i class="ion-ios-arrow-forward"></i></span></p>
+	       </div>
+	     </div>
+	   </div>
+	</section>
    
 
 		<section class="ftco-section bg-light">

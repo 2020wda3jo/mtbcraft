@@ -8,3 +8,14 @@
 .ftco-section.chap1 {
 	background: white;
 }
+
+.user-img.mb-4 {
+	border-radius: 0px;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.hero-wrap.hero-wrap-2 {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}

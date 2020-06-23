@@ -116,4 +116,14 @@ div.menus.d-flex > div {
 	height: 500px;
 	background-size: contain;
 }
-	
+
+.menu-img.img {
+	border-radius: 0px;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.hero-wrap.hero-wrap-2 {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}

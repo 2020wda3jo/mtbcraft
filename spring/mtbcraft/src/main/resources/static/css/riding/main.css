@@ -21,3 +21,8 @@
 	right: 1%;
 	bottom: -30px;
 }
+
+.hero-wrap.hero-wrap-2 {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}

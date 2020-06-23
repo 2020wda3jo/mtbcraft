@@ -118,3 +118,13 @@ table.type09 tbody tr td:nth-child(4){
 .sidebar-box.clubinfo h3 {
 	text-align: center;
 }
+
+.container {
+	width: 80%;
+	max-width: none;
+}
+
+.hero-wrap.hero-wrap-2 {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}

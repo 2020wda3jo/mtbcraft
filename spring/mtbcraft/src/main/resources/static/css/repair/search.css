@@ -7,7 +7,7 @@
 }
 
 .main {
-	width: 70%;
+	width: 85%;
 	height: 80%;
 	margin: 0 auto;
 	margin-top: 5%;
@@ -43,4 +43,9 @@
 
 .result tbody tr:hover {
 	color: #ffa323;
+}
+
+.hero-wrap.hero-wrap-2 {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
 }

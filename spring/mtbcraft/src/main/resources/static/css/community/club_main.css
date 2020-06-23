@@ -110,3 +110,8 @@ table.type09 tbody tr td:nth-child(4){
 	margin: 0;
 	padding-left: 10px;
 }
+
+.hero-wrap.hero-wrap-2 {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
