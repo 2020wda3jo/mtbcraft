@@ -386,6 +386,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/stop_bt"
                 tools:ignore="MissingConstraints"
+                android:onClick="myOnClick"
                 android:layout_marginLeft="50dp"/>
 
         </LinearLayout>

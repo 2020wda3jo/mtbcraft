@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mtbcraft">
+    package="com.capston.mtbcraft">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,10 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service
-            android:name=".Activity.Main.RidingService"
-            android:enabled="true"
-            android:exported="true"></service>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -42,7 +38,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- -액티비티 등록 -->
+        </activity>
+
+        <!-- -액티비티 등록 -->
         <activity android:name=".Activity.Main.LoginActivity" />
         <activity android:name=".network.LoginAccess" />
         <activity android:name=".Activity.Main.SubActivity" />
@@ -58,6 +56,7 @@
         <activity android:name=".Activity.Course.CourseSearch" />
         <activity android:name=".Activity.Competition.CompetitionDetail" />
         <activity android:name=".Activity.Competition.CompetitionList" />
+
     </application>
 
 </manifest>

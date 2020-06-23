@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
 
-        applicationId "com.mtbcraft"
+        applicationId "com.capston.mtbcraft"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
