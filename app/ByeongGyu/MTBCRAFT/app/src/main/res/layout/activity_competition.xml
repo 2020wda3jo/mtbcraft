@@ -42,7 +42,8 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textView4"
                 app:layout_constraintStart_toEndOf="@+id/comp_mem_image"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UnknownId" />
 
             <ImageView
                 android:id="@+id/comp_mem_image"

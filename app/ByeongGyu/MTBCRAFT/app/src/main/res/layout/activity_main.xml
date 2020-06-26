@@ -40,6 +40,7 @@
             android:layout_gravity="center"
             android:inputType="textPersonName"
             android:layout_marginTop="300dp"
+            android:text="1401287"
             android:hint="아이디" />
 
         <EditText
@@ -50,6 +51,7 @@
             android:layout_gravity="center"
             android:inputType="textPersonName"
             android:password="true"
+            android:text="1234"
             android:hint="비밀번호" />
 
         <Button

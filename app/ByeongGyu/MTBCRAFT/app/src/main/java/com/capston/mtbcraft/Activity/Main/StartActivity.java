@@ -484,7 +484,7 @@ public class StartActivity extends FragmentActivity
         A.setLatitude(latitude);
         A.setLongitude(lonngitude);
 
-        /*
+
         try {
             for (int i = 0; i < jarray.length(); i++) {
                 jObject = jarray.getJSONObject(i);
@@ -531,7 +531,7 @@ public class StartActivity extends FragmentActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-*/
+
         // 위도 경도 정보 배열 저장
         witch_lat.add(latitude);
         witch_lon.add(lonngitude);
