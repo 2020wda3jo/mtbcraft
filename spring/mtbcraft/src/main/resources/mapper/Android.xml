@@ -7,7 +7,7 @@
 		values
 		(
 		#{rr_rider},
-		#{rr_date},
+		#{rr_date, jdbcType=TIMESTAMP},
 		#{rr_distance},
 		#{rr_topspeed},
 		#{rr_avgspeed},
