@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
+import com.mtbcraft.dto.App_Competition;
 import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompClub;
@@ -301,7 +302,7 @@ public class AndroidController {
 	
 	// 경쟁전 조회
 	@RequestMapping(value = "/app/competition")
-	public @ResponseBody List<Competition> getCompetition() throws Exception {
+	public @ResponseBody List<App_Competition> getCompetition() throws Exception {
 		return androidService.getCompetition();
 	}
 	

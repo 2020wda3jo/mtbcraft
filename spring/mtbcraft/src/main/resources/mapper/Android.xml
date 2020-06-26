@@ -136,7 +136,7 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 		select * from riding_record where rr_num = #{rr_num}
 	</select>
 	
-	<select id="getCompetition" resultType="com.mtbcraft.dto.Competition">
+	<select id="getCompetition" resultType="com.mtbcraft.dto.App_Competition">
 		select competition.COMP_NUM, competition.COMP_NAME, competition.COMP_NAME,
     	competition.COMP_BADGE, competition.COMP_CONTENT, competition.COMP_COURSE,
     	competition.COMP_IMAGE, competition.COMP_PERIOD, course.C_GPX , course.c_name

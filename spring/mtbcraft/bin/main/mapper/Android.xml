@@ -3,7 +3,28 @@
 <mapper namespace="com.mtbcraft.mapper.AndroidMapper">
 <select id="insertRecord" resultType="com.mtbcraft.dto.RidingRecord">
 		insert into riding_record
-		(rr_rider, rr_date, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name, rr_like) 
+		(rr_rider, rr_date, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name) 
+		values
+		(
+		#{rr_rider},
+		#{rr_date, jdbcType=TIMESTAMP},
+		#{rr_distance},
+		#{rr_topspeed},
+		#{rr_avgspeed},
+		#{rr_high},
+		#{rr_gpx},
+		#{rr_open},
+		#{rr_breaktime},
+		#{rr_time},
+		#{rr_area},
+		#{rr_name}		
+		)
+	</select>
+	
+
+	<select id="insertRecordWithComp" resultType="com.mtbcraft.dto.RidingRecord">
+		insert into riding_record
+		(rr_rider, rr_date, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name, rr_like, rr_comp) 
 		values
 		(
 		#{rr_rider},
@@ -18,7 +39,8 @@
 		#{rr_time},
 		#{rr_area},
 		#{rr_name},
-		#{rr_like}
+		#{rr_like},
+		#{rr_comp}
 		
 		)
 	</select>
@@ -32,6 +54,10 @@
 	<select id="readRecord" parameterType="String" resultType="com.mtbcraft.dto.App_RidingRecord">
 	select * from riding_record where rr_rider = #{rr_rider} order by rr_date desc
 		
+	</select>
+	
+	<select id="getLoginInfo" parameterType="String" resultType="com.mtbcraft.dto.LoginInfo">
+		select cj_club, r_nickname, r_image from club_join, rider where r_id = #{LoginId} and cj_rider = #{LoginId} and cj_withdraw is null
 	</select>
 	
 	<!-- 내 기록 상세보기 -->
@@ -62,17 +88,32 @@
 		#{ss_rnum} )
 	</select>
 	<!-- 좋아요 -->
-	<select id="likeput" parameterType="com.mtbcraft.dto.Like_Status">
-		insert into like_status
-		(ls_rider, ls_rnum) values (
-		#{ls_rider},
-		#{ls_rnum} )
+	
+	<select id="insertLike" parameterType="com.mtbcraft.dto.RidingRecord">
+		{call
+		declare
+		begin
+		update riding_record set rr_like = #{rr_like}+1 where rr_num = #{rr_num};
+		insert into like_status (ls_rider, ls_rnum) values (#{rr_rider}, #{rr_num});
+		end
+	}
 	</select>
+	
+	<!-- 좋아요 가져오기 -->
+	<select id="getLikeCount" parameterType="com.mtbcraft.dto.RidingRecord">
+	select rr_num, rr_like, rr_rider from riding_record inner join like_status on(like_status.ls_rnum=riding_record.rr_num and like_status.ls_rider=#{rr_rider})
+	</select>
+	
+	<!-- 좋아요 상태가져오기 -->
+	<select id="getLikeStatus" parameterType="Map" resultType="com.mtbcraft.dto.Like_Status">
+		select * from like_status where ls_rider=#{ls_rider} and ls_rnum=#{ls_rnum}
+	</select>
+	
 	
 	<!-- 내 스크립 리스트 -->
 	<select id="getScrap" parameterType="Map" resultType="com.mtbcraft.dto.Scrap_Status">
-select ss_rider, rr_rider, rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, rr_time, rr_area, rr_gpx from riding_record INNER JOIN
-		scrap_status ON(scrap_status.ss_rnum = riding_record.rr_num and scrap_status.SS_RIDER=#{ss_rider})
+select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, rr_time, rr_area, rr_gpx from riding_record INNER JOIN
+		scrap_status ON(scrap_status.ss_rnum = riding_record.rr_num and scrap_status.SS_RIDER=#{ss_rider}) order by rr_gpx desc
 	</select>
 	
 	<!--  내 스크랩 코스 보기 -->
@@ -95,12 +136,17 @@ select ss_rider, rr_rider, rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, 
 		select * from riding_record where rr_num = #{rr_num}
 	</select>
 	
-	<select id="getCompetition" resultType="com.mtbcraft.dto.Competition">
-		select * from competition order by comp_num
+	<select id="getCompetition" resultType="com.mtbcraft.dto.App_Competition">
+		select competition.COMP_NUM, competition.COMP_NAME, competition.COMP_NAME,
+    	competition.COMP_BADGE, competition.COMP_CONTENT, competition.COMP_COURSE,
+    	competition.COMP_IMAGE, competition.COMP_PERIOD, course.C_GPX , course.c_name
+		from competition, course 
+		where comp_course = c_num
+		order by comp_num
 	</select>
 	
 	<select id="getjoinedComp" parameterType= "String" resultType="String">
-		select rr_comp from riding_record where rr_rider = #{rr_rider} and rr_comp is not null
+		select rr_comp from riding_record where rr_rider = #{rr_rider} and rr_comp is not null order by rr_comp
 	</select>
 	
 	<select id="getCompCourse" parameterType="Integer" resultType="String">
@@ -114,4 +160,57 @@ select ss_rider, rr_rider, rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, 
 	<select id="getDanger" parameterType="String" resultType="com.mtbcraft.dto.DangerousArea">
 		select * from DANGEROUS_AREA
 	</select>
+	
+	<select id="getCompBadge" parameterType="Integer" resultType="com.mtbcraft.dto.Badge">
+		select * from badge where bg_num = #{comp_badge}
+	</select>
+	
+	<select id="getCompScore" parameterType="Integer" resultType="com.mtbcraft.dto.CompScore">
+		select rr_avgspeed, R_NICKNAME, R_IMAGE from riding_record, rider where RR_RIDER = R_ID and RR_COMP = #{comp_num} order by r_nickname
+	</select>
+	
+	<select id="updateCompScore" parameterType="hashMap">
+	{call
+		declare
+		begin
+		update competition_status SET cs_score = cs_score + #{avg_speed} where cs_comp = #{rr_comp} and cs_club = #{r_club};
+		update mission_status set ms_score = ms_score + 1 where ms_type = '2' and ms_rider = #{LoginId};
+		end
+	}
+	</select>
+	
+	<select id="getCompAllScore" parameterType="Integer" resultType="com.mtbcraft.dto.Competition_Status">
+		select * from competition_status where cs_comp = #{comp_num}
+	</select>
+	
+	<select id="updateRank" parameterType="hashMap">
+		update competition_status set cs_rank = #{rank} where cs_comp = #{rr_comp} and cs_club = #{r_club}
+	</select>
+	
+	<select id="getMissionStatus" parameterType="String" resultType="com.mtbcraft.dto.Mission_Status">
+		select ms_score, ms_type from mission_status where ms_rider = #{LoginId} order by ms_type
+	</select>
+	
+	<select id="getNoClearMission" parameterType="String" resultType="com.mtbcraft.dto.Mission">
+		select distinct m_num, m_content, m_type, m_name from mission, mission_complete
+		where m_num not in ( select mc_mission from mission_complete where mc_rider = #{LoginIn} )
+	</select>
+	
+		<select id="updateMissionStatus" parameterType="hashMap">
+	{call
+		declare
+		begin
+		update mission_status set ms_score = #{typeScore1} where ms_type= '1' and ms_rider = #{LoginId};
+		update mission_status set ms_score = #{typeScore2} where ms_type= '3' and ms_rider = #{LoginId};
+		end
+	}
+	</select>
+	
+	
+	<select id="insertMissionCom" parameterType="hashMap">
+		insert into mission_complete  ( mc_num, mc_rider, mc_mission, mc_time )
+		values ( SQU_MISSIONCOM.nextval, #{LoginId},  #{mc_mission}, #{mc_time} )
+	</select>
+	
+
 </mapper>
