@@ -1,12 +1,15 @@
 package com.capston.mtbcraft.Activity.Scrap;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -74,17 +77,25 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
         mapView.setCurrentLocationEventListener(this);
         mapView.isShowingCurrentLocationMarker();
 
-        /*네비게이션 바 */
+
+
+        /* 로그인 정보 가져오기 */
+        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        String LoginId = auto.getString("LoginId","");
+        String Nickname = auto.getString("r_nickname","");
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View header = navigationView.getHeaderView(0);
+        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        InFoUserId.setText(Nickname+"님 환영합니다");
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -93,37 +104,37 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(MyScrapDetail.this, MyReport.class);
-                    startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(MyScrapDetail.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(MyScrapDetail.this, CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
-                    finish();
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(MyScrapDetail.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
-                    //스크랩 보관함
+                    break;
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(MyScrapDetail.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(MyScrapDetail.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(MyScrapDetail.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -242,7 +253,7 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://192.168.0.3:8080/app/riding/scrap/"+c_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/scrap/"+c_num);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -277,7 +288,7 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://192.168.0.3:8080/app/riding/course/"+c_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/course/"+c_num);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

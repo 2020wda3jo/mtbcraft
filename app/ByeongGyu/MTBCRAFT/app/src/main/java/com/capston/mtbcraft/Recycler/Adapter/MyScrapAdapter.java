@@ -61,6 +61,7 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
         testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
         testViewHolder.c_name.setText(String.valueOf(itemList.get(position).getRr_name()));
         testViewHolder.c_time.setText(hour_s+":"+min+":"+ sec);
+        testViewHolder.c_date.setText(itemList.get(position).getRr_date());
         testViewHolder.c_avg.setText(String.valueOf(itemList.get(position).getRr_avgspeed())+"km");
         testViewHolder.c_getgodo.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
         testViewHolder.c_distance.setText(total);
@@ -86,6 +87,7 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
         public ImageView imageView;
         public LinearLayout viewClick;
         public final View mView;
+        public TextView c_date;
 
         public MyScrapHolder( View itemView) {
             super(itemView);
@@ -96,6 +98,7 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
             c_avg = itemView.findViewById(R.id.c_avg);
             c_getgodo = itemView.findViewById(R.id.c_getgodo);
             c_distance = itemView.findViewById(R.id.c_dis);
+            c_date = itemView.findViewById(R.id.c_date);
             viewClick = itemView.findViewById(R.id.viewClick);
 
         }

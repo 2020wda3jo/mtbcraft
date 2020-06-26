@@ -3,7 +3,7 @@
 <mapper namespace="com.mtbcraft.mapper.AndroidMapper">
 <select id="insertRecord" resultType="com.mtbcraft.dto.RidingRecord">
 		insert into riding_record
-		(rr_rider, rr_date, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name, rr_like) 
+		(rr_rider, rr_date, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name) 
 		values
 		(
 		#{rr_rider},
@@ -17,9 +17,7 @@
 		#{rr_breaktime},
 		#{rr_time},
 		#{rr_area},
-		#{rr_name},
-		#{rr_like}
-		
+		#{rr_name}		
 		)
 	</select>
 	
@@ -114,8 +112,8 @@
 	
 	<!-- 내 스크립 리스트 -->
 	<select id="getScrap" parameterType="Map" resultType="com.mtbcraft.dto.Scrap_Status">
-select ss_rider, rr_rider, rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, rr_time, rr_area, rr_gpx from riding_record INNER JOIN
-		scrap_status ON(scrap_status.ss_rnum = riding_record.rr_num and scrap_status.SS_RIDER=#{ss_rider})
+select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance, rr_high, rr_time, rr_area, rr_gpx from riding_record INNER JOIN
+		scrap_status ON(scrap_status.ss_rnum = riding_record.rr_num and scrap_status.SS_RIDER=#{ss_rider}) order by rr_gpx desc
 	</select>
 	
 	<!--  내 스크랩 코스 보기 -->

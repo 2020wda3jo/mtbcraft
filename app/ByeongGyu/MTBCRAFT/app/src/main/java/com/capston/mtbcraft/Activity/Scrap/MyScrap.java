@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.R;
@@ -57,40 +58,48 @@ public class MyScrap extends AppCompatActivity  {
             mDrawerLayout.closeDrawers();
 
             int id = menuItem.getItemId();
+            /* 로그인 정보 가져오기 */
+            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+            String LoginId = auto.getString("LoginId","");
+            String Nickname = auto.getString("r_nickname","");
+
+
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(MyScrap.this, MyReport.class);
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(MyScrap.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(MyScrap.this, CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(MyScrap.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
-                    //스크랩 보관함
+                    break;
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(MyScrap.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
-                    finish();
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(MyScrap.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(MyScrap.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -117,7 +126,7 @@ public class MyScrap extends AppCompatActivity  {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://192.168.0.3:8080/app/riding/scrap/"+LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/scrap/"+LoginId);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

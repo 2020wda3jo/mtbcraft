@@ -115,7 +115,6 @@ public class AndroidController {
 		record.setRr_breaktime(Integer.parseInt(request.getParameter("rr_breaktime")));
 		record.setRr_time(Integer.parseInt(request.getParameter("rr_time")));
 		record.setRr_area(request.getParameter("rr_area"));
-		record.setRr_like(Integer.parseInt(request.getParameter("rr_like")));
 		record.setRr_name(request.getParameter("rr_name"));
 		if ( !request.getParameter("rr_comp").equals("null")) {
 			record.setRr_comp(Integer.parseInt(request.getParameter("rr_comp")));

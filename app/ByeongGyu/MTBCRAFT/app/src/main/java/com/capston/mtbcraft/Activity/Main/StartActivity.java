@@ -43,8 +43,6 @@ import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
-
-import org.codehaus.jackson.map.Serializers;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,8 +81,8 @@ public class StartActivity extends FragmentActivity
     GridLayout speed_pre;
     String test, test2, test3;
     //각종 변수
-    double latitude, lonngitude, getgodo, getSpeed = 0, hap = 0, getgodoval = 0, intime = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000, total_time;
-    int cnt = 0, restcnt = 0;
+    double latitude, lonngitude, getgodo, getSpeed = 0, hap = 0, getgodoval = 0, intime = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
+    int cnt = 0, restcnt = 0, total_time=0;
     ArrayList<Double> witch_lat = new ArrayList<>();
     ArrayList<Double> witch_lon = new ArrayList<>();
     ArrayList<Double> ele = new ArrayList<>();
@@ -231,7 +229,7 @@ public class StartActivity extends FragmentActivity
                 intent.putExtra("resttime", String.valueOf(resttime.getText())); //휴식시간
                 intent.putExtra("ingtime", String.valueOf(timeView.getText())); //경과시간
                 intent.putExtra("addr", adress_value);
-                intent.putExtra("endsec", String.valueOf(m_t.getText())); //라이딩 시간(초)
+                intent.putExtra("endsec", total_time); //라이딩 시간(초)
                 intent.putExtra("restsectime", String.valueOf(m_rest.getText())); //휴식시간(초)
                 intent.putExtra("witch_lat", witch_lat); //위도
                 intent.putExtra("witch_lon", witch_lon); //경도
@@ -323,9 +321,21 @@ public class StartActivity extends FragmentActivity
     Handler RidingTimer = new Handler() {
         public void handleMessage(Message msg) {
             timeView.setText(getTimeout());
+            m_time.setText(getTimeout());
+            total_time = getTimeout2();
 
             //sendEmptyMessage는 비어있는 메세제를 핸들러에게 전송함
             RidingTimer.sendEmptyMessage(0);
+        }
+
+        //현재시간을 계속구해서 출력하는 메소드
+        int getTimeout2() {
+            long now = SystemClock.elapsedRealtime(); //애플리케이션이 실행되고나서 실제로 경과된 시간(??)^^;
+            long outTime = now - BaseTime;
+
+            int easy_outTime2 = (int)outTime/1000;
+           // Log.d("로그", String.valueOf(easy_outTime2));
+            return easy_outTime2;
         }
 
         //현재시간을 계속구해서 출력하는 메소드
@@ -333,13 +343,12 @@ public class StartActivity extends FragmentActivity
             long now = SystemClock.elapsedRealtime(); //애플리케이션이 실행되고나서 실제로 경과된 시간(??)^^;
             long outTime = now - BaseTime;
 
-
            int sec = (int) ((outTime / 1000) % 60);
             int min = (int) ((outTime / 1000) / 60);
             int hour = (int) ((outTime / 1000) / 3600);
 
             String easy_outTime = String.format("%02d:%02d:%02d", hour, min, sec);
-            Log.d("로그", String.valueOf(outTime / 1000));
+            //Log.d("로그", String.valueOf(outTime / 1000));
             return easy_outTime;
         }
     };
@@ -475,6 +484,7 @@ public class StartActivity extends FragmentActivity
         A.setLatitude(latitude);
         A.setLongitude(lonngitude);
 
+        /*
         try {
             for (int i = 0; i < jarray.length(); i++) {
                 jObject = jarray.getJSONObject(i);
@@ -521,7 +531,7 @@ public class StartActivity extends FragmentActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+*/
         // 위도 경도 정보 배열 저장
         witch_lat.add(latitude);
         witch_lon.add(lonngitude);
@@ -619,7 +629,7 @@ public class StartActivity extends FragmentActivity
             }
 
             //평균속도
-            avg = hap / total_time;
+            avg = hap /total_time;
             avgspeed.setText(String.format("%.1f", Double.parseDouble(String.valueOf(avg))));
             cha_avg = String.format("%.0f", (avg));
 
@@ -656,7 +666,8 @@ public class StartActivity extends FragmentActivity
         int hour = (int) ((outTime/1000) / 3600);
 
         String easy_outTime = String.format("%02d:%02d:%02d", hour, min, sec);
-        Log.d("로그", String.valueOf(outTime/1000));
+
+       // Log.d("로그", String.valueOf(outTime/1000));
         return easy_outTime;
 
     }
@@ -733,6 +744,7 @@ public class StartActivity extends FragmentActivity
     protected void onDestroy() {
         super.onDestroy();
         Log.d("onDestroy","onDestroy");
+
     }
 
     @Override

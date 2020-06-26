@@ -89,7 +89,6 @@ public class LoginAccess extends AppCompatActivity {
                     SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor autoLogin = auto.edit();
                     autoLogin.putString("LoginId", rider);
-
                     autoLogin.commit();
 
                     new getLoginInfo().execute();

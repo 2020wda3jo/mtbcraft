@@ -23,6 +23,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.FollowStart;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
@@ -58,7 +59,7 @@ import java.util.Map;
 
 public class CourseDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     String c_num, course_name, gpx;
-    TextView c_rider_name, c_name, c_date, c_addr, c_dis, c_avg, c_getgodo, like_count;
+    TextView c_rider_name, c_name, c_date, c_addr, c_dis, c_avg, c_getgodo, like_count, r_rider_name, c_ride_time, c_rest_time, c_ride_max;
     ImageView like_push;
     Button button,button2;
     int Sta;
@@ -71,17 +72,22 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.coursedetail);
 
-        c_rider_name = (TextView)findViewById(R.id.c_rider_name);
         c_name = (TextView)findViewById(R.id.c_name );
         c_date = (TextView)findViewById(R.id.c_date );
-        c_addr = (TextView)findViewById(R.id.c_addr);
+
+        c_ride_time = (TextView) findViewById(R.id.c_ride_time);
+        c_rest_time = (TextView)findViewById(R.id.c_rest_time);
         c_dis = (TextView)findViewById(R.id.c_dis);
+        c_ride_max = (TextView) findViewById(R.id.c_ride_max);
         c_avg = (TextView)findViewById(R.id.c_avg);
-        c_getgodo = (TextView)findViewById(R.id.c_getgodo);
+        c_getgodo = (TextView)findViewById(R.id.c_get);
+        c_addr = (TextView)findViewById(R.id.c_addr);
         like_count = (TextView)findViewById(R.id.like_count);
+
         button = (Button)findViewById(R.id.scrap_bt);
         button2 = (Button)findViewById(R.id.follow_bt);
         like_push = (ImageView)findViewById(R.id.like_push);
+        r_rider_name = (TextView) findViewById(R.id.c_rider_name);
         Intent intent = new Intent(this.getIntent());
 
         c_num = intent.getStringExtra("c_num");
@@ -121,37 +127,39 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(CourseDetail.this, MyReport.class);
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(CourseDetail.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(CourseDetail.this, CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
-                    finish();
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(CourseDetail.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
-                    //스크랩 보관함
+                    break;
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(CourseDetail.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(CourseDetail.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(CourseDetail.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -252,11 +260,12 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         uThread.start(); // 작업 Thread 실행
 
         button.setOnClickListener(v -> {
+            Log.d("스크랩",c_num+" "+LoginId);
             ScrapTask scrap = new ScrapTask();
             Map<String, String> params = new HashMap<String, String>();
                 params.put("c_num", c_num);
-                params.put("r_rider", LoginId);
-            scrap.execute(params);
+                params.put("ss_rider", LoginId);
+                scrap.execute(params);
 
         });
 
@@ -337,39 +346,62 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
             @Override
             protected void onPostExecute(String s) {
-                Log.d("디테일 ", s);
                 try {
-
                     String tempData = s;
 
                     //json값을 받기위한 변수들
-
-
-                    String dis = "";
-                    String addr = "";
-                    String name = "";
-                    String avg = "";
-                    String godo="";
-                    String like="";
-                    String date = "";
                     JSONArray jarray = new JSONArray(tempData);
+                    String rr_rider="", rr_date="", rr_area="", rr_name="", rr_like="";
+                    int rr_distance=0, rr_topspeed=0, rr_avgspeed=0, rr_high=0, rr_breaktime=0, rr_time=0;
                     for (int i = 0; i < jarray.length(); i++) {
                         JSONObject jObject = jarray.getJSONObject(i);
-                        dis = jObject.getString("rr_distance");
-                        addr = jObject.getString("rr_area");
-                        name = jObject.getString("rr_name");
-                        avg = jObject.getString("rr_avgspeed");
-                        godo = jObject.getString("rr_high");
-                        date = jObject.getString("rr_date");
-                        like = jObject.getString("rr_like");
+
+                        /*상단 데이터 */
+                        rr_rider = jObject.getString("rr_rider");
+                        rr_date = jObject.getString("rr_date");
+                        rr_name = jObject.getString("rr_name");
+
+                        /*하단 데이터 */
+                        rr_distance = jObject.getInt("rr_distance");
+                        rr_topspeed = jObject.getInt("rr_topspeed");
+                        rr_avgspeed = jObject.getInt("rr_avgspeed");
+                        rr_time = jObject.getInt("rr_time");
+                        rr_high = jObject.getInt("rr_high");
+                        rr_breaktime = jObject.getInt("rr_breaktime");
+                        rr_like = jObject.getString("rr_like");
+                        rr_area = jObject.getString("rr_area");
                     }
-                    c_name.setText(name);
-                    c_date.setText(date);
-                    c_addr.setText(addr);
-                    c_dis.setText(dis);
-                    c_avg.setText(avg);
-                    c_getgodo.setText(godo);
-                    like_count.setText(like);
+
+                    /*상단 데이터 */
+                    c_name.setText(rr_name);
+                    r_rider_name.setText(rr_rider);
+                    c_date.setText(rr_date);
+
+                    /* 하단 데이터 */
+                    int hour, min, sec = rr_time;
+                    min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
+
+                    Log.d("라이딩시간",hour+"시간 "+min+"분 "+sec+"초");
+                    //휴식시간 계산
+                    int b_hour, b_min, b_sec = rr_breaktime;
+                    b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
+
+                    int des = rr_distance;
+                    float km = (float) (des/1000.0);
+                    String total = km+"Km";
+
+                    c_ride_max.setText(rr_topspeed+"km/h");
+                    c_avg.setText(rr_avgspeed+"km/h");
+                    c_getgodo.setText(rr_high+"m");
+
+                    String time = hour+"시간 "+min+"분 "+sec+"초";
+                    String r_time = b_hour+"시간 "+b_min+"분 "+b_sec+"초";
+                    c_ride_time.setText(time);
+                    c_rest_time.setText(r_time);
+
+                    c_addr.setText(rr_area);
+                    like_count.setText(rr_like);
+                    c_dis.setText(total);
 
                 } catch (Exception e) {
                     e.printStackTrace();

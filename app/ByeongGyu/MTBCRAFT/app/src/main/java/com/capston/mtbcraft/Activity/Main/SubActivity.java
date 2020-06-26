@@ -3,7 +3,13 @@ package com.capston.mtbcraft.Activity.Main;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +19,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -25,12 +33,33 @@ import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
 import com.google.android.material.navigation.NavigationView;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubActivity extends AppCompatActivity {
     TextView hello_user;
     private DrawerLayout mDrawerLayout;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submain);
+
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("키해시는 :", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         /* 로그인 정보 가져오기 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -61,34 +90,34 @@ public class SubActivity extends AppCompatActivity {
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(SubActivity.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
 
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(SubActivity.this, CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(SubActivity.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
                     break;
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(SubActivity.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(SubActivity.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(SubActivity.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -106,6 +135,9 @@ public class SubActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

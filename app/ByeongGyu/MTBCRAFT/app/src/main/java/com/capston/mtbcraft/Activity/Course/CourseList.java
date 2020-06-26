@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
@@ -69,34 +70,39 @@ public class CourseList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(CourseList.this, MyReport.class);
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(CourseList.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
+                    startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(CourseList.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
-                    //스크랩 보관함
+                    break;
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(CourseList.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(CourseList.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(CourseList.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }

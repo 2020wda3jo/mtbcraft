@@ -1,6 +1,8 @@
 package com.capston.mtbcraft.Activity.Riding;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
@@ -90,42 +93,49 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
-
             int id = menuItem.getItemId();
+            /* 로그인 정보 가져오기 */
+            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+            String LoginId = auto.getString("LoginId","");
+            String Nickname = auto.getString("r_nickname","");
+
+
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home=new Intent(DetailActivity.this, MyReport.class);
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(DetailActivity.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
-                    finish();
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(DetailActivity.this, CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(DetailActivity.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
-                    //스크랩 보관함
+                    break;
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(DetailActivity.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(DetailActivity.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(DetailActivity.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }
@@ -204,7 +214,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.3:8080/android/recordset/open");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237/:8080/android/recordset/open");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

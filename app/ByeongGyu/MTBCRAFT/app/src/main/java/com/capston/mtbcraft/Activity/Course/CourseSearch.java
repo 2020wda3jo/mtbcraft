@@ -17,6 +17,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
@@ -26,7 +27,7 @@ public class CourseSearch extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     WebView webview;
-    private static final String ENTRY_URL = "http://192.168.0.3:8080/riding/Android_CourseSearch";
+    private static final String ENTRY_URL = "http://13.209.229.237:8080/riding/Android_CourseSearch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,38 +64,39 @@ public class CourseSearch extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home = new Intent(CourseSearch.this, MyReport.class);
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
                     startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist = new Intent(CourseSearch.this, MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
+
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist = new Intent(CourseSearch.this, CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
-                    finish();
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch = new Intent(CourseSearch.this, CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
                     break;
-                    //스크랩 보관함
+                //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget = new Intent(CourseSearch.this, MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp = new Intent(CourseSearch.this, CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(CourseSearch.this, Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
             }

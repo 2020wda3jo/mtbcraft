@@ -17,8 +17,15 @@ public class Scrap_Status {
 	private String rr_area;
 	private int rr_time;
 	private String rr_gpx;
+	private String rr_date; 
 
 	
+	public String getRr_date() {
+		return rr_date;
+	}
+	public void setRr_date(String rr_date) {
+		this.rr_date = rr_date;
+	}
 	public String getSs_rider() {
 		return ss_rider;
 	}

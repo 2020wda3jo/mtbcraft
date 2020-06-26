@@ -56,11 +56,11 @@ import java.util.Map;
 public class endActivity extends AppCompatActivity {
 
     //스타트 액티비티에서 가져오는 String형변수
-    String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, endsec, restsectime, rr_comp;
+    String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, restsectime, rr_comp;
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
     TextView avgsoeed, maxspeed, getgodo, resttime, ingtime, distence, addr;
 
-    int check, clearCount=0;
+    int check, clearCount=0, endsec;
 
     MapView mapView;
     //DB로 전송하기 위한 변수
@@ -112,7 +112,7 @@ public class endActivity extends AppCompatActivity {
         Getgodo = intent.getStringExtra("getgodo"); //획득고도
         RestTime = intent.getStringExtra("m_rest"); //휴식시간
         IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
-        endsec = intent.getStringExtra("endsec"); //라이딩 시간(초)
+        endsec = intent.getIntExtra("endsec",0); //라이딩 시간(초)
         restsectime = intent.getStringExtra("restsectime"); //휴식시간(초)
         check = intent.getIntExtra("check", 0);
         rr_comp = intent.getStringExtra("rr_comp");
@@ -152,7 +152,7 @@ public class endActivity extends AppCompatActivity {
         mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
-
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
@@ -204,7 +204,7 @@ public class endActivity extends AppCompatActivity {
             min=0;
         }
 
-        int r_sec = Integer.parseInt(endsec);
+        int r_sec = endsec;
         int r_hour;
         int r_min;
 
@@ -327,9 +327,8 @@ public class endActivity extends AppCompatActivity {
                 params.put("rr_gpx", "gpx_" + nowTime + ".gpx");
                 params.put("rr_open", open);
                 params.put("rr_breaktime", restsectime);
-                params.put("rr_time", endsec);
+                params.put("rr_time", String.valueOf(endsec));
                 params.put("rr_area", adress_value);
-                params.put("rr_like", "0");
                 params.put("rr_name", riding_nameinput.getText().toString());
                 params.put("rr_comp", rr_comp);
                 networkTask1.execute(params);
@@ -388,6 +387,8 @@ public class endActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             try{
                 Log.d("JSON_RESULT", s);
+                Toast.makeText(getApplicationContext(), "기록이 저장되었습니다.", Toast.LENGTH_LONG).show();
+                finish();
 
             }catch(Exception e){
                 Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
