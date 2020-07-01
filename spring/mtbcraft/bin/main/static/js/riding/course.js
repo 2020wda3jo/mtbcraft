@@ -2,6 +2,7 @@
 $(".li_rr").click(function(){
 	drawPolylineByRR_Num(polyline, this.id);
 	$("#courseInfo").show();
+	$("#bt_like").hide();
 	//rr_num을 이용하여 라이딩상세 기록 조회
 	var mode = "ridingrecord";
 	getRidingRecordByRR_Num(this.id, mode);
@@ -11,6 +12,7 @@ $(".li_rr").click(function(){
 $(".li_sc").click(function(){
 	drawPolylineByRR_Num(polyline, this.id);
 	$("#courseInfo").show();
+	$("#bt_like").show();
 	//rr_num을 이용하여 라이딩상세 기록 조회
 	var mode = "scrap";
 	getRidingRecordByRR_Num(this.id, mode);

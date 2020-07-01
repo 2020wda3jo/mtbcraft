@@ -1,15 +1,19 @@
  <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header2"></head>
-<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
-   <div class="overlay"></div>
-   <div class="container">
-     <div class="row no-gutters slider-text align-items-end justify-content-center">
-       <div class="col-md-9 ftco-animate text-center">
-       </div>
-     </div>
-   </div>
-</section>
+<input type="hidden" id="hiddenCLUB" th:value="${club}"> 
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/community_img.jpg');" data-stellar-background-ratio="0.5">
+	   <div class="overlay"></div>
+	   <div class="container">
+	     <div class="row no-gutters slider-text align-items-end justify-content-center">
+	       <div class="col-md-9 ftco-animate text-center">
+	       		<h1 class="mb-2 bread">COMMUNITY</h1>
+	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">HOME <i class="ion-ios-arrow-forward"></i></a></span> <span>COMMUNITY <i class="ion-ios-arrow-forward"></i></span></p>
+	       </div>
+	     </div>
+	   </div>
+	</section>
    
 
 		<section class="ftco-section bg-light">
@@ -26,7 +30,7 @@
           <div class="col-md-4 d-flex align-self-stretch ftco-animate text-center">
             <div class="media block-6 services d-block">
               <div class="icon d-flex justify-content-center align-items-center">
-            		<a href="community/club"><span class="flaticon-cake"></span></a>
+            		<a href="#" id="community/club" class="commtag"><span class="flaticon-cake"></span></a>
               </div>
               <div class="media-body p-2 mt-3">
                 <h3 class="heading">클럽</h3>
@@ -62,26 +66,34 @@
 		
     <footer th:replace="footer2"></footer>
   
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
-
-  <script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="/test/js/popper.min.js"></script>
-  <script src="/test/js/bootstrap.min.js"></script>
-  <script src="/test/js/jquery.easing.1.3.js"></script>
-  <script src="/test/js/jquery.waypoints.min.js"></script>
-  <script src="/test/js/jquery.stellar.min.js"></script>
-  <script src="/test/js/owl.carousel.min.js"></script>
-  <script src="/test/js/jquery.magnific-popup.min.js"></script>
-  <script src="/test/js/aos.js"></script>
-  <script src="/test/js/jquery.animateNumber.min.js"></script>
-  <script src="/test/js/bootstrap-datepicker.js"></script>
-  <script src="/test/js/jquery.timepicker.min.js"></script>
-  <script src="/test/js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="/test/js/google-map.js"></script>
-  <script src="/test/js/main.js"></script>
-    
+	  <!-- loader -->
+	  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+	
+	
+	  <script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
+	  <script src="/test/js/popper.min.js"></script>
+	  <script src="/test/js/bootstrap.min.js"></script>
+	  <script src="/test/js/jquery.easing.1.3.js"></script>
+	  <script src="/test/js/jquery.waypoints.min.js"></script>
+	  <script src="/test/js/jquery.stellar.min.js"></script>
+	  <script src="/test/js/owl.carousel.min.js"></script>
+	  <script src="/test/js/jquery.magnific-popup.min.js"></script>
+	  <script src="/test/js/aos.js"></script>
+	  <script src="/test/js/jquery.animateNumber.min.js"></script>
+	  <script src="/test/js/bootstrap-datepicker.js"></script>
+	  <script src="/test/js/jquery.timepicker.min.js"></script>
+	  <script src="/test/js/scrollax.min.js"></script>
+	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+	  <script src="/test/js/google-map.js"></script>
+	  <script src="/test/js/main.js"></script>
+    	<script>
+    		$(".commtag").click(function(){
+    			if($("#hiddenCLUB").val()==0){
+    				location.href = this.id;
+    			}else {
+    				location.href = this.id+"/"+$("#hiddenCLUB").val();
+    			}
+    		});
+    	</script>
   </body>
 </html>

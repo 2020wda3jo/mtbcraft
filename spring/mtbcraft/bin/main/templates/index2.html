@@ -291,8 +291,10 @@
 			.ready(
 					function() {
 						var loginUser = $("#hidden_userId").val();
-						$
-								.ajax({
+						if(loginUser==null){
+							return;
+						}
+						$.ajax({
 									url : "/ridingrecordTop3", // 제이슨오브젝트값을 가져옴
 									data : {
 										rr_rider : loginUser

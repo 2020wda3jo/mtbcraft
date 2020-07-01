@@ -26,11 +26,11 @@
     <link rel="stylesheet" href="/test/css/icomoon.css">
     <link rel="stylesheet" href="/test/css/style.css">
     
-   <link rel="stylesheet" href="/css/entertainment/main.css">
+   <link rel="stylesheet" href="/css/entertainment/main.css?af">
 
 <body>
 	
-	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/entertainment_img.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
 	   <div class="container">
 	     <div class="row no-gutters slider-text align-items-end justify-content-center">
@@ -102,17 +102,17 @@
         </div>	
 				<div class="row">
 				
-					<div class="col-md-6 col-lg-3 ftco-animate">
+					<div class="col-md-6 col-lg-3 ftco-animate" th:each="comp:${complist}">
 						<div class="staff">
-							<div class="img" style="background-image: url(/test/images/chef-4.jpg);"></div>
+							<div class="img" style="background-image: url(/test/images/chef-4.jpg);" th:with="url = 'background-image: url(/entertainment/img/comp/'+${comp.comp_image}+')'" th:style="${url}"></div>
 							<div class="text pt-4">
-								<h3>경쟁전 이름</h3>
+								<h3 th:text="${comp.comp_name}">경쟁전 이름</h3>
 								<span class="position mb-2">
-									<span></span>
+									<span th:text="${comp.start}"></span>
 									<span> ~ </span>
-									<span></span>
+									<span th:text="${comp.end}"></span>
 								</span>
-								<p>경쟁전 설명</p>
+								<p th:text="${comp.comp_content}">경쟁전 설명</p>
 							</div>
 						</div>
 					</div>
@@ -134,13 +134,13 @@
           <div class="col-md-12">
             <div class="carousel-testimony owl-carousel ftco-owl">
               
-              <div class="item">
+              <div class="item" th:each="mission:${missionlist}">
                 <div class="testimony-wrap text-center pb-5">
-                  <div class="user-img mb-4" style="background-image: url(/test/images/person_1.jpg)">
+                  <div class="user-img mb-4" style="background-image: url(/test/images/person_1.jpg)" th:with="url = 'background-image: url(/entertainment/img/badge/'+${mission.m_img}+')'" th:style="${url}">
                   </div>
                   <div class="text p-3">
-                    <p class="name">미션명</p>
-                    <span class="position">성공일자</span>
+                    <p class="name" th:text="${mission.m_name}">미션명</p>
+                    <span class="position" th:text="${mission.m_time}">성공일자</span>
                   </div>
                 </div>
               </div>
