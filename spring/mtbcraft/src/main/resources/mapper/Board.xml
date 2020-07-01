@@ -17,5 +17,17 @@
 	<insert id="insertBoard" parameterType="com.mtbcraft.dto.Board">
 		insert into board values(SEQ_BOARDNUM.nextval, #{b_rider}, #{b_title}, #{b_content}, SYSDATE+(9/24), #{b_file}, #{b_club})
 	</insert>
+	
+	<select id="getBoardNum" parameterType="int" resultType="com.mtbcraft.dto.Board">
+		select * from board where b_num=#{b_num}
+	</select>
+	
+	<update id="updateBoard" parameterType="com.mtbcraft.dto.Board">
+		UPDATE BOARD SET b_title = #{b_title}, b_content=#{b_content} where b_num=#{b_num}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM BOARD WHERE b_num = #{b_num}
+	</delete>
 </mapper>
 

@@ -15,5 +15,14 @@ public interface BoardMapper {
 	
 	// 게시글 생성
 	public void insertBoard(Board board) throws Exception;
+	
+	// 게시글 조회
+	public Board getBoardNum(int b_num);
+	
+	//게시글 수정
+	public void updateBoard(Board board);
+	
+	// 게시글 삭제
+	public boolean deleteBoard(int b_num);
 }
 
