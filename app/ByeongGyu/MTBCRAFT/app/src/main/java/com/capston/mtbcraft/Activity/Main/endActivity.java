@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class endActivity extends AppCompatActivity {
+public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
 
     //스타트 액티비티에서 가져오는 String형변수
     String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, restsectime, rr_comp;
@@ -218,9 +218,12 @@ public class endActivity extends AppCompatActivity {
         if(r_min==0){
             r_min=00;
         }
-        resttime.setText(String.valueOf(hour+":"+min+":"+sec)); //휴식시간
-        ingtime.setText(String.valueOf(r_hour+":"+r_min+":"+r_sec)); //지속시간
-        distence.setText(Distence); //이동거리
+        resttime.setText(String.valueOf(hour+"시간 "+min+"분 "+sec)); //휴식시간
+        ingtime.setText(String.valueOf(r_hour+"시간 "+r_min+"분 "+r_sec)); //지속시간
+
+            distence.setText(Distence); //이동거리
+
+
         // gpx파일 제목을 위해 현재 시간 구하기
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -361,6 +364,36 @@ public class endActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
+    }
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
     }
 
 

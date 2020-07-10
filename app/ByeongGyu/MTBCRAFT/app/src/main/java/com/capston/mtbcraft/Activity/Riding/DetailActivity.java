@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -64,7 +67,9 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
     MapPolyline polyline = new MapPolyline();
     TextView textView1, textView2, textView3, textView4, textView5, textView6;
     private DrawerLayout mDrawerLayout;
-    String secS, test, disS, avgS, highS, maxS, breakS, gpx, open;
+    String secS, test, disS, avgS, highS, maxS, breakS, gpx;
+    int rr_open;
+    LinearLayout set_noopen, set_open;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +153,11 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
         textView4 = (TextView)findViewById(R.id.Riding_avg );
         textView5 = (TextView)findViewById(R.id.Riding_godo );
         textView6 = (TextView)findViewById(R.id.Riding_max );
+        set_open = (LinearLayout)findViewById(R.id.set_open);
+        set_noopen = (LinearLayout)findViewById(R.id.set_noopen);
 
+        set_open.setVisibility(View.GONE);
+        set_noopen.setVisibility(View.GONE);
 
         Intent intent = new Intent(this.getIntent());
 
@@ -165,6 +174,9 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
             e.printStackTrace();
         }
 
+
+
+        /*
         RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
         //공개여부 선택
         openselect.setOnCheckedChangeListener((RadioGroup.OnCheckedChangeListener) (group, checkedId) -> {
@@ -204,6 +216,12 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                     break;
             }
         });
+*/
+
+
+
+
+
 
     }
 
@@ -278,8 +296,16 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                     highS = jObject.getString("rr_high");
                     maxS = jObject.getString("rr_topspeed");
                     gpx = jObject.getString("rr_gpx");
+                    rr_open = jObject.getInt("rr_open");
                 }
+                //공개 및 비공개 이미지 변경
+Log.d("공개여부는요",String.valueOf(rr_open));
+                if(rr_open == 1){
 
+                    set_noopen.setVisibility(View.VISIBLE);
+                }else{
+                    set_open.setVisibility(View.VISIBLE);
+                }
                 //주행시간 계산
                 int hour, min, sec = Integer.parseInt(secS);
                 min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;

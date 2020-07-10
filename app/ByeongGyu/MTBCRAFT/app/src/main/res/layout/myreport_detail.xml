@@ -272,36 +272,40 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/set_open"
+                android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:background="#ABABAB">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="공개여부 설정 : " />
-
-                <RadioGroup
-                    android:id="@+id/selectgroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/NoOpen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="비공개" />
-                    <RadioButton
-                        android:id="@+id/FriOpen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="전체 공개" />
-
-                </RadioGroup>
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/open_icon" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/set_noopen"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:background="#997982">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/no_open_icon" />
+
+            </LinearLayout>
+
         </LinearLayout>
         </ScrollView>
 

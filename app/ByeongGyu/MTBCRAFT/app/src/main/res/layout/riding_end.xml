@@ -28,10 +28,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <com.naver.maps.map.MapView
+        <RelativeLayout
             android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="0" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"

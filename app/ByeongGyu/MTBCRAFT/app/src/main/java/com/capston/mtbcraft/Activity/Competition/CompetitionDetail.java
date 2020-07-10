@@ -54,7 +54,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
     String comp_num, comp_period, comp_badge, comp_course, comp_image, comp_content, comp_name, Save_Path, badge_path, c_gpx, c_name;
     TextView name_textView, period_textView2, textView3, textView4;
     Button joinButton;
-    ImageView imageView6, imageView7;
+    ImageView imageView6, imageView7, imageView8, imageView9;
     WebView webView;
     RecyclerView recyclerView, recyclerView2;
     LocationManager locationManager;
@@ -87,6 +87,8 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
         period_textView2 = findViewById(R.id.comp_day2);
         imageView6 = findViewById(R.id.imageView6);
         imageView7 = findViewById(R.id.badge_image);
+        imageView8 = findViewById(R.id.badge_image2);
+        imageView9 = findViewById(R.id.badge_image3);
         textView3 = findViewById(R.id.comp_content);
         webView = findViewById(R.id.comp_Course);
         recyclerView = findViewById(R.id.compClub_recycle);
@@ -398,13 +400,19 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
                 for(Badge item: items) {
                     itemList.add(item);
-                    FileDownload("badge" , item.getBg_image());
+                    FileDownload("badge" , item.getBg_image() + "1.png");
+                    FileDownload("badge" , item.getBg_image() + "2.png");
+                    FileDownload("badge" , item.getBg_image() + "3.png");
                     badge_path = item.getBg_image();
                     badge_name = item.getBg_name();
                 }
 
-                Bitmap comp_Badge = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path).getAbsolutePath());
-                imageView7.setImageBitmap(comp_Badge);
+                Bitmap comp_Badge1 = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path + "1.png").getAbsolutePath());
+                Bitmap comp_Badge2 = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path + "2.png").getAbsolutePath());
+                Bitmap comp_Badge3 = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path + "3.png").getAbsolutePath());
+                imageView7.setImageBitmap(comp_Badge1);
+                imageView8.setImageBitmap(comp_Badge2);
+                imageView9.setImageBitmap(comp_Badge3);
                 textView4.setText(badge_name);
 
 
