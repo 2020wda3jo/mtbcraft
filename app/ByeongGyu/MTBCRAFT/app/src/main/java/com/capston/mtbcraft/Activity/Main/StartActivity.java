@@ -54,7 +54,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @SuppressLint("HandlerLeak")
-public class StartActivity extends FragmentActivity
+public class StartActivity<cur_status> extends FragmentActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
     private RidingStartBinding binding;
     private MapView mMapView;
@@ -70,13 +70,13 @@ public class StartActivity extends FragmentActivity
     private String test, test2, test3;
     //각종 변수
     private double latitude, lonngitude, getgodo, getSpeed = 0, hap = 0, getgodoval = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
-    private int  total_time=0;
+    private int  total_time=0, rest=0;
     private ArrayList<Double> witch_lat = new ArrayList<>();
     private ArrayList<Double> witch_lon = new ArrayList<>();
     private ArrayList<Double> ele = new ArrayList<>();
     private ArrayList<Float> godoArray = new ArrayList<>();
     private TextToSpeech tts;
-
+    private long Rest_PauseTime;
     //형변환용변수
     private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "";
 
@@ -89,8 +89,10 @@ public class StartActivity extends FragmentActivity
     final static int Run = 1;
     final static int Pause = 2;
     int cur_status = Init;
-    long PauseTime;
+    long PauseTime, RestPTime;
     private long RestTime;
+    private Thread timeThread = null;
+    private Boolean isRunning = true;
 
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
@@ -120,7 +122,10 @@ public class StartActivity extends FragmentActivity
         View view = binding.getRoot();
         setContentView(view);
 
+        timeThread = new Thread(new timeThread());
+        timeThread.start();
 
+        isRunning = !isRunning;
         // MapLayout mapLayout = new MapLayout(this);
         mMapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
@@ -138,7 +143,12 @@ public class StartActivity extends FragmentActivity
 
         //이동시간 핸들러
         BaseTime = SystemClock.elapsedRealtime();
+        RestTime = SystemClock.elapsedRealtime();
+
+
         RidingTimer.sendEmptyMessage(0);
+
+
         cur_status = Run; //현재상태를 런상태로 변경
         binding.mapLayout.setVisibility(View.VISIBLE); //지도
         binding.speedPre.setVisibility(View.VISIBLE); //지도탭에서 보여지는거
@@ -187,7 +197,7 @@ public class StartActivity extends FragmentActivity
                 intent.putExtra("cha_dis", cha_dis); //이동거리(소수점X)
                 intent.putExtra("cha_max", cha_max); //최대속도(소수점X)
                 intent.putExtra("cha_avg", cha_avg); //평균속도(소수점X)
-                intent.putExtra("distence", String.valueOf(binding.dis.getText())); //이동거리
+                intent.putExtra("distence", hap); //이동거리
                 intent.putExtra("endmax", String.valueOf(binding.maxspeed.getText())); //최대속도
                 intent.putExtra("endavg", String.valueOf(binding.avgspeed.getText())); //평균속도
                 intent.putExtra("getgodo", String.valueOf(binding.getgodo.getText())); //획득고도
@@ -195,7 +205,7 @@ public class StartActivity extends FragmentActivity
                 intent.putExtra("ingtime", String.valueOf(binding.ingtime.getText())); //경과시간
                 intent.putExtra("addr", adress_value);
                 intent.putExtra("endsec", total_time); //라이딩 시간(초)
-                intent.putExtra("restsectime", String.valueOf(binding.mRest.getText())); //휴식시간(초)
+                intent.putExtra("restsectime", rest); //휴식시간(초)
                 intent.putExtra("witch_lat", witch_lat); //위도
                 intent.putExtra("witch_lon", witch_lon); //경도
                 intent.putExtra("godoarray", godoArray);
@@ -256,36 +266,56 @@ public class StartActivity extends FragmentActivity
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
     }
 
+    //재개, 정지 버튼
+
     public void myOnClick(View v){
+
+
+        Log.d("현재상태", String.valueOf(cur_status));
+
         switch (v.getId()) {
-            case R.id.pausebt: //시작버튼을 클릭했을때 현재 상태값에 따라 다른 동작을 할수있게끔 구현.
+            case R.id.pausebt: //정지버튼 활성
+
 
             case R.id.resume_bt:
+                //재개 활성
+
+
                 switch (cur_status) {
                     case Init:
                         BaseTime = SystemClock.elapsedRealtime();
-                        System.out.println(BaseTime);
-                        //myTimer이라는 핸들러를 빈 메세지를 보내서 호출
-                        RidingTimer.sendEmptyMessage(0);
                         cur_status = Run; //현재상태를 런상태로 변경
+                        Log.d("cur_status","1");
+
                         break;
+
                     case Run:
-                        RidingTimer.removeMessages(0); //핸들러 메세지 제거
                         PauseTime = SystemClock.elapsedRealtime();
+                        RidingTimer.removeMessages(0); //라이딩시간
+
+                        isRunning = !isRunning;
+
                         cur_status = Pause;
                         binding.resumeBt.setVisibility(View.VISIBLE);
                         binding.pausebt.setVisibility(View.GONE);
-
+                        Log.d("cur_status","실행");
                         break;
                     case Pause:
-                        long now = SystemClock.elapsedRealtime();
+                        long now2 = SystemClock.elapsedRealtime();
                         RidingTimer.sendEmptyMessage(0);
-                        BaseTime += (now - PauseTime);
+                        BaseTime += (now2 - PauseTime);
+
                         cur_status = Run;
+
                         binding.resumeBt.setVisibility(View.GONE);
                         binding.pausebt.setVisibility(View.VISIBLE);
+                        Log.d("cur_status","중지");
+
+                        isRunning = false;
+
                         break;
                 }
+
                 break;
         }
     }
@@ -299,6 +329,8 @@ public class StartActivity extends FragmentActivity
             //sendEmptyMessage는 비어있는 메세제를 핸들러에게 전송함
             RidingTimer.sendEmptyMessage(0);
         }
+
+
 
         //현재시간을 계속구해서 출력하는 메소드
         int getTimeout2() {
@@ -319,11 +351,61 @@ public class StartActivity extends FragmentActivity
             int min = (int) ((outTime / 1000) / 60);
             int hour = (int) ((outTime / 1000) / 3600);
 
+
             String easy_outTime = String.format("%02d:%02d:%02d", hour, min, sec);
             //Log.d("로그", String.valueOf(outTime / 1000));
             return easy_outTime;
         }
     };
+
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            int mSec = msg.arg1 % 100;
+            int sec = (msg.arg1 / 100) % 60;
+            int min = (msg.arg1 / 100) / 60;
+            int hour = (msg.arg1 / 100) / 360;
+            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
+
+            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
+
+            rest=msg.arg1 / 100;
+            binding.resttime.setText(result);
+        }
+    };
+
+    public class timeThread implements Runnable {
+        @Override
+        public void run() {
+            int i = 0;
+
+            while (true) {
+                while (isRunning) { //일시정지를 누르면 멈춤
+                    Message msg = new Message();
+                    msg.arg1 = i++;
+                    handler.sendMessage(msg);
+
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable(){
+                            @Override
+                            public void run() {
+                                binding.resttime.setText("");
+                                binding.resttime.setText("00:00:00");
+                            }
+                        });
+                        return; // 인터럽트 받을 경우 return
+                    }
+                }
+            }
+        }
+    }
+
+
 
     public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
@@ -524,9 +606,6 @@ public class StartActivity extends FragmentActivity
         binding.nowspeed.setText(String.format("%.1f", getSpeed));  //Get Speed
         binding.mSpeed.setText(String.format("%.1f", getSpeed) + "km/h");
 
-
-        //만약 속도가 0.1미만이라면 휴식시간이 늘어남(뭔가 이상함)
-
         MapPolyline polyline = new MapPolyline();
         polyline.setLineColor(Color.argb(128, 255, 51, 0));
 
@@ -551,53 +630,6 @@ public class StartActivity extends FragmentActivity
 
         Log.d("지금속도는",String.valueOf(getSpeed));
 
-        switch ((int) getSpeed) {
-            case 0:
-                Log.d("속도가","0입니다");
-                RidingTimer.removeMessages(0); //핸들러 메세지 제거
-                PauseTime = SystemClock.elapsedRealtime();
-                cur_status = Pause;
-                binding.resumeBt.setVisibility(View.VISIBLE);
-                binding.pausebt.setVisibility(View.GONE);
-                break;
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (getSpeed==0.0) {
-            RestTimer.removeMessages(0);
-            long PauseTime = SystemClock.elapsedRealtime();
-            long now = SystemClock.elapsedRealtime();
-            RestTime += (now-PauseTime);
-
-
-        } else {
-            RestTime = SystemClock.elapsedRealtime();
-            RestTimer.sendEmptyMessage(0);
-            cur_status = Run;
-
-            binding.restview.setText("열심히^^");
-        }
         if (mLastlocation != null) {
 
 
@@ -651,31 +683,6 @@ public class StartActivity extends FragmentActivity
         }
         // 현재위치를 지난 위치로 변경
         mLastlocation = location;
-    }
-
-    Handler RestTimer = new Handler(){
-        public void handleMessage(Message msg){
-            binding.resttime.setText(getTimeRest());
-
-            //sendEmptyMessage 는 비어있는 메세지를 Handler 에게 전송하는겁니다.
-            RestTimer.sendEmptyMessage(0);
-        }
-    };
-    //현재시간을 계속 구해서 출력하는 메소드
-    String getTimeRest(){
-        long now = SystemClock.elapsedRealtime(); //애플리케이션이 실행되고나서 실제로 경과된 시간(??)^^;
-        long outTime = now - RestTime;
-
-
-        int sec  = (int) ((outTime/1000) % 60);
-        int min = (int) ((outTime/1000) / 60);
-        int hour = (int) ((outTime/1000) / 3600);
-
-        String easy_outTime = String.format("%02d:%02d:%02d", hour, min, sec);
-
-        // Log.d("로그", String.valueOf(outTime/1000));
-        return easy_outTime;
-
     }
 
 

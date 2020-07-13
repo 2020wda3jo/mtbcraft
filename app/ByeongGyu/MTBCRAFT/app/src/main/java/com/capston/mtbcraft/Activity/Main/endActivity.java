@@ -56,7 +56,14 @@ import java.util.Map;
 public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
 
     //스타트 액티비티에서 가져오는 String형변수
-    String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, restsectime, rr_comp;
+    String MaxSpeed;
+    String AvgSpeed;
+    String Getgodo;
+    String RestTime;
+    String IngTime;
+    double Distence;
+    int restsectime;
+    String rr_comp;
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
     TextView avgsoeed, maxspeed, getgodo, resttime, ingtime, distence, addr;
 
@@ -72,7 +79,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
     int[] typeScore;
 
     int r_club;
-
+    int dis;
     //형 변환
     String cha_dis, cha_avg, cha_max, clear, comp_name, adress_value;
 
@@ -106,19 +113,20 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         cha_dis = intent.getStringExtra("cha_dis");
         cha_avg = intent.getStringExtra("cha_avg");
         cha_max = intent.getStringExtra("cha_max");
-        Distence = intent.getStringExtra("distence"); //이동거리
+        Distence = intent.getDoubleExtra("distence",0); //이동거리
         MaxSpeed = intent.getStringExtra("endmax"); //최대속도
         AvgSpeed = intent.getStringExtra("endavg"); //평균속도
         Getgodo = intent.getStringExtra("getgodo"); //획득고도
         RestTime = intent.getStringExtra("m_rest"); //휴식시간
         IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
         endsec = intent.getIntExtra("endsec",0); //라이딩 시간(초)
-        restsectime = intent.getStringExtra("restsectime"); //휴식시간(초)
+        restsectime = intent.getIntExtra("restsectime",0); //휴식시간(초)
         check = intent.getIntExtra("check", 0);
         rr_comp = intent.getStringExtra("rr_comp");
         comp_name = intent.getStringExtra("comp_name");
         adress_value = intent.getStringExtra("addr");
 
+        Log.d("라라라라라라라라라라라", restsectime + " " + endsec + Distence);
 
         ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
         ArrayList<Double> witch_lon = (ArrayList<Double>)intent.getSerializableExtra("witch_lon");
@@ -185,13 +193,15 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         //앞에서 받아온값들을 텍스트로 설정
         avgsoeed.setText(AvgSpeed); //평균속도
         maxspeed.setText(MaxSpeed); //최대속도
-        getgodo.setText(Getgodo); //획득고도
+
+
+
         String text=adress_value.replace("대한민국","");
         addr.setText(text);
 
         int hour;
         int min;
-        int sec = Integer.parseInt(restsectime);
+        int sec = restsectime;
 
         min = sec/60;
         hour = min/60;
@@ -218,10 +228,21 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         if(r_min==0){
             r_min=00;
         }
-        resttime.setText(String.valueOf(hour+"시간 "+min+"분 "+sec)); //휴식시간
-        ingtime.setText(String.valueOf(r_hour+"시간 "+r_min+"분 "+r_sec)); //지속시간
+        resttime.setText(String.valueOf(hour+":"+min+":"+sec)); //휴식시간
+        ingtime.setText(String.valueOf(r_hour+":"+r_min+":"+r_sec)); //지속시간
 
-            distence.setText(Distence); //이동거리
+
+        double killlo = 0;
+       dis = (int) Distence;
+
+        Log.d("값변환", String.valueOf(dis));
+        if (dis >= 1000) {
+            killlo = dis / 1000.0;
+
+            distence.setText(String.format("%.1f", killlo) + "km");
+        }else{
+            distence.setText(String.format("%.2f", dis)+"m");
+        }
 
 
         // gpx파일 제목을 위해 현재 시간 구하기
@@ -323,13 +344,13 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
                 Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
                 params.put("rr_rider", LoginId);
-                params.put("rr_distance", cha_dis);
+                params.put("rr_distance", String.valueOf(dis));
                 params.put("rr_topspeed", cha_max);
                 params.put("rr_avgspeed", cha_avg);
                 params.put("rr_high",Getgodo);
                 params.put("rr_gpx", "gpx_" + nowTime + ".gpx");
                 params.put("rr_open", open);
-                params.put("rr_breaktime", restsectime);
+                params.put("rr_breaktime", String.valueOf(restsectime));
                 params.put("rr_time", String.valueOf(endsec));
                 params.put("rr_area", adress_value);
                 params.put("rr_name", riding_nameinput.getText().toString());
