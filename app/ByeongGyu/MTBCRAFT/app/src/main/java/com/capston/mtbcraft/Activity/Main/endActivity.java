@@ -11,19 +11,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.capston.mtbcraft.GpxInfo;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.SendGPXFile;
+import com.capston.mtbcraft.databinding.RidingEndBinding;
+import com.capston.mtbcraft.databinding.RidingStartBinding;
 import com.capston.mtbcraft.dto.Competition_Status;
 import com.capston.mtbcraft.dto.Mission;
 import com.capston.mtbcraft.dto.Mission_Status;
@@ -54,20 +54,21 @@ import java.util.List;
 import java.util.Map;
 
 public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
+    private RidingEndBinding binding;
 
     //스타트 액티비티에서 가져오는 String형변수
-    String MaxSpeed;
-    String AvgSpeed;
-    int Getgodo;
-    String RestTime;
-    String IngTime;
-    double Distence;
-    int restsectime;
-    String rr_comp;
-    //스타트 액티비티에서 가져온 값들을 텍스트로 설정
-    TextView avgsoeed, maxspeed, getgodo, resttime, ingtime, distence, addr;
+    int MaxSpeed=0;
+    int AvgSpeed=0;
+    int Getgodo=0;
+    int RestTime=0;
+    int IngTime=0;
+    int Distence=0;
+    String rr_comp="";
 
-    int check, clearCount=0, endsec;
+    //스타트 액티비티에서 가져온 값들을 텍스트로 설정
+
+
+    int check, clearCount=0;
 
     MapView mapView;
     //DB로 전송하기 위한 변수
@@ -80,23 +81,23 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
     int r_club;
     int dis;
-    int distan;
+
     //형 변환
-    String cha_dis, cha_avg, cha_max, clear, comp_name, adress_value;
+    String comp_name, adress_value;
 
     Intent intent;
 
-    //라이딩 이름 짓기
-    LinearLayout openset;
-    TextView riding_nameinput;
-    CharSequence riding_name;
     private LineChart lineChart;
     private Object endActivity;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.riding_end);
+        binding = RidingEndBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         //로그인정보 받아오기
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -108,25 +109,18 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         //넘어온 intent값 넣기
         intent = new Intent(this.getIntent());
 
-        cha_dis= intent.getStringExtra("cha_dis"); //이동거리(소수점X)
-        cha_max =  intent.getStringExtra("cha_max"); //최대속도(소수점X)
-        cha_avg = intent.getStringExtra("cha_avg"); //평균속도(소수점X)
-        Distence = intent.getDoubleExtra("distence",0); //이동거리
-        MaxSpeed = intent.getStringExtra("endmax"); //최대속도
-        AvgSpeed = intent.getStringExtra("endavg"); //평균속도
+        Distence = intent.getIntExtra("distence",0); //이동거리
+        MaxSpeed = intent.getIntExtra("maxspeed",0); //최대속도
+        AvgSpeed = intent.getIntExtra("avgspeed",0); //평균속도
         Getgodo = intent.getIntExtra("getgodo",0); //획득고도
-        RestTime = intent.getStringExtra("m_rest"); //휴식시간
-        IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
-        endsec = intent.getIntExtra("endsec",0); //라이딩 시간(초)
-        restsectime = intent.getIntExtra("restsectime",0); //휴식시간(초)
+        RestTime = intent.getIntExtra("resttime",0); //휴식시간
+        IngTime = intent.getIntExtra("ingtime",0); //라이딩시간(시분초)
         check = intent.getIntExtra("check", 0);
         rr_comp = intent.getStringExtra("rr_comp");
         comp_name = intent.getStringExtra("comp_name");
         adress_value = intent.getStringExtra("addr");
 
-        distan = (int) Distence;
-        Log.d("End Activity", cha_dis + " " + cha_max + " " + cha_avg + " " + Distence + " " + MaxSpeed + " " + AvgSpeed +" " + Getgodo + " " +restsectime + " " + IngTime + " " + endsec + " "+ restsectime + " " +
-                check + " " + rr_comp + " "+ comp_name+ " " + adress_value      );
+        Log.d("End Activity", Distence + " " + MaxSpeed + " " + AvgSpeed + " " + Getgodo + " " + RestTime + " " + IngTime +" " +check + " " + rr_comp + " "+ comp_name+ " " + adress_value      );
 
         ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
         ArrayList<Double> witch_lon = (ArrayList<Double>)intent.getSerializableExtra("witch_lon");
@@ -178,30 +172,23 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         int padding = 100; // px
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
 
-        avgsoeed = (TextView) findViewById(R.id.endavg);
-        maxspeed = (TextView) findViewById(R.id.endmax);
-        getgodo = (TextView) findViewById(R.id.endget);
-        resttime = (TextView) findViewById(R.id.endresttime);
-        ingtime = (TextView) findViewById(R.id.ending);
-        distence = (TextView) findViewById(R.id.enddis);
-        riding_nameinput = (EditText)findViewById(R.id.riding_nameinput); //라이딩 이름 넣기
-        addr = (TextView) findViewById(R.id.addr);
 
         Button save = (Button) findViewById(R.id.saveriding);
         RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
 
         //앞에서 받아온값들을 텍스트로 설정
-        avgsoeed.setText(AvgSpeed); //평균속도
-        maxspeed.setText(MaxSpeed); //최대속도
+        binding.endavg.setText(String.valueOf(AvgSpeed)); //평균속도
+        binding.endmax.setText(String.valueOf(MaxSpeed)); //최대속도
 
 
-
+        //주소 텍스트
         String text=adress_value.replace("대한민국","");
-        addr.setText(text);
+        binding.addr.setText(text);
 
+        //휴식시간 및 지속시간
         int hour;
         int min;
-        int sec = restsectime;
+        int sec = IngTime;
 
         min = sec/60;
         hour = min/60;
@@ -214,7 +201,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
             min=0;
         }
 
-        int r_sec = endsec;
+        int r_sec = RestTime;
         int r_hour;
         int r_min;
 
@@ -228,20 +215,18 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         if(r_min==0){
             r_min=00;
         }
-        resttime.setText(String.valueOf(hour+":"+min+":"+sec)); //휴식시간
-        ingtime.setText(String.valueOf(r_hour+":"+r_min+":"+r_sec)); //지속시간
+        binding.ending.setText(String.valueOf(hour+"시간 "+min+"분 "+sec+"초")); //지속시간
+        binding.endresttime.setText(String.valueOf(r_hour+"시간 "+r_min+"분 "+r_sec+"초")); //휴식시간
 
-
+        binding.endget.setText(String.valueOf(Getgodo));
         double killlo = 0;
 
-
-        Log.d("값변환", String.valueOf(dis));
         if (dis >= 1000) {
             killlo = dis / 1000.0;
 
-            distence.setText(String.format("%.1f", killlo) + "km");
+            binding.enddis.setText(String.format("%.1f", killlo) + "km");
         }else{
-            distence.setText(String.format("%.2f", Distence)+"m");
+            binding.enddis.setText(Distence+"m");
         }
 
 
@@ -342,18 +327,18 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 NetworkTask2 networkTask1 = new NetworkTask2();
                 Map<String, String> params = new HashMap<String, String>();
 
-                Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
+                Log.d("로그임","아이디"+LoginId+"거리"+Distence+"최대속도"+MaxSpeed+"평균속도"+AvgSpeed+"고도"+Getgodo+"공개"+open+"휴식"+RestTime+"시간"+IngTime+"이름"+binding.ridingNameinput.getText());
                 params.put("rr_rider", LoginId);
-                params.put("rr_distance", String.valueOf(distan));
-                params.put("rr_topspeed", cha_max);
-                params.put("rr_avgspeed", cha_avg);
+                params.put("rr_distance", String.valueOf(Distence));
+                params.put("rr_topspeed", String.valueOf(MaxSpeed));
+                params.put("rr_avgspeed", String.valueOf(AvgSpeed));
                 params.put("rr_high", String.valueOf(Getgodo));
                 params.put("rr_gpx", "gpx_" + nowTime + ".gpx");
                 params.put("rr_open", open);
-                params.put("rr_breaktime", String.valueOf(restsectime));
-                params.put("rr_time", String.valueOf(endsec));
+                params.put("rr_breaktime", String.valueOf(RestTime));
+                params.put("rr_time", String.valueOf(IngTime));
                 params.put("rr_area", adress_value);
-                params.put("rr_name", riding_nameinput.getText().toString());
+                params.put("rr_name", binding.ridingNameinput.getText().toString());
                 params.put("rr_comp", rr_comp);
                 networkTask1.execute(params);
 
@@ -369,7 +354,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                     UpdateCompScore updateCompScore = new UpdateCompScore();
                     Map<String, String> params2 = new HashMap<>();
 
-                    params2.put("avg_speed", cha_avg);
+                    params2.put("avg_speed", String.valueOf(AvgSpeed));
                     params2.put("rr_comp", rr_comp);
                     params2.put("r_club", String.valueOf(r_club));
                     params2.put("LoginId", LoginId);
@@ -510,7 +495,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
                 for ( int i = 0; i<items.length; i++){
                     if ( items[i].getCs_club() == r_club)
-                        items[i].setCs_score( items[i].getCs_score() + Integer.parseInt(cha_avg));
+                        items[i].setCs_score( items[i].getCs_score() + Integer.parseInt(String.valueOf(AvgSpeed)));
                     itemList.add(items[i]);
                 }
 
@@ -619,7 +604,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
                 for ( int j = 0; j<itemList.size(); j++) {
                     if ( itemList.get(j).getMs_type() == 1)
-                        typeScore[0] = itemList.get(0).getMs_score() + Integer.parseInt(cha_dis); // 총 거리 계산
+                        typeScore[0] = itemList.get(0).getMs_score() + Integer.parseInt(String.valueOf(Distence)); // 총 거리 계산
                     else if ( itemList.get(j).getMs_type() == 2) {
                         typeScore[1] = itemList.get(1).getMs_score(); // 경쟁전 참여 횟수 계산
                         if (!rr_comp.equals("null"))
@@ -709,7 +694,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                     if ( itemList.get(j).getM_type() == 4){
                         String tempStr = itemList.get(j).getM_content();
                         String changeStr = tempStr.replaceAll("[^0-9]", "");
-                        if ( Integer.parseInt(cha_avg) >= Integer.parseInt(changeStr)){
+                        if ( Integer.parseInt(String.valueOf(AvgSpeed)) >= Integer.parseInt(changeStr)){
                             clearList.add(itemList.get(j));
                             typeScore[2]++;
                             clearCount++;

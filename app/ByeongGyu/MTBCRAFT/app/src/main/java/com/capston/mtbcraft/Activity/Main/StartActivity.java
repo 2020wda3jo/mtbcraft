@@ -56,6 +56,7 @@ import java.util.Map;
 @SuppressLint("HandlerLeak")
 public class StartActivity<cur_status> extends FragmentActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
+
     private RidingStartBinding binding;
     private MapView mMapView;
     private MapPOIItem mCustomMarker;
@@ -66,17 +67,19 @@ public class StartActivity<cur_status> extends FragmentActivity
     private float distance;
     private JSONArray jarray;
     private JSONObject jObject;
+    private int cnt=0;
 
     private String test, test2, test3;
     //각종 변수
-    private double latitude, lonngitude, getgodo, getSpeed = 0, hap = 0, getgodoval = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
+    private double latitude, lonngitude, getSpeed = 0, hap = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
+    private int getgodo, getgodoval = 0;
     private int  total_time=0, rest=0;
     private ArrayList<Double> witch_lat = new ArrayList<>();
     private ArrayList<Double> witch_lon = new ArrayList<>();
     private ArrayList<Double> ele = new ArrayList<>();
     private ArrayList<Float> godoArray = new ArrayList<>();
     private TextToSpeech tts;
-    private long Rest_PauseTime;
+
     //형변환용변수
     private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "";
 
@@ -84,13 +87,12 @@ public class StartActivity<cur_status> extends FragmentActivity
     private Geocoder gCoder;
 
     //이동시간 핸들러
-    long BaseTime, RestBase;
+    long BaseTime;
     final static int Init = 0;
     final static int Run = 1;
     final static int Pause = 2;
     int cur_status = Init;
-    long PauseTime, RestPTime;
-    private long RestTime;
+    long PauseTime;
     private Thread timeThread = null;
     private Boolean isRunning = true;
 
@@ -143,8 +145,6 @@ public class StartActivity<cur_status> extends FragmentActivity
 
         //이동시간 핸들러
         BaseTime = SystemClock.elapsedRealtime();
-        RestTime = SystemClock.elapsedRealtime();
-
 
         RidingTimer.sendEmptyMessage(0);
 
@@ -193,19 +193,15 @@ public class StartActivity<cur_status> extends FragmentActivity
                 alert.show();
 
             } else {
+
                 Intent intent = new Intent(StartActivity.this, endActivity.class);
-                intent.putExtra("cha_dis", cha_dis); //이동거리(소수점X)
-                intent.putExtra("cha_max", cha_max); //최대속도(소수점X)
-                intent.putExtra("cha_avg", cha_avg); //평균속도(소수점X)
-                intent.putExtra("distence", hap); //이동거리
-                intent.putExtra("endmax", String.valueOf(binding.maxspeed.getText())); //최대속도
-                intent.putExtra("endavg", String.valueOf(binding.avgspeed.getText())); //평균속도
-                intent.putExtra("getgodo", getgodoval); //획득고도
-                intent.putExtra("resttime", String.valueOf(binding.resttime.getText())); //휴식시간
-                intent.putExtra("ingtime", String.valueOf(binding.ingtime.getText())); //경과시간
+                intent.putExtra("ingtime", total_time); //경과시간
+                intent.putExtra("distence", (int)hap); //이동거리
+                intent.putExtra("maxspeed", (int)maX); //최대속도
+                intent.putExtra("avgspeed", (int)avg); //평균속도
+                intent.putExtra("getgodo", getgodo); //획득고도
+                intent.putExtra("resttime", rest); //휴식시간
                 intent.putExtra("addr", adress_value);
-                intent.putExtra("endsec", total_time); //라이딩 시간(초)
-                intent.putExtra("restsectime", rest); //휴식시간(초)
                 intent.putExtra("witch_lat", witch_lat); //위도
                 intent.putExtra("witch_lon", witch_lon); //경도
                 intent.putExtra("godoarray", godoArray);
@@ -217,6 +213,8 @@ public class StartActivity<cur_status> extends FragmentActivity
                 intent.putExtra("wido", witch_lat); //위도(지도보여줄거
                 intent.putExtra("kyun", witch_lon); //경도(지도보여줄거)
                 intent.putExtra("rr_comp", "null");
+
+                Log.d("로그랑",total_time+ " " + hap + " " + maX + " " + avg + " " + getgodo + " " +rest + " " + adress_value + " " );
                 startActivity(intent);
                 finish();
                 mapViewContainer.removeAllViews();
@@ -228,7 +226,7 @@ public class StartActivity<cur_status> extends FragmentActivity
         //위험지역 가져오기
         try {
 
-            GetTask getTask = new GetTask();
+            DangerGet getTask = new DangerGet();
             getTask.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -304,18 +302,13 @@ public class StartActivity<cur_status> extends FragmentActivity
                         long now2 = SystemClock.elapsedRealtime();
                         RidingTimer.sendEmptyMessage(0);
                         BaseTime += (now2 - PauseTime);
-
                         cur_status = Run;
-
                         binding.resumeBt.setVisibility(View.GONE);
                         binding.pausebt.setVisibility(View.VISIBLE);
                         Log.d("cur_status","중지");
-
                         isRunning = false;
-
                         break;
                 }
-
                 break;
         }
     }
@@ -407,7 +400,7 @@ public class StartActivity<cur_status> extends FragmentActivity
 
 
 
-    public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
+    public class DangerGet extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
@@ -538,6 +531,11 @@ public class StartActivity<cur_status> extends FragmentActivity
         A.setLatitude(latitude);
         A.setLongitude(lonngitude);
 
+        cnt = cnt+1;
+
+        if(cnt==1){
+
+        }
 
 
         try {
@@ -621,7 +619,19 @@ public class StartActivity<cur_status> extends FragmentActivity
         gCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         try {
             addr = gCoder.getFromLocation(latitude, lonngitude, 1);
+
+            List<Address> addr2  = gCoder.getFromLocation(latitude, lonngitude, 2);;
+            List<Address> addr3  = gCoder.getFromLocation(latitude, lonngitude, 3);;
+            List<Address> addr4  = gCoder.getFromLocation(latitude, lonngitude, 4);;
+            List<Address> addr5  = gCoder.getFromLocation(latitude, lonngitude, 5);;
+
             Address a = addr.get(0);
+
+            Address b = addr2.get(1);
+            Address c = addr3.get(2);
+            Address d = addr4.get(3);
+            Address e = addr5.get(4);
+            Log.d("주소", "a주소값은 "+a + " b주소값은" + b+" c주소값은"+c+" d주소값은" +d);
 
             adress_value = a.getAddressLine(0);
         } catch (Exception e) {
@@ -649,13 +659,10 @@ public class StartActivity<cur_status> extends FragmentActivity
                 binding.maxspeed.setText(String.format("%.1f", maX));
                 cha_max = String.format("%.0f", maX);
             }
-
-
             //이동거리
             hap = hap + mLastlocation.distanceTo(location);
             cha_dis = String.format("%.0f", hap);
 
-            int testhap = 0;
             binding.dis.setText(String.format("%.2f", hap));
             binding.mDistance.setText(String.format("%.1f", hap) + "m");
 
@@ -672,14 +679,14 @@ public class StartActivity<cur_status> extends FragmentActivity
             cha_avg = String.format("%.0f", (avg));
 
             //획득고도
-            getgodoval = (location.getAltitude() - mLastlocation.getAltitude());
+            getgodoval = (int) (location.getAltitude() - mLastlocation.getAltitude());
             if (getgodoval > 0) {
                 getgodo += getgodoval;
-                binding.getgodo.setText(String.format("%.0f", getgodo));
+                binding.getgodo.setText(String.valueOf(getgodo));
             }
 
             //고도
-            binding.getgodo.setText(String.format("%.0f", location.getAltitude()) + "m");
+            binding.Nowgodo.setText(String.format("%.0f", location.getAltitude()) + "m");
         }
         // 현재위치를 지난 위치로 변경
         mLastlocation = location;
