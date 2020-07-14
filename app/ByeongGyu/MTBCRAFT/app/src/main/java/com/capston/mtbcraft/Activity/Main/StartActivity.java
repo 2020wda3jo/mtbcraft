@@ -200,7 +200,7 @@ public class StartActivity<cur_status> extends FragmentActivity
                 intent.putExtra("distence", hap); //이동거리
                 intent.putExtra("endmax", String.valueOf(binding.maxspeed.getText())); //최대속도
                 intent.putExtra("endavg", String.valueOf(binding.avgspeed.getText())); //평균속도
-                intent.putExtra("getgodo", String.valueOf(binding.getgodo.getText())); //획득고도
+                intent.putExtra("getgodo", getgodoval); //획득고도
                 intent.putExtra("resttime", String.valueOf(binding.resttime.getText())); //휴식시간
                 intent.putExtra("ingtime", String.valueOf(binding.ingtime.getText())); //경과시간
                 intent.putExtra("addr", adress_value);

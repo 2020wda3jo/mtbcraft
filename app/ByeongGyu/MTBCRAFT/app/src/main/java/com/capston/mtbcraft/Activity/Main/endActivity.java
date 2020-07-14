@@ -58,7 +58,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
     //스타트 액티비티에서 가져오는 String형변수
     String MaxSpeed;
     String AvgSpeed;
-    String Getgodo;
+    int Getgodo;
     String RestTime;
     String IngTime;
     double Distence;
@@ -80,6 +80,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
     int r_club;
     int dis;
+    int distan;
     //형 변환
     String cha_dis, cha_avg, cha_max, clear, comp_name, adress_value;
 
@@ -110,13 +111,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         cha_dis= intent.getStringExtra("cha_dis"); //이동거리(소수점X)
         cha_max =  intent.getStringExtra("cha_max"); //최대속도(소수점X)
         cha_avg = intent.getStringExtra("cha_avg"); //평균속도(소수점X)
-        cha_dis = intent.getStringExtra("cha_dis");
-        cha_avg = intent.getStringExtra("cha_avg");
-        cha_max = intent.getStringExtra("cha_max");
         Distence = intent.getDoubleExtra("distence",0); //이동거리
         MaxSpeed = intent.getStringExtra("endmax"); //최대속도
         AvgSpeed = intent.getStringExtra("endavg"); //평균속도
-        Getgodo = intent.getStringExtra("getgodo"); //획득고도
+        Getgodo = intent.getIntExtra("getgodo",0); //획득고도
         RestTime = intent.getStringExtra("m_rest"); //휴식시간
         IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
         endsec = intent.getIntExtra("endsec",0); //라이딩 시간(초)
@@ -126,7 +124,9 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         comp_name = intent.getStringExtra("comp_name");
         adress_value = intent.getStringExtra("addr");
 
-        Log.d("라라라라라라라라라라라", restsectime + " " + endsec + Distence);
+        distan = (int) Distence;
+        Log.d("End Activity", cha_dis + " " + cha_max + " " + cha_avg + " " + Distence + " " + MaxSpeed + " " + AvgSpeed +" " + Getgodo + " " +restsectime + " " + IngTime + " " + endsec + " "+ restsectime + " " +
+                check + " " + rr_comp + " "+ comp_name+ " " + adress_value      );
 
         ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
         ArrayList<Double> witch_lon = (ArrayList<Double>)intent.getSerializableExtra("witch_lon");
@@ -233,7 +233,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
 
         double killlo = 0;
-       dis = (int) Distence;
+
 
         Log.d("값변환", String.valueOf(dis));
         if (dis >= 1000) {
@@ -241,7 +241,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             distence.setText(String.format("%.1f", killlo) + "km");
         }else{
-            distence.setText(String.format("%.2f", dis)+"m");
+            distence.setText(String.format("%.2f", Distence)+"m");
         }
 
 
@@ -344,10 +344,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
                 Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
                 params.put("rr_rider", LoginId);
-                params.put("rr_distance", String.valueOf(dis));
+                params.put("rr_distance", String.valueOf(distan));
                 params.put("rr_topspeed", cha_max);
                 params.put("rr_avgspeed", cha_avg);
-                params.put("rr_high",Getgodo);
+                params.put("rr_high", String.valueOf(Getgodo));
                 params.put("rr_gpx", "gpx_" + nowTime + ".gpx");
                 params.put("rr_open", open);
                 params.put("rr_breaktime", String.valueOf(restsectime));
@@ -423,7 +423,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237:8080/api/upload");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://172.26.1.177:8080/api/upload");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
