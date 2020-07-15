@@ -11,6 +11,7 @@ import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.EntertainRider;
 import com.mtbcraft.dto.Member;
 import com.mtbcraft.dto.Mission;
 import com.mtbcraft.dto.MissionComplete;
@@ -86,4 +87,18 @@ public class EntertainmentService {
 		return entertainmentMapper.getCompleteMission(rider);
 	}
 	
+	//미션 상세 정보 조회
+	public Mission getMissionDetail(int m_num) {
+		return entertainmentMapper.getMissionDetail(m_num);
+	}
+	
+	//미션 상세 정보 조회시 성공 인원 조회
+	public List<EntertainRider> getER_List(int m_num){
+		return entertainmentMapper.getER_List(m_num);
+	}
+	
+	//전체 회원 조회
+	public int getTotalRiders() {
+		return entertainmentMapper.getTotalRiders();
+	}
 }

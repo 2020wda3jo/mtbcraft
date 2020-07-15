@@ -9,6 +9,7 @@ import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
+import com.mtbcraft.dto.EntertainRider;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.Member;
 import com.mtbcraft.dto.Mission;
@@ -54,5 +55,14 @@ public interface EntertainmentMapper {
 	
 	//성공한 미션 조회
 	public List<Mission> getCompleteMission(String rider);
+	
+	//미션 상세 정보 조회
+	public Mission getMissionDetail(int m_num);
+	
+	//미션 상세 정보 조회시 성공 인원 조회
+	public List<EntertainRider> getER_List(int m_num);
+	
+	//전체 회원 조회
+	public int getTotalRiders();
 	
 }
