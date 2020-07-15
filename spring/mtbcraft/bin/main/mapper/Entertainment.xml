@@ -3,19 +3,22 @@
 <mapper namespace="com.mtbcraft.mapper.EntertainmentMapper">
 
 	
-	<select id="getBadge" resultType="com.mtbcraft.dto.Badge">
-		select * from badge order by bg_num
+	<select id="getBadge" parameterType="String" resultType="com.mtbcraft.dto.Badge">
+		<![CDATA[
+			SELECT * FROM BADGE where BG_NUM IN 
+			(select MISSION.M_BADGE 
+			from MISSION_COMPLETE, MISSION 
+			where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION_COMPLETE.MC_RIDER = #{rider}
+			union
+			SELECT COMPETITION.COMP_BADGE 
+			FROM COMPETITION_STATUS, COMPETITION 
+			where CS_CLUB=2 and CS_RANK <=4 and COMPETITION.COMP_NUM=COMPETITION_STATUS.CS_COMP)
+		]]>
 	</select>
 
 	<select id="getMission" resultType="com.mtbcraft.dto.Mission">
 		select * from mission ORDER
 		BY m_num
-	</select>
-
-	<select id="getMissionComplete" parameterType="String"
-		resultType="com.mtbcraft.dto.MissionComplete">
-		select * from mission_complete where mc_complete = 1 AND
-		mc_rider = #{mc_rider}
 	</select>
 
 	<insert id="missionUpload">
@@ -41,7 +44,38 @@
 		select * from competition where (SUBSTR(comp_period,9,16))
 		&lt; (select to_char(SYSDATE,'YYYYMMDD')from dual)
 	</select>
+	
+	<!-- 참여한 최근 경쟁전 조회 -->
+	<select id="getRecentComp3" parameterType="String" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select distinct COMPETITION.COMP_NUM, COMPETITION.COMP_CONTENT, COMPETITION.COMP_PERIOD, COMPETITION.COMP_IMAGE, COMPETITION.COMP_NAME from RIDING_RECORD, COMPETITION where RIDING_RECORD.RR_COMP=COMPETITION.COMP_NUM and RR_RIDER=#{rider} and RR_COMP is not null order by comp_num desc) where rownum<=3 ]]>
+	</select>
+	
+	<!-- 참여한 최근 경쟁전4 조회 -->
+	<select id="getRecentComp4" parameterType="String" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select distinct COMPETITION.COMP_NUM, COMPETITION.COMP_CONTENT, COMPETITION.COMP_PERIOD, COMPETITION.COMP_IMAGE, COMPETITION.COMP_NAME from RIDING_RECORD, COMPETITION where RIDING_RECORD.RR_COMP=COMPETITION.COMP_NUM and RR_RIDER=#{rider} and RR_COMP is not null order by comp_num desc) where rownum<=4 ]]>
+	</select>
+	
+	<!-- 진행중인 경쟁전 2개 조회 -->
+	<select id="getIngComp2" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') > sysdate order by comp_num desc ) where rownum<=2 ]]>
+	</select>
 
-
-
+	<!-- 종료된 경쟁전 2개 조회 -->
+	<select id="getEndComp2" resultType="com.mtbcraft.dto.Competition">
+		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') < sysdate order by comp_num desc ) where rownum<=2 ]]>
+	</select>
+	
+	<!-- 번호로 경쟁전 조회 -->
+	<select id="getComp" parameterType="int" resultType="com.mtbcraft.dto.Competition">
+		select * from COMPETITION, COURSE, BADGE where COMPETITION.COMP_COURSE = c_num and COMPETITION.COMP_BADGE=BADGE.BG_NUM and comp_num=#{comp_num}
+	</select>
+	
+	<!-- 성공한 미션 조회 -->
+	<select id="getCompleteMission" parameterType="String" resultType="com.mtbcraft.dto.Mission">
+		select MISSION.M_NUM,BADGE.BG_IMAGE as m_img, MISSION.M_CONTENT, MISSION.M_NAME as m_name, to_char(MC_TIME, 'YYYY-MM-DD  HH24:MI:SS') as m_time from MISSION, MISSION_COMPLETE, BADGE where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION.M_BADGE=BADGE.BG_NUM and MISSION_COMPLETE.MC_RIDER=#{rider}
+	</select>
+	
+	
+	
+	
 </mapper>
