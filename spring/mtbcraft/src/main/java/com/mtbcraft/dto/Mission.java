@@ -6,11 +6,25 @@ public class Mission {
 	private String m_name;
 	private String m_content;
 	private int m_type;
+	private int cnt;
 	
 	private String m_img;
+	private String bg_name;
 	private String m_time;
 	
 	
+	public String getBg_name() {
+		return bg_name;
+	}
+	public void setBg_name(String bg_name) {
+		this.bg_name = bg_name;
+	}
+	public int getCnt() {
+		return cnt;
+	}
+	public void setCnt(int cnt) {
+		this.cnt = cnt;
+	}
 	public String getM_time() {
 		return m_time;
 	}

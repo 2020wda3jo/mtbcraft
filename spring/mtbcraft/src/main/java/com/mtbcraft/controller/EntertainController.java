@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
+import com.mtbcraft.dto.EntertainRider;
 import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.Mission;
 import com.mtbcraft.dto.MissionComplete;
@@ -111,13 +113,37 @@ public class EntertainController {
 	}
 
 	// 미션 페이지
-	@RequestMapping(value="/entertainment/mission", method = RequestMethod.POST)
-	public String missions(String rider, Model model) {
+	@RequestMapping(value="/entertainment/mission", method = RequestMethod.GET)
+	public String missions(Principal principal, Model model) {
 		
-		model.addAttribute("missionList", entertainmentService.getCompleteMission(rider));
+		model.addAttribute("missionList", entertainmentService.getCompleteMission(principal.getName()));
 		
 		
 		return "entertainment/mission";
+	}
+	
+	//미션 상세보기 페이지
+	@RequestMapping(value = "entertainment/mission/{m_num}", method = RequestMethod.GET)
+	public String missionDetailPage(@PathVariable int m_num, Model model) {
+		
+		model.addAttribute("mission", entertainmentService.getMissionDetail(m_num));
+		
+		List<EntertainRider> list = entertainmentService.getER_List(m_num);
+		
+		int success_cnt = list.size();
+		int total_cnt = entertainmentService.getTotalRiders();
+		
+		double success_rate = (double) success_cnt / (double) total_cnt;
+		
+		String rate =( (int) Math.floor((success_rate*100)) )+"%";
+		
+		System.out.println(success_rate);
+		System.out.println(rate);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("rate", rate);
+		
+		return "entertainment/missiondetail";
 	}
 
 	// 미션 데이터

@@ -23,7 +23,7 @@
 			
 		         <div class="col-md-4 ftco-animate" th:each="mission:${missionList}">
 		           <div class="blog-entry">
-		             <a href="#" th:href="'/entertainment/mission/'+${mission.m_num}" class="block-20" style="background-image: url('/test/images/image_1.jpg');" th:with="url = 'background-image: url(/test/images/'+${mission.m_img}+')'" th:style="${url}">
+		             <a href="#" th:href="'/entertainment/mission/'+${mission.m_num}" class="block-20" style="background-image: url('/test/images/image_1.jpg');" th:with="url = 'background-image: url(/data/img/mission/'+${mission.m_img}+')'" th:style="${url}">
 		             </a>
 		             <div class="text pt-3 pb-4">
 		               <div class="meta">
@@ -32,7 +32,7 @@
 		               <h3 class="heading"><a href="#" th:text="${mission.m_name}">미션 이름</a></h3>
 		               <p class="clearfix">
 		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">완료한 사람 : 1</a>
+		                 <a href="#" class="float-right meta-chat" th:text="'완료한 사람 : '+${mission.cnt}">완료한 사람 : 수</a>
 		               </p>
 		             </div>
 		           </div>
