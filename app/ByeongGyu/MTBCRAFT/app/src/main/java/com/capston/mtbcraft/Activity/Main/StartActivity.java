@@ -69,7 +69,7 @@ public class StartActivity<cur_status> extends FragmentActivity
     private JSONObject jObject;
     private int cnt=0;
 
-    private String test, test2, test3;
+    private String test, test2, test3, address_dong;
     //각종 변수
     private double latitude, lonngitude, getSpeed = 0, hap = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
     private int getgodo, getgodoval = 0;
@@ -204,6 +204,7 @@ public class StartActivity<cur_status> extends FragmentActivity
                 intent.putExtra("addr", adress_value);
                 intent.putExtra("witch_lat", witch_lat); //위도
                 intent.putExtra("witch_lon", witch_lon); //경도
+                intent.putExtra("address_dong",address_dong);
                 intent.putExtra("godoarray", godoArray);
                 intent.putExtra("ele", ele); //고도
                 intent.putExtra("maxLat", maxLat); //최대위도
@@ -623,15 +624,17 @@ public class StartActivity<cur_status> extends FragmentActivity
             List<Address> addr2  = gCoder.getFromLocation(latitude, lonngitude, 2);;
             List<Address> addr3  = gCoder.getFromLocation(latitude, lonngitude, 3);;
             List<Address> addr4  = gCoder.getFromLocation(latitude, lonngitude, 4);;
-            List<Address> addr5  = gCoder.getFromLocation(latitude, lonngitude, 5);;
 
             Address a = addr.get(0);
 
             Address b = addr2.get(1);
             Address c = addr3.get(2);
             Address d = addr4.get(3);
-            Address e = addr5.get(4);
-            Log.d("주소", "a주소값은 "+a + " b주소값은" + b+" c주소값은"+c+" d주소값은" +d);
+
+            String a1 = b.getAddressLine(0);
+            String a2 = c.getAddressLine(0);
+            address_dong  = a.getThoroughfare();
+
 
             adress_value = a.getAddressLine(0);
         } catch (Exception e) {

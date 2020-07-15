@@ -35,12 +35,15 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.google.gson.Gson;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -63,8 +66,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
     int RestTime=0;
     int IngTime=0;
     int Distence=0;
+    String rr_num = "";
+    String rr_rider="";
     String rr_comp="";
-
+    String address_dong="";
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
 
 
@@ -119,6 +124,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         rr_comp = intent.getStringExtra("rr_comp");
         comp_name = intent.getStringExtra("comp_name");
         adress_value = intent.getStringExtra("addr");
+        address_dong = intent.getStringExtra("address_dong");
 
         Log.d("End Activity", Distence + " " + MaxSpeed + " " + AvgSpeed + " " + Getgodo + " " + RestTime + " " + IngTime +" " +check + " " + rr_comp + " "+ comp_name+ " " + adress_value      );
 
@@ -326,7 +332,6 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
             try{
                 NetworkTask2 networkTask1 = new NetworkTask2();
                 Map<String, String> params = new HashMap<String, String>();
-
                 Log.d("로그임","아이디"+LoginId+"거리"+Distence+"최대속도"+MaxSpeed+"평균속도"+AvgSpeed+"고도"+Getgodo+"공개"+open+"휴식"+RestTime+"시간"+IngTime+"이름"+binding.ridingNameinput.getText());
                 params.put("rr_rider", LoginId);
                 params.put("rr_distance", String.valueOf(Distence));
@@ -341,6 +346,11 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 params.put("rr_name", binding.ridingNameinput.getText().toString());
                 params.put("rr_comp", rr_comp);
                 networkTask1.execute(params);
+
+                GetRecordTask getRecordTask = new GetRecordTask();
+                getRecordTask.execute();
+
+
 
                 new getMissionStatus().execute();
 
@@ -371,6 +381,85 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
             }
         });
     }
+
+    public class GetRecordTask extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://172.26.1.177:8080/app/riding/getrecord");
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                Log.d("GetRecord", s);
+                String tempData = s;
+
+                JSONArray jarray2 = new JSONArray(tempData);
+                for (int i = 0; i < jarray2.length(); i++) {
+                    JSONObject jObject2 = jarray2.getJSONObject(i);
+                    rr_num = jObject2.getString("rr_num");
+                }
+                Log.d("GetRecord2", rr_num);
+
+                TagInsert tgagInsert = new TagInsert();
+                Map<String, String> par = new HashMap<String, String>();
+                par.put("rr_num", rr_num);
+                par.put("rr_rider",LoginId);
+                par.put("address_dong","#"+address_dong);
+                tgagInsert.execute(par);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public class TagInsert extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://172.26.1.177:8080/app/riding/taginsert");
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                Log.d("JSON_RESULT", s);
+                String tempData = s;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
