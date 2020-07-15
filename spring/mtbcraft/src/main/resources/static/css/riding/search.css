@@ -28,8 +28,7 @@
 }
 
 #placesList {
-	height : auto;
-	max-height : 450px;
+	height : 450px;
 	list-style: none;
 	margin: 0;
 	padding: 0;

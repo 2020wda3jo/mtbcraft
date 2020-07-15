@@ -44,9 +44,12 @@
 	</select>
 	
 	<!-- 위험지역신청 등록 -->
-	<insert id="postDangerousArea"	parameterType="com.mtbcraft.dto.DangerousArea">
-		insert into dangerous_area(da_num, da_rider,da_latitude, da_addr, da_status, da_content, da_longitude, da_image)
-		values(SEQ_DANGEROUSAREA.nextval, #{da_rider,jdbcType=VARCHAR}, #{da_latitude,jdbcType=VARCHAR},	#{da_addr,jdbcType=VARCHAR}, 0, #{da_content,jdbcType=VARCHAR}, #{da_longitude,jdbcType=VARCHAR}, #{da_image,jdbcType=VARCHAR})
+	<insert id="postDangerousArea"
+		parameterType="com.mtbcraft.dto.DangerousArea">
+		insert into dangerous_area(da_num, da_rider,
+		da_latitude, da_addr, da_status, da_content, da_longitude, da_image)
+		values(SEQ_DANGEROUSAREA.nextval, #{da_rider}, #{da_latitude},
+		#{da_addr}, 0, #{da_content}, #{da_longitude}, #{da_image})
 	</insert>
 	
 	<!-- 사용자 스크랩 코스 조회 -->
@@ -73,7 +76,7 @@
 	
 	<!-- 라이딩 넘버로 리뷰 조회 -->
 	<select id="getCourseReviews" parameterType="Integer" resultType="com.mtbcraft.dto.Course_Review">
-		SELECT RIDER.R_IMAGE as RIDERIMG, cr_num, cr_rider, cr_time, cr_content, CR_IMAGES FROM RIDER, COURSE_RIVIEW WHERE RIDER.R_ID=COURSE_RIVIEW.CR_RIDER AND COURSE_RIVIEW.CR_RNUM=#{cr_rnum} order by cr_time desc
+		SELECT RIDER.R_IMAGE as RIDERIMG, cr_num, cr_rider, cr_time, cr_content, CR_IMAGES FROM RIDER, COURSE_RIVIEW WHERE RIDER.R_ID=COURSE_RIVIEW.CR_RIDER AND COURSE_RIVIEW.CR_RNUM=#{cr_rnum}
 	</select>
 	
 	<!-- 리뷰 등록 -->
@@ -105,37 +108,5 @@
 	<delete id="deleteLS" parameterType="com.mtbcraft.dto.Like_Status">
 		DELETE FROM LIKE_STATUS WHERE LS_RNUM=#{ls_rnum} and LS_RIDER=#{ls_rider}
 	</delete>
-	
-	<!-- 코스 해시태그 조회 -->
-	<select id="getTagList" parameterType="int" resultType="com.mtbcraft.dto.Tag_Status">
-		SELECT * FROM TAG_STATUS WHERE TS_RNUM=#{ts_rnum} ORDER BY TS_NUM
-	</select>
-	
-	<!-- 해시태그 삭제 -->
-	<delete id="removeTag" parameterType="int">
-		DELETE TAG_STATUS WHERE TS_NUM=#{ts_num}
-	</delete>
-	
-	<!-- 해시태그 등록 -->
-	<insert id="insertTag" parameterType="com.mtbcraft.dto.Tag_Status">
-		INSERT INTO TAG_STATUS(ts_num, ts_rider, ts_rnum, ts_tag) VALUES(TAG_STATUS_SEQ.nextval, #{ts_rider}, #{ts_rnum}, #{ts_tag})
-	</insert>
-	
-	<!-- 코스명 검색 - 검색어 포함 -->
-	<select id="searchCourseName" parameterType="com.mtbcraft.dto.PagingVO" resultType="com.mtbcraft.dto.RidingRecord">
-		select * from (
-			select rownum rn, c.rr_num, c.rr_name, c.rr_date, c.rr_distance, c.cnt_like as rr_like
-			from ( SELECT a.* , b.cnt_like
-			FROM RIDING_RECORD a, cnt_like b 
-			where rr_name like #{name} and a.rr_num=b.rr_num order by b.cnt_like desc ) c
-		) where rn between #{start} and #{end}
-	</select>
-	
-	<!-- 코스명 검색 - 개수 파악 -->
-	<select id="cnt_searchCourseName" parameterType="String" resultType="int">
-		SELECT count(*) FROM RIDING_RECORD a, cnt_like b where rr_name like #{rr_name} and a.rr_num=b.rr_num	
-	</select>
-	
-	
 </mapper>
 

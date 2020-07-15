@@ -46,40 +46,5 @@
 	<update id="updateRepairApply" parameterType="com.mtbcraft.dto.Repair_Apply">
 		UPDATE REPAIR_APPLY SET RA_CONFIRM=#{ra_confirm} WHERE RA_NUM=#{ra_num}
 	</update>
-	
-	<!-- 사용자 문의 내역 조회 -->
-	<select id="rider_getQNA" parameterType="String" resultType="com.mtbcraft.dto.Qna">
-		SELECT QA_NUM, QA_TITLE, QA_CONTENT, QA_ANSWER, QA_SHOP, QA_RIDER, QA_TIME FROM QNA WHERE QA_RIDER =#{rider}
-	</select>
-	
-	<!-- 사용자 신청 내역 조회 -->
-	<select id="rider_getRepairApply" parameterType="String" resultType="com.mtbcraft.dto.Repair_Apply">
-		SELECT * FROM REPAIR_APPLY WHERE RA_RIDER= #{rider}
-	</select>
-
-	<!-- 정비소 조회(임시) -->
-	<select id="getRepairShop" resultType="com.mtbcraft.dto.Repair_Shop">
-		select * from REPAIR_SHOP, rider where REPAIR_SHOP.RS_ID=rider.R_ID
-	</select>
-	
-	<!-- 정비소 상세정보 조회 -->
-	<select id="getRepairShopDetail" parameterType="String" resultType="com.mtbcraft.dto.Repair_Shop">
-		select * from REPAIR_SHOP, rider where REPAIR_SHOP.RS_ID=rider.R_ID and REPAIR_SHOP.RS_ID=#{rs_id}
-	</select>
-	
-	<!-- 정비소 리뷰 조회 -->
-	<select id="getRepairHistory" parameterType="String" resultType="com.mtbcraft.dto.Repair_History">
-		select rh_num,ra_rider,ra_shop,ra_content,rh_day,rh_review, to_char(rh_time, 'YYYY-MM-DD HH24:MI:SS') as rh_time ,rh_answer,rh_score from REPAIR_APPLY, REPAIR_HISTORY where rh_review is not null and rh_num = ra_num and ra_shop=#{ra_shop}
-	</select>
-	
-	<!-- 사용자 문의 등록 -->
-	<insert id="postRider_QNA" parameterType="com.mtbcraft.dto.Qna">
-		INSERT INTO QNA(QA_NUM, QA_TITLE, QA_CONTENT,QA_TIME,QA_RIDER,QA_SHOP)  VALUES (SEQ_QA_NUM.NEXTVAL, #{qa_title}, #{qa_content}, SYSTIMESTAMP+(9/24),#{qa_rider}, #{qa_shop})
-	</insert>
-	
-	<!-- 사용자 신청 등록 -->
-	<insert id="postRider_Apply" parameterType="com.mtbcraft.dto.Repair_Apply">
-		INSERT INTO REPAIR_APPLY(RA_NUM, RA_RIDER,RA_SHOP,RA_TYPE,RA_DATE,RA_CONTENT) VALUES (SEQ_RA_NUM.NEXTVAL, #{ra_rider}, #{ra_shop}, #{ra_type}, #{ra_date}, #{ra_content})
-	</insert>
 </mapper>
 

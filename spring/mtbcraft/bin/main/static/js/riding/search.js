@@ -1,6 +1,5 @@
 $(document).ready(function() {
 	loadCourse();
-	
 });
 
 var location_markers = []; //장소검색시 사용할 마커배열
@@ -22,65 +21,17 @@ $("#btn_search_course").click(function(){
 
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
-	
-	var option = $("#searchCondition option:selected").val();
-	var keyword = document.getElementById('keyword').value;
-	
-	if(option==0){
-		
 
-	    if (!keyword.replace(/^\s+|\s+$/g, '')) {
-	        alert('키워드를 입력해주세요!');
-	        return false;
-	    }
-	
-	    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-	    ps.keywordSearch( keyword, placesSearchCB);
-	} else if( option == 1){
-		var pagenum;
-		if( $("#pageNum").val() == 1 || $("#pageNum").val() == null ){
-			pagenum = 1;
-		}else {
-			pagenum = $("#pageNum").val();
-		}
-		$.ajax({
-			url : "/info/riding/search/"+pagenum+"/"+keyword,
-			type : "get",
-			dataType : "json",
-			cache : false,
-			success : function(data){
-				var listEl = document.getElementById('placesList'); 
-    	
-    			//검색 결과 목록에 추가된 항목들을 제거합니다
-    			removeAllChildNods(listEl);
-			    // 지도에 표시되고 있는 마커를 제거합니다
-			    removeMarker();
-			    
-				for(var i=0;i<data.length;i++){
-					var str = "<li class='item' onclick='clickCouseName(this)' id='"+data[i].rr_num+"'><span class='markerbg marker_"+i+"'></span>"
-					+"<div class='info'><h5>"+data[i].rr_name+"</h5>"
-					+"<span>거리 : "+ data[i].rr_distance +"m</span>"
-					+"<span>추천 수 : "+ data[i].rr_like+"개</span></div></li>";
-					
-					$("#placesList").append(str);
-					
-					if(i==0){
-						var paginationEl = document.getElementById('pagination');
-					
-					    // 기존에 추가된 페이지번호를 삭제합니다
-					    while (paginationEl.hasChildNodes()) {
-					        paginationEl.removeChild (paginationEl.lastChild);
-					    }
-					
-						for(var j=data[i].rr_time; j<=data[i].rr_breaktime; j++){
-							var str2 = "<a href='#' class='on' onclick='clickPageNum("+j+")'>"+j+"</a>";
-							$("#pagination").append(str2);
-						}
-					}
-				}
-			}
-		})
-	}
+    var keyword = document.getElementById('keyword').value;
+
+    if (!keyword.replace(/^\s+|\s+$/g, '')) {
+        alert('키워드를 입력해주세요!');
+        return false;
+    }
+
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+    ps.keywordSearch( keyword, placesSearchCB);
+    
 }
 
 //장소 검색 시 등록된 코스들 로드
@@ -124,6 +75,7 @@ function loadCourse(){
 						// 지도에 선을 표시합니다 
 						polyline.setMap(map);
 					}
+				
 				});
 			}
 		}
@@ -307,42 +259,4 @@ function removeAllChildNods(el) {
     while (el.hasChildNodes()) {
         el.removeChild (el.lastChild);
     }
-}
-
-function clickPageNum(pageNum){
-	$("#pageNum").val(pageNum);
-	searchPlaces();
-}
-
-function clickCouseName(e){
-	$.ajax({
-		url : "/getGpxByRR_Num",
-		type : "GET",
-		data : {rr_num : e.id},
-		dataType : "json",
-		cache : false,
-		success : function(data2) {
-			var point = data2.infos;
-			var linePath = [];
-			var rr_num = data2.rr_num;
-			loadHashTag(rr_num);
-			
-			// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-			var tempbounds = new kakao.maps.LatLngBounds();
-			
-			for(var k=0;k<point.length;k++){
-				var location = new kakao.maps.LatLng(point[k].lat, point[k].lon);
-				linePath.push(location);
-				tempbounds.extend(location);
-			}
-			
-			var mode = 'course';
-			$("#box_courseInfo").show();
-			selectedPolyline.setPath(linePath);
-			selectedPolyline.setMap(map);
-			getRidingRecordByRR_Num(rr_num, mode);
-			map.setBounds(tempbounds);
-		}
-	
-	});
 }
