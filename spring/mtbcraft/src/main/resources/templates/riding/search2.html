@@ -29,7 +29,12 @@
 <div id="mainbox">
 	<div id="box_search_course">
 			<form id="form_search" onsubmit="searchPlaces(); return false;">
-				<input id="keyword" name="search_loation" type="text" value="" placeholder="장소를 검색하세요.">
+				<select id="searchCondition">
+					<option value="0">장소 검색</option>
+					<option value="1">코스명 검색</option>
+				</select>
+				<input id="keyword" name="search_loation" type="text" value="" placeholder="장소나 지역을 검색하세요.">
+				<input type="hidden" id="pageNum" value="1">
 				
 				<button type="submit">검색</button>
 			</form>
@@ -82,6 +87,9 @@
 					    </tr>
 			    	</tbody>
 			</table>
+			<div class="hashtag">
+				<span></span>
+			</div>
 			<button id="bt_mode" onclick="change()">스크랩하기</button>
 			<button id="bt_like" onclick="like()">추천!</button>
 		</div>
@@ -113,7 +121,7 @@
 
 
 <script type="text/javascript" src="/js/riding/basic.js?after"></script>
-<script type="text/javascript" src="/js/riding/search.js?after"></script>
+<script type="text/javascript" src="/js/riding/search.js?aftera"></script>
 <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 

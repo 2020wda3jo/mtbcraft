@@ -2,10 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header2"></head>
 <link rel="stylesheet" href="/css/riding/course.css?after"/>
-<link rel="stylesheet" href="/css/riding/main.css?a"/>
+<link rel="stylesheet" href="/css/riding/main.css?abc"/>
 <!-- 위는 로컬에 적용하는 KEY, 아래는 서버에 적용하는 KEY입니다. 로컬에서는 상단KEY를 쓰고 아래 KEY를 주석처리해주세요.-->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbb047c9e9b46e285f76df6669c00d7f&libraries=services"></script>
+
 
 <section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/riding_img.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
@@ -107,6 +108,10 @@
 					    
 			    	</tbody>
 			</table>
+			<div>
+				<div class="hashtag"></div>
+				<button onClick="javascript:goDetail('테스트');">태그등록</button>
+			</div>
 			<button id="bt_mode" onclick="change()">스크랩하기</button>
 			<button id="bt_like" onclick="like()">추천!</button>
 			<button id='chrrnamebtn'  onclick='changeRR_Name()'>코스명 변경하기</button>
@@ -139,8 +144,39 @@
 </div>
 
 
+    <div style="height:1000px;"> </div>
 
-<script type="text/javascript" src="/js/riding/basic.js?after"></script>
+    <!-- 팝업뜰때 배경 -->
+    <div id="mask"></div>
+
+    <!--Popup Start -->
+    <div id="layerbox" class="layerpop"
+        style="width: 700px; height: 350px;">
+        <article class="layerpop_area">
+        <div class="title">해시태그 등록</div>
+        <div class="content">
+        	<table>
+		      <tr>
+		      	<td>등록자명</td>
+		      	<td><input type="text" id="ts_rider" th:value="${rider}"></td>
+		      </tr>
+		      
+		      <tr>
+		      	<td>해시태그</td>
+		      	<td> <input type="text" id="ts_tag" placeholder="#해시태그를 입력하세요"></td>
+		      </tr>
+		      
+	   		</table>
+       </div>
+        <button onclick="javascript:saveTag();">등록</button>
+        <button onclick="javascript:popupClose();">취소</button>
+        </article>
+    </div>
+
+
+
+
+<script type="text/javascript" src="/js/riding/basic.js?afterafte"></script>
 <script type="text/javascript" src="/js/riding/course.js?after"></script>
 
 <!-- loader -->
@@ -164,3 +200,6 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="/test/js/google-map.js"></script>
   <script src="/test/js/main.js"></script>
+
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 

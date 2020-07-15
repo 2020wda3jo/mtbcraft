@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mtbcraft.mapper.MyPageMapper">
+
+	<select id="getRR" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
+		SELECT * FROM RIDING_RECORD WHERE RR_RIDER=#{rider}
+	</select>
+	
+	<select id="getBadge" parameterType="String" resultType="com.mtbcraft.dto.Badge">
+		<![CDATA[
+			SELECT * FROM BADGE where BG_NUM IN 
+			(select MISSION.M_BADGE 
+			from MISSION_COMPLETE, MISSION 
+			where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION_COMPLETE.MC_RIDER = #{rider}
+			union
+			SELECT COMPETITION.COMP_BADGE 
+			FROM COMPETITION_STATUS, COMPETITION 
+			where CS_CLUB=2 and CS_RANK <=4 and COMPETITION.COMP_NUM=COMPETITION_STATUS.CS_COMP)
+		]]>
+	</select>
+</mapper>
+
