@@ -2,6 +2,7 @@ package com.mtbcraft.mapper;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_Competition;
+import com.mtbcraft.dto.App_CourseReview;
+import com.mtbcraft.dto.App_Mission;
+import com.mtbcraft.dto.App_MissionRanking;
 import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.App_Tag;
 import com.mtbcraft.dto.Badge;
@@ -124,4 +128,14 @@ public interface AndroidMapper {
 	public List<RidingRecord> getRecord();
 
 	public void Taginsert(App_Tag tag);
+	
+	public List<App_Mission> getAllMission(@Param("LoginId") String LoginId) throws Exception;
+	
+	public List<String> getComMission(@Param("LoginId") String LoginId) throws Exception;
+	
+	public Date getWhenCom(@Param("LoginId") String LoginId, @Param("m_num") int m_num) throws Exception;
+	
+	public List<App_MissionRanking> getMisRanking() throws Exception;
+	
+	public List<App_CourseReview> getCourseRiview(@Param("c_num") int c_num) throws Exception;
 }

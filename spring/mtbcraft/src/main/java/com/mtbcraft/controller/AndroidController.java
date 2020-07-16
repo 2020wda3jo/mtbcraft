@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_Competition;
+import com.mtbcraft.dto.App_CourseReview;
+import com.mtbcraft.dto.App_Mission;
+import com.mtbcraft.dto.App_MissionRanking;
 import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.App_Tag;
 import com.mtbcraft.dto.Badge;
@@ -177,32 +181,32 @@ public class AndroidController {
 		}
 	
 
-	@RequestMapping(value = "/android/fileUpload", method = RequestMethod.POST)
-	public String upload(HttpServletRequest request, MultipartFile file1) {
-		try {
+		@RequestMapping(value = "/android/fileUpload/{dir}", method = RequestMethod.POST)
+		public String upload(HttpServletRequest request, MultipartFile file1, @PathVariable(value = "dir") String dir) {
+			try {
 
-			// String path =
-			// "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
-			String path = "/home/ec2-user/data/gpx";
-			String fileName = "";
+				// String path =
+				// "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
+				String path = "/home/ec2-user/data/" + dir;
+				String fileName = "";
 
-			if (!file1.isEmpty()) { // 첨부파일이 존재?
-				fileName = file1.getOriginalFilename();
-				try {
-					// 디렉토리 생성
-					new File(path).mkdir();
-					// 지정된 업로드 경로로 저장됨
-					file1.transferTo(new File(path + "/" + fileName));
-					System.out.println();
-				} catch (Exception e) {
-					e.printStackTrace();
+				if (!file1.isEmpty()) { // 첨부파일이 존재?
+					fileName = file1.getOriginalFilename();
+					try {
+						// 디렉토리 생성
+						new File(path).mkdir();
+						// 지정된 업로드 경로로 저장됨
+						file1.transferTo(new File(path + "/" + fileName));
+						System.out.println();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			return "redirect:/";
 		}
-		return "redirect:/";
-	}
 
 	// 코스 조회
 	@RequestMapping(value = "/app/riding/course")
@@ -439,5 +443,31 @@ public class AndroidController {
 		return result;
 		
 
+	}
+	
+	@RequestMapping(value = "/app/getAllMission/{LoginId}")
+	public @ResponseBody List<App_Mission> getAllMission ( @PathVariable(value="LoginId") String LoginId) throws Exception {
+		return androidService.getAllMission(LoginId);
+	}
+	
+	@RequestMapping(value = "/app/getComMission/{LoginId}")
+	public @ResponseBody List<String> getComMission ( @PathVariable(value="LoginId") String LoginId) throws Exception {
+		return androidService.getComMission(LoginId);
+	}
+	
+	@RequestMapping(value = "/app/getWhenCom/{LoginId}/{m_num}")
+	public @ResponseBody Date getWhenCom ( @PathVariable(value="LoginId") String LoginId,
+												@PathVariable(value="m_num") int m_num) throws Exception {
+		return androidService.getWhenCom(LoginId, m_num);
+	}
+	
+	@RequestMapping(value = "/app/getMisRanking")
+	public @ResponseBody List<App_MissionRanking> getMisRanking () throws Exception {
+		return androidService.getMisRanking();
+	}
+	
+	@RequestMapping(value = "/app/getCourseReview/{c_num}")
+	public @ResponseBody List<App_CourseReview> getCourseRiview (@PathVariable(value="c_num") int c_num) throws Exception{
+		return androidService.getCourseRiview(c_num);
 	}
 }
