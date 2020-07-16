@@ -72,10 +72,41 @@
 	
 	<!-- 성공한 미션 조회 -->
 	<select id="getCompleteMission" parameterType="String" resultType="com.mtbcraft.dto.Mission">
-		select MISSION.M_NUM,BADGE.BG_IMAGE as m_img, MISSION.M_CONTENT, MISSION.M_NAME as m_name, to_char(MC_TIME, 'YYYY-MM-DD  HH24:MI:SS') as m_time from MISSION, MISSION_COMPLETE, BADGE where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION.M_BADGE=BADGE.BG_NUM and MISSION_COMPLETE.MC_RIDER=#{rider}
+		select * from	(
+			select MISSION.M_NUM,BADGE.BG_IMAGE as m_img, MISSION.M_CONTENT, MISSION.M_NAME as m_name, to_char(MC_TIME, 'YYYY-MM-DD  HH24:MI:SS') as m_time 
+			from MISSION, MISSION_COMPLETE, BADGE 
+			where MISSION.M_NUM = MISSION_COMPLETE.MC_MISSION and MISSION.M_BADGE=BADGE.BG_NUM and MISSION_COMPLETE.MC_RIDER=#{rider}
+			), ( select mc_mission m_num2, count(mc_mission) cnt from mission_complete group by mc_mission )
+		where m_num=m_num2
 	</select>
 	
+	<!-- 미션 상세 정보 조회 -->
+	<select id="getMissionDetail" parameterType="int" resultType="com.mtbcraft.dto.Mission">
+		select a.*, b.bg_image m_img, b.bg_name  from mission a, badge b where a.m_badge=b.bg_num and m_num=#{m_num}
+	</select>
 	
+	<!-- 미션 상세 정보 조회시 성공 인원 조회 -->
+	<select id="getER_List" parameterType="int" resultType="com.mtbcraft.dto.EntertainRider">
+		select r_nickname nickname, r_image user_img, C.bg_image bg_img
+		from rider, ( 
+			select mc_rider, b.bg_image 
+			from mission_complete A, (
+				select m_num, bg_image 
+				from mission, badge 
+				where mission.m_badge=badge.bg_num) 
+			B where a.mc_mission=B.m_num and a.mc_mission = #{m_num} ) C 
+		where r_id=c.mc_rider
+	</select>
 	
+	<!-- 전체 회원 조회 -->
+	<select id="getTotalRiders" resultType="int">
+		select count(*) from rider
+	</select>
 	
+	<!-- 미완료 미션 조회 -->
+	<select id="getNoCompleteMission" parameterType="String" resultType="com.mtbcraft.dto.Mission">
+		select sq1.*, bg_image m_img from ( select s1.*, s2.cnt from ( select * from mission where not exists ( select mc_mission from mission_complete where mc_rider=#{rider} and mc_mission=m_num) ) s1,
+		( select m_num, count(mc_num) cnt from mission,mission_complete where m_num=mc_mission(+) group by m_num ) s2 where s1.m_num=s2.m_num ) sq1, badge 
+		where badge.bg_num=m_badge
+	</select>
 </mapper>

@@ -101,4 +101,9 @@ public class EntertainmentService {
 	public int getTotalRiders() {
 		return entertainmentMapper.getTotalRiders();
 	}
+	
+	//미완료 미션 조회
+	public List<Mission> getNoCompleteMission(String rider){
+		return entertainmentMapper.getNoCompleteMission(rider);
+	}
 }

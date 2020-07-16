@@ -65,4 +65,7 @@ public interface EntertainmentMapper {
 	//전체 회원 조회
 	public int getTotalRiders();
 	
+	//미완료 미션 조회
+	public List<Mission> getNoCompleteMission(String rider);
+	
 }
