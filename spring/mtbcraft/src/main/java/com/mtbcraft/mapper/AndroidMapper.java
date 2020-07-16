@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_Competition;
 import com.mtbcraft.dto.App_RidingRecord;
+import com.mtbcraft.dto.App_Tag;
 import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.CompScore;
@@ -119,4 +120,8 @@ public interface AndroidMapper {
 	public List<RidingRecord> getLikeCount(@Param("rr_num") int rr_num);
 
 	public List<Like_Status> getLikeStatus(@Param("ls_rnum") int ls_rnum, @Param("ls_rider")String ls_rider);
+	
+	public List<RidingRecord> getRecord();
+
+	public void Taginsert(App_Tag tag);
 }

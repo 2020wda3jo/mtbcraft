@@ -212,5 +212,20 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 		values ( SQU_MISSIONCOM.nextval, #{LoginId},  #{mc_mission}, #{mc_time} )
 	</select>
 	
+	<select id="getRecord" resultType="com.mtbcraft.dto.RidingRecord">
+		<![CDATA[select * from (select * from riding_record order by rr_num desc) where rownum <=1]]>
+	</select>
+	
+	<insert id="Taginsert">
+		insert into tag_status (ts_rider, ts_rnum, ts_tag) values (
+			#{ts_rider},
+			#{ts_rnum},
+			#{ts_tag}
+		
+		
+		)
+	
+	
+	</insert>
 
 </mapper>

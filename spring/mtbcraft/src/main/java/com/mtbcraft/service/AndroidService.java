@@ -14,6 +14,7 @@ import com.mtbcraft.mapper.AndroidMapper;
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_Competition;
 import com.mtbcraft.dto.App_RidingRecord;
+import com.mtbcraft.dto.App_Tag;
 import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompClub;
 import com.mtbcraft.dto.CompScore;
@@ -182,5 +183,15 @@ public class AndroidService {
 	public List<Like_Status> getLikeStatus(int ls_rnum, String ls_rider) {
 		// TODO Auto-generated method stub
 		return androidMapper.getLikeStatus(ls_rnum, ls_rider);
+	}
+	
+	public List<RidingRecord> selectRecord() {
+
+		return androidMapper.getRecord();
+	}
+
+	public void TagInsert(App_Tag tag) {
+		androidMapper.Taginsert(tag);
+		
 	}
 }
