@@ -117,7 +117,7 @@ public class EntertainController {
 	public String missions(Principal principal, Model model) {
 		
 		model.addAttribute("missionList", entertainmentService.getCompleteMission(principal.getName()));
-		
+		model.addAttribute("nomissionList", entertainmentService.getNoCompleteMission(principal.getName()));
 		
 		return "entertainment/mission";
 	}

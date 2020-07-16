@@ -212,5 +212,56 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 		values ( SQU_MISSIONCOM.nextval, #{LoginId},  #{mc_mission}, #{mc_time} )
 	</select>
 	
+	<select id="getRecord" resultType="com.mtbcraft.dto.RidingRecord">
+		<![CDATA[select * from (select * from riding_record order by rr_num desc) where rownum <=1]]>
+	</select>
+	
+	<insert id="Taginsert">
+		insert into tag_status (ts_rider, ts_rnum, ts_tag) values (
+			#{ts_rider},
+			#{ts_rnum},
+			#{ts_tag}
+		
+		
+		)
+	
+	
+	</insert>
+	
+		<select id="getAllMission" parameterType="String" resultType="com.mtbcraft.dto.App_Mission">
+		select mission.*, badge.BG_IMAGE, badge.bg_name, ms.MS_SCORE from mission, badge, mission_status ms
+		where badge.bg_num = mission.m_badge
+    	and m_type = ms.MS_TYPE
+    	and ms.MS_RIDER = #{LoginId}
+    	union
+		select m.*, badge.bg_image, badge.bg_name, m.M_TYPE 
+		from mission m, badge
+		where m_type = '4'
+		and m.M_BADGE = badge.BG_NUM
+	</select>
+	
+	<select id="getComMission" parameterType="String" resultType="String">
+		select MC_mission from mission_complete
+    	where mc_rider = #{LoginId}
+	</select>
+	
+	<select id="getWhenCom" parameterType="hashMap" resultType="Date">
+		select distinct mc_time from mission_complete
+		where mc_rider = #{LoginId}
+		and mc_mission = #{m_num}
+	</select>
+	
+	<select id="getMisRanking" resultType="com.mtbcraft.dto.App_MissionRanking">
+		select mc_rider, r_nickname, r_image, count(*) as how from mission_complete, rider
+		where mc_rider = rider.R_ID
+		group by mc_rider, r_nickname, r_image
+		order by how desc
+	</select>
+	
+	<select id="getCourseRiview" parameterType="int" resultType="com.mtbcraft.dto.App_CourseReview">
+		select course_riview.*, r_nickname, r_image from course_riview, rider
+		where cr_rnum = #{c_num}
+		and r_id = cr_rider
+	</select>
 
 </mapper>

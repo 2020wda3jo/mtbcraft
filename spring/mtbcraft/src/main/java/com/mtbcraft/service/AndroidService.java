@@ -2,10 +2,12 @@ package com.mtbcraft.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mtbcraft.mapper.AndroidMapper;
 import com.mtbcraft.dto.AnLogin;
 import com.mtbcraft.dto.App_Competition;
+import com.mtbcraft.dto.App_CourseReview;
+import com.mtbcraft.dto.App_Mission;
+import com.mtbcraft.dto.App_MissionRanking;
 import com.mtbcraft.dto.App_RidingRecord;
 import com.mtbcraft.dto.App_Tag;
 import com.mtbcraft.dto.Badge;
@@ -193,5 +198,25 @@ public class AndroidService {
 	public void TagInsert(App_Tag tag) {
 		androidMapper.Taginsert(tag);
 		
+	}
+	
+	public List<App_Mission> getAllMission(@Param("LoginId") String LoginId) throws Exception{
+		return androidMapper.getAllMission(LoginId);
+	}
+	
+	public List<String> getComMission(@Param("LoginId") String LoginId) throws Exception{
+		return androidMapper.getComMission(LoginId);
+	}
+	
+	public Date getWhenCom(@Param("LoginId") String LoginId, @Param("m_num") int m_num) throws Exception {
+		return androidMapper.getWhenCom(LoginId, m_num);
+	}
+	
+	public List<App_MissionRanking> getMisRanking() throws Exception {
+		return androidMapper.getMisRanking();
+	}
+	
+	public List<App_CourseReview> getCourseRiview(@Param("c_num") int c_num) throws Exception{
+		return androidMapper.getCourseRiview(c_num);
 	}
 }

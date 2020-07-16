@@ -103,4 +103,10 @@
 		select count(*) from rider
 	</select>
 	
+	<!-- 미완료 미션 조회 -->
+	<select id="getNoCompleteMission" parameterType="String" resultType="com.mtbcraft.dto.Mission">
+		select sq1.*, bg_image m_img from ( select s1.*, s2.cnt from ( select * from mission where not exists ( select mc_mission from mission_complete where mc_rider=#{rider} and mc_mission=m_num) ) s1,
+		( select m_num, count(mc_num) cnt from mission,mission_complete where m_num=mc_mission(+) group by m_num ) s2 where s1.m_num=s2.m_num ) sq1, badge 
+		where badge.bg_num=m_badge
+	</select>
 </mapper>
