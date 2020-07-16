@@ -26,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,6 +55,7 @@ import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.AndroidService;
 import com.mtbcraft.service.MemberService;
+import com.mtbcraft.service.RidingService;
 
 @Controller
 public class AndroidController {
@@ -63,6 +65,9 @@ public class AndroidController {
 
 	@Autowired
 	AndroidService androidService;
+	
+	@Autowired
+	private RidingService ridingService;
 
 	// 안드로이드 세션로그인
 	@RequestMapping(value = "/android/login")
@@ -354,10 +359,10 @@ public class AndroidController {
 	}
 	
 	//코스검색
-	@RequestMapping("/riding/Android_CourseSearch")
+	@RequestMapping("/app/riding/Android_CourseSearch")
 	public String CourseSearch() throws Exception{
 		
-		return "/riding/Android_CourseSearch";
+		return "/android/course_search";
 	}
 	
 	//위험지역 마커
@@ -440,4 +445,26 @@ public class AndroidController {
 		
 
 	}
+	
+	
+	@RequestMapping("/app/riding/course_view/{rr_num}")
+	public String course_view(@PathVariable int rr_num, Model model) throws Exception{
+		model.addAttribute("rr_num", rr_num);
+		return "/android/course_view";
+	}
+	
+	//RR_NUM으로 RIDINGRECORD 조회
+	@RequestMapping(value="/getRidingRecordByRR_Num/{rr_num}", method = RequestMethod.GET)
+	@ResponseBody
+	public RidingRecord getRidingRecordByRR_Num(@PathVariable int rr_num, Model model) throws Exception {
+		RidingRecord rr = ridingService.getRidingRecordDetail(rr_num);
+		int like = ridingService.getRR_Like(rr_num);
+		rr.setRr_like(like);
+		return rr;
+	}
+	
+	
+	
+	
+	
 }

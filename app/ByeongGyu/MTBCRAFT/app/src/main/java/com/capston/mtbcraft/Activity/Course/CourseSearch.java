@@ -27,7 +27,7 @@ public class CourseSearch extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     WebView webview;
-    private static final String ENTRY_URL = "http:/172.26.1.177:8080/riding/Android_CourseSearch";
+    private static final String ENTRY_URL = "http:/172.26.1.177:8080/app/riding/Android_CourseSearch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +39,26 @@ public class CourseSearch extends AppCompatActivity {
         webview.getSettings().setLoadWithOverviewMode(true);
 
         webview.setWebViewClient(new WebViewClient());
-        webview.loadUrl(ENTRY_URL);
 
+
+        webview.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // 여기서 WebView의 데이터를 가져오는 작업을 한다.
+                if (url.equals(ENTRY_URL)) {
+                    String keyword = "tistory";
+
+                    String script = "javascript:function afterLoad() {"
+                            + "document.getElementById('keyword').value = '" + keyword + "';"
+                            + "};"
+                            + "afterLoad();";
+
+                    view.loadUrl(script);
+                }
+            }
+
+        });
+        webview.loadUrl(ENTRY_URL);
         /* 로그인관련 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String LoginId = auto.getString("LoginId", "");

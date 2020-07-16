@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -36,6 +37,7 @@ import com.capston.mtbcraft.gpxparser.Track;
 import com.capston.mtbcraft.gpxparser.TrackPoint;
 import com.capston.mtbcraft.gpxparser.TrackSegment;
 import com.capston.mtbcraft.network.HttpClient;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
@@ -163,7 +165,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
         textView6 = (TextView)findViewById(R.id.Riding_max );
         set_open = (LinearLayout)findViewById(R.id.set_open);
         set_noopen = (LinearLayout)findViewById(R.id.set_noopen);
-        tag = (TextView) findViewById(R.id.tag);
+
         set_open.setVisibility(View.GONE);
         set_noopen.setVisibility(View.GONE);
 
@@ -252,6 +254,8 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                 String[] tags = new String[jarray.length()];
                 String te = "";
                 char[] chr = new char[jarray.length()];
+
+                FlexboxLayout tag_layout= (FlexboxLayout) findViewById(R.id.tag_layout);
                 for(int i=0; i<jarray.length(); i++){
                     JSONObject jObject = jarray.getJSONObject(i);
                     taglist = jObject.getString("ts_tag");
@@ -263,7 +267,18 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
                     Log.d("태그리스트 확인", te);
 
-                    tag.setText(te);
+
+                    TextView[] textView = new TextView[jarray.length()];
+                        textView[i] = new TextView(getApplicationContext());
+                        textView[i].setText(tags[i]);
+                        textView[i].setTextSize(16);
+                        textView[i].setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.label_bg_shape));
+
+                        textView[i].setPadding(15,15,15,15);
+
+
+
+                        tag_layout.addView(textView[i]);
                 }
 
 
@@ -272,7 +287,6 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
             }
         }
     }
-
 
 
     public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {

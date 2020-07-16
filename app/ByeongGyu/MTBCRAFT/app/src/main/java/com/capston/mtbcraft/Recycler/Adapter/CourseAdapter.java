@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
     public Context mContext;
     public ArrayList<RidingRecord> itemList;
     RidingRecord item;
-
+    WebView webview;
     public CourseAdapter(Context mContext, ArrayList<RidingRecord> itemList) {
         this.mContext = mContext;
         this.itemList = itemList;
@@ -57,6 +58,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         int des = (itemList.get(position).getRr_distance());
         float km = (float) (des/1000.0);
         String total = String.valueOf(km)+"Km";
+
+
+         String ENTRY_URL = "http://172.26.1.177:8080//app/riding/course_view/";
+
+
         testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
         testViewHolder.c_name.setText(itemList.get(position).getRr_name());
         testViewHolder.c_time.setText(hour_s+":"+min+":"+ sec);
@@ -65,6 +71,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         testViewHolder.c_dis.setText(total);
         testViewHolder.c_date.setText(itemList.get(position).getRr_date());
         testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
+        testViewHolder.webview.loadUrl("http://172.26.1.177:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
+
+        testViewHolder.webview.getSettings().setJavaScriptEnabled(true);
+
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
             Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
