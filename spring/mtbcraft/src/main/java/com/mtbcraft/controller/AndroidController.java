@@ -181,23 +181,26 @@ public class AndroidController {
 		}
 	
 
-		@RequestMapping(value = "/android/fileUpload/{dir}", method = RequestMethod.POST)
-		public String upload(HttpServletRequest request, MultipartFile file1, @PathVariable(value = "dir") String dir) {
+		@RequestMapping(value = "/android/fileUpload/{dir}/{fileName}", method = RequestMethod.POST)
+		public String upload(HttpServletRequest request, MultipartFile file1, @PathVariable(value = "dir") String dir,
+				@PathVariable(value="fileName") String fileName) {
 			try {
 
 				// String path =
 				// "/home/ec2-user/apps/mtbcraft/spring/mtbcraft/src/main/resources/static/gpx";
 				String path = "/home/ec2-user/data/" + dir;
-				String fileName = "";
 
 				if (!file1.isEmpty()) { // 첨부파일이 존재?
+					System.out.println(file1.getSize());
+					System.out.println(path);
+
 					fileName = file1.getOriginalFilename();
 					try {
 						// 디렉토리 생성
-						new File(path).mkdir();
-						// 지정된 업로드 경로로 저장됨
-						file1.transferTo(new File(path + "/" + fileName));
-						System.out.println();
+						if ( !new File(path).exists())
+							new File(path).mkdir();
+							// 지정된 업로드 경로로 저장됨
+							file1.transferTo(new File(path + "/" + fileName));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
