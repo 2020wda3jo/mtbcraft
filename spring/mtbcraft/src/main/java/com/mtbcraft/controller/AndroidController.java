@@ -193,8 +193,6 @@ public class AndroidController {
 				if (!file1.isEmpty()) { // 첨부파일이 존재?
 					System.out.println(file1.getSize());
 					System.out.println(path);
-
-					fileName = file1.getOriginalFilename();
 					try {
 						// 디렉토리 생성
 						if ( !new File(path).exists())
