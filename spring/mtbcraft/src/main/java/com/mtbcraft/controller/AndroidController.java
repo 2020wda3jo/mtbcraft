@@ -68,6 +68,9 @@ public class AndroidController {
 	@Autowired
 	AndroidService androidService;
 
+	@Autowired
+	private RidingService ridingService;
+	
 	// 안드로이드 세션로그인
 	@RequestMapping(value = "/android/login")
 	public @ResponseBody Map<String, String> login(AnLogin login) throws Exception {
@@ -470,5 +473,21 @@ public class AndroidController {
 	@RequestMapping(value = "/app/getCourseReview/{c_num}")
 	public @ResponseBody List<App_CourseReview> getCourseRiview (@PathVariable(value="c_num") int c_num) throws Exception{
 		return androidService.getCourseRiview(c_num);
+	}
+
+	@RequestMapping("/app/riding/course_view/{rr_num}")
+	public String course_view(@PathVariable int rr_num, Model model) throws Exception{
+		model.addAttribute("rr_num", rr_num);
+		return "/android/course_view";
+	}
+	
+	//RR_NUM으로 RIDINGRECORD 조회
+	@RequestMapping(value="/getRidingRecordByRR_Num/{rr_num}", method = RequestMethod.GET)
+	@ResponseBody
+	public RidingRecord getRidingRecordByRR_Num(@PathVariable int rr_num, Model model) throws Exception {
+		RidingRecord rr = ridingService.getRidingRecordDetail(rr_num);
+		int like = ridingService.getRR_Like(rr_num);
+		rr.setRr_like(like);
+		return rr;
 	}
 }
