@@ -108,4 +108,16 @@ public interface CommunityMapper {
 	
 	//거래 물품 등록
 	public void postGoods(Goods goods);
+	
+	// 사용자 거래물품 조회
+	public List<Goods> getRiderGoodsList(@Param("rider") String rider, @Param("status") int status);
+	
+	//사용자 물품 삭제
+	public void removeGoods(int g_num);
+	
+	//사용자 물품 수정 이미지X
+	public void updateGoods(Goods goods);
+	
+	//사용자 물품 수정 이미지O
+	public void updateGoods2(Goods goods);
 }

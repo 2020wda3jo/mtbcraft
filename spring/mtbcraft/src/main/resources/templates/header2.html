@@ -74,7 +74,8 @@
 	<script>
 		$(".mm").click(function(){
 			var form = document.createElement("form");
-			form.setAttribute("method", "Post");  
+			form.setAttribute("method", "Post"); 
+			console.log(this.id);
 			form.setAttribute("action", this.id); 
 		  	var hiddenField = document.createElement("input");
 			hiddenField.setAttribute("type", "hidden");

@@ -169,5 +169,29 @@
 	<insert id="postGoods" parameterType="com.mtbcraft.dto.Goods">
 		insert into goods values(SEQ_GOODS_NUM.nextval,#{g_title},#{g_location},#{g_content},#{g_image},#{g_price},0,0,#{g_rider},systimestamp)
 	</insert>
+	
+	<!-- 사용자 거래물품 조회 -->
+	<select id="getRiderGoodsList" resultType="com.mtbcraft.dto.Goods">
+		select goods.*, g_like 
+		from goods, ( 
+		  select g_num, count(gl_rider) g_like 
+		  from ( select g_num, gl_rider from goods a, goods_like b where g_num=gl_goods(+) and a.g_rider=#{rider} and a.g_status=#{status} ) group by g_num ) sq1
+				where goods.g_num=sq1.g_num order by goods.g_num desc
+	</select>
+	
+	<!-- 사용자 물품 삭제 -->
+	<delete id="removeGoods" parameterType="int">
+		delete from goods where g_num=#{g_num}
+	</delete>
+	
+	<!-- 사용자 물품 수정 이미지X -->
+	<update id="updateGoods" parameterType="com.mtbcraft.dto.Goods">
+		update goods set g_title=#{g_title}, g_price=#{g_price}, g_content=#{g_content}, g_date=systimestamp where g_num = #{g_num}
+	</update>
+	
+	<!-- 사용자 물품 수정 이미지O -->
+	<update id="updateGoods2" parameterType="com.mtbcraft.dto.Goods">
+		update goods set g_title=#{g_title}, g_price=#{g_price}, g_content=#{g_content}, g_date=systimestamp, g_image=#{g_image} where g_num = #{g_num}
+	</update>
 </mapper>
 

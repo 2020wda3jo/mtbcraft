@@ -552,6 +552,68 @@ public class CommunityController {
 		return "redirect:/community/market";
 	}
 	
+	@RequestMapping(value = "/community/myMarket", method = RequestMethod.GET)
+	public String myMarket(Principal principal, Model model) {
+		
+		model.addAttribute("ingGoodsList", communityService.getRiderGoodsList(principal.getName(), 0));
+		
+		model.addAttribute("edGoodsList", communityService.getRiderGoodsList(principal.getName(), 2));
+		
+		return "community/myMarket";
+	}
+	
+	// 거래물품 상세보기
+	@RequestMapping(value = "/community/myMarket/{g_num}", method = RequestMethod.GET)
+	public String goMyGoodsDetailPage(@PathVariable int g_num, Model model) {
+		
+		model.addAttribute("goods", communityService.getGoodsDetail(g_num) );
+		
+		return "community/modifyGoods";
+	}
+	
+	//거래 물품 수정하기
+	@RequestMapping(value = "/community/myMarket/{g_num}", method = RequestMethod.POST)
+	public String updatepost(@PathVariable int g_num, Goods goods, String price,MultipartFile img_file, Principal principal) throws IOException {
+		
+		goods.setG_num(g_num);
+		
+		System.out.println(price);
+		
+		if(price.contains("원")) {
+			 System.out.println( price.substring(0,  price.lastIndexOf("원") ) );
+			 goods.setG_price( Integer.parseInt( price.substring(0,  price.lastIndexOf("원") ) ) );
+		}
+		
+		if(!img_file.isEmpty()) {
+			String filename = img_file.getOriginalFilename();
+	        String directory = "/home/ec2-user/data/goods/";
+	        //String directory = "C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\goods\\";
+	        String filepath = Paths.get(directory, filename).toString();             
+	        
+	        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+	        stream.write(img_file.getBytes());
+	        stream.close();
+	        
+	        goods.setG_image(filename);
+	        
+	        communityService.updateGoods2(goods);
+		}
+		
+		 communityService.updateGoods(goods);
+		
+		return "redirect:/community/myMarket/"+g_num;
+	}
+	
+	
+	// 거래물품 삭제
+	@RequestMapping(value = "/community/removeMyGoods/{g_num}", method = RequestMethod.GET)
+	public String removeMyGoods(@PathVariable int g_num) {
+		
+		communityService.removeGoods(g_num);
+		
+		return "redirect:/community/myMarket";
+	}
+	
 	//이미지 로딩
 	@GetMapping(value = "/data/img/{place}/{b_file}")
 	public @ResponseBody byte[] getImage(@PathVariable String place ,@PathVariable String b_file) throws IOException {

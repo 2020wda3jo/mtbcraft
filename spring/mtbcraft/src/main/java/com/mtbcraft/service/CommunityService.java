@@ -177,4 +177,24 @@ public class CommunityService {
 	public void postGoods(Goods goods) {
 		communityMapper.postGoods(goods);
 	}
+	
+	// 사용자 거래물품 조회
+	public List<Goods> getRiderGoodsList(String rider, int status){
+		return communityMapper.getRiderGoodsList(rider, status);
+	}
+	
+	//사용자 물품 삭제
+	public void removeGoods(int g_num) {
+		communityMapper.removeGoods(g_num);
+	}
+	
+	//사용자 물품 수정 이미지X
+	public void updateGoods(Goods goods) {
+		communityMapper.updateGoods(goods);
+	}
+	
+	//사용자 물품 수정 이미지O
+	public void updateGoods2(Goods goods) {
+		communityMapper.updateGoods2(goods);
+	}
 }
