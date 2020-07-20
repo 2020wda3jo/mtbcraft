@@ -134,7 +134,7 @@ public class HttpClient {
 
         private Map<String, Object> parameters;
         private String method;
-        private String url;
+        private String url = "http://192.168.42.69:8080";
 
         public String getMethod() {
             return method;
@@ -144,12 +144,12 @@ public class HttpClient {
             return url;
         }
 
-        public Builder(String method, String url) {
+        public Builder(String method, String url2) {
             if (method == null) {
                 method = "GET";
             }
             this.method = method;
-            this.url = url;
+            this.url = url+url2;
             this.parameters = new HashMap<String, Object>();
         }
 
