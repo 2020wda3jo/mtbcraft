@@ -1,14 +1,20 @@
 package com.mtbcraft.mapper;
 
+import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.Board;
 import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.Club_Calender;
 import com.mtbcraft.dto.Club_Join;
+import com.mtbcraft.dto.Goods;
+import com.mtbcraft.dto.Goods_like;
 import com.mtbcraft.dto.Reply;
+import com.mtbcraft.dto.Rider;
+import com.mtbcraft.dto.Trade_Info;
 
 @Repository("com.mtbcraft.mapper.CommunityMapper")
 public interface CommunityMapper {
@@ -75,4 +81,31 @@ public interface CommunityMapper {
 	
 	//SNS댓글 수정
 	public void putReply(Reply reply);
+	
+	//거래물품 조회
+	public List<Goods> getGoodsList();
+	
+	//거래물품 조회수 증가
+	public void updateGoodsHit(int g_num);
+	
+	//거래물품 상세조회
+	public Goods getGoodsDetail(int g_num);
+	
+	//사용자 정보 조회
+	public Rider getUserInfo(String r_id);
+	
+	//사용자 거래 내역 조회	
+	public Integer getUserTradeInfo(Goods goods);
+	
+	//거래물품 관심등록
+	public void updateGoodsLike(Goods_like gl);
+	
+	//거래 완료 업데이트 - 거래기록 저장
+	public void updateTradeEnd(Goods_like gl);
+	
+	//거래 완료 업데이트2 - 물품 상태 판매완료 갱신
+	public void updateTradeEnd2(Goods_like gl);
+	
+	//거래 물품 등록
+	public void postGoods(Goods goods);
 }

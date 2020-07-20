@@ -120,5 +120,54 @@
 	<update id="putReply" parameterType="com.mtbcraft.dto.Reply">
 		update reply set re_content=#{re_content}, re_day=sysdate where re_num=#{re_num}
 	</update>
+	
+	<!-- 거래물품 조회 -->
+	<select id="getGoodsList" resultType="com.mtbcraft.dto.Goods">
+		select goods.*, g_like from goods, ( select g_num, count(gl_rider) g_like from ( select g_num, gl_rider from goods a, goods_like b where g_num=gl_goods(+) ) group by g_num ) sq1
+		where goods.g_num=sq1.g_num order by goods.g_num desc
+	</select>
+	
+	<!-- 거래물품 조회수 증가 -->
+	<update id="updateGoodsHit" parameterType="int">
+		update goods set g_hit=g_hit+1 where g_num=#{g_num}
+	</update>
+	
+	<!-- 거래물품 상세조회 -->
+	<select id="getGoodsDetail" parameterType="int" resultType="com.mtbcraft.dto.Goods">
+		select goods.g_num, goods.g_title, to_char(goods.g_date, 'YYYY-MM-DD HH24:MI:SS' ) g_date, goods.g_content, goods.g_price, goods.g_hit, g_like, goods.g_image, goods.g_status, goods.g_rider 
+		from goods, ( select g_num, count(gl_rider) g_like 
+		from ( select g_num, gl_rider from goods a, goods_like b where g_num=gl_goods(+) ) group by g_num ) sq1
+		where goods.g_num=sq1.g_num and goods.g_num=#{g_num}
+	</select>
+	
+	<!-- 사용자 정보 조회 -->
+	<select id="getUserInfo" parameterType="String" resultType="com.mtbcraft.dto.Rider">
+		select * from rider where r_id=#{r_id}
+	</select>
+	
+	<!-- 사용자 거래 내역 조회 -->	
+	<select id="getUserTradeInfo" parameterType="com.mtbcraft.dto.Goods" resultType="Integer">
+		select count(g_status) from goods where g_rider =#{g_rider} group by g_status having g_status=#{g_status}
+	</select>
+	
+	<!-- 거래물품 관심등록 -->
+	<insert id="updateGoodsLike" parameterType="com.mtbcraft.dto.Goods_like">
+		insert into goods_like values(#{gl_rider},#{gl_goods})
+	</insert>
+	
+	<!-- 거래 완료 업데이트 -->
+	<update id="updateTradeEnd" parameterType="com.mtbcraft.dto.Goods_like">
+		insert into trade_board values(#{gl_rider},#{gl_goods},SEQ_TRADE_NUM.nextval,systimestamp)
+	</update>
+	
+	<!-- 거래 완료 업데이트2-->
+	<update id="updateTradeEnd2" parameterType="com.mtbcraft.dto.Goods_like">
+		update goods set g_status=2 where g_num = #{gl_goods}
+	</update>
+	
+	<!-- 거래 물품 등록 -->
+	<insert id="postGoods" parameterType="com.mtbcraft.dto.Goods">
+		insert into goods values(SEQ_GOODS_NUM.nextval,#{g_title},#{g_location},#{g_content},#{g_image},#{g_price},0,0,#{g_rider},systimestamp)
+	</insert>
 </mapper>
 

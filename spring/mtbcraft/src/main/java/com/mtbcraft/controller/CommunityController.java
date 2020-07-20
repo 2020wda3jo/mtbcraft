@@ -13,8 +13,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +36,11 @@ import com.mtbcraft.dto.CC_Event;
 import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.Club_Calender;
 import com.mtbcraft.dto.Club_Join;
+import com.mtbcraft.dto.Goods;
+import com.mtbcraft.dto.Goods_like;
 import com.mtbcraft.dto.Reply;
+import com.mtbcraft.dto.Rider;
+import com.mtbcraft.dto.Trade_Info;
 import com.mtbcraft.service.BoardService;
 import com.mtbcraft.service.CommunityService;
 
@@ -57,7 +64,6 @@ public class CommunityController {
 		int club = 0;
 		try {
 			club = communityService.getJoinCLub(rider);
-			System.out.println(club);
 		} catch (Exception e) {
 
 		}
@@ -166,7 +172,6 @@ public class CommunityController {
 		int result = 0;
 		try {
 			result = communityService.checkClubName(cb_name);
-			System.out.println(cb_name + "/" + result);
 			if (result == 1) {
 				return "fail";
 			} else {
@@ -300,7 +305,6 @@ public class CommunityController {
 	// SNS
 	@RequestMapping(value = "/community/mutub", method = RequestMethod.GET)
 	public String snsget(Principal principal, Model model) {
-		System.out.println(principal.getName());
 		
 		List<Board> list = communityService.getSNSList(principal.getName());
 		
@@ -381,10 +385,6 @@ public class CommunityController {
 		reply.setRe_rider(principal.getName());
 		reply.setRe_board(re_board);
 		
-		System.out.println(reply.getRe_content());
-		System.out.println(reply.getRe_rider());
-		System.out.println(reply.getRe_board());
-		
 		communityService.postReply(reply);
 		
 		return "redirect:/community/mutub";
@@ -404,9 +404,6 @@ public class CommunityController {
 	@ResponseBody
 	public String putReply(@PathVariable int re_num, String re_content){
 		
-		System.out.println(re_num);
-		System.out.println(re_content);
-		
 		Reply reply = new Reply();
 		reply.setRe_num(re_num);
 		reply.setRe_content(re_content);
@@ -416,24 +413,151 @@ public class CommunityController {
 		return "success";
 	}
 
-	// 중고거래 GET
-	@RequestMapping(value = "/community/trade", method = RequestMethod.GET)
-	public String tradeget() {
-		return "/community/trade";
+	// 중고거래 게시판 이동
+	@RequestMapping(value = "/community/market", method = RequestMethod.GET)
+	public String tradeget(Model model) {
+		
+		List<Goods> goodsList = communityService.getGoodsList();
+		model.addAttribute("goodsList", goodsList);
+		
+		return "community/market";
+	}
+	
+	// 거래물품 상세보기
+	@RequestMapping(value = "/community/market/{g_num}", method = RequestMethod.GET)
+	public String goGoodsDetailPage(@PathVariable int g_num, Model model) {
+		
+		communityService.updateGoodsHit(g_num);
+		
+		
+		
+		Goods goods = communityService.getGoodsDetail(g_num);
+		Trade_Info ti = new Trade_Info();
+		
+		Goods goods2 = new Goods();
+		goods2.setG_rider(goods.getG_rider());
+		
+		Integer cnt;
+		
+		model.addAttribute("rider", communityService.getUserInfo( goods.getG_rider() ));
+		
+		goods2.setG_status(0);
+
+		cnt = communityService.getUserTradeInfo(goods2);
+		if(cnt==null) {
+			cnt=0;
+		}
+		ti.setYet(cnt);
+		
+		goods2.setG_status(1);
+		cnt = communityService.getUserTradeInfo(goods2);
+		if(cnt==null) {
+			cnt=0;
+		}
+		ti.setIng(cnt);
+		
+		goods2.setG_status(2);
+		cnt = communityService.getUserTradeInfo(goods2);
+		if(cnt==null) {
+			cnt=0;
+		}
+		ti.setEd(cnt);
+		
+		model.addAttribute("trade_info",  ti);
+		
+		model.addAttribute("goods",  goods);
+		
+		return "community/goodsDetail";
+	}
+	
+	//거래물품 관심 등록
+	@RequestMapping(value="/community/goodslike/{g_num}", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateGoodsLike(@PathVariable int g_num, Principal principal) {
+		Goods_like gl = new Goods_like();
+		gl.setGl_goods(g_num);
+		gl.setGl_rider(principal.getName());
+		try {
+			communityService.updateGoodsLike(gl);
+		} catch (Exception e) {
+			return "fail";
+		}
+		Goods goods = communityService.getGoodsDetail(g_num);
+		
+		return ""+goods.getG_like();
+	}
+	
+	//물품 구매시
+	@RequestMapping("/community/buyGoods/{g_num}")
+	public String buyGoods(@PathVariable int g_num, Model model, Principal principal) {
+		
+		Goods goods = communityService.getGoodsDetail(g_num);
+		Rider rider = communityService.getUserInfo(principal.getName());
+		
+		model.addAttribute("goods", goods);
+		model.addAttribute("buyer", rider);
+		
+		return "community/kakaoPay";
+	}
+	
+	//물품 구매 후 - 성공
+	@RequestMapping("/community/buyGoods/success/{g_num}/{g_rider}")
+	public String completeBuyGoods(@PathVariable int g_num, @PathVariable String g_rider) {
+		
+		Goods_like gl = new Goods_like();
+		
+		gl.setGl_goods(g_num);
+		gl.setGl_rider(g_rider);
+		
+		communityService.updateTradeEnd(gl);
+		communityService.updateTradeEnd2(gl);
+		
+		return "redirect:/community/market/"+g_num;
+	}
+	
+	//물품 구매 후 - 성공
+	@RequestMapping("/community/buyGoods/fail/{g_num}/{g_rider}")
+	public String completefailBuyGoods(@PathVariable int g_num, @PathVariable String g_rider) {
+		
+		return "redirect:/community/market/"+g_num;
 	}
 
-	// 중고거래 글쓰기 POST
-	@RequestMapping(value = "/community/trade/posting", method = RequestMethod.POST)
+	//거래 물품 등록하기 페이지로 이동
+	@RequestMapping(value = "/community/regist/goods", method = RequestMethod.GET)
 	public String tradeposting() {
-		return "/community/trade/posting";
+		return "community/reg_goods";
+	}
+	
+	//거래 물품 등록하기
+	@RequestMapping(value = "/community/regist/goods", method = RequestMethod.POST)
+	public String tradepost(Goods goods, MultipartFile img_file, Principal principal) throws IOException {
+		
+		if(!img_file.isEmpty()) {
+			String filename = img_file.getOriginalFilename();
+	        String directory = "/home/ec2-user/data/goods/";
+	        //String directory = "C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\goods\\";
+	        String filepath = Paths.get(directory, filename).toString();             
+	        
+	        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+	        stream.write(img_file.getBytes());
+	        stream.close();
+	        
+	        goods.setG_image(filename);
+		}
+		
+		goods.setG_rider(principal.getName());
+		
+		communityService.postGoods(goods);
+		
+		return "redirect:/community/market";
 	}
 	
 	//이미지 로딩
 	@GetMapping(value = "/data/img/{place}/{b_file}")
 	public @ResponseBody byte[] getImage(@PathVariable String place ,@PathVariable String b_file) throws IOException {
 		InputStream in = null;
-	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+place+"/"+b_file));
-	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\"+place+"\\"+b_file)); 
+	    //in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+place+"/"+b_file));
+	    in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\"+place+"\\"+b_file)); 
 	    return IOUtils.toByteArray(in);
 	}
 }

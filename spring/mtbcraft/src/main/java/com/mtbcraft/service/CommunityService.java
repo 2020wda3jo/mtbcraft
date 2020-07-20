@@ -1,9 +1,11 @@
 package com.mtbcraft.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,11 @@ import com.mtbcraft.dto.Board;
 import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.Club_Calender;
 import com.mtbcraft.dto.Club_Join;
+import com.mtbcraft.dto.Goods;
+import com.mtbcraft.dto.Goods_like;
 import com.mtbcraft.dto.Reply;
+import com.mtbcraft.dto.Rider;
+import com.mtbcraft.dto.Trade_Info;
 import com.mtbcraft.mapper.CommunityMapper;
 import com.mtbcraft.mapper.MemberMapper;
 
@@ -125,5 +131,50 @@ public class CommunityService {
 	//SNS댓글 수정
 	public void putReply(Reply reply) {
 		communityMapper.putReply(reply);
+	}
+	
+	//거래물품 조회
+	public List<Goods> getGoodsList(){
+		return communityMapper.getGoodsList();
+	}
+	
+	//거래물품 조회수 증가
+	public void updateGoodsHit(int g_num) {
+		communityMapper.updateGoodsHit(g_num);
+	}
+	
+	//거래물품 상세조회
+	public Goods getGoodsDetail(int g_num) {
+		return communityMapper.getGoodsDetail(g_num);
+	}
+	
+	//사용자 정보 조회
+	public Rider getUserInfo(String r_id) {
+		return communityMapper.getUserInfo(r_id);
+	}
+		
+	//사용자 거래 내역 조회	
+	public Integer getUserTradeInfo(Goods goods) {
+		return communityMapper.getUserTradeInfo(goods);
+	}
+	
+	//거래물품 관심등록
+	public void updateGoodsLike(Goods_like gl) {
+		communityMapper.updateGoodsLike(gl);
+	}
+	
+	//거래 완료 업데이트 - 거래기록 저장
+	public void updateTradeEnd(Goods_like gl) {
+		communityMapper.updateTradeEnd(gl);
+	}
+	
+	//거래 완료 업데이트2 - 물품 상태 판매완료 갱신
+	public void updateTradeEnd2(Goods_like gl) {
+		communityMapper.updateTradeEnd2(gl);
+	}
+	
+	//거래 물품 등록
+	public void postGoods(Goods goods) {
+		communityMapper.postGoods(goods);
 	}
 }
