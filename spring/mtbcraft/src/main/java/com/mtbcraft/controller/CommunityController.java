@@ -556,8 +556,8 @@ public class CommunityController {
 	@GetMapping(value = "/data/img/{place}/{b_file}")
 	public @ResponseBody byte[] getImage(@PathVariable String place ,@PathVariable String b_file) throws IOException {
 		InputStream in = null;
-	    //in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+place+"/"+b_file));
-	    in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\"+place+"\\"+b_file)); 
+	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+place+"/"+b_file));
+	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\"+place+"\\"+b_file)); 
 	    return IOUtils.toByteArray(in);
 	}
 }
