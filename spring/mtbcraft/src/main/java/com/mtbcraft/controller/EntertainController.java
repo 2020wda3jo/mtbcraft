@@ -199,15 +199,26 @@ public class EntertainController {
 
 	}
 
+	 // 배지 등록 가능 체크 페이지
+    @RequestMapping(value = "/entertainment/badgeCheck", method = RequestMethod.GET)
+    public String getBadgeCheck(Model model, Principal principal) throws Exception {
+       int list = entertainmentService.getBadgeCheck(principal.getName());
+       model.addAttribute("list", list);
+       return "entertainment/badgeCheck";
+    }
+    
+    
 	// 배지 등록 페이지
 	@RequestMapping("/entertainment/badgeUpload")
 	public String badgeUpload() {
 		return "entertainment/badgeUpload";
 	}
+	
+
 
 	// 배지 이미지, 값 등록
 	@RequestMapping(value = "/entertainment/badgeUpload/test", method = RequestMethod.POST)
-	public String badgeUpload(@RequestPart MultipartFile files, Badge badge) throws Exception {
+	public String badgeUpload(@RequestPart MultipartFile files, Badge badge, Principal principal) throws Exception {
 		String filename = files.getOriginalFilename();
 		String directory = "C:\\ServerFiles";
 		String filepath = Paths.get(directory, filename).toString();
@@ -217,6 +228,7 @@ public class EntertainController {
 		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
 		stream.write(files.getBytes());
 		stream.close();
+		entertainmentService.pricePoint(principal.getName());
 
 		return "entertainment/success";
 

@@ -14,7 +14,14 @@ public class Member{
 	private String r_badge = "0";
 	private String r_image; //실제파일
 	private String r_type;
+	private String r_point;
 	
+	public String getR_point() {
+		return r_point;
+	}
+	public void setR_point(String r_point) {
+		this.r_point = r_point;
+	}
 	private String roleName;//권한 이름
 	public String getR_id() {
 		return r_id;

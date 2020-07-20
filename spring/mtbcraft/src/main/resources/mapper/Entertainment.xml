@@ -30,6 +30,12 @@
 		insert into badge(bg_num, bg_name, bg_image)
 		values(SEQ_BADGE.nextval, #{bg_name}, #{bg_image})
 	</insert>
+	
+	<update id="pricePoint">
+		update rider
+		set r_point = r_point -200
+		where r_id=#{rr_id}
+	</update>
 
 	<select id="getCompIng" resultType="com.mtbcraft.dto.CompIng">
 		select * from competition
@@ -44,6 +50,12 @@
 		select * from competition where (SUBSTR(comp_period,9,16))
 		&lt; (select to_char(SYSDATE,'YYYYMMDD')from dual)
 	</select>
+	
+	<select id="getBadgeCheck" resultType="int">
+      select r_point from rider
+      where r_id = #{rr_id}
+   </select>
+	
 	
 	<!-- 참여한 최근 경쟁전 조회 -->
 	<select id="getRecentComp3" parameterType="String" resultType="com.mtbcraft.dto.Competition">
