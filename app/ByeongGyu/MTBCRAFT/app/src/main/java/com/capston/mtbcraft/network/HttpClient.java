@@ -134,7 +134,7 @@ public class HttpClient {
 
         private Map<String, Object> parameters;
         private String method;
-        private String url = "http://192.168.42.69:8080";
+        private String url = "http://172.26.1.152:8080";
 
         public String getMethod() {
             return method;
