@@ -68,6 +68,7 @@ public class EntertainController {
 		List<Competition> compendlist = entertainmentService.getEndComp2();
 		
 		model.addAttribute("complist", complist);
+		
 		model.addAttribute("comping1", compinglist.get(0));
 		model.addAttribute("comping2", compinglist.get(1));
 		model.addAttribute("compend1", compendlist.get(0));

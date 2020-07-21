@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,21 +48,21 @@ public class RidingController {
 	private RidingService ridingService;
 
 	// 코스 메뉴 진입
-	@RequestMapping(value = "/riding/course", method = RequestMethod.POST)
-	public String course(String rider, Model model) throws Exception {
-		List<RidingRecord> rrlist = ridingService.getRidingRecord(rider);
+	@RequestMapping(value = "/riding/course", method = RequestMethod.GET)
+	public String course(Principal principal, Model model) throws Exception {
+		List<RidingRecord> rrlist = ridingService.getRidingRecord(principal.getName());
 		for(int i=0;i<rrlist.size();i++) {
 			rrlist.get(i).setRr_gpx(rrlist.get(i).getRr_dateYYYYMMDD());
 			int like = ridingService.getRR_Like(rrlist.get(i).getRr_num());
 			rrlist.get(i).setRr_like(like);
 		}//course.html에서 사용되지않는 gpx변수를 원하는 문자열을 표현하기 위해 사용
-		List<RidingRecord> scraplist = ridingService.getScrapCourse(rider);
+		List<RidingRecord> scraplist = ridingService.getScrapCourse(principal.getName());
 		for(int i=0;i<scraplist.size();i++) {
 			scraplist.get(i).setRr_gpx(scraplist.get(i).getRr_dateYYYYMMDD());
 			int like = ridingService.getRR_Like(scraplist.get(i).getRr_num());
 			scraplist.get(i).setRr_like(like);
 		}
-		model.addAttribute("rider", rider);
+		model.addAttribute("rider", principal.getName());
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);
 		return "riding/course2";
@@ -420,8 +421,8 @@ public class RidingController {
 	}
 	
 	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
-		//String path = "/home/ec2-user/data/gpx/"+gpxFile;
-		String path = "D:\\gp\\"+gpxFile;
+		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		//String path = "C:\\Users\\woolu\\Desktop\\workspace\\data\\gpx\\"+gpxFile;
 		File file = new File(path);
 		String txt = "";
 		FileInputStream fis = new FileInputStream(file); 

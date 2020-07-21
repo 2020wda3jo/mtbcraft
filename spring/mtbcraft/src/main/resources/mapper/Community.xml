@@ -63,7 +63,7 @@
 	<!-- SNS게시글 조회 -->
 	<select id="getSNSList" parameterType="String" resultType="com.mtbcraft.dto.Board">
 		<![CDATA[
-			select b_num, r_image b_img, b_rider, b_content, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') b_title, b_file, b_type 
+			select b_num, r_image b_img, rider.r_nickname b_rider, b_content, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') b_title, b_file, b_type 
 			from board, rider
 			where board.b_rider=rider.r_id and b_club=999 and b_type=0 or (
 			board.b_rider=rider.r_id and
@@ -100,7 +100,7 @@
 	
 	<!-- SNS댓글 조회 -->
 	<select id="getReply" parameterType="int" resultType="com.mtbcraft.dto.Reply">
-		select b.r_image , a.re_num, a.re_board, a.re_rider, a.re_content, to_char(a.re_day, 'YYYY-MM-DD HH24:MI:SS') re_day, a.re_confirm
+		select b.r_image , a.re_num, a.re_board, b.r_nickname re_rider, a.re_content, to_char(a.re_day, 'YYYY-MM-DD HH24:MI:SS') re_day, a.re_confirm
 		from reply a, rider b 
 		where a.re_rider=b.r_id and re_board = #{re_board} order by re_day desc
 	</select>

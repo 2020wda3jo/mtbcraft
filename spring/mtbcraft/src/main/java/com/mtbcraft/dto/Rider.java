@@ -12,6 +12,28 @@ public class Rider {
 	private int r_badge;
 	private String r_image;
 	private int r_point;
+	private String r_regdate;
+	private String badge;
+	private int total;
+	
+	public String getBadge() {
+		return badge;
+	}
+	public void setBadge(String badge) {
+		this.badge = badge;
+	}
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
+	public String getR_regdate() {
+		return r_regdate;
+	}
+	public void setR_regdate(String r_regdate) {
+		this.r_regdate = r_regdate;
+	}
 	public String getR_id() {
 		return r_id;
 	}

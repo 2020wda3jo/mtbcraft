@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,6 +52,25 @@ public class MypageController {
 	public List<RidingRecord> getRR(@PathVariable String rider){
 		return myPageService.getRR(rider);
 	}
+	
+	@PostMapping("/info/history")
+	String goUserInfoPage(String beforePage, String userNickname, Model model) {
+		
+		System.out.println(beforePage);
+		System.out.println(userNickname);
+		
+		if(beforePage.equals("sns")) {
+			beforePage = "/community/mutub";
+		} else if(beforePage.equals("course") || beforePage.equals("search")) {
+			beforePage = "/riding/"+beforePage;
+		}
+		
+		model.addAttribute("beforePage", beforePage);
+		model.addAttribute("userInfo",  myPageService.getUserInfo(userNickname) );
+		
+		return "mypage/userInfo";
+	}
+	
 	
 		
 		

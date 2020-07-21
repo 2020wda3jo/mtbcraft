@@ -307,28 +307,72 @@ function hourminsec(text){
 		 cache : false,
 		 success : function(data) {
 			for(var i=0;i<data.length;i++){
-				var code = "<li class='comment'><div class='vcard bio'>";
+				var code = "<li class='comment'><div class='bio'>";
+				
+				var newLi = $("<li class='comment'>");
+				var newDIV = $("<div class='bio'>");
 				
 				// 유저 이미지
-				if(data[i].cr_images != null){
-					code += "<img src='/test/images/person_1.jpg' alt='Image placeholder'>";
+				var newIMG = $("<img>");
+				if(data[i].riderimg != null){
+					newIMG.attr("src", "/data/img/rider/"+data[i].riderimg);
 				}else {
-					code += "<img src='/imgs/test001.png' alt='Image placeholder'>";
+					newIMG.attr("src", "/imgs/test001.png");
+				} 
+				newDIV.append(newIMG);
+				
+				var newDIV2 = $("<div class='comment-body'>");
+				
+				var newH3 = $("<h3>"+data[i].cr_rider+"</h3>");
+				
+				var nick = data[i].cr_rider;
+				
+				newH3.click(function(){
+					var beforePage = ( window.location.href ).substring( ( window.location.href ).lastIndexOf("/")+1 );
+					
+					var form = document.createElement("form");
+					form.setAttribute("method", "Post"); 
+					form.setAttribute("action", "/info/history"); 
+				  	var hiddenField = document.createElement("input");
+					hiddenField.setAttribute("type", "hidden");
+					hiddenField.setAttribute("name", "userNickname");
+				    hiddenField.setAttribute("value", nick);
+				    form.appendChild(hiddenField);
+				    
+				  	var hiddenField2 = document.createElement("input");
+					hiddenField2.setAttribute("type", "hidden");
+					hiddenField2.setAttribute("name", "beforePage");
+				    hiddenField2.setAttribute("value", beforePage);
+			        form.appendChild(hiddenField2);
+			        
+			        document.body.appendChild(form);
+			        form.submit();
+				});
+				
+				var newDIV3 = $("<div class='meta mb-2'>"+data[i].reg_time+"</div>");
+				var newP = $("<p>"+data[i].cr_content+"</p>");
+				
+				newDIV2.append(newH3);
+				newDIV2.append(newDIV3);
+				newDIV2.append(newP);
+				
+				if(data[i].cr_rider==userId){
+					var newP2 = $("<p><a href='#' class='reply' onclick='updateReview("+data[i].cr_num+")'>수정</a> <a href='#' class='reply' onclick='deleteReview("+data[i].cr_num+")'>삭제</a></p>");
+					newDIV2.append(newP2);
 				}
 				
-				code += "</div><div class='comment-body'>"
-					+"<h3>"+data[i].cr_rider+"</h3>"
-					+"<div class='meta mb-2'>"+data[i].cr_time+"</div>"
-					+"<p>"+data[i].cr_content+"</p>";
-					
-				if(data[i].cr_rider==userId){
-					code += "<p><a href='#' class='reply' onclick='updateReview("+data[i].cr_num+")'>수정</a> <a href='#' class='reply' onclick='deleteReview("+data[i].cr_num+")'>삭제</a></p>";
-				}
 				if(data[i].cr_images != null){
-					code += "<img class='reviewimg' src='/image/review/"+data[i].cr_images+"'>";
+					var newIMG2 = $("<img>");
+					newIMG2.attr("src", "/image/review/"+data[i].cr_images);
+					newIMG2.attr("class", "reviewimg");
+					newDIV2.append(newIMG2);
 				}
-				code += "</div></li>";
-				$("ul.comment-list").append(code);
+				
+				newLi.append(newDIV);
+				newLi.append(newDIV2);
+				
+				$("ul.comment-list").append(newLi);
+				
 			}	
 		}
 	});
@@ -539,7 +583,6 @@ function loadHashTag(rr_num){
 		url : "/info/riding/tag/"+rr_num,
 		type : "get",
 		success : function(data) {
-			console.log(data);
 			
 			for(var i=0;i<data.length;i++){
 				var span = document.createElement("span");
@@ -564,12 +607,10 @@ function loadHashTag(rr_num){
 
 //해시태그 삭제
 function removeTag(ts_num,rr_num){
-	console.log(ts_num);
 	$.ajax({
 		url : "/info/riding/tag/"+ts_num,
 		type : "delete",
 		success : function(data) {
-			console.log(data);
 			loadHashTag(rr_num);
 		}
 	});
@@ -640,4 +681,5 @@ function wrapWindowByMask() {
 			}
 		});
     }
+    
 

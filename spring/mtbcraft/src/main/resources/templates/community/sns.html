@@ -46,7 +46,7 @@
 		<div th:each="board:${list}" class="snsbox">
 			<div class="userinfo">
 				<img th:src="'/data/img/rider/'+${board.b_img}">
-				<h4 th:text="${board.b_rider}">작성자</h4>
+				<h4 th:text="${board.b_rider}" class="otherRider" th:id="${board.b_rider}">작성자</h4>
 			</div>
 			<div class="snsinfo">
 				<span th:text="${board.b_title}">작성일시</span>
@@ -86,9 +86,14 @@
 </section>
 
 <script>
+
 	var sel_file;
 	
 	$(document).ready(function(){
+		$(".otherRider").click(function(){
+			moveUserInfo(this.id);
+		});
+		
 		
 		$(".imgbox").hide();
 		$("#input_img").on("change", handleImgFile);
@@ -178,8 +183,12 @@
 						var newDIV = $("<div class='flex_end'>");
 						var newIMG = $("<img>");
 						newIMG.attr("src", "/data/img/rider/"+data[i].r_image);
-						var newH5 = $("<h5>"+data[i].re_rider+"</h5>");
+						var newH5 = $("<h5 id='"+data[i].re_rider+"' class='otherRider2'>"+data[i].re_rider+"</h5>");
 						var newSpan = $("<span>"+data[i].re_day+"</span>");
+						
+						newH5.click(function(){
+							moveUserInfo(this.id);
+						});
 						
 						newDIV.append(newIMG);
 						newDIV.append(newH5);
@@ -219,6 +228,7 @@
 						$("#replybox_"+data[i].re_board).append(newHR);
 					}
 					
+					
 				}
 			})
 		}
@@ -256,6 +266,27 @@
 	function reply_nomodify(re_num){
 		$("#reply_"+re_num).attr("contenteditable", "false");
 		$(".reply_modify_btn_box"+re_num).hide();
+	}
+	
+	function moveUserInfo(nickname){
+		
+		var form = document.createElement("form");
+		form.setAttribute("method", "Post"); 
+		form.setAttribute("action", "/info/history"); 
+	  	var hiddenField = document.createElement("input");
+		hiddenField.setAttribute("type", "hidden");
+		hiddenField.setAttribute("name", "userNickname");
+	    hiddenField.setAttribute("value", nickname);
+	    form.appendChild(hiddenField);
+	    
+	  	var hiddenField2 = document.createElement("input");
+		hiddenField2.setAttribute("type", "hidden");
+		hiddenField2.setAttribute("name", "beforePage");
+	    hiddenField2.setAttribute("value", "sns");
+        form.appendChild(hiddenField2);
+        
+        document.body.appendChild(form);
+        form.submit();
 	}
 	
 </script>
