@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
+import com.mtbcraft.dto.CustomBadge;
 import com.mtbcraft.dto.EntertainRider;
 import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.Mission;
@@ -68,7 +71,6 @@ public class EntertainController {
 		List<Competition> compendlist = entertainmentService.getEndComp2();
 		
 		model.addAttribute("complist", complist);
-		
 		model.addAttribute("comping1", compinglist.get(0));
 		model.addAttribute("comping2", compinglist.get(1));
 		model.addAttribute("compend1", compendlist.get(0));
@@ -202,9 +204,15 @@ public class EntertainController {
 
 	 // 배지 등록 가능 체크 페이지
     @RequestMapping(value = "/entertainment/badgeCheck", method = RequestMethod.GET)
-    public String getBadgeCheck(Model model, Principal principal) throws Exception {
+    public String getBadgeCheck(Model model, Principal principal, Authentication authentication) throws Exception {
        int list = entertainmentService.getBadgeCheck(principal.getName());
        model.addAttribute("list", list);
+       UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+       String rider = userDetails.getUsername();
+       
+       model.addAttribute("rider", rider);
+       model.addAttribute("badgeList",entertainmentService.getBadge(rider));
+       model.addAttribute("cbadgeList",entertainmentService.getCustomBadge(rider));
        return "entertainment/badgeCheck";
     }
     
@@ -219,11 +227,12 @@ public class EntertainController {
 
 	// 배지 이미지, 값 등록
 	@RequestMapping(value = "/entertainment/badgeUpload/test", method = RequestMethod.POST)
-	public String badgeUpload(@RequestPart MultipartFile files, Badge badge, Principal principal) throws Exception {
+	public String badgeUpload(@RequestPart MultipartFile files, CustomBadge badge, Principal principal) throws Exception {
 		String filename = files.getOriginalFilename();
-		String directory = "C:\\ServerFiles";
+		String directory = "C:\\ServerFiles\\badge";
 		String filepath = Paths.get(directory, filename).toString();
-		badge.setBg_image(filename);
+		badge.setCbg_image(filename);
+		badge.setCbg_id(principal.getName());
 		entertainmentService.BadgeUpload(badge);
 
 		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
@@ -266,8 +275,8 @@ public class EntertainController {
 	@GetMapping(value = "/entertainment/img/{path}/{imageFile}")
 	public @ResponseBody byte[] getImage(@PathVariable String path, @PathVariable String imageFile) throws IOException {
 		InputStream in = null;
-	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+path+"/"+imageFile)); 
-	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\"+path+"\\"+imageFile)); 
+	   // in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+path+"/"+imageFile)); 
+	    in = new  BufferedInputStream(new FileInputStream("C:\\ServerFiles\\"+path+"\\"+imageFile)); 
 	    return IOUtils.toByteArray(in);
 	}
 }

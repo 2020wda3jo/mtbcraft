@@ -10,6 +10,7 @@ import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.CustomBadge;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.EntertainRider;
 import com.mtbcraft.dto.Member;
@@ -41,9 +42,15 @@ public class EntertainmentService {
 	public List<Badge> getBadge(String rider) throws Exception {
 		return entertainmentMapper.getBadge(rider);
 	}
+	
+	// 커스텀 배지 조회
+	public List<CustomBadge> getCustomBadge(String rider) throws Exception {
+		return entertainmentMapper.getCustomBadge(rider);
+	}
+
 
 	// 배지 등록
-	public void BadgeUpload(Badge badge) throws Exception {
+	public void BadgeUpload(CustomBadge badge) throws Exception {
 		entertainmentMapper.BadgeUpload(badge);
 	}
 

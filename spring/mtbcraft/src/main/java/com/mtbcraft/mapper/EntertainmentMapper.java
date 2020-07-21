@@ -8,6 +8,7 @@ import com.mtbcraft.dto.Badge;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
+import com.mtbcraft.dto.CustomBadge;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.EntertainRider;
 import com.mtbcraft.dto.Login;
@@ -40,9 +41,12 @@ public interface EntertainmentMapper {
 
 	// 배지 조회
 	public List<Badge> getBadge(String rider);
+	
+	// 커스텀 배지 조회
+	public List<CustomBadge> getCustomBadge(String rider);
 
 	// 배지 등록
-	public void BadgeUpload(Badge badge) throws Exception;
+	public void BadgeUpload(CustomBadge badge) throws Exception;
 
 	// 참여한 최근 경쟁전 3개 조회
 	public List<Competition> getRecentComp3(String rider);
