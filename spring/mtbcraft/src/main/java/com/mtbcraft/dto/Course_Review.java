@@ -10,7 +10,14 @@ public class Course_Review {
 	private String cr_content;
 	private String cr_images;
 	private String riderimg;
+	private String reg_time;
 	
+	public String getReg_time() {
+		return reg_time;
+	}
+	public void setReg_time(String reg_time) {
+		this.reg_time = reg_time;
+	}
 	public String getRiderimg() {
 		return riderimg;
 	}
