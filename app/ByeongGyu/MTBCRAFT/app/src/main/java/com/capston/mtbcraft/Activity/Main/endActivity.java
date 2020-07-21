@@ -387,7 +387,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://172.26.1.177:8080/app/riding/getrecord");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/getrecord");
 
             //Http 요청 전송
             HttpClient post = http.create();
@@ -434,7 +434,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://172.26.1.177:8080/app/riding/taginsert");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "/app/riding/taginsert");
             http.addAllParameters(maps[0]);
             //Http 요청 전송
             HttpClient post = http.create();
@@ -497,7 +497,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://172.26.1.177:8080/api/upload");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "/api/upload");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -530,7 +530,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateCompScore");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateCompScore");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -557,7 +557,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompAllScore/" + rr_comp);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getCompAllScore/" + rr_comp);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -634,7 +634,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateRank/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateRank/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -660,7 +660,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getMissionStatus/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getMissionStatus/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -720,7 +720,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getNoClearMission/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getNoClearMission/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -866,7 +866,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateMissionStatus/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateMissionStatus/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -890,7 +890,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/insertMissionCom/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/insertMissionCom/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

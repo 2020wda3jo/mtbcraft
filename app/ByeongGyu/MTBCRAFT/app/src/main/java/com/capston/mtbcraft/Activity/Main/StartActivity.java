@@ -406,7 +406,7 @@ public class StartActivity<cur_status> extends FragmentActivity
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/danger");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/danger");
 
             //Http 요청 전송
             HttpClient post = http.create();

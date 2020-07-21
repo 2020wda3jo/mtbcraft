@@ -60,7 +60,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         String total = String.valueOf(km)+"Km";
 
 
-         String ENTRY_URL = "http://172.26.1.177:8080//app/riding/course_view/";
+         String ENTRY_URL = "http://172.26.1.152:8080/app/riding/course_view/";
 
 
         testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
@@ -71,7 +71,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         testViewHolder.c_dis.setText(total);
         testViewHolder.c_date.setText(itemList.get(position).getRr_date());
         testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
-        testViewHolder.webview.loadUrl("http://172.26.1.177:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
+        testViewHolder.webview.loadUrl("http://172.26.1.152:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
 
         testViewHolder.webview.getSettings().setJavaScriptEnabled(true);
 
