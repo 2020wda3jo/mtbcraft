@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.capston.mtbcraft">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true">
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="8819eab741cd2e061a5bb0e04dbe8a96" />
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="frzpsowm1l" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCa8UBfxfwsrydbQwFng-J7D_O1lnOUOss" />
+
+        <activity android:name=".Activity.Main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- -액티비티 등록 -->
+        <activity android:name=".Activity.Main.LoginActivity" />
+        <activity android:name=".network.LoginAccess" />
+        <activity android:name=".Activity.Main.SubActivity" />
+        <activity android:name=".Activity.Main.StartActivity" />
+        <activity android:name=".Activity.Riding.DetailActivity" />
+        <activity android:name=".Activity.Riding.MyReport" />
+        <activity android:name=".Activity.Main.endActivity" />
+        <activity android:name=".Activity.Course.CourseList" />
+        <activity android:name=".Activity.Course.CourseDetail" />
+        <activity android:name=".Activity.Riding.FollowStart" />
+        <activity android:name=".Activity.Scrap.MyScrap" />
+        <activity android:name=".Activity.Scrap.MyScrapDetail" />
+        <activity android:name=".Activity.Course.CourseSearch" />
+        <activity android:name=".Activity.Competition.CompetitionDetail" />
+        <activity android:name=".Activity.Competition.CompetitionList" />
+
+    </application>
+
+</manifest>
