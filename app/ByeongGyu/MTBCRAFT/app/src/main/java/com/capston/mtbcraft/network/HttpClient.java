@@ -1,6 +1,4 @@
 package com.capston.mtbcraft.network;
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -132,13 +130,6 @@ public class HttpClient {
         return result;
     }
 
-    public static class DefaultUrl{
-        private String url;
-        public String DefaultUrl(){
-            url = "http://172.26.1.152:8080";
-            return url;
-        }
-    }
     public static class Builder {
 
         private Map<String, Object> parameters;
@@ -152,17 +143,14 @@ public class HttpClient {
         public String getUrl() {
             return url;
         }
+
         public Builder(String method, String url) {
             if (method == null) {
                 method = "GET";
             }
             this.method = method;
-            this.url = "http://172.26.1.152:8080"+url;
+            this.url = url;
             this.parameters = new HashMap<String, Object>();
-
-            Log.d("주소는",this.url );
-
-
         }
 
         public void addOrReplace(String key, String value) {

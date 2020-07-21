@@ -158,7 +158,7 @@ public class CompetitionList extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/competition/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/competition/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -203,7 +203,7 @@ public class CompetitionList extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/competition");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/competition");
             // Parameter 를 전송한다.
 
             //Http 요청 전송

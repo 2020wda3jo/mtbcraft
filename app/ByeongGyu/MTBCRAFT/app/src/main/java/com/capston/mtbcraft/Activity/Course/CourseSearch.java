@@ -27,15 +27,11 @@ public class CourseSearch extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     WebView webview;
-    private static final String ENTRY_URL = "http://192.168.42.69:8080/app/riding/CourseSearch";
+    private static final String ENTRY_URL = "http://13.209.229.237:8080/riding/Android_CourseSearch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_search);
-
-        /* 로그인관련 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId", "");
 
         webview = (WebView) findViewById(R.id.searchMap);
         webview.getSettings().setJavaScriptEnabled(true);//자바스크립트 허용
@@ -43,26 +39,11 @@ public class CourseSearch extends AppCompatActivity {
         webview.getSettings().setLoadWithOverviewMode(true);
 
         webview.setWebViewClient(new WebViewClient());
-
-
-        webview.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // 여기서 WebView의 데이터를 가져오는 작업을 한다.
-                if (url.equals(ENTRY_URL)) {
-                    String keyword = LoginId;
-
-                    String script = "javascript:function afterLoad() {"
-                            + "document.getElementById('userid').value = '" + keyword + "';"
-                            + "};"
-                            + "afterLoad();";
-
-                    view.loadUrl(script);
-                }
-            }
-
-        });
         webview.loadUrl(ENTRY_URL);
+
+        /* 로그인관련 */
+        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        String LoginId = auto.getString("LoginId", "");
 
         /*네비게이션 바 */
         Toolbar toolbar = findViewById(R.id.toolbar);

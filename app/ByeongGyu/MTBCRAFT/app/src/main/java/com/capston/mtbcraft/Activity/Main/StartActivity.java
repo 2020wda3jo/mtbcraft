@@ -54,9 +54,8 @@ import java.util.Locale;
 import java.util.Map;
 
 @SuppressLint("HandlerLeak")
-public class StartActivity<cur_status> extends FragmentActivity
+public class StartActivity extends FragmentActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
-
     private RidingStartBinding binding;
     private MapView mMapView;
     private MapPOIItem mCustomMarker;
@@ -67,13 +66,11 @@ public class StartActivity<cur_status> extends FragmentActivity
     private float distance;
     private JSONArray jarray;
     private JSONObject jObject;
-    private int cnt=0;
 
-    private String test, test2, test3, address_dong;
+    private String test, test2, test3;
     //각종 변수
-    private double latitude, lonngitude, getSpeed = 0, hap = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
-    private int getgodo, getgodoval = 0;
-    private int  total_time=0, rest=0;
+    private double latitude, lonngitude, getgodo, getSpeed = 0, hap = 0, getgodoval = 0, avg = 0, maX = 0, maxLat = 0, maxLon = 0, minLat = 1000, minLon = 1000;
+    private int  total_time=0;
     private ArrayList<Double> witch_lat = new ArrayList<>();
     private ArrayList<Double> witch_lon = new ArrayList<>();
     private ArrayList<Double> ele = new ArrayList<>();
@@ -87,14 +84,13 @@ public class StartActivity<cur_status> extends FragmentActivity
     private Geocoder gCoder;
 
     //이동시간 핸들러
-    long BaseTime;
+    long BaseTime, RestBase;
     final static int Init = 0;
     final static int Run = 1;
     final static int Pause = 2;
     int cur_status = Init;
     long PauseTime;
-    private Thread timeThread = null;
-    private Boolean isRunning = true;
+    private long RestTime;
 
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
@@ -124,10 +120,7 @@ public class StartActivity<cur_status> extends FragmentActivity
         View view = binding.getRoot();
         setContentView(view);
 
-        timeThread = new Thread(new timeThread());
-        timeThread.start();
 
-        isRunning = !isRunning;
         // MapLayout mapLayout = new MapLayout(this);
         mMapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
@@ -145,10 +138,7 @@ public class StartActivity<cur_status> extends FragmentActivity
 
         //이동시간 핸들러
         BaseTime = SystemClock.elapsedRealtime();
-
         RidingTimer.sendEmptyMessage(0);
-
-
         cur_status = Run; //현재상태를 런상태로 변경
         binding.mapLayout.setVisibility(View.VISIBLE); //지도
         binding.speedPre.setVisibility(View.VISIBLE); //지도탭에서 보여지는거
@@ -193,18 +183,21 @@ public class StartActivity<cur_status> extends FragmentActivity
                 alert.show();
 
             } else {
-
                 Intent intent = new Intent(StartActivity.this, endActivity.class);
-                intent.putExtra("ingtime", total_time); //경과시간
-                intent.putExtra("distence", (int)hap); //이동거리
-                intent.putExtra("maxspeed", (int)maX); //최대속도
-                intent.putExtra("avgspeed", (int)avg); //평균속도
-                intent.putExtra("getgodo", getgodo); //획득고도
-                intent.putExtra("resttime", rest); //휴식시간
+                intent.putExtra("cha_dis", cha_dis); //이동거리(소수점X)
+                intent.putExtra("cha_max", cha_max); //최대속도(소수점X)
+                intent.putExtra("cha_avg", cha_avg); //평균속도(소수점X)
+                intent.putExtra("distence", String.valueOf(binding.dis.getText())); //이동거리
+                intent.putExtra("endmax", String.valueOf(binding.maxspeed.getText())); //최대속도
+                intent.putExtra("endavg", String.valueOf(binding.avgspeed.getText())); //평균속도
+                intent.putExtra("getgodo", String.valueOf(binding.getgodo.getText())); //획득고도
+                intent.putExtra("resttime", String.valueOf(binding.resttime.getText())); //휴식시간
+                intent.putExtra("ingtime", String.valueOf(binding.ingtime.getText())); //경과시간
                 intent.putExtra("addr", adress_value);
+                intent.putExtra("endsec", total_time); //라이딩 시간(초)
+                intent.putExtra("restsectime", String.valueOf(binding.mRest.getText())); //휴식시간(초)
                 intent.putExtra("witch_lat", witch_lat); //위도
                 intent.putExtra("witch_lon", witch_lon); //경도
-                intent.putExtra("address_dong",address_dong);
                 intent.putExtra("godoarray", godoArray);
                 intent.putExtra("ele", ele); //고도
                 intent.putExtra("maxLat", maxLat); //최대위도
@@ -214,8 +207,6 @@ public class StartActivity<cur_status> extends FragmentActivity
                 intent.putExtra("wido", witch_lat); //위도(지도보여줄거
                 intent.putExtra("kyun", witch_lon); //경도(지도보여줄거)
                 intent.putExtra("rr_comp", "null");
-
-                Log.d("로그랑",total_time+ " " + hap + " " + maX + " " + avg + " " + getgodo + " " +rest + " " + adress_value + " " );
                 startActivity(intent);
                 finish();
                 mapViewContainer.removeAllViews();
@@ -227,7 +218,7 @@ public class StartActivity<cur_status> extends FragmentActivity
         //위험지역 가져오기
         try {
 
-            DangerGet getTask = new DangerGet();
+            GetTask getTask = new GetTask();
             getTask.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -265,49 +256,34 @@ public class StartActivity<cur_status> extends FragmentActivity
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5, this);
     }
 
-    //재개, 정지 버튼
-
     public void myOnClick(View v){
-
-
-        Log.d("현재상태", String.valueOf(cur_status));
-
         switch (v.getId()) {
-            case R.id.pausebt: //정지버튼 활성
-
+            case R.id.pausebt: //시작버튼을 클릭했을때 현재 상태값에 따라 다른 동작을 할수있게끔 구현.
 
             case R.id.resume_bt:
-                //재개 활성
-
-
                 switch (cur_status) {
                     case Init:
                         BaseTime = SystemClock.elapsedRealtime();
+                        System.out.println(BaseTime);
+                        //myTimer이라는 핸들러를 빈 메세지를 보내서 호출
+                        RidingTimer.sendEmptyMessage(0);
                         cur_status = Run; //현재상태를 런상태로 변경
-                        Log.d("cur_status","1");
-
                         break;
-
                     case Run:
+                        RidingTimer.removeMessages(0); //핸들러 메세지 제거
                         PauseTime = SystemClock.elapsedRealtime();
-                        RidingTimer.removeMessages(0); //라이딩시간
-
-                        isRunning = !isRunning;
-
                         cur_status = Pause;
                         binding.resumeBt.setVisibility(View.VISIBLE);
                         binding.pausebt.setVisibility(View.GONE);
-                        Log.d("cur_status","실행");
+
                         break;
                     case Pause:
-                        long now2 = SystemClock.elapsedRealtime();
+                        long now = SystemClock.elapsedRealtime();
                         RidingTimer.sendEmptyMessage(0);
-                        BaseTime += (now2 - PauseTime);
+                        BaseTime += (now - PauseTime);
                         cur_status = Run;
                         binding.resumeBt.setVisibility(View.GONE);
                         binding.pausebt.setVisibility(View.VISIBLE);
-                        Log.d("cur_status","중지");
-                        isRunning = false;
                         break;
                 }
                 break;
@@ -323,8 +299,6 @@ public class StartActivity<cur_status> extends FragmentActivity
             //sendEmptyMessage는 비어있는 메세제를 핸들러에게 전송함
             RidingTimer.sendEmptyMessage(0);
         }
-
-
 
         //현재시간을 계속구해서 출력하는 메소드
         int getTimeout2() {
@@ -345,68 +319,18 @@ public class StartActivity<cur_status> extends FragmentActivity
             int min = (int) ((outTime / 1000) / 60);
             int hour = (int) ((outTime / 1000) / 3600);
 
-
             String easy_outTime = String.format("%02d:%02d:%02d", hour, min, sec);
             //Log.d("로그", String.valueOf(outTime / 1000));
             return easy_outTime;
         }
     };
 
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            int mSec = msg.arg1 % 100;
-            int sec = (msg.arg1 / 100) % 60;
-            int min = (msg.arg1 / 100) / 60;
-            int hour = (msg.arg1 / 100) / 360;
-            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
-
-            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
-
-            rest=msg.arg1 / 100;
-            binding.resttime.setText(result);
-        }
-    };
-
-    public class timeThread implements Runnable {
-        @Override
-        public void run() {
-            int i = 0;
-
-            while (true) {
-                while (isRunning) { //일시정지를 누르면 멈춤
-                    Message msg = new Message();
-                    msg.arg1 = i++;
-                    handler.sendMessage(msg);
-
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        runOnUiThread(new Runnable(){
-                            @Override
-                            public void run() {
-                                binding.resttime.setText("");
-                                binding.resttime.setText("00:00:00");
-                            }
-                        });
-                        return; // 인터럽트 받을 경우 return
-                    }
-                }
-            }
-        }
-    }
-
-
-
-    public class DangerGet extends AsyncTask<Map<String, String>, Integer, String> {
+    public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/danger");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/danger");
 
             //Http 요청 전송
             HttpClient post = http.create();
@@ -532,11 +456,6 @@ public class StartActivity<cur_status> extends FragmentActivity
         A.setLatitude(latitude);
         A.setLongitude(lonngitude);
 
-        cnt = cnt+1;
-
-        if(cnt==1){
-
-        }
 
 
         try {
@@ -605,6 +524,9 @@ public class StartActivity<cur_status> extends FragmentActivity
         binding.nowspeed.setText(String.format("%.1f", getSpeed));  //Get Speed
         binding.mSpeed.setText(String.format("%.1f", getSpeed) + "km/h");
 
+
+        //만약 속도가 0.1미만이라면 휴식시간이 늘어남(뭔가 이상함)
+
         MapPolyline polyline = new MapPolyline();
         polyline.setLineColor(Color.argb(128, 255, 51, 0));
 
@@ -620,21 +542,7 @@ public class StartActivity<cur_status> extends FragmentActivity
         gCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         try {
             addr = gCoder.getFromLocation(latitude, lonngitude, 1);
-
-            List<Address> addr2  = gCoder.getFromLocation(latitude, lonngitude, 2);;
-            List<Address> addr3  = gCoder.getFromLocation(latitude, lonngitude, 3);;
-            List<Address> addr4  = gCoder.getFromLocation(latitude, lonngitude, 4);;
-
             Address a = addr.get(0);
-
-            Address b = addr2.get(1);
-            Address c = addr3.get(2);
-            Address d = addr4.get(3);
-
-            String a1 = b.getAddressLine(0);
-            String a2 = c.getAddressLine(0);
-            address_dong  = a.getThoroughfare();
-
 
             adress_value = a.getAddressLine(0);
         } catch (Exception e) {
@@ -643,6 +551,53 @@ public class StartActivity<cur_status> extends FragmentActivity
 
         Log.d("지금속도는",String.valueOf(getSpeed));
 
+        switch ((int) getSpeed) {
+            case 0:
+                Log.d("속도가","0입니다");
+                RidingTimer.removeMessages(0); //핸들러 메세지 제거
+                PauseTime = SystemClock.elapsedRealtime();
+                cur_status = Pause;
+                binding.resumeBt.setVisibility(View.VISIBLE);
+                binding.pausebt.setVisibility(View.GONE);
+                break;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (getSpeed==0.0) {
+            RestTimer.removeMessages(0);
+            long PauseTime = SystemClock.elapsedRealtime();
+            long now = SystemClock.elapsedRealtime();
+            RestTime += (now-PauseTime);
+
+
+        } else {
+            RestTime = SystemClock.elapsedRealtime();
+            RestTimer.sendEmptyMessage(0);
+            cur_status = Run;
+
+            binding.restview.setText("열심히^^");
+        }
         if (mLastlocation != null) {
 
 
@@ -662,10 +617,13 @@ public class StartActivity<cur_status> extends FragmentActivity
                 binding.maxspeed.setText(String.format("%.1f", maX));
                 cha_max = String.format("%.0f", maX);
             }
+
+
             //이동거리
             hap = hap + mLastlocation.distanceTo(location);
             cha_dis = String.format("%.0f", hap);
 
+            int testhap = 0;
             binding.dis.setText(String.format("%.2f", hap));
             binding.mDistance.setText(String.format("%.1f", hap) + "m");
 
@@ -682,17 +640,42 @@ public class StartActivity<cur_status> extends FragmentActivity
             cha_avg = String.format("%.0f", (avg));
 
             //획득고도
-            getgodoval = (int) (location.getAltitude() - mLastlocation.getAltitude());
+            getgodoval = (location.getAltitude() - mLastlocation.getAltitude());
             if (getgodoval > 0) {
                 getgodo += getgodoval;
-                binding.getgodo.setText(String.valueOf(getgodo));
+                binding.getgodo.setText(String.format("%.0f", getgodo));
             }
 
             //고도
-            binding.Nowgodo.setText(String.format("%.0f", location.getAltitude()) + "m");
+            binding.getgodo.setText(String.format("%.0f", location.getAltitude()) + "m");
         }
         // 현재위치를 지난 위치로 변경
         mLastlocation = location;
+    }
+
+    Handler RestTimer = new Handler(){
+        public void handleMessage(Message msg){
+            binding.resttime.setText(getTimeRest());
+
+            //sendEmptyMessage 는 비어있는 메세지를 Handler 에게 전송하는겁니다.
+            RestTimer.sendEmptyMessage(0);
+        }
+    };
+    //현재시간을 계속 구해서 출력하는 메소드
+    String getTimeRest(){
+        long now = SystemClock.elapsedRealtime(); //애플리케이션이 실행되고나서 실제로 경과된 시간(??)^^;
+        long outTime = now - RestTime;
+
+
+        int sec  = (int) ((outTime/1000) % 60);
+        int min = (int) ((outTime/1000) / 60);
+        int hour = (int) ((outTime/1000) / 3600);
+
+        String easy_outTime = String.format("%02d:%02d:%02d", hour, min, sec);
+
+        // Log.d("로그", String.valueOf(outTime/1000));
+        return easy_outTime;
+
     }
 
 

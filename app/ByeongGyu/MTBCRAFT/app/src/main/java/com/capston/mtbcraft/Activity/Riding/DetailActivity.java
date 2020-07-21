@@ -20,7 +20,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -37,7 +36,6 @@ import com.capston.mtbcraft.gpxparser.Track;
 import com.capston.mtbcraft.gpxparser.TrackPoint;
 import com.capston.mtbcraft.gpxparser.TrackSegment;
 import com.capston.mtbcraft.network.HttpClient;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
@@ -67,17 +65,9 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
     Gpx parsedGpx = null;
     MapView mapView;
     MapPolyline polyline = new MapPolyline();
-    TextView textView1, textView2, textView3, textView4, textView5, textView6, tag;
+    TextView textView1, textView2, textView3, textView4, textView5, textView6;
     private DrawerLayout mDrawerLayout;
-    String secS;
-    String test;
-    String disS;
-    String avgS;
-    String highS;
-    String maxS;
-    String breakS;
-    String gpx;
-    String taglist;
+    String secS, test, disS, avgS, highS, maxS, breakS, gpx;
     int rr_open;
     LinearLayout set_noopen, set_open;
 
@@ -180,14 +170,59 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
             params.put("rr_num", rr_num);
             params.put("rr_rider", rr_rider);
             getTask.execute(params);
-
-            TagGetTask tagGet = new TagGetTask();
-            Map<String, String> par = new HashMap<String, String>();
-            par.put("rr_num", rr_num);
-            tagGet.execute(par);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
+        /*
+        RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
+        //공개여부 선택
+        openselect.setOnCheckedChangeListener((RadioGroup.OnCheckedChangeListener) (group, checkedId) -> {
+            RadioGroup rg = (RadioGroup)findViewById(R.id.selectgroup); // 라디오그룹 객체 맵핑
+            RadioButton selectedRdo = (RadioButton)findViewById(rg.getCheckedRadioButtonId()); // rg 라디오그룹의 체크된(getCheckedRadioButtonId) 라디오버튼 객체 맵핑
+            String selectedValue = selectedRdo.getText().toString();
+            String value="";
+            switch (selectedValue){
+                case "비공개":
+                    value="0";
+                    try {
+                        OpenSet openset = new OpenSet();
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("rr_num", rr_num);
+                        params.put("rr_rider", rr_rider);
+                        params.put("open","0");
+                        openset.execute(params);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "전체 공개":
+                    value="1";
+                    try {
+                        OpenSet openset = new OpenSet();
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("rr_num", rr_num);
+                        params.put("rr_rider", rr_rider);
+                        params.put("open","1");
+                        openset.execute(params);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    value="1";
+                    break;
+            }
+        });
+*/
+
+
+
+
+
+
     }
 
     public class OpenSet extends AsyncTask<Map<String, String>, Integer, String> {
@@ -197,7 +232,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "/android/recordset/open");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://13.209.229.237/:8080/android/recordset/open");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -219,75 +254,6 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
         }
     }
 
-    public class TagGetTask extends AsyncTask<Map<String, String>, Integer, String> {
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) {
-
-            // Http 요청 준비 작업
-            //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/info/riding/tag/"+rr_num);
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-
-            // 응답 본문 가져오기
-            String body = post.getBody();
-
-            return body;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.d("태그리스트 ", s);
-            try {
-
-                String tempData = s;
-                //json값을 받기위한 변수들
-                JSONArray jarray = new JSONArray(tempData);
-
-                String[] tags = new String[jarray.length()];
-                String te = "";
-                char[] chr = new char[jarray.length()];
-
-                FlexboxLayout tag_layout= (FlexboxLayout) findViewById(R.id.tag_layout);
-                for(int i=0; i<jarray.length(); i++){
-                    JSONObject jObject = jarray.getJSONObject(i);
-                    taglist = jObject.getString("ts_tag");
-                    tags[i] = jObject.getString("ts_tag");
-
-                    chr = taglist.toCharArray();
-                    te+= tags[i];
-
-
-                    Log.d("태그리스트 확인", te);
-
-
-                    TextView[] textView = new TextView[jarray.length()];
-                        textView[i] = new TextView(getApplicationContext());
-                        textView[i].setText(tags[i]);
-                        textView[i].setTextSize(16);
-                        textView[i].setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.label_bg_shape));
-
-                        textView[i].setPadding(15,15,15,15);
-
-
-
-                        tag_layout.addView(textView[i]);
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
 
@@ -296,7 +262,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/api/get/"+rr_rider+"/"+rr_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/api/get/"+rr_rider+"/"+rr_num);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -333,7 +299,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                     rr_open = jObject.getInt("rr_open");
                 }
                 //공개 및 비공개 이미지 변경
-                Log.d("공개여부는요",String.valueOf(rr_open));
+Log.d("공개여부는요",String.valueOf(rr_open));
                 if(rr_open == 1){
 
                     set_noopen.setVisibility(View.VISIBLE);

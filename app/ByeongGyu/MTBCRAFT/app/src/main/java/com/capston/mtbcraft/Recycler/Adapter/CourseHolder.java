@@ -1,9 +1,6 @@
 package com.capston.mtbcraft.Recycler.Adapter;
 
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,13 +14,16 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
-public class CourseHolder extends RecyclerView.ViewHolder {
+public class CourseHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
 
     public TextView c_rider_name, c_name, c_time, c_avg, c_getgodo, c_dis, c_date, like_count;
     public ImageView likebt;
     public LinearLayout viewClick;
     public View mView;
-    public WebView webview;
+    public GoogleMap map;
+    MapView mapView;
+    private GoogleMap googleMap;
+
     public CourseHolder(View itemView) {
         super(itemView);
 
@@ -39,9 +39,18 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         likebt = itemView.findViewById(R.id.likeimg);
         like_count = itemView.findViewById(R.id.like_count);
         viewClick = itemView.findViewById(R.id.viewClick);
+        mapView = itemView.findViewById(R.id.map);
 
-        webview = itemView.findViewById(R.id.course_view);
+    }
 
-
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        //지도타입 - 일반
+        this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //기본위치(63빌딩)
+        LatLng position = new LatLng(37.5197889 , 126.9403083);
+        //화면중앙의 위치와 카메라 줌비율
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
     }
 }
