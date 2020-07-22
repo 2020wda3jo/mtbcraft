@@ -63,7 +63,7 @@
 	<!-- SNS게시글 조회 -->
 	<select id="getSNSList" parameterType="String" resultType="com.mtbcraft.dto.Board">
 		<![CDATA[
-			select b_num, r_image b_img, b_rider, b_content, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') b_title, b_file, b_type 
+			select b_num, r_image b_img, rider.r_nickname b_rider, b_content, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') b_title, b_file, b_type 
 			from board, rider
 			where board.b_rider=rider.r_id and b_club=999 and b_type=0 or (
 			board.b_rider=rider.r_id and
@@ -100,7 +100,7 @@
 	
 	<!-- SNS댓글 조회 -->
 	<select id="getReply" parameterType="int" resultType="com.mtbcraft.dto.Reply">
-		select b.r_image , a.re_num, a.re_board, a.re_rider, a.re_content, to_char(a.re_day, 'YYYY-MM-DD HH24:MI:SS') re_day, a.re_confirm
+		select b.r_image , a.re_num, a.re_board, b.r_nickname re_rider, a.re_content, to_char(a.re_day, 'YYYY-MM-DD HH24:MI:SS') re_day, a.re_confirm
 		from reply a, rider b 
 		where a.re_rider=b.r_id and re_board = #{re_board} order by re_day desc
 	</select>
@@ -169,5 +169,29 @@
 	<insert id="postGoods" parameterType="com.mtbcraft.dto.Goods">
 		insert into goods values(SEQ_GOODS_NUM.nextval,#{g_title},#{g_location},#{g_content},#{g_image},#{g_price},0,0,#{g_rider},systimestamp)
 	</insert>
+	
+	<!-- 사용자 거래물품 조회 -->
+	<select id="getRiderGoodsList" resultType="com.mtbcraft.dto.Goods">
+		select goods.*, g_like 
+		from goods, ( 
+		  select g_num, count(gl_rider) g_like 
+		  from ( select g_num, gl_rider from goods a, goods_like b where g_num=gl_goods(+) and a.g_rider=#{rider} and a.g_status=#{status} ) group by g_num ) sq1
+				where goods.g_num=sq1.g_num order by goods.g_num desc
+	</select>
+	
+	<!-- 사용자 물품 삭제 -->
+	<delete id="removeGoods" parameterType="int">
+		delete from goods where g_num=#{g_num}
+	</delete>
+	
+	<!-- 사용자 물품 수정 이미지X -->
+	<update id="updateGoods" parameterType="com.mtbcraft.dto.Goods">
+		update goods set g_title=#{g_title}, g_price=#{g_price}, g_content=#{g_content}, g_date=systimestamp where g_num = #{g_num}
+	</update>
+	
+	<!-- 사용자 물품 수정 이미지O -->
+	<update id="updateGoods2" parameterType="com.mtbcraft.dto.Goods">
+		update goods set g_title=#{g_title}, g_price=#{g_price}, g_content=#{g_content}, g_date=systimestamp, g_image=#{g_image} where g_num = #{g_num}
+	</update>
 </mapper>
 

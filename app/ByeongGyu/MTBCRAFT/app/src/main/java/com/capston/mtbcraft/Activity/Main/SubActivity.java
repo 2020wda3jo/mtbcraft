@@ -61,16 +61,11 @@ import java.util.Map;
 
 public class SubActivity extends AppCompatActivity {
     private ActivitySubmainBinding binding;
-    TextView hello_user;
     private DrawerLayout mDrawerLayout;
     private ViewFlipper v_fillipper;
     private JSONArray jarray;
     private JSONObject jObject;
     String LoginId;
-    TextView main_km, main_time;
-    Date time;
-    private String day1 = null;
-    private Date day2 = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +74,6 @@ public class SubActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        main_km = (TextView) findViewById(R.id.main_km);
-        main_time = (TextView) findViewById(R.id.main_time);
         try {
             PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -227,20 +220,14 @@ public class SubActivity extends AppCompatActivity {
             try {
                 Log.d("JSON_RESULT", s);
                 String tempData = s;
-
                 jarray = new JSONArray(tempData);
-                int[] Record_Km = new int[jarray.length()];
 
                 double killlo = 0;
                 int dis = 0;
                 int riding_time=0;
                 int total_dis=0;
 
-
-                Date dbgetTime = null; //DB에서 가져온 시간
-                Date currentDate; //현재날짜
                 String oTime="";//현재날짜
-                String compareVal = "";
 
                 SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date currentTime = new Date();
@@ -251,32 +238,23 @@ public class SubActivity extends AppCompatActivity {
 
 
                     jObject = jarray.getJSONObject(i);
-                   // total_dis+=jObject.getInt("rr_distance");
-                   // dis+= jObject.getInt("rr_distance");
-                  //  riding_time+=jObject.getInt("rr_time");
+                    total_dis+=jObject.getInt("rr_distance");
+                    riding_time+=jObject.getInt("rr_time");
                     test =  jObject.getString("rr_date");
-                    Log.d("문자자름",test.substring(0,10));
-                    Log.d("심플",oTime);
-                    if(oTime.equals(test.substring(0,10))){
 
+                    //오늘 주행한거
+                    if(oTime.equals(test.substring(0,10))){
                         dis+= jObject.getInt("rr_distance");
-                        Log.d("응 같아~","같다고 그리고 오늘 주행한거는"+dis);
+                        killlo = (int) (dis / 1000.0);
                         if (dis >= 1000) {
-                            killlo = (int) (dis / 1000.0);
-                            main_km.setText(String.valueOf(killlo)+"km");
+                            binding.mainKm.setText(killlo +"km");
                         }else{
-                            main_km.setText(String.valueOf(killlo));
+                            binding.mainKm.setText(dis+"m");
                         }
                     }else{
                         Log.d("응 달라~","다르다고");
                     }
                 }
-
-
-
-
-
-
 
                 int hour;
                 int min;
@@ -292,24 +270,22 @@ public class SubActivity extends AppCompatActivity {
                 if(min==0){
                     min=0;
                 }
-                main_time.setText(String.valueOf(hour+"시간 "+min+"분 "+sec+"초"));
-                if (dis >= 1000) {
-                    killlo = (int) (dis / 1000.0);
-                    main_km.setText(String.valueOf(killlo));
+                binding.mainTime.setText(hour + "시간 " + min + "분 " + sec + "초");
+
+                killlo = (int) (total_dis / 1000.0);
+                if (total_dis >= 1000) {
+                    binding.mainDis.setText(killlo +"km를 주행하셨어요");
                 }else{
-                    main_km.setText(String.valueOf(killlo)+"km");
+                    binding.mainDis.setText(total_dis+"m");
                 }
 
-                binding.mainDis.setText(String.valueOf(killlo)+"km를 주행하셨어요");
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

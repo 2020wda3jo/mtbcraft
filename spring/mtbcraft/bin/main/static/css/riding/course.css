@@ -200,3 +200,12 @@ table.type09 td {
     vertical-align: top;
     border-bottom: 1px solid #ccc;
 }
+.bio {
+	display: inline-block;
+	padding: 5px;
+}
+
+.bio img {
+	width: 70px;
+	border-radius: 20%;
+}

@@ -18,5 +18,14 @@
 			where CS_CLUB=2 and CS_RANK <=4 and COMPETITION.COMP_NUM=COMPETITION_STATUS.CS_COMP)
 		]]>
 	</select>
+	
+	<!-- 사용자 정보 조회 -->
+	<select id="getUserInfo" parameterType="String" resultType="com.mtbcraft.dto.Rider">
+		select * from
+		( select r_id, r_nickname, r_image, r_point, to_char(r_regdate, 'YYYY-MM-DD HH24:MI:SS') r_regdate, nvl(bg_image,'null.jpg') badge
+		from rider, badge where r_badge=bg_num(+) and r_nickname=#{nickname} ),
+		( select rr_rider, sum(rr_distance) total from riding_record, rider where r_id=rr_rider and r_nickname=#{nickname} group by rr_rider )
+		where r_id = rr_rider
+	</select>
 </mapper>
 

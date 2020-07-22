@@ -73,7 +73,9 @@
 	
 	<!-- 라이딩 넘버로 리뷰 조회 -->
 	<select id="getCourseReviews" parameterType="Integer" resultType="com.mtbcraft.dto.Course_Review">
-		SELECT RIDER.R_IMAGE as RIDERIMG, cr_num, cr_rider, cr_time, cr_content, CR_IMAGES FROM RIDER, COURSE_RIVIEW WHERE RIDER.R_ID=COURSE_RIVIEW.CR_RIDER AND COURSE_RIVIEW.CR_RNUM=#{cr_rnum} order by cr_time desc
+		SELECT RIDER.R_IMAGE as RIDERIMG, cr_num, r_nickname cr_rider, to_char(cr_time, 'YYYY-MM-DD HH24:MI:SS') reg_time, cr_content, CR_IMAGES 
+		FROM RIDER, COURSE_RIVIEW 
+		WHERE RIDER.R_ID=COURSE_RIVIEW.CR_RIDER AND COURSE_RIVIEW.CR_RNUM=#{cr_rnum} order by cr_time desc
 	</select>
 	
 	<!-- 리뷰 등록 -->
