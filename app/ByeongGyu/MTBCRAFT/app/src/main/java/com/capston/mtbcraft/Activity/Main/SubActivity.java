@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,26 +33,54 @@ import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Riding.DetailActivity;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
+import com.capston.mtbcraft.databinding.ActivitySubmainBinding;
+import com.capston.mtbcraft.databinding.RidingStartBinding;
+import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class SubActivity extends AppCompatActivity {
+    private ActivitySubmainBinding binding;
     TextView hello_user;
     private DrawerLayout mDrawerLayout;
+    private ViewFlipper v_fillipper;
+    private JSONArray jarray;
+    private JSONObject jObject;
+    String LoginId;
+    TextView main_km, main_time;
+    Date time;
+    private String day1 = null;
+    private Date day2 = null;
 
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_submain);
+        binding = ActivitySubmainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-
+        main_km = (TextView) findViewById(R.id.main_km);
+        main_time = (TextView) findViewById(R.id.main_time);
         try {
             PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
@@ -64,10 +94,20 @@ public class SubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //이미지 슬라이드
+        int images[] = {
+                R.drawable.back_img1,
+                R.drawable.back_img2
+        };
+
+        v_fillipper = findViewById(R.id.image_slide);
+        for (int image : images) {
+            fllipperImages(image);
+        }
         /* 로그인 정보 가져오기 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId","");
-        String Nickname = auto.getString("r_nickname","");
+        LoginId = auto.getString("LoginId", "");
+        String Nickname = auto.getString("r_nickname", "");
 
         /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -79,7 +119,7 @@ public class SubActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        InFoUserId.setText(Nickname+"님 환영합니다");
+        InFoUserId.setText(Nickname + "님 환영합니다");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -91,41 +131,41 @@ public class SubActivity extends AppCompatActivity {
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
 
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
                     break;
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
                     break;
                 case R.id.friend_chodae:
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_SEND);
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId+"님이 귀하를 초대합니다. 앱 설치하기");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
                     intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
 
                     Intent chooser = Intent.createChooser(intent, "초대하기");
@@ -135,15 +175,136 @@ public class SubActivity extends AppCompatActivity {
             return true;
         });
 
-
-
         ImageView startbt = (ImageView) findViewById(R.id.ridingstart);
         //라이딩 시작
         startbt.setOnClickListener(v -> {
 
-            Intent intent=new Intent(SubActivity.this, StartActivity.class);
+            Intent intent = new Intent(SubActivity.this, StartActivity.class);
             startActivity(intent);
         });
+
+        AddRecord addRecord = new AddRecord();
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("rr_rider", LoginId);
+        addRecord.execute(params);
+
+    }
+    private void fllipperImages(int image) {
+
+        ImageView imageView = new ImageView(this);
+        imageView.setBackgroundResource(image);
+
+        v_fillipper.addView(imageView);      // 이미지 추가
+        v_fillipper.setFlipInterval(4000);       // 자동 이미지 슬라이드 딜레이시간(1000 당 1초)
+        v_fillipper.setAutoStart(true);          // 자동 시작 유무 설정
+
+        // animation
+        v_fillipper.setInAnimation(this,android.R.anim.slide_in_left);
+        v_fillipper.setOutAnimation(this,android.R.anim.slide_out_right);
+    }
+
+    public class AddRecord extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/api/get/" + LoginId);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                Log.d("JSON_RESULT", s);
+                String tempData = s;
+
+                jarray = new JSONArray(tempData);
+                int[] Record_Km = new int[jarray.length()];
+
+                double killlo = 0;
+                int dis = 0;
+                int riding_time=0;
+                int total_dis=0;
+
+
+                Date dbgetTime = null; //DB에서 가져온 시간
+                Date currentDate; //현재날짜
+                String oTime="";//현재날짜
+                String compareVal = "";
+
+                SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date currentTime = new Date();
+                oTime = mSimpleDateFormat.format(currentTime);
+
+                String test="";
+                for (int i = 0; i < jarray.length(); i++) {
+
+
+                    jObject = jarray.getJSONObject(i);
+                   // total_dis+=jObject.getInt("rr_distance");
+                   // dis+= jObject.getInt("rr_distance");
+                  //  riding_time+=jObject.getInt("rr_time");
+                    test =  jObject.getString("rr_date");
+                    Log.d("문자자름",test.substring(0,10));
+                    Log.d("심플",oTime);
+                    if(oTime.equals(test.substring(0,10))){
+
+                        dis+= jObject.getInt("rr_distance");
+                        Log.d("응 같아~","같다고 그리고 오늘 주행한거는"+dis);
+                        if (dis >= 1000) {
+                            killlo = (int) (dis / 1000.0);
+                            main_km.setText(String.valueOf(killlo)+"km");
+                        }else{
+                            main_km.setText(String.valueOf(killlo));
+                        }
+                    }else{
+                        Log.d("응 달라~","다르다고");
+                    }
+                }
+
+
+
+
+
+
+
+                int hour;
+                int min;
+                int sec = riding_time;
+
+                min = sec/60;
+                hour = min/60;
+                sec = sec % 60;
+                min = min % 60;
+                if(hour == 0){
+                    hour=0;
+                }
+                if(min==0){
+                    min=0;
+                }
+                main_time.setText(String.valueOf(hour+"시간 "+min+"분 "+sec+"초"));
+                if (dis >= 1000) {
+                    killlo = (int) (dis / 1000.0);
+                    main_km.setText(String.valueOf(killlo));
+                }else{
+                    main_km.setText(String.valueOf(killlo)+"km");
+                }
+
+                binding.mainDis.setText(String.valueOf(killlo)+"km를 주행하셨어요");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

@@ -6,11 +6,13 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    >
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#f0f0f0">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -38,16 +40,18 @@
             tools:ignore="MissingConstraints">
 
 
-            <ImageView
-                android:id="@+id/imageView"
+            <ViewFlipper
+                android:id="@+id/image_slide"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:srcCompat="@drawable/subactivity_img01" />
+                android:layout_height="200dp"/>
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="400dp"
+            android:layout_gravity="center"
+            android:layout_height="90dp"
             android:orientation="vertical"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/subactivity_shape"
             tools:ignore="MissingConstraints">
 
 
@@ -55,46 +59,55 @@
                 android:id="@+id/imageView8"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_margin="10dp"
                 app:srcCompat="@drawable/time" />
 
             <TextView
 
                 android:layout_marginLeft="50dp"
+                android:layout_marginTop="-40dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="오늘 활동시간"
-                android:layout_marginTop="-30dp"
-                android:textSize="20dp"
+
+                android:textSize="16dp"
+                android:textColor="#414141"
+                android:textStyle="bold"
+
 
                 />
 
             <TextView
-
+                android:id="@+id/main_time"
                 android:layout_marginLeft="50dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10분"
-                android:textSize="30dp"
+                android:text="1시간 0분 0초"
+                android:textSize="20dp"
+                android:textColor="#000"
                 />
 
             <TextView
-
+                android:id="@+id/main_km"
                 android:layout_marginRight="50dp"
                 android:layout_gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="17km"
-                android:textSize="30dp"
-                android:layout_marginTop="-40dp"
+                android:textSize="40dp"
+                android:layout_marginTop="-50dp"
+                android:textColor="#000"
                 />
+
         </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="400dp"
+                android:layout_height="320dp"
                 android:orientation="vertical"
+                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/subactivity_shape"
                 tools:ignore="MissingConstraints">
 
                 <TextView
@@ -114,15 +127,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="145525님 저희와 함께"
-                    android:textSize="30dp"
+                    android:textSize="22dp"
+                    android:textColor="#000"
+                    android:layout_marginTop="20dp"
                     />
 
                 <TextView
+                    android:id="@+id/main_dis"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1234Km를 주행하셨어요"
-                    android:textSize="30dp"
+                    android:text="34Km를 주행하셨어요"
+                    android:textSize="22dp"
+                    android:textColor="#000"
                     />
 
                 <ImageView
@@ -130,6 +147,7 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
                     app:srcCompat="@drawable/riding_bt" />
 
 

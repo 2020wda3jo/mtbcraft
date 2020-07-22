@@ -132,13 +132,6 @@ public class HttpClient {
         return result;
     }
 
-    public static class DefaultUrl{
-        private String url;
-        public String DefaultUrl(){
-            url = "http://172.26.1.152:8080";
-            return url;
-        }
-    }
     public static class Builder {
 
         private Map<String, Object> parameters;
@@ -157,7 +150,7 @@ public class HttpClient {
                 method = "GET";
             }
             this.method = method;
-            this.url = "http://172.26.1.152:8080"+url;
+            this.url = "http://192.168.42.69:8080"+url;
             this.parameters = new HashMap<String, Object>();
 
             Log.d("주소는",this.url );
