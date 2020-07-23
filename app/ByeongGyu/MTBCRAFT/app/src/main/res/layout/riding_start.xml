@@ -4,12 +4,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/default_layout"
     >
 
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tab_layout">
+        android:id="@+id/tab_layout"
+        android:background="#fff">
+
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,11 +24,13 @@
     </com.google.android.material.tabs.TabLayout>
 
 
+
     <LinearLayout
         android:id="@+id/map_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/map_view"
             android:layout_width="match_parent"
@@ -34,21 +39,35 @@
             android:layout_weight="0" />
     </LinearLayout>
 
-    <GridLayout
-        android:id="@+id/speed_pre"
-        android:verticalSpacing="30dp"
-        android:layout_marginTop="70dp"
-        android:layout_gravity = "center"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
+        >
 
-        <LinearLayout
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+        <GridLayout
+            android:id="@+id/speed_pre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:columnCount="4"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:verticalSpacing="30dp"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,29 +75,31 @@
                     android:text="시간"
                     android:textColor="#000"
                     android:textSize="25dp" />
+
                 <TextView
                     android:id="@+id/m_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="0:0:0"
-                    android:textSize="20dp"
-                    android:textColor="#000"/>
-        </LinearLayout>
+                    android:textColor="#000"
+                    android:textSize="20dp" />
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="50dp">
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="현재속도"
-                android:textColor="#000"
-                android:textSize="25dp" />
+                android:layout_marginLeft="50dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="현재속도"
+                    android:textColor="#000"
+                    android:textSize="25dp" />
+
                 <TextView
                     android:id="@+id/m_speed"
                     android:layout_width="wrap_content"
@@ -87,12 +108,14 @@
                     android:text="0.0Km/h"
                     android:textColor="#000"
                     android:textSize="25dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="50dp">
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,6 +123,7 @@
                     android:text="거리"
                     android:textColor="#000"
                     android:textSize="25dp" />
+
                 <TextView
                     android:id="@+id/m_distance"
                     android:layout_width="wrap_content"
@@ -109,235 +133,247 @@
                     android:textColor="#000"
                     android:textSize="25dp" />
             </LinearLayout>
-    </GridLayout>
+        </GridLayout>
+</LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/speed_tap"
         android:orientation="vertical">
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="380dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/speedlayout">
+                android:orientation="vertical"
+                android:background="@drawable/subactivity_shape"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp">
                 <TextView
-                    android:id="@+id/nowspeed"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:text="0.00"
-                    android:textSize="50dp"
+                    android:text="시간"
+                    android:textSize="25dp"
+                    android:textColor="#3e7319"
+                    android:textStyle="bold"
                     tools:ignore="MissingConstraints" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/restlayout">
                 <TextView
-                    android:id="@+id/restview"
+                    android:id="@+id/ingtime"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="PAUSE"
-                    android:textSize="20dp"
+                    android:text="00:00:00"
+                    android:textColor="#000"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="150dp"
+            android:id="@+id/speedlayout"
+            android:orientation="vertical"
+            android:background="@drawable/subactivity_shape"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="평균"
+                android:textSize="25dp"
+                android:textColor="#3e7319"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="속도"
+                android:textSize="25dp"
+                android:textColor="#3e7319"
+                android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="최고"
+                    android:textSize="25dp"
+                    android:textColor="#3e7319"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                >
+                <TextView
+                    android:id="@+id/avgspeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="0"
+                    android:textColor="#000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/nowspeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="0.00"
+                    android:textSize="40dp"
+                    android:textColor="#000"
+                    android:textStyle="bold"
                     tools:ignore="MissingConstraints" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/statuslayout1">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="주행시간"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="10dp"
-                        android:gravity="right"
-                        android:text="거리(km)"
-                        android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/maxspeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="0"
+                    android:layout_marginRight="10dp"
+                    android:textSize="20dp"
+                    android:textColor="#000"
+                    tools:ignore="DuplicateIds" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/statusvaluelayout1">
-
-                    <TextView
-                        android:id="@+id/ingtime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:layout_marginLeft="10dp"
-                        android:text="00:00:00"
-                        android:textSize="24sp" />
-                    <TextView
-                        android:id="@+id/dis"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:text="0"
-                        android:textSize="20dp" />
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="km/h"
+                    android:layout_marginRight="10dp"
+                    android:textColor="#000"
+                    android:textSize="17dp" />
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/subactivity_shape"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:text="휴식시간"
+                android:textSize="25dp"
+                android:textColor="#3e7319"
+                android:textStyle="bold"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/resttime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="00:00:00"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="90dp"
+            android:orientation="vertical"
+            android:background="@drawable/subactivity_shape"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp">
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="고도"
+                    android:textColor="#3e7319"
+                    android:textStyle="bold"
+                    android:textSize="25dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:text="거리"
+                    android:textColor="#3e7319"
+                    android:textStyle="bold"
+                    android:textSize="25dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="획득고도"
+                    android:textColor="#3e7319"
+                    android:textStyle="bold"
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/statuslayout2">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="평균속도(km/h)"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="최대속도(km/h)"
-                        android:layout_marginRight="10dp"
-                        android:textSize="20dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/statusvaluelayout2">
+                >
 
-                    <TextView
-                        android:id="@+id/avgspeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="0"
-                        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/Nowgodo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="0"
+                    android:textColor="#000"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/maxspeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="0"
-                        android:layout_marginRight="10dp"
-                        android:textSize="20dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp">
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/dis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:text="0"
+                    android:textColor="#000"
+                    android:textSize="20dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/statuslayout3">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="고도(m)"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="획득고도(m)"
-                        android:layout_marginRight="10dp"
-                        android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/getgodo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textColor="#000"
+                    android:textSize="20dp" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/statusvaluelayout3">
-                    <TextView
-                        android:id="@+id/Nowgodo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="0"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/getgodo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="0"
-                        android:textSize="20dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp">
-            </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/statuslayout4">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="휴식시간"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20dp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="코스정보"
-                        android:layout_marginRight="10dp"
-                        android:textSize="20dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/statusvaluelayout4">
-                    <TextView
-                        android:id="@+id/resttime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="left"
-                        android:text="00:00:00"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/couse_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="0"
-                        android:layout_marginRight="10dp"
-                        android:textSize="20dp" />
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
