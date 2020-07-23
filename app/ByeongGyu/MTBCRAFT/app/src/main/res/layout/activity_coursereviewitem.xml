@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="65dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="5dp"
                 android:includeFontPadding="false"
                 android:text="작성자"
                 android:textColor="@android:color/black"
@@ -62,11 +62,11 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
                 android:text="수정"
-                app:layout_constraintEnd_toStartOf="@+id/cr_delete"
+                app:layout_constraintEnd_toStartOf="@id/button2"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/cr_delete"
+                android:id="@+id/button2"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
                 android:text="삭제"
@@ -74,10 +74,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/modify_image"
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="8dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/ic_launcher"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,11 +88,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
                 android:text="TextView"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/modify_image" />
+                app:layout_constraintTop_toBottomOf="@id/imageView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

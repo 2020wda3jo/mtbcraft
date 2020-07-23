@@ -7,10 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.MissionList;
+
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
@@ -45,8 +43,6 @@ public class CourseList extends AppCompatActivity {
     ArrayList<RidingRecord> arrlist = new ArrayList<>();
     RecyclerView recyclerView;
     ImageView likeimg;
-    CourseAdapter courseAdapter;
-    Button moreButton;
 
     String LoginId;
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +54,6 @@ public class CourseList extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        moreButton = findViewById(R.id.more_button);
 
         RidingRecord rrr = new RidingRecord();
         Intent intent = new Intent(this.getIntent());
@@ -105,50 +100,9 @@ public class CourseList extends AppCompatActivity {
                     Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
-                //미션
-                case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
-                    startActivity(mission);
-                    break;
+
             }
             return true;
-        });
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                int lastPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition() + 1;
-                int totalCount = recyclerView.getAdapter().getItemCount();
-
-                Log.e("끝포지션", String.valueOf(totalCount));
-                Log.e("라스트포지션", String.valueOf(lastPosition));
-
-
-                if(lastPosition == totalCount){
-                    if ( courseAdapter.itemList.size() == courseAdapter.count){
-                        moreButton.setVisibility(View.GONE);
-                    }
-                }
-
-                moreButton.setOnClickListener( v -> {
-                    if ( courseAdapter.itemList.size() - (courseAdapter.count+5) > 0) {
-                        courseAdapter.count += 5;
-                        recyclerView.requestLayout();
-                    }
-                    else{
-                        courseAdapter.count += courseAdapter.itemList.size() - courseAdapter.count;
-                        recyclerView.requestLayout();
-                    }
-                });
-            }
         });
 
         try{
@@ -166,7 +120,7 @@ public class CourseList extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/course");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/course");
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -194,10 +148,9 @@ public class CourseList extends AppCompatActivity {
                 for(RidingRecord item: items){
                     itemList.add(item);
                 }
-
-                courseAdapter = new CourseAdapter(getApplicationContext(), itemList);
+                CourseAdapter adapter = new CourseAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                recyclerView.setAdapter(courseAdapter);
+                recyclerView.setAdapter(adapter);
             }catch(Exception e){
                 e.printStackTrace();
             }

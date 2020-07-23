@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
@@ -388,6 +389,16 @@
                 tools:ignore="MissingConstraints"
                 android:onClick="myOnClick"
                 android:layout_marginLeft="50dp"/>
+
+            <Button
+                android:id="@+id/resume_bt"
+                android:layout_width="52dp"
+                android:layout_height="50dp"
+                android:background="@drawable/restart_icon"
+                tools:ignore="MissingConstraints"
+                android:onClick="myOnClick"
+                android:layout_marginLeft="50dp"/>
+
 
         </LinearLayout>
     </GridLayout>

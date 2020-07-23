@@ -4,8 +4,12 @@ android {
     compileSdkVersion 29
     buildToolsVersion '29.0.3'
 
-    defaultConfig {
+    buildFeatures{
+        viewBinding = true
+    }
 
+
+    defaultConfig {
         applicationId "com.capston.mtbcraft"
         minSdkVersion 23
         targetSdkVersion 29
@@ -60,8 +64,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'net.danlew:android.joda:2.9.9.3'
     implementation 'com.github.PhilJay:MpAndroidChart:v3.0.2'
-
-
+    implementation 'com.google.android:flexbox:2.0.1'
 // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.8.0'
 

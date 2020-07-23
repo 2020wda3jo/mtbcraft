@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
@@ -137,11 +136,7 @@ public class CompetitionList extends AppCompatActivity {
                     Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
-                //미션
-                case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
-                    startActivity(mission);
-                    break;
+
             }
             return true;
         });
@@ -164,7 +159,7 @@ public class CompetitionList extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/competition/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/competition/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -209,7 +204,7 @@ public class CompetitionList extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/competition");
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/competition");
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -447,7 +442,7 @@ public class CompetitionList extends AppCompatActivity {
         protected void onPostExecute(String s) {
             try {
                 nowSize++;
-                if ( nowSize == size ){
+                if (nowSize == size) {
                     CompetitionAdapter adapter = new CompetitionAdapter(getApplicationContext(), nowItemList, Save_Path);
                     recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                     recycleView.setAdapter(adapter);

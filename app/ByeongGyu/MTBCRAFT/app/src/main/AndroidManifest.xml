@@ -8,8 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:required="true" />
@@ -22,7 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true">
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -58,8 +58,6 @@
         <activity android:name=".Activity.Course.CourseSearch" />
         <activity android:name=".Activity.Competition.CompetitionDetail" />
         <activity android:name=".Activity.Competition.CompetitionList" />
-        <activity android:name=".Activity.Mission.MissionList" />
-        <activity android:name=".Activity.Mission.MissionDetail" />
 
     </application>
 

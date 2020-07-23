@@ -18,7 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.MissionList;
+
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
@@ -27,11 +27,15 @@ public class CourseSearch extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     WebView webview;
-    private static final String ENTRY_URL = "http://13.209.229.237:8080/riding/Android_CourseSearch";
+    private static final String ENTRY_URL = "http://192.168.42.69:8080/app/riding/CourseSearch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course_search);
+
+        /* 로그인관련 */
+        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        String LoginId = auto.getString("LoginId", "");
 
         webview = (WebView) findViewById(R.id.searchMap);
         webview.getSettings().setJavaScriptEnabled(true);//자바스크립트 허용
@@ -39,11 +43,26 @@ public class CourseSearch extends AppCompatActivity {
         webview.getSettings().setLoadWithOverviewMode(true);
 
         webview.setWebViewClient(new WebViewClient());
-        webview.loadUrl(ENTRY_URL);
 
-        /* 로그인관련 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId", "");
+
+        webview.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // 여기서 WebView의 데이터를 가져오는 작업을 한다.
+                if (url.equals(ENTRY_URL)) {
+                    String keyword = LoginId;
+
+                    String script = "javascript:function afterLoad() {"
+                            + "document.getElementById('userid').value = '" + keyword + "';"
+                            + "};"
+                            + "afterLoad();";
+
+                    view.loadUrl(script);
+                }
+            }
+
+        });
+        webview.loadUrl(ENTRY_URL);
 
         /*네비게이션 바 */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -94,11 +113,7 @@ public class CourseSearch extends AppCompatActivity {
                     Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
-                //미션
-                case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
-                    startActivity(mission);
-                    break;
+
             }
             return true;
         });

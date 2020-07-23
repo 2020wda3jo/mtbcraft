@@ -11,14 +11,15 @@ import java.net.URL;
 
 public class SendGPXFile extends AppCompatActivity implements Runnable {
 
-    String filepath = "";
-    String fileName = "";
-    public SendGPXFile(String filepath, String fileName) {
-        this.filepath = filepath;
-        this.fileName = fileName;
+    public SendGPXFile() {
+
     }
 
-    String url_address;
+    final String url_address = "http://13.209.229.237:8080/android/fileUpload";
+
+    //안드로이드 내 저장 파일 이름
+    String filepath = "";
+    String fileName = "";
 
     String str; //결과를 저장할 변수
 
@@ -26,8 +27,6 @@ public class SendGPXFile extends AppCompatActivity implements Runnable {
     public void run() {
 
         try {
-            url_address = "http://13.209.229.237:8080/android/fileUpload/gpx/" + fileName;
-            Log.e("파일네임", fileName);
             FileInputStream fis = new FileInputStream(filepath + fileName);
             URL url = new URL(url_address);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -45,10 +44,8 @@ public class SendGPXFile extends AppCompatActivity implements Runnable {
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
             //form-data; name=파일변수명; filename="첨부파일이름"
             dos.writeBytes("--files\r\n"); // --은 파일 시작 알림 표시
-            dos.writeBytes("Content-Disposition: form-data;"
-                    + " name=\"file1\";"
-                    + " filename=\"" + fileName
-                    + "\"" + "\r\n");
+            dos.writeBytes("Content-Disposition: form-data; name=\"file1\"; filename=\""
+                    + fileName + "\"" + "\r\n");
 
             dos.writeBytes("\r\n");//줄바꿈 문자
             int bytes = fis.available();

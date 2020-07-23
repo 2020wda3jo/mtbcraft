@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.*;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.Recycler.Adapter.CompClubAdapter;
@@ -45,7 +44,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,7 +51,7 @@ import java.util.Collections;
 import java.util.Map;
 import com.capston.mtbcraft.R;
 public class CompetitionDetail extends AppCompatActivity implements LocationListener{
-    String comp_num, comp_period, comp_badge, comp_course, comp_image, comp_content, comp_name, Save_Path, badge_path, c_gpx, c_name, comp_point;
+    String comp_num, comp_period, comp_badge, comp_course, comp_image, comp_content, comp_name, Save_Path, badge_path, c_gpx, c_name;
     TextView name_textView, period_textView2, textView3, textView4;
     Button joinButton;
     ImageView imageView6, imageView7, imageView8, imageView9;
@@ -62,9 +60,6 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
     LocationManager locationManager;
     Location lastKnownLocation;
     String[] a = new String[4];
-    ArrayList<CompClub> clubItemList;
-    ArrayList<CompScore> newScoreItemList;
-    int clubCount = 0, badgeCount = 0, scoreCount = 0;
 
     private DrawerLayout mDrawerLayout;
 
@@ -92,8 +87,6 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
         period_textView2 = findViewById(R.id.comp_day2);
         imageView6 = findViewById(R.id.imageView6);
         imageView7 = findViewById(R.id.badge_image);
-        imageView8 = findViewById(R.id.badge_image2);
-        imageView9 = findViewById(R.id.badge_image3);
         textView3 = findViewById(R.id.comp_content);
         webView = findViewById(R.id.comp_Course);
         recyclerView = findViewById(R.id.compClub_recycle);
@@ -113,41 +106,33 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
-                    startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist = new Intent(CompetitionDetail.this, MyReport.class);
                     startActivity(mylist);
 
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
-                    courselist.putExtra("rider_id", LoginId);
+                    Intent courselist = new Intent(CompetitionDetail.this, CourseList.class);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch = new Intent(CompetitionDetail.this, CourseSearch.class);
                     startActivity(coursesearch);
-                    break;
-                //스크랩 보관함
+                    //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget = new Intent(CompetitionDetail.this, MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp = new Intent(CompetitionDetail.this, CompetitionList.class);
                     startActivity(comp);
                     break;
-                //미션
-                case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
-                    startActivity(mission);
-                    break;
+
             }
             return true;
         });
@@ -164,10 +149,8 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
         Save_Path = intent.getStringExtra("save_path");
         c_gpx = intent.getStringExtra("c_gpx");
         c_name = intent.getStringExtra("c_name");
-        comp_point = intent.getStringExtra("comp_point");
 
-        DownloadgpxTask downloadgpxTask = new DownloadgpxTask("gpx", c_gpx);
-        downloadgpxTask.execute();
+        FileDownload("gpx", c_gpx);
 
 
         try {
@@ -179,7 +162,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
         }
 
-/*        Serializer serializer = new Persister();
+        Serializer serializer = new Persister();
         InputStream is = null;
         String line;
         try {
@@ -201,7 +184,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
             Toast.makeText(CompetitionDetail.this, "gpx 위도" + a[1] + "경도" + a[3] , Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
 
 
         //권한 체크
@@ -216,43 +199,42 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
         joinButton.setOnClickListener( v -> {
 
-                double latitude = lastKnownLocation.getLatitude();
-                double longitude = lastKnownLocation.getLongitude();
+            double latitude = lastKnownLocation.getLatitude();
+            double longitude = lastKnownLocation.getLongitude();
 
-                double kmLat = 1 / 88.74;
-                double kmLot = 1 / 109.958489129649955;
+            double kmLat = 1 / 88.74;
+            double kmLot = 1 / 109.958489129649955;
 
-                if ( (Double.parseDouble(a[1])-kmLat) < latitude && latitude < ( Double.parseDouble(a[1] ) + kmLat ) &&
-                        ( Double.parseDouble(a[3])-kmLot) < longitude && longitude < ( Double.parseDouble(a[3]) + kmLot ))
-                {
+            if ( (Double.parseDouble(a[1])-kmLat) < latitude && latitude < ( Double.parseDouble(a[1] ) + kmLat ) &&
+                    ( Double.parseDouble(a[3])-kmLot) < longitude && longitude < ( Double.parseDouble(a[3]) + kmLot ))
+            {
 
-                    Context context = v.getContext();
-                    Intent intent3 = new Intent(v.getContext(), FollowStart.class);
-                    intent3.putExtra("comp_num", comp_num);
-                    intent3.putExtra("check", 1);
-                    intent3.putExtra("comp_gpx", c_gpx);
-                    intent3.putExtra("c_name", c_name);
-                    intent3.putExtra("comp_name", comp_name);
-                    intent3.putExtra("comp_point", comp_point);
-                    intent3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    v.getContext().startActivity(intent3);
+                Context context = v.getContext();
+                Intent intent3 = new Intent(v.getContext(), FollowStart.class);
+                intent3.putExtra("comp_num", comp_num);
+                intent3.putExtra("check", 1);
+                intent3.putExtra("comp_gpx", c_gpx);
+                intent3.putExtra("c_name", c_name);
+                intent3.putExtra("comp_name", comp_name);
+                intent3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                v.getContext().startActivity(intent3);
 
-                    finish();
-                }
-                else{
-                    // 다이얼로그 바디
-                    AlertDialog.Builder alert_confirm = new AlertDialog.Builder((Context) v.getContext());
-                    // 메세지
-                    alert_confirm.setMessage("지정된 코스 위치가 아닙니다\n\n현재 위치 : " + latitude + "\n경도 : " + longitude);
-                    // 확인 버튼 리스너
-                    alert_confirm.setPositiveButton("확인", null);
-                    // 다이얼로그 생성
-                    AlertDialog alert = alert_confirm.create();
-                    // 다이얼로그 타이틀
-                    alert.setTitle("코스 위치를 확인해주십시요");
-                    // 다이얼로그 보기
-                    alert.show();
-                }
+                finish();
+            }
+            else{
+                // 다이얼로그 바디
+                AlertDialog.Builder alert_confirm = new AlertDialog.Builder((Context) v.getContext());
+                // 메세지
+                alert_confirm.setMessage("지정된 코스 위치가 아닙니다\n\n현재 위치 : " + latitude + "\n경도 : " + longitude);
+                // 확인 버튼 리스너
+                alert_confirm.setPositiveButton("확인", null);
+                // 다이얼로그 생성
+                AlertDialog alert = alert_confirm.create();
+                // 다이얼로그 타이틀
+                alert.setTitle("코스 위치를 확인해주십시요");
+                // 다이얼로그 보기
+                alert.show();
+            }
 
         });
 
@@ -330,7 +312,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompClub/" + comp_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getCompClub/" + comp_num);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -352,16 +334,19 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
                 String tempData = s;
 
                 Gson gson = new Gson();
-                clubItemList = new ArrayList<>();
+                ArrayList<CompClub> itemList = new ArrayList<>();
                 CompClub[] items = gson.fromJson(tempData, CompClub[].class);
 
                 for ( int i = 0; i<5 && i<items.length; i++){
                     CompClub item = items[i];
-                    clubItemList.add(item);
+                    itemList.add(item);
 
-                    DownloadClubTask downloadTask = new DownloadClubTask("club", item.getCb_image());
-                    downloadTask.execute();
+                    FileDownload("club" , item.getCb_image());
                 }
+
+                CompClubAdapter adapter = new CompClubAdapter(getApplicationContext(), itemList, Save_Path);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                recyclerView.setAdapter(adapter);
 
             }catch(Exception e){
                 e.printStackTrace();
@@ -377,7 +362,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompBadge/" + comp_badge);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getCompBadge/" + comp_badge);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -405,17 +390,13 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
                 for(Badge item: items) {
                     itemList.add(item);
-
-                    DownloadBadgeTask downloadBadgeTask1 = new DownloadBadgeTask("badge", item.getBg_image() + "1.png");
-                    downloadBadgeTask1.execute();
-                    DownloadBadgeTask downloadBadgeTask2 = new DownloadBadgeTask("badge", item.getBg_image() + "2.png");
-                    downloadBadgeTask2.execute();
-                    DownloadBadgeTask downloadBadgeTask3 = new DownloadBadgeTask("badge", item.getBg_image() + "3.png");
-                    downloadBadgeTask3.execute();
-
+                    FileDownload("badge" , item.getBg_image());
                     badge_path = item.getBg_image();
                     badge_name = item.getBg_name();
                 }
+
+                Bitmap comp_Badge = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path).getAbsolutePath());
+                imageView7.setImageBitmap(comp_Badge);
                 textView4.setText(badge_name);
 
 
@@ -433,7 +414,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompScore/" + comp_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getCompScore/" + comp_num);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -456,7 +437,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
                 Gson gson = new Gson();
                 ArrayList<CompScore> itemList = new ArrayList<>();
-                newScoreItemList = new ArrayList<>();
+                ArrayList<CompScore> newItemList = new ArrayList<>();
                 CompScore[] items = gson.fromJson(tempData, CompScore[].class);
                 String past_name="";
                 int i = 0, cnt = 1;
@@ -492,316 +473,75 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
                             if(itemList.get(k).getR_image() == null){
                                 itemList.get(k).setR_image("noImage.jpg");
                             }
-                            newScoreItemList.add(itemList.get(k));
-                            DownloadScoreTask downloadScoreTask = new DownloadScoreTask("rider", itemList.get(k).getR_image(), newScoreItemList.size());
-                            downloadScoreTask.execute();
+                            newItemList.add(itemList.get(k));
+                            FileDownload("member" , itemList.get(k).getR_image());
                         }
                     }
                 }
 
-        }catch(Exception e){
+                CompScoreAdapter adapter = new CompScoreAdapter(getApplicationContext(), newItemList, Save_Path);
+                recyclerView2.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                recyclerView2.setAdapter(adapter);
+
+            }catch(Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    public class DownloadgpxTask extends AsyncTask<Map<String, String>, Integer, String> {
-        String directory = "";
-        String url = "";
+    public void FileDownload(String directory, String url)
+    {
+        String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url; // URL
+        DownloadThread dThread;
+        File dir = new File(Save_Path);
+        // 폴더가 존재하지 않을 경우 폴더를 만듦
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        // 다운로드 폴더에 동일한 파일명이 존재하는지 확인
+        if (new File(Save_Path + "/" + url).exists() == false) {
+            dThread = new DownloadThread(fileURL, Save_Path + "/" + url);
+            dThread.start();
+        }
+    }
 
-        public DownloadgpxTask(String directory, String url) {
-            this.directory = directory;
-            this.url = url;
+
+    // 쓰레드로 다운로드 돌림
+    class DownloadThread extends Thread {
+        String ServerUrl;
+        String LocalPath;
+
+        DownloadThread(String serverPath, String localPath) {
+            ServerUrl = serverPath;
+            LocalPath = localPath;
         }
 
         @Override
-        protected String doInBackground(Map<String, String>... maps) {
-
-            File dir = new File(Save_Path);
-            //상위 디렉토리가 존재하지 않을 경우 생성
-
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url;
-            String LocalPath = Save_Path + "/" + url;
-
-            if (new File(Save_Path + "/" + url).exists() == false) {
-                URL imgUrl = null;
-                try {
-                    imgUrl = new URL(fileURL);
-
-                    //서버와 접속하는 클라이언트 객체 생성
-                    HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
-                    int response = conn.getResponseCode();
-
-                    File file = new File(LocalPath);
-
-                    InputStream is = conn.getInputStream();
-                    OutputStream outStream = new FileOutputStream(file);
-
-                    byte[] buf = new byte[1024];
-                    int len = 0;
-
-                    while ((len = is.read(buf)) > 0) {
-                        outStream.write(buf, 0, len);
-                    }
-
-                    outStream.close();
-                    is.close();
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            Serializer serializer = new Persister();
-            InputStream is = null;
-            String line;
+        public void run() {
+            URL gpxUrl;
+            int Read;
             try {
-                is = new FileInputStream(new File(getFilesDir().getPath() + "/" + c_gpx));
-                StringBuffer strBuffer = new StringBuffer();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                line="";
-                boolean stop = false;
-                while((line=reader.readLine())!=null && stop == false){
-                    if ( line.contains("trkpt lat=")) {
-                        a = line.split("\"");
-                        stop = true;
+                gpxUrl = new URL(ServerUrl);
+                HttpURLConnection conn = (HttpURLConnection) gpxUrl
+                        .openConnection();
+                int len = conn.getContentLength();
+                Log.d("에러", String.valueOf(len));
+                byte[] tmpByte = new byte[len];
+                InputStream is = conn.getInputStream();
+                File file = new File(LocalPath);
+                FileOutputStream fos = new FileOutputStream(file);
+                for (;;) {
+                    Read = is.read(tmpByte);
+                    if (Read <= 0) {
+                        break;
                     }
+                    fos.write(tmpByte, 0, Read);
                 }
-
-                reader.close();
                 is.close();
-
-                Toast.makeText(CompetitionDetail.this, "gpx 위도" + a[1] + "경도" + a[3] , Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
+                fos.close();
+                conn.disconnect();
+            } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    public class DownloadClubTask extends AsyncTask<Map<String, String>, Integer, String> {
-        String directory = "";
-        String url = "";
-
-        public DownloadClubTask(String directory, String url) {
-            this.directory = directory;
-            this.url = url;
-        }
-
-        @Override
-        protected synchronized String doInBackground(Map<String, String>... maps) {
-
-            File dir = new File(Save_Path);
-            //상위 디렉토리가 존재하지 않을 경우 생성
-
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url;
-            String LocalPath = Save_Path + "/" + url;
-
-            if (new File(Save_Path + "/" + url).exists() == false) {
-                URL imgUrl = null;
-                try {
-                    imgUrl = new URL(fileURL);
-
-                    //서버와 접속하는 클라이언트 객체 생성
-                    HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
-                    int response = conn.getResponseCode();
-
-                    File file = new File(LocalPath);
-
-                    InputStream is = conn.getInputStream();
-                    OutputStream outStream = new FileOutputStream(file);
-
-                    byte[] buf = new byte[1024];
-                    int len = 0;
-
-                    while ((len = is.read(buf)) > 0) {
-                        outStream.write(buf, 0, len);
-                    }
-
-                    outStream.close();
-                    is.close();
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected synchronized void onPostExecute(String s) {
-            try {
-                clubCount++;
-
-                if ( clubCount == 5) {
-                    CompClubAdapter adapter = new CompClubAdapter(getApplicationContext(), clubItemList, Save_Path);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                    recyclerView.setAdapter(adapter);
-                }
-
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    public class DownloadBadgeTask extends AsyncTask<Map<String, String>, Integer, String> {
-        String directory = "";
-        String url = "";
-
-        public DownloadBadgeTask(String directory, String url) {
-            this.directory = directory;
-            this.url = url;
-        }
-
-        @Override
-        protected synchronized String doInBackground(Map<String, String>... maps) {
-
-            File dir = new File(Save_Path);
-            //상위 디렉토리가 존재하지 않을 경우 생성
-
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url;
-            String LocalPath = Save_Path + "/" + url;
-
-            if (new File(Save_Path + "/" + url).exists() == false) {
-                URL imgUrl = null;
-                try {
-                    imgUrl = new URL(fileURL);
-
-                    //서버와 접속하는 클라이언트 객체 생성
-                    HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
-                    int response = conn.getResponseCode();
-
-                    File file = new File(LocalPath);
-
-                    InputStream is = conn.getInputStream();
-                    OutputStream outStream = new FileOutputStream(file);
-
-                    byte[] buf = new byte[1024];
-                    int len = 0;
-
-                    while ((len = is.read(buf)) > 0) {
-                        outStream.write(buf, 0, len);
-                    }
-
-                    outStream.close();
-                    is.close();
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected synchronized void onPostExecute(String s) {
-            try {
-                badgeCount++;
-
-                if ( badgeCount == 3) {
-                    CompClubAdapter adapter = new CompClubAdapter(getApplicationContext(), clubItemList, Save_Path);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                    recyclerView.setAdapter(adapter);
-
-                    Bitmap comp_Badge1 = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path + "1.png").getAbsolutePath());
-                    Bitmap comp_Badge2 = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path + "2.png").getAbsolutePath());
-                    Bitmap comp_Badge3 = BitmapFactory.decodeFile(new File(Save_Path + "/" + badge_path + "3.png").getAbsolutePath());
-                    imageView7.setImageBitmap(comp_Badge1);
-                    imageView8.setImageBitmap(comp_Badge2);
-                    imageView9.setImageBitmap(comp_Badge3);
-                }
-
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    public class DownloadScoreTask extends AsyncTask<Map<String, String>, Integer, String> {
-        String directory = "";
-        String url = "";
-        int ListSize;
-
-        public DownloadScoreTask(String directory, String url, int listSize) {
-            this.directory = directory;
-            this.url = url;
-            this.ListSize = listSize;
-        }
-
-        @Override
-        protected synchronized String doInBackground(Map<String, String>... maps) {
-
-            File dir = new File(Save_Path);
-            //상위 디렉토리가 존재하지 않을 경우 생성
-
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url;
-            String LocalPath = Save_Path + "/" + url;
-
-            if (new File(Save_Path + "/" + url).exists() == false) {
-                URL imgUrl = null;
-                try {
-                    imgUrl = new URL(fileURL);
-
-                    //서버와 접속하는 클라이언트 객체 생성
-                    HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
-                    int response = conn.getResponseCode();
-
-                    File file = new File(LocalPath);
-
-                    InputStream is = conn.getInputStream();
-                    OutputStream outStream = new FileOutputStream(file);
-
-                    byte[] buf = new byte[1024];
-                    int len = 0;
-
-                    while ((len = is.read(buf)) > 0) {
-                        outStream.write(buf, 0, len);
-                    }
-
-                    outStream.close();
-                    is.close();
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected synchronized void onPostExecute(String s) {
-            try {
-                scoreCount++;
-
-                if ( scoreCount == ListSize) {
-                    CompScoreAdapter adapter = new CompScoreAdapter(getApplicationContext(), newScoreItemList, Save_Path);
-                    recyclerView2.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                    recyclerView2.setAdapter(adapter);
-                }
-
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
             }
         }
     }

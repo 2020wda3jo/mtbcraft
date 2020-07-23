@@ -11,19 +11,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.capston.mtbcraft.GpxInfo;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.SendGPXFile;
+import com.capston.mtbcraft.databinding.RidingEndBinding;
+import com.capston.mtbcraft.databinding.RidingStartBinding;
 import com.capston.mtbcraft.dto.Competition_Status;
 import com.capston.mtbcraft.dto.Mission;
 import com.capston.mtbcraft.dto.Mission_Status;
@@ -35,12 +35,15 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.google.gson.Gson;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapPointBounds;
 import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -53,14 +56,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class endActivity extends AppCompatActivity {
+public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
+    private RidingEndBinding binding;
 
     //스타트 액티비티에서 가져오는 String형변수
-    String MaxSpeed, AvgSpeed, Getgodo, RestTime, IngTime, Distence, restsectime, rr_comp, comp_point="";
+    int MaxSpeed=0;
+    int AvgSpeed=0;
+    int Getgodo=0;
+    int RestTime=0;
+    int IngTime=0;
+    int Distence=0;
+    String rr_num = "";
+    String rr_rider="";
+    String rr_comp="";
+    String address_dong="";
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
-    TextView avgsoeed, maxspeed, getgodo, resttime, ingtime, distence, addr;
 
-    int check, endsec;
+
+    int check, clearCount=0;
 
     MapView mapView;
     //DB로 전송하기 위한 변수
@@ -72,23 +85,24 @@ public class endActivity extends AppCompatActivity {
     int[] typeScore;
 
     int r_club;
+    int dis;
 
     //형 변환
-    String cha_dis, cha_avg, cha_max, clear, comp_name, adress_value;
+    String comp_name, adress_value;
 
     Intent intent;
 
-    //라이딩 이름 짓기
-    LinearLayout openset;
-    TextView riding_nameinput;
-    CharSequence riding_name;
     private LineChart lineChart;
     private Object endActivity;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.riding_end);
+        binding = RidingEndBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         //로그인정보 받아오기
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -100,27 +114,19 @@ public class endActivity extends AppCompatActivity {
         //넘어온 intent값 넣기
         intent = new Intent(this.getIntent());
 
-        cha_dis= intent.getStringExtra("cha_dis"); //이동거리(소수점X)
-        cha_max =  intent.getStringExtra("cha_max"); //최대속도(소수점X)
-        cha_avg = intent.getStringExtra("cha_avg"); //평균속도(소수점X)
-        cha_dis = intent.getStringExtra("cha_dis");
-        cha_avg = intent.getStringExtra("cha_avg");
-        cha_max = intent.getStringExtra("cha_max");
-        Distence = intent.getStringExtra("distence"); //이동거리
-        MaxSpeed = intent.getStringExtra("endmax"); //최대속도
-        AvgSpeed = intent.getStringExtra("endavg"); //평균속도
-        Getgodo = intent.getStringExtra("getgodo"); //획득고도
-        RestTime = intent.getStringExtra("m_rest"); //휴식시간
-        IngTime = intent.getStringExtra("ingtime"); //라이딩시간(시분초)
-        endsec = intent.getIntExtra("endsec",0); //라이딩 시간(초)
-        restsectime = intent.getStringExtra("restsectime"); //휴식시간(초)
+        Distence = intent.getIntExtra("distence",0); //이동거리
+        MaxSpeed = intent.getIntExtra("maxspeed",0); //최대속도
+        AvgSpeed = intent.getIntExtra("avgspeed",0); //평균속도
+        Getgodo = intent.getIntExtra("getgodo",0); //획득고도
+        RestTime = intent.getIntExtra("resttime",0); //휴식시간
+        IngTime = intent.getIntExtra("ingtime",0); //라이딩시간(시분초)
         check = intent.getIntExtra("check", 0);
-        if ( check == 1)
-            comp_point = intent.getStringExtra("comp_point");
         rr_comp = intent.getStringExtra("rr_comp");
         comp_name = intent.getStringExtra("comp_name");
         adress_value = intent.getStringExtra("addr");
+        address_dong = intent.getStringExtra("address_dong");
 
+        Log.d("End Activity", Distence + " " + MaxSpeed + " " + AvgSpeed + " " + Getgodo + " " + RestTime + " " + IngTime +" " +check + " " + rr_comp + " "+ comp_name+ " " + adress_value      );
 
         ArrayList<Double> witch_lat = (ArrayList<Double>)intent.getSerializableExtra("witch_lat");
         ArrayList<Double> witch_lon = (ArrayList<Double>)intent.getSerializableExtra("witch_lon");
@@ -172,28 +178,23 @@ public class endActivity extends AppCompatActivity {
         int padding = 100; // px
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
 
-        avgsoeed = (TextView) findViewById(R.id.endavg);
-        maxspeed = (TextView) findViewById(R.id.endmax);
-        getgodo = (TextView) findViewById(R.id.endget);
-        resttime = (TextView) findViewById(R.id.endresttime);
-        ingtime = (TextView) findViewById(R.id.ending);
-        distence = (TextView) findViewById(R.id.enddis);
-        riding_nameinput = (EditText)findViewById(R.id.riding_nameinput); //라이딩 이름 넣기
-        addr = (TextView) findViewById(R.id.addr);
 
         Button save = (Button) findViewById(R.id.saveriding);
         RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
 
         //앞에서 받아온값들을 텍스트로 설정
-        avgsoeed.setText(AvgSpeed); //평균속도
-        maxspeed.setText(MaxSpeed); //최대속도
-        getgodo.setText(Getgodo); //획득고도
-        String text=adress_value.replace("대한민국","");
-        addr.setText(text);
+        binding.endavg.setText(String.valueOf(AvgSpeed)); //평균속도
+        binding.endmax.setText(String.valueOf(MaxSpeed)); //최대속도
 
+
+        //주소 텍스트
+        String text=adress_value.replace("대한민국","");
+        binding.addr.setText(text);
+
+        //휴식시간 및 지속시간
         int hour;
         int min;
-        int sec = Integer.parseInt(restsectime);
+        int sec = IngTime;
 
         min = sec/60;
         hour = min/60;
@@ -206,7 +207,7 @@ public class endActivity extends AppCompatActivity {
             min=0;
         }
 
-        int r_sec = endsec;
+        int r_sec = RestTime;
         int r_hour;
         int r_min;
 
@@ -220,9 +221,21 @@ public class endActivity extends AppCompatActivity {
         if(r_min==0){
             r_min=00;
         }
-        resttime.setText(String.valueOf(hour+":"+min+":"+sec)); //휴식시간
-        ingtime.setText(String.valueOf(r_hour+":"+r_min+":"+r_sec)); //지속시간
-        distence.setText(Distence); //이동거리
+        binding.ending.setText(String.valueOf(hour+"시간 "+min+"분 "+sec+"초")); //지속시간
+        binding.endresttime.setText(String.valueOf(r_hour+"시간 "+r_min+"분 "+r_sec+"초")); //휴식시간
+
+        binding.endget.setText(String.valueOf(Getgodo));
+        double killlo = 0;
+
+        if (dis >= 1000) {
+            killlo = dis / 1000.0;
+
+            binding.enddis.setText(String.format("%.1f", killlo) + "km");
+        }else{
+            binding.enddis.setText(Distence+"m");
+        }
+
+
         // gpx파일 제목을 위해 현재 시간 구하기
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -319,21 +332,25 @@ public class endActivity extends AppCompatActivity {
             try{
                 NetworkTask2 networkTask1 = new NetworkTask2();
                 Map<String, String> params = new HashMap<String, String>();
-
-                Log.d("로그임","아이디"+LoginId+"거리"+cha_dis+"최대속도"+cha_max+"평균속도"+cha_avg+"고도"+Getgodo+"공개"+open+"휴식"+restsectime+"시간"+endsec+"이름"+riding_nameinput.getText());
+                Log.d("로그임","아이디"+LoginId+"거리"+Distence+"최대속도"+MaxSpeed+"평균속도"+AvgSpeed+"고도"+Getgodo+"공개"+open+"휴식"+RestTime+"시간"+IngTime+"이름"+binding.ridingNameinput.getText());
                 params.put("rr_rider", LoginId);
-                params.put("rr_distance", cha_dis);
-                params.put("rr_topspeed", cha_max);
-                params.put("rr_avgspeed", cha_avg);
-                params.put("rr_high",Getgodo);
+                params.put("rr_distance", String.valueOf(Distence));
+                params.put("rr_topspeed", String.valueOf(MaxSpeed));
+                params.put("rr_avgspeed", String.valueOf(AvgSpeed));
+                params.put("rr_high", String.valueOf(Getgodo));
                 params.put("rr_gpx", "gpx_" + nowTime + ".gpx");
                 params.put("rr_open", open);
-                params.put("rr_breaktime", restsectime);
-                params.put("rr_time", String.valueOf(endsec));
+                params.put("rr_breaktime", String.valueOf(RestTime));
+                params.put("rr_time", String.valueOf(IngTime));
                 params.put("rr_area", adress_value);
-                params.put("rr_name", riding_nameinput.getText().toString());
+                params.put("rr_name", binding.ridingNameinput.getText().toString());
                 params.put("rr_comp", rr_comp);
                 networkTask1.execute(params);
+
+                GetRecordTask getRecordTask = new GetRecordTask();
+                getRecordTask.execute();
+
+
 
                 new getMissionStatus().execute();
 
@@ -347,16 +364,17 @@ public class endActivity extends AppCompatActivity {
                     UpdateCompScore updateCompScore = new UpdateCompScore();
                     Map<String, String> params2 = new HashMap<>();
 
-                    params2.put("avg_speed", cha_avg);
+                    params2.put("avg_speed", String.valueOf(AvgSpeed));
                     params2.put("rr_comp", rr_comp);
                     params2.put("r_club", String.valueOf(r_club));
                     params2.put("LoginId", LoginId);
-                    params2.put("m_point", comp_point);
                     updateCompScore.execute(params2);
                 }
 
                 // gpx 파일 보냄
-                SendGPXFile sendObj = new SendGPXFile(getFilesDir().getPath() + "/", "gpx_" + nowTime + ".gpx");
+                SendGPXFile sendObj = new SendGPXFile();
+                sendObj.setFileName("gpx_" + nowTime + ".gpx");
+                sendObj.setFilepath(getFilesDir().getPath() + "/");
                 sendObj.upload();
             }catch(Exception e){
                 e.printStackTrace();
@@ -364,15 +382,13 @@ public class endActivity extends AppCompatActivity {
         });
     }
 
-
-    public class NetworkTask2 extends AsyncTask<Map<String, String>, Integer, String> {
+    public class GetRecordTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://172.26.1.216:8080/api/upload");
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/getrecord");
+
             //Http 요청 전송
             HttpClient post = http.create();
             post.request();
@@ -387,14 +403,124 @@ public class endActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-/*            try{
+            try {
+                Log.d("GetRecord", s);
+                String tempData = s;
+
+                JSONArray jarray2 = new JSONArray(tempData);
+                for (int i = 0; i < jarray2.length(); i++) {
+                    JSONObject jObject2 = jarray2.getJSONObject(i);
+                    rr_num = jObject2.getString("rr_num");
+                }
+                Log.d("GetRecord2", rr_num);
+
+                TagInsert tgagInsert = new TagInsert();
+                Map<String, String> par = new HashMap<String, String>();
+                par.put("rr_num", rr_num);
+                par.put("rr_rider",LoginId);
+                par.put("address_dong","#"+address_dong);
+                tgagInsert.execute(par);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public class TagInsert extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("POST", "/app/riding/taginsert");
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                Log.d("JSON_RESULT", s);
+                String tempData = s;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
+    }
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
+    }
+
+
+    public class NetworkTask2 extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("POST", "/api/upload");
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            try{
                 Log.d("JSON_RESULT", s);
                 Toast.makeText(getApplicationContext(), "기록이 저장되었습니다.", Toast.LENGTH_LONG).show();
                 finish();
 
             }catch(Exception e){
                 Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
-            }*/
+            }
         }
     }
 
@@ -404,7 +530,7 @@ public class endActivity extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://172.26.1.216:8080/app/updateCompScore");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateCompScore");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -431,7 +557,7 @@ public class endActivity extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getCompAllScore/" + rr_comp);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getCompAllScore/" + rr_comp);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -458,7 +584,7 @@ public class endActivity extends AppCompatActivity {
 
                 for ( int i = 0; i<items.length; i++){
                     if ( items[i].getCs_club() == r_club)
-                        items[i].setCs_score( items[i].getCs_score() + Integer.parseInt(cha_avg));
+                        items[i].setCs_score( items[i].getCs_score() + Integer.parseInt(String.valueOf(AvgSpeed)));
                     itemList.add(items[i]);
                 }
 
@@ -508,7 +634,7 @@ public class endActivity extends AppCompatActivity {
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateRank/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateRank/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -534,7 +660,7 @@ public class endActivity extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/getMissionStatus/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getMissionStatus/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -567,7 +693,7 @@ public class endActivity extends AppCompatActivity {
 
                 for ( int j = 0; j<itemList.size(); j++) {
                     if ( itemList.get(j).getMs_type() == 1)
-                        typeScore[0] = itemList.get(0).getMs_score() + Integer.parseInt(cha_dis); // 총 거리 계산
+                        typeScore[0] = itemList.get(0).getMs_score() + Integer.parseInt(String.valueOf(Distence)); // 총 거리 계산
                     else if ( itemList.get(j).getMs_type() == 2) {
                         typeScore[1] = itemList.get(1).getMs_score(); // 경쟁전 참여 횟수 계산
                         if (!rr_comp.equals("null"))
@@ -594,7 +720,7 @@ public class endActivity extends AppCompatActivity {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://172.26.1.216:8080/app/getNoClearMission/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getNoClearMission/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -631,6 +757,7 @@ public class endActivity extends AppCompatActivity {
                         if (typeScore[0] >= Integer.parseInt(changeStr)) {
                             clearList.add(itemList.get(j));
                             typeScore[2]++;
+                            clearCount++;
                         }
                     }
                     else if ( itemList.get(j).getM_type() == 2){
@@ -639,6 +766,7 @@ public class endActivity extends AppCompatActivity {
                         if ( typeScore[1] >= Integer.parseInt(changeStr)){
                             clearList.add(itemList.get(j));
                             typeScore[2]++;
+                            clearCount++;
                         }
                     }
 
@@ -648,15 +776,17 @@ public class endActivity extends AppCompatActivity {
                         if ( typeScore[2] >= Integer.parseInt(changeStr)){
                             clearList.add(itemList.get(j));
                             typeScore[2]++;
+                            clearCount++;
                         }
                     }
 
                     if ( itemList.get(j).getM_type() == 4){
                         String tempStr = itemList.get(j).getM_content();
                         String changeStr = tempStr.replaceAll("[^0-9]", "");
-                        if ( Integer.parseInt(cha_avg) >= Integer.parseInt(changeStr)){
+                        if ( Integer.parseInt(String.valueOf(AvgSpeed)) >= Integer.parseInt(changeStr)){
                             clearList.add(itemList.get(j));
                             typeScore[2]++;
+                            clearCount++;
                         }
                     }
                 }
@@ -678,14 +808,12 @@ public class endActivity extends AppCompatActivity {
                     String time2 = format.format(time);
                     insertMissionCom[] IMC = new insertMissionCom[count];
                     Map<String, String>[] params5 = new HashMap[count];
-
                     for ( int k = 0; k < clearList.size(); k++){
                         IMC[k] = new insertMissionCom();
                         params5[k] = new HashMap<>();
                         params5[k].put("LoginId", LoginId);
                         params5[k].put("mc_mission", String.valueOf(clearList.get(k).getM_num()));
                         params5[k].put("mc_time", time2);
-                        params5[k].put("m_point", String.valueOf(clearList.get(k).getM_point()));
                         IMC[k].executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params5[k]);
                     }
                 }
@@ -738,7 +866,7 @@ public class endActivity extends AppCompatActivity {
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://13.209.229.237:8080/app/updateMissionStatus/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateMissionStatus/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -762,7 +890,7 @@ public class endActivity extends AppCompatActivity {
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "http://172.26.1.216:8080/app/insertMissionCom/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/insertMissionCom/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

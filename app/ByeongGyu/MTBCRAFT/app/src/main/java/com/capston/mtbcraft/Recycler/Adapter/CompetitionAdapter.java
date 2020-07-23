@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +83,6 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
             intent.putExtra("save_path",Save_Path);
             intent.putExtra("c_gpx",itemList.get(position).getC_gpx());
             intent.putExtra("c_name",itemList.get(position).getC_name());
-            intent.putExtra("comp_point", String.valueOf(itemList.get(position).getComp_point()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             v.getContext().startActivity(intent);
 
@@ -109,7 +107,7 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
             mView = itemView;
             textView1 = itemView.findViewById(R.id.comp_name);
             textView2 = itemView.findViewById(R.id.comp_day);
-            imageView = itemView.findViewById(R.id.modify_image);
+            imageView = itemView.findViewById(R.id.imageView);
             viewClick = itemView.findViewById(R.id.viewClick);
         }
     }

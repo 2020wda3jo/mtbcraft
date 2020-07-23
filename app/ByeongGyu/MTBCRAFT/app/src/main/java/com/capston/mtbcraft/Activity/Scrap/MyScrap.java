@@ -20,7 +20,7 @@ import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.MissionList;
+
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.Recycler.Adapter.MyScrapAdapter;
@@ -97,11 +97,7 @@ public class MyScrap extends AppCompatActivity  {
                     Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
-                //미션
-                case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
-                    startActivity(mission);
-                    break;
+
             }
             return true;
         });
@@ -126,7 +122,7 @@ public class MyScrap extends AppCompatActivity  {
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "http://13.209.229.237:8080/app/riding/scrap/"+LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/scrap/"+LoginId);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송

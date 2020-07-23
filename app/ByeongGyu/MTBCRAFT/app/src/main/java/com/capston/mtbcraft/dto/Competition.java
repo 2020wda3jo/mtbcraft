@@ -10,15 +10,7 @@ public class Competition {
     private String comp_image;
     private String c_gpx;
     private String c_name;
-    private int comp_point;
 
-    public int getComp_point() {
-        return comp_point;
-    }
-
-    public void setComp_point(int comp_point) {
-        this.comp_point = comp_point;
-    }
 
     public String getC_name() {
         return c_name;
