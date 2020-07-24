@@ -240,7 +240,7 @@ public class StartActivity<cur_status> extends FragmentActivity
                 binding.mapLayout.setVisibility(View.VISIBLE);
                 binding.speedPre.setVisibility(View.VISIBLE);
                 binding.speedTap.setVisibility(View.GONE);
-                binding.defaultLayout.setBackgroundColor(0xffffff);
+                binding.defaultLayout.setBackgroundColor(0xdddddd);
                 break;
             case 1:
                 binding.mapLayout.setVisibility(View.GONE);

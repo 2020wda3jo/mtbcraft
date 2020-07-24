@@ -40,10 +40,35 @@
             tools:ignore="MissingConstraints">
 
 
-            <ViewFlipper
-                android:id="@+id/image_slide"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+            <LinearLayout
+                android:layout_width="380dp"
+                android:layout_gravity="center"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/subactivity_shape"
+                tools:ignore="MissingConstraints">
+
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    app:srcCompat="@drawable/time" />
+
+                <TextView
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="-40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="긴급알림"
+                    android:textSize="16dp"
+                    android:textColor="#414141"
+                    android:textStyle="bold"
+                    />
+
+            </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="380dp"

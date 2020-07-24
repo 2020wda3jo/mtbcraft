@@ -89,16 +89,9 @@ public class SubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //이미지 슬라이드
-        int images[] = {
-                R.drawable.back_img1,
-                R.drawable.back_img2
-        };
 
-        v_fillipper = findViewById(R.id.image_slide);
-        for (int image : images) {
-            fllipperImages(image);
-        }
+
+
         /* 로그인 정보 가져오기 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
@@ -199,19 +192,7 @@ public class SubActivity extends AppCompatActivity {
         addRecord.execute(params);
 
     }
-    private void fllipperImages(int image) {
 
-        ImageView imageView = new ImageView(this);
-        imageView.setBackgroundResource(image);
-
-        v_fillipper.addView(imageView);      // 이미지 추가
-        v_fillipper.setFlipInterval(4000);       // 자동 이미지 슬라이드 딜레이시간(1000 당 1초)
-        v_fillipper.setAutoStart(true);          // 자동 시작 유무 설정
-
-        // animation
-        v_fillipper.setInAnimation(this,android.R.anim.slide_in_left);
-        v_fillipper.setOutAnimation(this,android.R.anim.slide_out_right);
-    }
 
     public class AddRecord extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
