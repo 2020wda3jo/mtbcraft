@@ -54,18 +54,40 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/time" />
+                    app:srcCompat="@drawable/siren" />
 
                 <TextView
                     android:layout_marginLeft="50dp"
                     android:layout_marginTop="-40dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="긴급알림"
+                    android:text="긴급신고"
                     android:textSize="16dp"
                     android:textColor="#414141"
                     android:textStyle="bold"
                     />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/help_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="51dp"
+                        app:srcCompat="@drawable/siren_bt" />
+
+                    <ImageView
+                        android:id="@+id/sos_sound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="51dp"
+                        app:srcCompat="@drawable/send_sound" />
+
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -129,43 +151,41 @@
             <LinearLayout
                 android:layout_width="380dp"
                 android:layout_height="320dp"
-                android:orientation="vertical"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/subactivity_shape"
+                android:orientation="vertical"
                 tools:ignore="MissingConstraints">
 
                 <TextView
 
-                    android:layout_marginLeft="50dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="오늘 활동시간"
+                    android:layout_marginLeft="50dp"
                     android:layout_marginTop="-30dp"
+                    android:text="오늘 활동시간"
                     android:textSize="20dp"
 
                     />
 
                 <TextView
                     android:id="@+id/idinfo"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="145525님 저희와 함께"
-                    android:textSize="22dp"
-                    android:textColor="#000"
+                    android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    />
+                    android:text="145525님 저희와 함께"
+                    android:textColor="#000"
+                    android:textSize="22dp" />
 
                 <TextView
                     android:id="@+id/main_dis"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:text="34Km를 주행하셨어요"
-                    android:textSize="22dp"
                     android:textColor="#000"
-                    />
+                    android:textSize="22dp" />
 
                 <ImageView
                     android:id="@+id/ridingstart"

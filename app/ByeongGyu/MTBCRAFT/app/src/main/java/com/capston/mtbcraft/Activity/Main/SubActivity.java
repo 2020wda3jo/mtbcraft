@@ -7,9 +7,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.ActionBar;
@@ -68,6 +72,11 @@ public class SubActivity extends AppCompatActivity {
     private JSONArray jarray;
     private JSONObject jObject;
     String LoginId;
+    private SoundPool soundPool;
+    private SoundManager soundManager;
+    boolean play;
+    int playSoundId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +98,9 @@ public class SubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+        soundPool = new SoundPool.Builder().build();
+        soundManager = new SoundManager(this,soundPool);
+        soundManager.addSound(0,R.raw.sos);
 
 
         /* 로그인 정보 가져오기 */
@@ -178,6 +189,33 @@ public class SubActivity extends AppCompatActivity {
             return true;
         });
 
+        //긴급알림
+        ImageView send_sms = (ImageView) findViewById(R.id.help_send);
+        send_sms.setOnClickListener(v -> {
+            //
+            String number = "010-6780-5637";
+            String sms = "산에서 다쳤어요! 도와주세요! 제 위치는     이고 주소는     에요.";
+            try{
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(number, null, sms, null, null);
+                Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(), "전송에 실패하였습니다. 내장전화앱으로 전환합니다.",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        });
+
+        ImageView sns_sound = (ImageView) findViewById(R.id.sos_sound);
+        sns_sound.setOnClickListener(v -> {
+            if(!play){
+                playSoundId=soundManager.playSound(0);
+                play = true;
+            }else{
+                soundManager.playSound(0);
+                play = false;
+            }
+
+        });
         ImageView startbt = (ImageView) findViewById(R.id.ridingstart);
         //라이딩 시작
         startbt.setOnClickListener(v -> {

@@ -150,7 +150,7 @@ public class HttpClient {
                 method = "GET";
             }
             this.method = method;
-            this.url = "http://172.26.1.66:8080"+url;
+            this.url = "http://53.92.32.7:8080"+url;
             this.parameters = new HashMap<String, Object>();
 
             Log.d("주소는",this.url );

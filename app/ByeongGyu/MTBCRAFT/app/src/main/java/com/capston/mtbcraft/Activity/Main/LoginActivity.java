@@ -33,7 +33,8 @@ public class LoginActivity extends AppCompatActivity{
             Manifest.permission.ACCESS_BACKGROUND_LOCATION, // GPS백그라운드
             Manifest.permission.ACCESS_FINE_LOCATION, // 위치
             Manifest.permission.RECORD_AUDIO, //마이크
-            Manifest.permission.WRITE_EXTERNAL_STORAGE //내장메모리
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, //내장메모리
+            Manifest.permission.SEND_SMS //내장메모리
     };
 
     protected void onCreate(Bundle savedInstanceState) {
