@@ -13,12 +13,14 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,9 +56,13 @@ import java.util.Locale;
 import java.util.Map;
 
 @SuppressLint("HandlerLeak")
-public class StartActivity<cur_status> extends FragmentActivity
+public class StartActivity extends FragmentActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
-
+    private SoundPool soundPool;
+    private SoundManager soundManager;
+    boolean play;
+    int playSoundId;
+    Button send_sms;
     private RidingStartBinding binding;
     private MapView mMapView;
     private MapPOIItem mCustomMarker;
@@ -124,6 +130,14 @@ public class StartActivity<cur_status> extends FragmentActivity
         View view = binding.getRoot();
         setContentView(view);
 
+        Intent intentt = new Intent(this.getIntent());
+        intentt.getStringExtra("c_name");
+
+
+        soundPool = new SoundPool.Builder().build();
+        soundManager = new SoundManager(this,soundPool);
+        soundManager.addSound(0,R.raw.sos);
+
         timeThread = new Thread(new timeThread());
         timeThread.start();
 
@@ -148,7 +162,7 @@ public class StartActivity<cur_status> extends FragmentActivity
 
         RidingTimer.sendEmptyMessage(0);
 
-
+        send_sms = (Button) findViewById(R.id.help);
         cur_status = Run; //현재상태를 런상태로 변경
         binding.mapLayout.setVisibility(View.VISIBLE); //지도
         binding.speedPre.setVisibility(View.VISIBLE); //지도탭에서 보여지는거
@@ -172,6 +186,20 @@ public class StartActivity<cur_status> extends FragmentActivity
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 // do nothing
+            }
+        });
+
+        send_sms.setOnClickListener(v -> {
+            //
+            String number = "010-6507-7613";
+            String sms = "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요.";
+            try{
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(number, null, sms, null, null);
+                Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
+            }catch(Exception e){
+                Toast.makeText(getApplicationContext(), "전송에 실패하였습니다. 내장전화앱으로 전환합니다.",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
         });
 
@@ -530,6 +558,7 @@ public class StartActivity<cur_status> extends FragmentActivity
         latitude = location.getLatitude();
         lonngitude = location.getLongitude();
 
+
         Location A = new Location("pointA");
         A.setLatitude(latitude);
         A.setLongitude(lonngitude);
@@ -642,6 +671,23 @@ public class StartActivity<cur_status> extends FragmentActivity
         }
 
         Log.d("지금속도는",String.valueOf(getSpeed));
+
+        //긴급알림
+
+
+
+        Button sns_sound = (Button) findViewById(R.id.sos_sound);
+        sns_sound.setOnClickListener(v -> {
+            if(!play){
+                playSoundId=soundManager.playSound(0);
+                play = true;
+            }else{
+                soundManager.playSound(0);
+                play = false;
+            }
+
+        });
+
 
         if (mLastlocation != null) {
 

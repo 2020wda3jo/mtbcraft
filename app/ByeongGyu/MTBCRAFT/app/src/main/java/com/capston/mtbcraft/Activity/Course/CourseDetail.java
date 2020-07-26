@@ -107,6 +107,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         /* 로그인관련 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId","");
+        Log.d("GPX파일",gpx);
         Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
 
         /*네비게이션 바 */

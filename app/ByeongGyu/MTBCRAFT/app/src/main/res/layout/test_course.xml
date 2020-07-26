@@ -57,7 +57,7 @@
             android:layout_marginTop="-30dp"
             android:layout_marginLeft="60dp">
             <TextView
-                android:id="@+id/c_date"
+                android:id="@+id/record_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
@@ -120,7 +120,7 @@
                     android:textSize="16dp" />
 
                 <TextView
-                    android:id="@+id/c_dis"
+                    android:id="@+id/my_dis"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -173,32 +173,6 @@
 
                 <TextView
                     android:id="@+id/c_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:textStyle="bold"
-                    android:text="1시간 0분 4초"
-                    android:textColor="#000"
-                    android:textSize="16dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="평균속도"
-                    android:textStyle="bold"
-                    android:textColor="#000"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/c_avg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"

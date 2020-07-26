@@ -11,21 +11,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#f0f0f0">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="#000"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             tools:ignore="MissingConstraints" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fillViewport="true"
-            tools:layout_editor_absoluteX="-16dp"
-            tools:layout_editor_absoluteY="-134dp">
+            tools:ignore="MissingConstraints">
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,18 +45,17 @@
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 tools:ignore="MissingConstraints">
-
                 <RelativeLayout
                     android:id="@+id/map_view"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="25dp" />
+                    android:layout_marginTop="70dp"/>
 
                 <GridLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginTop="30dp"
                     android:columnCount="3"
                     android:orientation="horizontal"
                     android:rowCount="3"
@@ -69,7 +80,7 @@
                             android:layout_gravity="center"
                             android:text="라이딩 시간"
                             android:textColor="#000"
-                            android:textSize="20dp"
+                            android:textSize="17dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -79,7 +90,7 @@
                             android:layout_gravity="center"
                             android:text="00:00:00"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
@@ -102,7 +113,7 @@
                             android:layout_gravity="center"
                             android:text="휴식시간"
                             android:textColor="#000"
-                            android:textSize="20dp"
+                            android:textSize="17dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -112,7 +123,7 @@
                             android:layout_gravity="center"
                             android:text="00:00:00"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
@@ -135,7 +146,7 @@
                             android:layout_gravity="center"
                             android:text="이동거리"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="17dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -145,7 +156,7 @@
                             android:layout_gravity="center"
                             android:text="0.0km"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
@@ -168,7 +179,7 @@
                             android:layout_gravity="center"
                             android:text="최대속도"
                             android:textColor="#000"
-                            android:textSize="20dp"
+                            android:textSize="17dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -178,7 +189,7 @@
                             android:layout_gravity="center"
                             android:text="00.0km/h"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
@@ -202,7 +213,7 @@
                             android:layout_gravity="center"
                             android:text="평균속도"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="17dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -212,7 +223,7 @@
                             android:layout_gravity="center"
                             android:text="00.0km/h"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
@@ -237,7 +248,7 @@
                             android:layout_gravity="center"
                             android:text="획득고도"
                             android:textColor="#000"
-                            android:textSize="20dp"
+                            android:textSize="17dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -247,7 +258,7 @@
                             android:layout_gravity="center"
                             android:text="0.0km"
                             android:textColor="#000"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             tools:ignore="MissingConstraints" />
                     </LinearLayout>
                 </GridLayout>
@@ -271,7 +282,7 @@
                         android:layout_gravity="center"
                         android:text="주소"
                         android:textColor="#000"
-                        android:textSize="18dp"
+                        android:textSize="17dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -281,16 +292,15 @@
                         android:gravity="center"
                         android:text="대한민국 대구광역시 북구 관문동"
                         android:textColor="#000"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
-
 
 
                 <com.google.android.flexbox.FlexboxLayout
                     android:id="@+id/tag_layout"
-                    android:layout_marginTop="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
                     android:fitsSystemWindows="true"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -302,7 +312,6 @@
                     app:justifyContent="flex_start"
                     app:showDivider="beginning|middle"
                     tools:ignore="MissingClass">
-
 
 
                 </com.google.android.flexbox.FlexboxLayout>
@@ -344,7 +353,7 @@
 
             </LinearLayout>
         </ScrollView>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"

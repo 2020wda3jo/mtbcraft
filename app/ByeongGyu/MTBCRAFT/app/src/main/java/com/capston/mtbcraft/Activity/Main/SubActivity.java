@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
@@ -54,6 +56,7 @@ import net.daum.mf.map.api.MapPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -71,12 +74,7 @@ public class SubActivity extends AppCompatActivity {
     private ViewFlipper v_fillipper;
     private JSONArray jarray;
     private JSONObject jObject;
-    String LoginId;
-    private SoundPool soundPool;
-    private SoundManager soundManager;
-    boolean play;
-    int playSoundId;
-
+    String LoginId, Nickname, Image, Save_Path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,17 +96,18 @@ public class SubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        soundPool = new SoundPool.Builder().build();
-        soundManager = new SoundManager(this,soundPool);
-        soundManager.addSound(0,R.raw.sos);
 
 
         /* 로그인 정보 가져오기 */
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
         String Nickname = auto.getString("r_nickname", "");
-
+        Image = auto.getString("r_image", "");
+        Save_Path = "http://13.209.229.237:8080/data/img/rider";
+        Log.d("파일경로",Save_Path+"/"+Image);
         /* 드로우 레이아웃 네비게이션 부분들 */
+        Bitmap mem_Image = BitmapFactory.decodeFile(new File(Save_Path + "/" + Image).getAbsolutePath());
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -117,7 +116,9 @@ public class SubActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
+        ImageView userImage = (ImageView) header.findViewById(R.id.user_image);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        userImage.setImageBitmap(mem_Image);
         InFoUserId.setText(Nickname + "님 환영합니다");
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
@@ -189,33 +190,7 @@ public class SubActivity extends AppCompatActivity {
             return true;
         });
 
-        //긴급알림
-        ImageView send_sms = (ImageView) findViewById(R.id.help_send);
-        send_sms.setOnClickListener(v -> {
-            //
-            String number = "010-6780-5637";
-            String sms = "산에서 다쳤어요! 도와주세요! 제 위치는     이고 주소는     에요.";
-            try{
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(number, null, sms, null, null);
-                Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
-            }catch(Exception e){
-                Toast.makeText(getApplicationContext(), "전송에 실패하였습니다. 내장전화앱으로 전환합니다.",Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        });
 
-        ImageView sns_sound = (ImageView) findViewById(R.id.sos_sound);
-        sns_sound.setOnClickListener(v -> {
-            if(!play){
-                playSoundId=soundManager.playSound(0);
-                play = true;
-            }else{
-                soundManager.playSound(0);
-                play = false;
-            }
-
-        });
         ImageView startbt = (ImageView) findViewById(R.id.ridingstart);
         //라이딩 시작
         startbt.setOnClickListener(v -> {

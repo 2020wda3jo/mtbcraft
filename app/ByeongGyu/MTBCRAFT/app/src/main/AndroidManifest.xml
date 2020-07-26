@@ -53,12 +53,12 @@
         <activity android:name=".Activity.Main.endActivity" />
         <activity android:name=".Activity.Course.CourseList" />
         <activity android:name=".Activity.Course.CourseDetail" />
-        <activity android:name=".Activity.Riding.FollowStart" />
         <activity android:name=".Activity.Scrap.MyScrap" />
         <activity android:name=".Activity.Scrap.MyScrapDetail" />
         <activity android:name=".Activity.Course.CourseSearch" />
         <activity android:name=".Activity.Competition.CompetitionDetail" />
         <activity android:name=".Activity.Competition.CompetitionList" />
+        <activity android:name=".Activity.Riding.FollowStart" />
 
     </application>
 

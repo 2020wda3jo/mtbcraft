@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -123,6 +124,7 @@
             </LinearLayout>
         </GridLayout>
 </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -362,6 +364,8 @@
             </LinearLayout>
         </LinearLayout>
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -386,14 +390,17 @@
                         android:textSize="20dp" />
                     </LinearLayout>
             </LinearLayout>
+
+
     <GridLayout
         android:verticalSpacing="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity = "center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:orientation="horizontal"
+        android:columnCount="3"
+        android:rowCount="2"
+        android:orientation="vertical"
         tools:ignore="MissingConstraints">
         <LinearLayout
             android:layout_width="match_parent"
@@ -422,8 +429,30 @@
                 tools:ignore="MissingConstraints"
                 android:onClick="myOnClick"
                 android:layout_marginLeft="50dp"/>
-
-
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+
+            <Button
+                android:id="@+id/sos_sound"
+                android:layout_width="50dp"
+                android:layout_height="55dp"
+                android:background="@drawable/sos_sound"
+                tools:ignore="MissingConstraints" />
+
+            <Button
+                android:id="@+id/help"
+                android:layout_width="50dp"
+                android:layout_height="55dp"
+                android:background="@drawable/help"
+                tools:ignore="MissingConstraints"
+                android:onClick="myOnClick"
+                android:layout_marginLeft="50dp"/>
+        </LinearLayout>
+
     </GridLayout>
 </LinearLayout>
