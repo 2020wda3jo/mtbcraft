@@ -434,6 +434,46 @@ function hourminsec(text){
 	 });
  }
  
+ 
+  //위험지역 등록 눌렀을 때
+ function show_pr(){
+	 $("#box_post_DA2").show();
+	 $("#form_post_DA")[0].reset();
+	 postmode = true;
+	 
+	 // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+	 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+		 if(!postmode){
+			 return;
+		 }
+	 	// 클릭한 위도, 경도 정보를 가져옵니다 
+	     var latlng = mouseEvent.latLng; 
+	     
+	 	// 마커 위치를 클릭한 위치로 옮깁니다
+	    da_Point.setPosition(latlng);
+	    da_Point.setMap(map);
+	 	
+	    $("#DA_Lat").val(latlng.getLat());
+	 	$("#DA_Lon").val(latlng.getLng());
+
+	 	searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+	         if (status === kakao.maps.services.Status.OK) {
+	         	// 지번 주소정보
+	         	var detailAddr = result[0].address.address_name;
+	         	var addr = detailAddr.split(" ");
+	         	// 시 + 군구
+	         	$("#DA_addr").val(addr[0]+" "+addr[1]);
+	         }
+	 	});
+	 	
+	 	function searchDetailAddrFromCoords(coords, callback) {
+		    // 좌표로 법정동 상세 주소 정보를 요청합니다
+	 		geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+	 	}
+	 });
+ }
+ 
+ 
  //위험지역등록 취소 눌렀을 때
  function cancel_post_DA(){
 	 $("#box_post_DA").hide();
@@ -556,7 +596,7 @@ function hourminsec(text){
  
  //위험지역 등록신청 버튼 클릭
  function regDA(){
-	 
+	
 	 var form = $("#form_post_DA")[0];
 	 var formdata = new FormData(form);
 	 
@@ -575,6 +615,29 @@ function hourminsec(text){
 		}
 	});
  }
+ 
+ //위험지역 등록신청 버튼 클릭
+ function regNomtb(){
+	
+	 var form = $("#form_post_DA")[0];
+	 var formdata = new FormData(form);
+	 
+	 $.ajax({
+		 url : "/nomtbAction",
+		 type : "post",
+		 data : formdata,
+		 processData: false,
+         contentType: false,
+		 cache : false,
+		 success : function(data) {
+			 alert("통제지역등록완료");
+			 hideMarkers();
+			 getDA();
+			 cancel_post_DA();
+		}
+	});
+ }
+ 
  
  //해시태그 로딩
 function loadHashTag(rr_num){

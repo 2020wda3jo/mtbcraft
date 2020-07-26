@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -232,6 +234,22 @@ public class RidingController {
 		return "success";
 		
 	}
+	
+	@RequestMapping(value = "/nomtbAction", method = RequestMethod.POST)
+	@ResponseBody
+	public  String noMtb(DangerousArea da, HttpServletRequest request) throws Exception {
+		System.out.println(request.getParameter("da_latitude"));
+		System.out.println(request.getParameter("da_longitude"));
+		System.out.println(request.getParameter("da_addr"));
+		System.out.println(request.getParameter("da_content"));
+		System.out.println(request.getParameter("file"));
+		//ridingService.postDangerousArea(da);
+		
+		return "success";
+		
+	}
+	
+	
 		
 	// 사용자 등록 위험 지역 삭제
 	@RequestMapping(value = "/riding/DA/delete", method = RequestMethod.DELETE)
