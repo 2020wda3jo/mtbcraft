@@ -61,7 +61,7 @@
 #ridingmainbtn > * {
   margin: 1%;
 }
-#showDAbtn {
+.showBtn {
 	position : absolute;
 	text-align : center;
 	font-weight : 700;

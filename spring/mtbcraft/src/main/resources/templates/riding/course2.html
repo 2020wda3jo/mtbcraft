@@ -55,9 +55,11 @@ display:none;}
 	
 	<div id="mymap" style="width:69%; height:600px;">
 		<!-- 위험지역 보기 버튼 -->
-		<div id="showDAbtn">
+		<div id="showDAbtn" class="showBtn">
 			<label for="chk_DA">위험지역 보기</label> <input id="chk_DA" name="DA" type="checkbox">
-			<label for="chk_DA">통제지역</label> <input id="chk_DA" name="DA" type="checkbox">
+			</div>
+			<div id="showDAbtn" class="showBtn" style="margin-top:60px;">
+			<label for="chk_NO">통제지역 보기</label> <input id="chk_NO" name="NO" type="checkbox">
 		</div>
 	</div>
 	
@@ -75,11 +77,11 @@ display:none;}
 	</div>
 	
 	<div id="box_post_DA2">
-		<form id="form_post_DA" action="/nomtbAction" method="post"  enctype="multipart/form-data">
-			<label>위도</label><input type="text" id="DA_Lat" name="da_latitude" size="18">
-			<label>경도</label><input type="text" id="DA_Lon" name="da_longitude" size="18">
-			<label>산 이름</label><input type="text" id="DA_addr" name="da_addr" size="8" required>
-			<label>한줄평</label><input type="text" id="DA_content" name="da_content" size="40" required>
+		<form id="form_post_nomtb" action="/nomtbAction" method="post"  enctype="multipart/form-data">
+			<label>위도</label><input type="text" id="no_lot" name="nomtb_lot" size="18">
+			<label>경도</label><input type="text" id="no_lon" name="nomtb_lon" size="18">
+			<label>산 이름</label><input type="text" id="no_addr" name="nomtb_addr" size="8" required>
+			<label>한줄평</label><input type="text" id="no_content" name="nomtb_content" size="40" required>
 			<label>이미지첨부</label><input type="file" id="file" name="file" accept="image/*">
 			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
 		</form>

@@ -4,10 +4,24 @@ $(document).ready(function() {
 		
 });
 
+
+
+var imageSrc = '/imgs/danger.png', // 마커이미지의 주소입니다    
+    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+    
+var imageSrc2 = '/imgs/noin.png', // 마커이미지의 주소입니다    
+    imageSize2 = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+    imageOption2 = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+var markerImage2 = new kakao.maps.MarkerImage(imageSrc2, imageSize2, imageOption2);
+var postNoMode = false;
+var postNomtb = false;
+
+
 var userId = $("#hiddenID").val();
-
 var da_makers = []; // 위험지역을 담을 배열
-
+var no_markers = [];
 var mapContainer = document.getElementById('mymap'), // 지도를 표시할 div 
 mapOption = { 
     center: new kakao.maps.LatLng(35.89617906303501, 128.62171907592318), // 지도의 중심좌표
@@ -60,6 +74,15 @@ $("#chk_DA").click(function(){
 });
 
 
+//통제지역 표시 체크 클릭시
+$("#chk_NO").click(function(){
+	if( $("#chk_NO").is(":checked") ){
+		getNomtb();
+	}else{
+		hideMarkers();
+	}
+	});
+	
 //위험지역 조회
 function getDA(){
 	da_makers = [];
@@ -72,6 +95,7 @@ function getDA(){
 			    // 마커를 생성합니다
 			    var marker = new kakao.maps.Marker({
 			        map: map, // 마커를 표시할 지도
+			        image: markerImage,
 			        position: new kakao.maps.LatLng(data[i].da_latitude, data[i].da_longitude) // 마커의 위치
 			    });
 			    
@@ -92,6 +116,42 @@ function getDA(){
 	});		
 }
 
+
+//통제지역 조회
+function getNomtb(){
+	no_markers = [];
+
+$.ajax({
+    url : "/riding/NO",
+    type : "GET",
+    cache : false,
+    success : function(data) {
+        for (var i = 0; i < data.length; i ++) {
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                map: map, // 마커를 표시할 지도
+                image : markerImage2,
+                position: new kakao.maps.LatLng(data[i].pr_lattude, data[i].pr_longitude) // 마커의 위치
+            });
+            
+            no_markers.push(marker);
+
+            // 마커에 표시할 인포윈도우를 생성합니다 
+            var infowindow = new kakao.maps.InfoWindow({
+                content: data[i].pr_content // 인포윈도우에 표시할 내용
+            });
+
+            // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+            // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+            // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+            kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+            kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+        }
+    }
+});		
+}
+
+
 // 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
 function setMarkers(map) {
     for (var i = 0; i < da_makers.length; i++) {
@@ -99,14 +159,25 @@ function setMarkers(map) {
     }            
 }
 
+// 
+function setNoMakers(map) {
+for (var i = 0; i < no_markers.length; i++) {
+    no_markers[i].setMap(map);
+}            
+}
+
+
+
 // "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
 function showMarkers() {
-    setMarkers(map)    
+    setMarkers(map);
+    setNoMakers(map);    
 }
 
 // "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
 function hideMarkers() {
-    setMarkers(null);    
+    setMarkers(null);
+    setNoMakers(null);    
 }
 
 // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
@@ -435,43 +506,36 @@ function hourminsec(text){
  }
  
  
-  //위험지역 등록 눌렀을 때
- function show_pr(){
-	 $("#box_post_DA2").show();
-	 $("#form_post_DA")[0].reset();
-	 postmode = true;
-	 
-	 // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-	 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-		 if(!postmode){
-			 return;
-		 }
-	 	// 클릭한 위도, 경도 정보를 가져옵니다 
-	     var latlng = mouseEvent.latLng; 
-	     
-	 	// 마커 위치를 클릭한 위치로 옮깁니다
-	    da_Point.setPosition(latlng);
-	    da_Point.setMap(map);
-	 	
-	    $("#DA_Lat").val(latlng.getLat());
-	 	$("#DA_Lon").val(latlng.getLng());
+  //입산통제눌렀을 때 
+function show_pr(){
+ $("#box_post_DA2").show();
+ $("#form_post_nomtb")[0].reset();
+ postNoMode = true;
+ 
+ // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+     if(!postNoMode){
+         return;
+     }
+     // 클릭한 위도, 경도 정보를 가져옵니다 
+     var latlng = mouseEvent.latLng; 
+     
+     // 마커 위치를 클릭한 위치로 옮깁니다
+    da_Point.setPosition(latlng);
+    da_Point.setMap(map);
+     
+    $("#no_lot").val(latlng.getLat());
+     $("#no_lon").val(latlng.getLng());
 
-	 	searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
-	         if (status === kakao.maps.services.Status.OK) {
-	         	// 지번 주소정보
-	         	var detailAddr = result[0].address.address_name;
-	         	var addr = detailAddr.split(" ");
-	         	// 시 + 군구
-	         	$("#DA_addr").val(addr[0]+" "+addr[1]);
-	         }
-	 	});
-	 	
-	 	function searchDetailAddrFromCoords(coords, callback) {
-		    // 좌표로 법정동 상세 주소 정보를 요청합니다
-	 		geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
-	 	}
-	 });
- }
+     
+     function searchDetailAddrFromCoords(coords, callback) {
+        // 좌표로 법정동 상세 주소 정보를 요청합니다
+         geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+     }
+ });
+}
+
+
  
  
  //위험지역등록 취소 눌렀을 때
@@ -616,27 +680,29 @@ function hourminsec(text){
 	});
  }
  
- //위험지역 등록신청 버튼 클릭
- function regNomtb(){
-	
-	 var form = $("#form_post_DA")[0];
-	 var formdata = new FormData(form);
-	 
-	 $.ajax({
-		 url : "/nomtbAction",
-		 type : "post",
-		 data : formdata,
-		 processData: false,
-         contentType: false,
-		 cache : false,
-		 success : function(data) {
-			 alert("통제지역등록완료");
-			 hideMarkers();
-			 getDA();
-			 cancel_post_DA();
-		}
-	});
- }
+ 
+//통제지역 등록
+function regNomtb(){
+
+ var form = $("#form_post_nomtb")[0];
+ var formdata = new FormData(form);
+ alert(form);
+ 
+ $.ajax({
+     url : "/nomtbAction",
+     type : "post",
+     data : formdata,
+     processData: false,
+     contentType: false,
+     cache : false,
+     success : function(data) {
+         alert("통제지역등록완료");
+         hideMarkers();
+         getDA();
+         cancel_post_DA();
+    }
+});
+}
  
  
  //해시태그 로딩
@@ -744,5 +810,3 @@ function wrapWindowByMask() {
 			}
 		});
     }
-    
-

@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
@@ -38,6 +40,7 @@ import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Gpx;
 import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.No_Danger;
+import com.mtbcraft.dto.Nomtb;
 import com.mtbcraft.dto.PagingVO;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
@@ -206,6 +209,14 @@ public class RidingController {
 	public @ResponseBody List<DangerousArea> getDangerousArea() throws Exception {
 		return ridingService.getDangerousArea();
 	}
+	
+	// 위험 지역 조회
+		@RequestMapping(value = "/riding/NO", method = RequestMethod.GET)
+		public @ResponseBody List<Nomtb> getNoMtbArea() throws Exception {
+			System.out.println("들어왔다");
+			return ridingService.getNoMtbArea();
+		}
+		
 
 	// 사용자 등록 위험 지역 조회
 	@RequestMapping(value = "/riding/DA/check", method = RequestMethod.GET)
@@ -235,15 +246,23 @@ public class RidingController {
 		
 	}
 	
+	//입산통제지역 신청
+	
 	@RequestMapping(value = "/nomtbAction", method = RequestMethod.POST)
 	@ResponseBody
-	public  String noMtb(DangerousArea da, HttpServletRequest request) throws Exception {
-		System.out.println(request.getParameter("da_latitude"));
-		System.out.println(request.getParameter("da_longitude"));
-		System.out.println(request.getParameter("da_addr"));
-		System.out.println(request.getParameter("da_content"));
-		System.out.println(request.getParameter("file"));
-		//ridingService.postDangerousArea(da);
+	public  String noMtb(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
+		
+		Nomtb nomtb = new Nomtb();
+		nomtb.setPr_lattude(request.getParameter("nomtb_lot"));
+		nomtb.setPr_longitude(request.getParameter("nomtb_lon"));
+		nomtb.setPr_addr(request.getParameter("nomtb_addr"));
+		nomtb.setPr_content(request.getParameter("nomtb_content"));
+		nomtb.setPr_image(file.getOriginalFilename());
+		nomtb.setPr_rider(request.getParameter("da_rider"));
+		
+		
+		ridingService.postnoMtb(nomtb);
+
 		
 		return "success";
 		

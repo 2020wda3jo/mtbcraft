@@ -8,6 +8,7 @@ import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Like_Status;
+import com.mtbcraft.dto.Nomtb;
 import com.mtbcraft.dto.PagingVO;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Tag_Status;
@@ -89,4 +90,8 @@ public interface RidingMapper {
 	
 	//코스명 검색 - 개수 파악
 	public int cnt_searchCourseName(String rr_name);
+
+	public void postnoMtb(Nomtb da);
+
+	public List<Nomtb> getNoMtbArea();
 }

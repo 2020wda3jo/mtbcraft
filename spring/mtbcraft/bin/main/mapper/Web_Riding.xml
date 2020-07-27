@@ -37,6 +37,11 @@
 		SELECT * FROM DANGEROUS_AREA
 	</select>
 	
+	<!-- 등록된 위험지역 조회 -->
+	<select id="getNoMtbArea" resultType="com.mtbcraft.dto.Nomtb">
+		SELECT * FROM PROHIBITION
+	</select>
+	
 	<!-- 사용자 등록 위험지역 조회 -->
 	<select id="getUserDangerousArea" parameterType="String"
 		resultType="com.mtbcraft.dto.DangerousArea">
@@ -47,6 +52,21 @@
 	<insert id="postDangerousArea"	parameterType="com.mtbcraft.dto.DangerousArea">
 		insert into dangerous_area(da_num, da_rider,da_latitude, da_addr, da_status, da_content, da_longitude, da_image)
 		values(SEQ_DANGEROUSAREA.nextval, #{da_rider,jdbcType=VARCHAR}, #{da_latitude,jdbcType=VARCHAR},	#{da_addr,jdbcType=VARCHAR}, 0, #{da_content,jdbcType=VARCHAR}, #{da_longitude,jdbcType=VARCHAR}, #{da_image,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 입산통제지역 등록 -->
+	<insert id="postnoMtb"	parameterType="com.mtbcraft.dto.Nomtb">
+		INSERT INTO PROHIBITION (PR_RIDER, PR_LATTUDE, PR_ADDR, PR_IMAGE, PR_STATUS, PR_CONTENT, PR_LONGITUDE)
+		VALUES (
+		#{pr_rider},
+		#{pr_lattude},
+		#{pr_addr},
+		#{pr_image},
+		0,
+		#{pr_content},
+		#{pr_longitude}
+		)
+
 	</insert>
 	
 	<!-- 사용자 스크랩 코스 조회 -->
