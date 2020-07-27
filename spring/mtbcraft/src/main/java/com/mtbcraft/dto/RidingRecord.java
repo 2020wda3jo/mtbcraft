@@ -21,7 +21,16 @@ public class RidingRecord {
 	private int rr_like;
 	private String rr_name;
 	private String rr_tag;
-	
+	private String rr_foname;
+
+	public String getRr_foname() {
+		return rr_foname;
+	}
+
+	public void setRr_foname(String rr_foname) {
+		this.rr_foname = rr_foname;
+	}
+
 	public String getRr_tag() {
 		return rr_tag;
 	}

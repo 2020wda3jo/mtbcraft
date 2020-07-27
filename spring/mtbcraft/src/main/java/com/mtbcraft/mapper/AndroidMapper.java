@@ -138,4 +138,8 @@ public interface AndroidMapper {
 	public List<App_MissionRanking> getMisRanking() throws Exception;
 	
 	public List<App_CourseReview> getCourseRiview(@Param("c_num") int c_num) throws Exception;
+
+    void foinsert(RidingRecord record);
+
+	void foupdate(RidingRecord record);
 }

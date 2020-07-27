@@ -492,4 +492,38 @@ public class AndroidController {
 		rr.setRr_like(like);
 		return rr;
 	}
+
+	@RequestMapping(value = "/app/riding/foup")
+	// 주소변경예정 @RequestMapping(value = "/android/recordInsert")
+	@ResponseBody
+	public Map<String, String> insertFollowRiding(HttpServletRequest request) throws Exception {
+		RidingRecord record = new RidingRecord();
+
+		// 현재날짜 timestamp
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		// formatter.setTimeZone(TimeZone.getTimeZone("GMT+09"));
+		Calendar cal = Calendar.getInstance();
+		String today = null;
+		today = formatter.format(cal.getTime());
+		Timestamp ts = Timestamp.valueOf(today);
+		record.setRr_rider(request.getParameter("rr_rider"));
+		record.setRr_date(ts);
+		record.setRr_distance(Integer.parseInt(request.getParameter("rr_distance")));
+		record.setRr_topspeed(Integer.parseInt(request.getParameter("rr_topspeed")));
+		record.setRr_avgspeed(Integer.parseInt(request.getParameter("rr_avgspeed")));
+		record.setRr_high(Integer.parseInt(request.getParameter("rr_high")));
+		record.setRr_gpx(request.getParameter("rr_gpx"));
+		record.setRr_open(Integer.parseInt(request.getParameter("rr_open")));
+		record.setRr_breaktime(Integer.parseInt(request.getParameter("rr_breaktime")));
+		record.setRr_time(Integer.parseInt(request.getParameter("rr_time")));
+		record.setRr_area(request.getParameter("rr_area"));
+		record.setRr_name(request.getParameter("rr_name"));
+		record.setRr_foname(request.getParameter("rr_name"));
+		// 안드로이드에게 전달하는 데이터
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("data1", request.getParameter("rr_rider"));
+		androidService.foinsert(record);
+		androidService.foupdate(record);
+		return result;
+	}
 }

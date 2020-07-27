@@ -151,7 +151,7 @@ public class FollowStart extends FragmentActivity
         binding.couseInfo.setText(intentt.getStringExtra("c_name"));
         Log.d("확인",intentt.getStringExtra("c_name") + ""+ intentt.getStringExtra("gpx"));
 
-
+        String course_name = intentt.getStringExtra("c_name");
 
 
 
@@ -310,7 +310,7 @@ public class FollowStart extends FragmentActivity
 
             } else {
 
-                Intent intent = new Intent(getApplicationContext(), endActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FollowEndActivity.class);
                 intent.putExtra("ingtime", total_time); //경과시간
                 intent.putExtra("distence", (int)hap); //이동거리
                 intent.putExtra("maxspeed", (int)maX); //최대속도
@@ -330,6 +330,7 @@ public class FollowStart extends FragmentActivity
                 intent.putExtra("wido", witch_lat); //위도(지도보여줄거
                 intent.putExtra("kyun", witch_lon); //경도(지도보여줄거)
                 intent.putExtra("rr_comp", "null");
+                intent.putExtra("course_name",course_name);
 
                 Log.d("로그랑",total_time+ " " + hap + " " + maX + " " + avg + " " + getgodo + " " +rest + " " + adress_value + " " );
                 startActivity(intent);

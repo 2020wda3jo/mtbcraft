@@ -59,6 +59,7 @@
         <activity android:name=".Activity.Competition.CompetitionDetail" />
         <activity android:name=".Activity.Competition.CompetitionList" />
         <activity android:name=".Activity.Riding.FollowStart" />
+        <activity android:name=".Activity.Riding.FollowEndActivity"/>
 
     </application>
 

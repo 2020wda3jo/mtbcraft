@@ -219,4 +219,12 @@ public class AndroidService {
 	public List<App_CourseReview> getCourseRiview(@Param("c_num") int c_num) throws Exception{
 		return androidMapper.getCourseRiview(c_num);
 	}
+
+    public void foinsert(RidingRecord record) {
+		androidMapper.foinsert(record);
+    }
+
+	public void foupdate(RidingRecord record) {
+		androidMapper.foupdate(record);
+	}
 }
