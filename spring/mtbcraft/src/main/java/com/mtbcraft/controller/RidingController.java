@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.mtbcraft.dto.Avg_RidingRecord;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
@@ -473,6 +474,12 @@ public class RidingController {
 		}
 		fis.close();
 		gpx.setting(txt);
+	}
+	//라이딩기록 전체 평균정보
+	@RequestMapping(value="/info/riding/totalavg", method = RequestMethod.GET)
+	@ResponseBody
+	public Avg_RidingRecord getAVGRR() {
+		return ridingService.getAVGRR();
 	}
 	
 	//이미지 로딩

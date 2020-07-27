@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mtbcraft.dto.Avg_RidingRecord;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Like_Status;
@@ -158,5 +159,10 @@ public class RidingService {
 	public List<Nomtb> getNoMtbArea() {
 		// TODO Auto-generated method stub
 		return ridingMapper.getNoMtbArea();
+	}
+	
+	//전체 라이딩 평균 기록 조회
+	public Avg_RidingRecord getAVGRR() {
+		return ridingMapper.getAVGRR();
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.mtbcraft.dto.Avg_RidingRecord;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
@@ -94,4 +95,7 @@ public interface RidingMapper {
 	public void postnoMtb(Nomtb da);
 
 	public List<Nomtb> getNoMtbArea();
+	
+	//전체 라이딩 평균 기록 조회
+	public Avg_RidingRecord getAVGRR();
 }

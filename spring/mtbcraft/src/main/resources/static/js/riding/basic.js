@@ -282,6 +282,147 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					$("#cif_high").text(data.rr_high+" m"); 
 					$("#cif_like").text(data.rr_like);
 					$('#bt_mode').text("스크랩하기");
+					
+					var rr_avgspeed,rr_topspeed,rr_distance,rr_high,rr_time,
+					total_avgspeed, total_topspeed,total_distance,total_high,total_time;
+					
+					rr_avgspeed = data.rr_avgspeed;
+					rr_topspeed = data.rr_topspeed;
+					rr_distance = data.rr_distance/1000;
+					rr_high = data.rr_high/10;
+					rr_time = data.rr_time/60;
+					
+					$.ajax({
+						url : "/info/riding/totalavg",
+						type : "GET",
+						cache : false, 
+						success : function(data2) {
+							console.log(data2);
+							
+							total_avgspeed = data2.avgspeed;
+							total_topspeed = data2.topspeed;
+							total_distance = data2.distance;
+							total_high = data2.avgspeed;
+							total_time = data2.time/60;
+							
+							Highcharts.chart('container2', {
+								
+								  chart: {
+								    polar: true,
+								    type: 'line'
+								  },
+						
+								   title: {
+								    text: '평균주행정보',
+								    x: -80
+								  },
+						
+								  pane: {
+								    size: '80%'
+								  },
+						
+								  xAxis: {
+								    categories: ['최고속도(km/h)', '평균속도(km/h)', '거리(km)', '획득고도(10m)'],
+								    tickmarkPlacement: 'on',
+								    lineWidth: 0
+								  },
+						
+								  yAxis: {
+								    gridLineInterpolation: 'polygon',
+								    lineWidth: 0,
+								    min: 0
+								  },
+						
+								  tooltip: {
+								    shared: true,
+								    pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+								  },
+						
+								  legend: {
+								    align: 'right',
+								    verticalAlign: 'middle',
+								    layout: 'vertical'
+								  },
+						
+								  series: [{
+								    name: '전체코스',
+								    data: [total_topspeed, total_avgspeed, total_distance, total_high ],
+								    pointPlacement: 'on'
+								  }, {
+								    name: '해당코스',
+								    data: [rr_topspeed, rr_avgspeed, rr_distance, rr_high],
+								    pointPlacement: 'on'
+								  }],
+						
+								  responsive: {
+								    rules: [{
+								      condition: {
+								        maxWidth: 500
+								      },
+								      chartOptions: {
+								        legend: {
+								          align: 'center',
+								          verticalAlign: 'bottom',
+								          layout: 'horizontal'
+								        },
+								        pane: {
+								          size: '70%'
+								        }
+								      }
+								    }]
+								  }
+								});
+							
+							Highcharts.chart('container3', {
+							    chart: {
+							        type: 'column'
+							    },
+							    title: {
+							        text: '주행시간'
+							    },
+							    
+							    xAxis: {
+							        type: 'category',
+							        labels: {
+							            style: {
+							                fontSize: '17px',
+							                fontFamily: 'Verdana, sans-serif'
+							            }
+							        }
+							    },
+							    yAxis: {
+							        min: 0,
+							        title: {
+							            text: ''
+							        }
+							    },
+							    legend: {
+							        enabled: false
+							    },
+							    tooltip: {
+							        pointFormat: '주행시간: <b>{point.y:.0f} 분</b>'
+							    },
+							    series: [{
+							        name: 'Population',
+							        data: [
+							            ['해당코스', rr_time],
+							            ['전체코스', total_time]            
+							        ],
+							        dataLabels: {
+							            enabled: true,
+							            color: '#FFFFFF',
+							            format: '{point.y:.0f}', // one decimal
+							            y: 50, // 10 pixels down from the top
+							            style: {
+							                fontSize: '30px',
+							                fontFamily: 'Verdana, sans-serif'
+							            }
+							        }
+							    }]
+							});
+						}
+					});
+					
 				}else if(mode=="ridingrecord"){
 					$("#cif_name").text(data.rr_name); 
 					$("#cif_total").text( (parseInt(data.rr_distance)/1000).toString().substring(0,3)+ " km" ); 
