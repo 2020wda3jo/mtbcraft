@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +24,16 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
+import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
+import com.capston.mtbcraft.Activity.Danger.Danger;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.FollowStart;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.R;
+import com.capston.mtbcraft.databinding.ActivitySubmainBinding;
+import com.capston.mtbcraft.databinding.ScrapDetailBinding;
 import com.capston.mtbcraft.gpxparser.GPXParser;
 import com.capston.mtbcraft.gpxparser.Gpx;
 import com.capston.mtbcraft.gpxparser.Track;
@@ -57,19 +63,21 @@ import java.util.List;
 import java.util.Map;
 
 public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
-    String c_num, gpx, c_name;
-    TextView textView1, textView2, textView3, det_title;
-    Button deleteBt,button2;
-    int Sta;
+    private ScrapDetailBinding binding;
+    private String c_num, gpx, c_name, LoginId, Nickname;
     private DrawerLayout mDrawerLayout;
-    GPXParser mParser = new GPXParser();
-    Gpx parsedGpx = null;
-    MapView mapView;
+    private GPXParser mParser = new GPXParser();
+    private Gpx parsedGpx = null;
+    private MapView mapView;
+    private SharedPreferences auto;
+    private ImageView userImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.scrap_detail);
-
+        binding = ScrapDetailBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
         mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
@@ -80,9 +88,10 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
 
 
         /* 로그인 정보 가져오기 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId","");
-        String Nickname = auto.getString("r_nickname","");
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        LoginId = auto.getString("LoginId", "");
+        Nickname = auto.getString("r_nickname", "");
+
 
         /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -93,8 +102,25 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        InFoUserId.setText(Nickname+"님 환영합니다");
+        InFoUserId.setText(Nickname + "님 환영합니다");
+
+        //닉네임명에 따른 이미지변경(임시)
+        switch(Nickname){
+            case "배고파":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
+                break;
+
+            case "2병규":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                break;
+        }
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
@@ -107,46 +133,63 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
 
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
                     break;
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
+                    break;
+                case R.id.friend_chodae:
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
+
+                    Intent chooser = Intent.createChooser(intent, "초대하기");
+                    startActivity(chooser);
+                    break;
+
+                //위험구역
+                case R.id.nav_danger:
+                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    startActivity(danger);
+                    break;
+
+                //위험구역
+                case R.id.no_mtb:
+                    Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
+                    startActivity(nomtb);
                     break;
             }
             return true;
         });
 
-        textView1 = (TextView)findViewById(R.id.course_add);
-        textView2 = (TextView)findViewById(R.id.course_dis );
-        textView3 = (TextView)findViewById(R.id.course_level );
-        det_title = (TextView)findViewById(R.id.deta_title);
-        deleteBt = (Button)findViewById(R.id.delete_bt);
-        button2 = (Button)findViewById(R.id.follow_bt);
+
         Intent intent = new Intent(this.getIntent());
         c_num = intent.getStringExtra("c_num");
         gpx = intent.getStringExtra("c_gpx");
@@ -217,7 +260,8 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
             }
         };
         uThread.start(); // 작업 Thread 실행
-        deleteBt.setOnClickListener(v -> {
+
+        binding.deleteBt.setOnClickListener(v -> {
             try{
                 DeleteTask delTask = new DeleteTask();
                 Map<String, String> params = new HashMap<String, String>();
@@ -227,7 +271,7 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
                 e.printStackTrace();
             }
         });
-        button2.setOnClickListener(v->{
+        binding.followBt.setOnClickListener(v->{
             Intent intent2=new Intent(MyScrapDetail.this, FollowStart.class);
             intent2.putExtra("gpx",gpx);
             intent2.putExtra("c_name",c_name);
@@ -253,7 +297,7 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/scrap/"+c_num);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/scrap/del/"+c_num);
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -312,25 +356,56 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
                 String tempData = s;
 
                 //json값을 받기위한 변수들
-
-                String c_distance = "";
-                String c_area = "";
-                String c_title="";
-                String c_avg="";
-
                 JSONArray jarray = new JSONArray(tempData);
+                String rr_rider="", rr_date="", rr_area="", rr_name="", rr_like="";
+                int rr_distance=0, rr_topspeed=0, rr_avgspeed=0, rr_high=0, rr_breaktime=0, rr_time=0;
                 for (int i = 0; i < jarray.length(); i++) {
                     JSONObject jObject = jarray.getJSONObject(i);
-                    c_distance = jObject.getString("rr_distance");
-                    c_area = jObject.getString("rr_area");
-                    c_title = jObject.getString("rr_name");
-                    c_avg = jObject.getString("rr_avgspeed");
+
+                    /*상단 데이터 */
+                    rr_rider = jObject.getString("rr_rider");
+                    rr_date = jObject.getString("rr_date");
+                    rr_name = jObject.getString("rr_name");
+
+                    /*하단 데이터 */
+                    rr_distance = jObject.getInt("rr_distance");
+                    rr_topspeed = jObject.getInt("rr_topspeed");
+                    rr_avgspeed = jObject.getInt("rr_avgspeed");
+                    rr_time = jObject.getInt("rr_time");
+                    rr_high = jObject.getInt("rr_high");
+                    rr_breaktime = jObject.getInt("rr_breaktime");
+                    rr_like = jObject.getString("rr_like");
+                    rr_area = jObject.getString("rr_area");
                 }
 
-                textView1.setText(c_area);
-                textView2.setText(c_distance);
-                textView3.setText(c_avg);
-                det_title.setText(c_title);
+                /* 하단 데이터 */
+                int hour, min, sec = rr_time;
+                min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
+
+                Log.d("라이딩시간",hour+"시간 "+min+"분 "+sec+"초");
+                //휴식시간 계산
+                int b_hour, b_min, b_sec = rr_breaktime;
+                b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
+
+                int des = rr_distance;
+                float km = (float) (des/1000.0);
+                String total = km+"Km";
+
+                binding.cRideMax.setText(rr_topspeed+"km/h");
+                binding.cAvg.setText(rr_avgspeed+"km/h");
+                binding.cGet.setText(rr_high+"m");
+
+                String time = hour+"시간 "+min+"분 "+sec+"초";
+                String r_time = b_hour+"시간 "+b_min+"분 "+b_sec+"초";
+                binding.cRideTime.setText(time);
+                binding.cRestTime.setText(r_time);
+
+                binding.cAddr.setText(rr_area);
+                binding.likeCount.setText(rr_like);
+                binding.cDis.setText(total);
+                binding.detaTitle.setText(rr_name);
+
+
             } catch (Exception e) {
                 e.printStackTrace();
 

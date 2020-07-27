@@ -1,6 +1,6 @@
 package com.capston.mtbcraft.Activity.Main;
 
-import android.annotation.SuppressLint;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,72 +9,52 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Danger.Danger;
 import com.capston.mtbcraft.Activity.Mission.Mission;
-import com.capston.mtbcraft.Activity.Riding.DetailActivity;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.databinding.ActivitySubmainBinding;
-import com.capston.mtbcraft.databinding.RidingStartBinding;
 import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
-
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapPoint;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-public class SubActivity extends AppCompatActivity {
+public class SubActivity extends AppCompatActivity{
     private ActivitySubmainBinding binding;
     private DrawerLayout mDrawerLayout;
     private ViewFlipper v_fillipper;
     private JSONArray jarray;
     private JSONObject jObject;
-    String LoginId, Nickname, Image, Save_Path;
+    private String LoginId, Nickname;
+    private ImageView userImage;
+    private SharedPreferences auto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,18 +76,13 @@ public class SubActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
         /* 로그인 정보 가져오기 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
-        String Nickname = auto.getString("r_nickname", "");
-        Image = auto.getString("r_image", "");
-        Save_Path = "http://13.209.229.237:8080/data/img/rider";
-        Log.d("파일경로",Save_Path+"/"+Image);
-        /* 드로우 레이아웃 네비게이션 부분들 */
-        Bitmap mem_Image = BitmapFactory.decodeFile(new File(Save_Path + "/" + Image).getAbsolutePath());
+        Nickname = auto.getString("r_nickname", "");
 
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -116,10 +91,26 @@ public class SubActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
-        ImageView userImage = (ImageView) header.findViewById(R.id.user_image);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        userImage.setImageBitmap(mem_Image);
         InFoUserId.setText(Nickname + "님 환영합니다");
+
+        //닉네임명에 따른 이미지변경(임시)
+        switch(Nickname){
+            case "배고파":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
+                break;
+
+            case "2병규":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                break;
+        }
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -183,9 +174,6 @@ public class SubActivity extends AppCompatActivity {
                     Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
                     startActivity(nomtb);
                     break;
-
-
-
             }
             return true;
         });
@@ -205,7 +193,6 @@ public class SubActivity extends AppCompatActivity {
         addRecord.execute(params);
 
     }
-
 
     public class AddRecord extends AsyncTask<Map<String, String>, Integer, String> {
         @Override

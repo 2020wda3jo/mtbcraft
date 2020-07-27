@@ -1,6 +1,8 @@
 package com.capston.mtbcraft.Activity.Course;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
+import com.capston.mtbcraft.Activity.Control.NoMtb;
+import com.capston.mtbcraft.Activity.Danger.Danger;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
@@ -35,33 +40,57 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Map;
 public class CourseList extends AppCompatActivity {
-    GPXParser mParser = new GPXParser();
-    Gpx parsedGpx = null;
-
     private RecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
-    ArrayList<RidingRecord> arrlist = new ArrayList<>();
-    RecyclerView recyclerView;
-    ImageView likeimg;
+    private RecyclerView recyclerView;
+    private SharedPreferences auto;
 
-    String LoginId;
+    String LoginId, Nickname;
+    ImageView userImage;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.courselist);
         recyclerView= findViewById(R.id.recyclerView);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         RidingRecord rrr = new RidingRecord();
         Intent intent = new Intent(this.getIntent());
         rrr.setLoginId(intent.getStringExtra("rider_id")); ;
 
+        /* 로그인 정보 가져오기 */
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        LoginId = auto.getString("LoginId", "");
+        Nickname = auto.getString("r_nickname", "");
+
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        likeimg = (ImageView) findViewById(R.id.likeimg);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View header = navigationView.getHeaderView(0);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
+        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        InFoUserId.setText(Nickname + "님 환영합니다");
+
+        //닉네임명에 따른 이미지변경(임시)
+        switch(Nickname){
+            case "배고파":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
+                break;
+
+            case "2병규":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                break;
+        }
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -70,40 +99,60 @@ public class CourseList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
-                    startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
 
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
                     break;
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), Mission.class);
                     startActivity(mission);
+                    break;
+                case R.id.friend_chodae:
+                    Intent intent2 = new Intent();
+                    intent2.setAction(Intent.ACTION_SEND);
+                    intent2.setType("text/plain");
+                    intent2.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    intent2.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
+
+                    Intent chooser = Intent.createChooser(intent2, "초대하기");
+                    startActivity(chooser);
+                    break;
+
+                //위험구역
+                case R.id.nav_danger:
+                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    startActivity(danger);
+                    break;
+
+                //위험구역
+                case R.id.no_mtb:
+                    Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
+                    startActivity(nomtb);
                     break;
             }
             return true;

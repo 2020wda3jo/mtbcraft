@@ -3,11 +3,16 @@ package com.capston.mtbcraft.Activity.Riding;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,42 +35,64 @@ import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 public class MyReport extends AppCompatActivity  {
     private RecyclerAdapter adapter;
     private DrawerLayout mDrawerLayout;
-    ArrayList<RidingRecord> arrlist = new ArrayList<>();
-    RecyclerView recyclerView;
-    SharedPreferences auto;
-    String LoginId;
+    private ArrayList<RidingRecord> arrlist = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private SharedPreferences auto;
+    private String LoginId, Nickname;
+    private ImageView userImage;
+    private TextView InFoUserId;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myreport);
         recyclerView= findViewById(R.id.recyclerView);
 
+        /* 로그인 정보 가져오기 */
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        LoginId = auto.getString("LoginId", "");
+        Nickname = auto.getString("r_nickname", "");
+
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View header = navigationView.getHeaderView(0);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
+        InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        InFoUserId.setText(Nickname + "님 환영합니다");
+
+        //닉네임명에 따른 이미지변경(임시)
+        switch(Nickname){
+            case "배고파":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
+                break;
+
+            case "2병규":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                break;
+        }
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
-
-            int id = menuItem.getItemId();
-            /* 로그인 정보 가져오기 */
-            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-            String LoginId = auto.getString("LoginId","");
-            String Nickname = auto.getString("r_nickname","");
-
-
+        int id = menuItem.getItemId();
             switch (id) {
                 //홈
                 case R.id.nav_home:

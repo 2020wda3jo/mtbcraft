@@ -122,9 +122,9 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 	</select>
 	
 	<!-- 스크랩 코스 삭제 -->
-	<select id="delScrap" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
+	<delete id="delScrap">
 		delete from scrap_status where ss_rnum = #{ss_rnum}
-	</select>
+	</delete>
 	
 	<!-- 주행기록전체보기 -->
 	<select id="getRidingRecordAll" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">

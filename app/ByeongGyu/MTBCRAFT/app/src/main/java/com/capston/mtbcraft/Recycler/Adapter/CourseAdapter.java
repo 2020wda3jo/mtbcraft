@@ -60,8 +60,22 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         String total = String.valueOf(km)+"Km";
 
 
-         String ENTRY_URL = "http://172.30.1.10:8080/app/riding/course_view/";
+         String ENTRY_URL = "http://13.209.229.237:8080/app/riding/course_view/";
 
+        switch(itemList.get(position).getRr_rider()){
+            case "1401287":
+                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo1));
+                break;
+            case "2병규":
+                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.common_google_signin_btn_icon_light));
+                break;
+        }
 
         testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
         testViewHolder.c_name.setText(itemList.get(position).getRr_name());
@@ -71,7 +85,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         testViewHolder.c_dis.setText(total);
         testViewHolder.c_date.setText(itemList.get(position).getRr_date());
         testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
-        testViewHolder.webview.loadUrl("http://172.30.1.10:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
+        testViewHolder.webview.loadUrl("http://53.92.32.7:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
 
         testViewHolder.webview.getSettings().setJavaScriptEnabled(true);
 

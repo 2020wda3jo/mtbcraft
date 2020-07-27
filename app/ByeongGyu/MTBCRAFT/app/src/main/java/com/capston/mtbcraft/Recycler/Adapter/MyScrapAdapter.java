@@ -32,7 +32,7 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
     @NonNull
     @Override
     public MyScrapHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_item , viewGroup,false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.scrap_item , viewGroup,false);
 
         return new MyScrapHolder(v);
     }
@@ -54,6 +54,10 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
         if(min==0){
             min=00;
         }
+
+
+
+
         String hour_s = String.valueOf(hour);
         int des = (itemList.get(position).getRr_distance());
         float km = (float) (des/1000.0);
@@ -84,7 +88,7 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
 
     class MyScrapHolder extends RecyclerView.ViewHolder {
         public TextView c_rider_name, c_name, c_time, c_avg, c_getgodo, c_distance;
-        public ImageView imageView;
+        public ImageView my_image;
         public LinearLayout viewClick;
         public final View mView;
         public TextView c_date;
@@ -99,6 +103,7 @@ public class MyScrapAdapter extends RecyclerView.Adapter<MyScrapAdapter.MyScrapH
             c_getgodo = itemView.findViewById(R.id.c_getgodo);
             c_distance = itemView.findViewById(R.id.c_dis);
             c_date = itemView.findViewById(R.id.c_date);
+            my_image = itemView.findViewById(R.id.myimage);
             viewClick = itemView.findViewById(R.id.viewClick);
 
         }

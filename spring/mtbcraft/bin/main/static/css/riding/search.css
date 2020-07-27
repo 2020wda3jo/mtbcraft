@@ -70,3 +70,10 @@
 #box_courseInfo {
 	float: none;
 }
+.flex {
+	display: flex;
+}
+
+.flex div:first-child {
+	margin-right: 30px;
+}

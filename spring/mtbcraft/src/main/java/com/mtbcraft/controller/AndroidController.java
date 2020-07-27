@@ -258,9 +258,11 @@ public class AndroidController {
 	}
 	
 	//스크랩 삭제
-	@RequestMapping(value = "/app/riding/scrap/{ss_rnum}", method = RequestMethod.GET)
-	public @ResponseBody List<Course> delScrap(@PathVariable(value = "ss_rnum") String ss_rnum) throws Exception {
-		return androidService.delScrap(ss_rnum);
+	@RequestMapping(value = "/app/riding/scrap/del/{ss_rnum}", method = RequestMethod.GET)
+	public void delScrap(@PathVariable(value = "ss_rnum") String ss_rnum) throws Exception {
+		System.out.println(ss_rnum);
+		androidService.delScrap(ss_rnum);
+		
 	}
 
 	//좋아요

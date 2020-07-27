@@ -22,8 +22,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
+import com.capston.mtbcraft.Activity.Danger.Danger;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.*;
@@ -53,41 +55,27 @@ import java.util.Collections;
 import java.util.Map;
 import com.capston.mtbcraft.R;
 public class CompetitionDetail extends AppCompatActivity implements LocationListener{
-    String comp_num, comp_period, comp_badge, comp_course, comp_image, comp_content, comp_name, Save_Path, badge_path, c_gpx, c_name, comp_point;
-    TextView name_textView, period_textView2, textView3, textView4;
-    Button joinButton;
-    ImageView imageView6, imageView7, imageView8, imageView9;
-    WebView webView;
-    RecyclerView recyclerView, recyclerView2;
-    LocationManager locationManager;
-    Location lastKnownLocation;
-    String[] a = new String[4];
-    ArrayList<CompClub> clubItemList;
-    ArrayList<CompScore> newScoreItemList;
-    int clubCount = 0, badgeCount = 0, scoreCount = 0;
-
+    private String comp_num, comp_period, comp_badge, comp_course, comp_image, comp_content, comp_name, Save_Path, badge_path, c_gpx, c_name, comp_point, LoginId, Nickname;
+    private TextView name_textView, period_textView2, textView3, textView4;
+    private Button joinButton;
+    private ImageView imageView6, imageView7, imageView8, imageView9;
+    private WebView webView;
+    private RecyclerView recyclerView, recyclerView2;
+    private LocationManager locationManager;
+    private Location lastKnownLocation;
+    private String[] a = new String[4];
+    private ArrayList<CompClub> clubItemList;
+    private ArrayList<CompScore> newScoreItemList;
+    private int clubCount = 0, badgeCount = 0, scoreCount = 0;
     private DrawerLayout mDrawerLayout;
+    SharedPreferences auto;
+    ImageView userImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_competitiondetail);
 
-
-        /* 로그인관련 */
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        String LoginId = auto.getString("LoginId", "");
-        String Nickname = auto.getString("r_nickname","");
-
-        /*네비게이션 바 */
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         name_textView = findViewById(R.id.comp_name2);
         period_textView2 = findViewById(R.id.comp_day2);
         imageView6 = findViewById(R.id.imageView6);
@@ -101,10 +89,41 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
         recyclerView2 = findViewById(R.id.compScore_recycle);
         joinButton = findViewById(R.id.compjoin_button);
 
+        /* 로그인 정보 가져오기 */
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        LoginId = auto.getString("LoginId", "");
+        Nickname = auto.getString("r_nickname", "");
+
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
-        InFoUserId.setText(LoginId+"님 환영합니다");
+        InFoUserId.setText(Nickname + "님 환영합니다");
+
+        //닉네임명에 따른 이미지변경(임시)
+        switch(Nickname){
+            case "배고파":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
+                break;
+
+            case "2병규":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                break;
+        }
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -113,38 +132,61 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
-                    startActivity(home);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
 
                     break;
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
+                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
                     break;
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
                 //미션
+                case R.id.nav_mission:
+                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    startActivity(mission);
+                    break;
+                case R.id.friend_chodae:
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
 
+                    Intent chooser = Intent.createChooser(intent, "초대하기");
+                    startActivity(chooser);
+                    break;
+
+                //위험구역
+                case R.id.nav_danger:
+                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    startActivity(danger);
+                    break;
+
+                //위험구역
+                case R.id.no_mtb:
+                    Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
+                    startActivity(nomtb);
+                    break;
             }
             return true;
         });

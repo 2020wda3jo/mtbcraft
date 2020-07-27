@@ -92,7 +92,8 @@ public interface AndroidMapper {
 	
 	public String RidingOpenSet(RidingRecord record) throws Exception;
 
-	public List<Course> delScrap(String ss_rnum) throws Exception;
+	public void delScrap(String ss_rnum) throws Exception;
+	
 
 	//좋아요
 	public String likeput(Like_Status likestatus) throws Exception;

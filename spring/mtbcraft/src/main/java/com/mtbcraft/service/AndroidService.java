@@ -134,8 +134,9 @@ public class AndroidService {
 		return androidMapper.getCompScore(comp_num);
 	}
 	
-	public List<Course> delScrap(String ss_rnum) throws Exception {
-		return androidMapper.delScrap(ss_rnum);
+	public void delScrap(String ss_rnum) throws Exception {
+		System.out.println("서비스"+ss_rnum);
+		androidMapper.delScrap(ss_rnum);
 	}
 	public String likeput(Like_Status likestatus) throws Exception {
 		return androidMapper.likeput(likestatus);

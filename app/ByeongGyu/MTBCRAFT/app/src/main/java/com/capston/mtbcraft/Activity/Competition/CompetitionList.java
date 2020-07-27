@@ -23,17 +23,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
+import com.capston.mtbcraft.Activity.Danger.Danger;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.Recycler.Adapter.CompetitionAdapter;
+import com.capston.mtbcraft.databinding.ActivityCompetitionBinding;
+import com.capston.mtbcraft.databinding.RidingStartBinding;
 import com.capston.mtbcraft.dto.Competition;
 import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,28 +54,32 @@ import java.util.Date;
 import java.util.Map;
 
 public class CompetitionList extends AppCompatActivity {
+private ActivityCompetitionBinding binding;
+    private TextView memberId;
 
-    TextView memberId;
+    private DrawerLayout mDrawerLayout;
 
-    DrawerLayout mDrawerLayout;
+    private RecyclerView recycleView;
 
-    RecyclerView recycleView;
 
-    Button ingBt, finishBt, joinedBt;
+    private String LoginId, Nickname, Image, Save_Path;
 
-    String LoginId, Nickname, Image, Save_Path;
+    private int nowSize = 0;
 
-    int nowSize = 0, nowCount = 0;
+    private ArrayList<String> joinedList = new ArrayList<>();
+    private ArrayList<Competition> nowItemList;
 
-    ArrayList<String> joinedList = new ArrayList<>();
-    ArrayList<Competition> nowItemList;
-
-    ImageView imageView;
+    private ImageView imageView;
+    private ArrayList<Competition> pastItemList;
+    private ArrayList<Competition> itemList;
+    private ImageView userImage;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_competition);
+        binding = ActivityCompetitionBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
@@ -85,10 +94,14 @@ public class CompetitionList extends AppCompatActivity {
         recycleView = findViewById(R.id.recycleView1);
 
         imageView = findViewById(R.id.comp_mem_image);
+
+        /* 로그인 정보 가져오기 */
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        LoginId = auto.getString("LoginId", "");
+        Nickname = auto.getString("r_nickname", "");
+
+        /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
-        ingBt = findViewById(R.id.ing_bt);
-        finishBt = findViewById(R.id.finish_bt);
-        joinedBt = findViewById(R.id.joined_bt);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -96,9 +109,25 @@ public class CompetitionList extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View header = navigationView.getHeaderView(0);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(Nickname + "님 환영합니다");
-        imageView.setImageBitmap(mem_Image);
+
+        //닉네임명에 따른 이미지변경(임시)
+        switch(Nickname){
+            case "배고파":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
+                break;
+
+            case "2병규":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                break;
+        }
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
@@ -108,7 +137,6 @@ public class CompetitionList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
-                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
                     break;
                 //라이딩 기록
                 case R.id.nav_mylist:
@@ -137,11 +165,56 @@ public class CompetitionList extends AppCompatActivity {
                     Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
+                //미션
+                case R.id.nav_mission:
+                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    startActivity(mission);
+                    break;
+                case R.id.friend_chodae:
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
 
+                    Intent chooser = Intent.createChooser(intent, "초대하기");
+                    startActivity(chooser);
+                    break;
+
+                //위험구역
+                case R.id.nav_danger:
+                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    startActivity(danger);
+                    break;
+
+                //위험구역
+                case R.id.no_mtb:
+                    Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
+                    startActivity(nomtb);
+                    break;
             }
             return true;
         });
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                // TODO : process tab selection event.
+                int pos = tab.getPosition();
+                changeView(pos);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // do nothing
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // do nothing
+            }
+        });
         try {
             new GetTask2().execute();
 
@@ -153,6 +226,7 @@ public class CompetitionList extends AppCompatActivity {
         }
 
     }
+
 
     public class GetTask2 extends AsyncTask<Map<String, String>, Integer, String> {
 
@@ -198,6 +272,26 @@ public class CompetitionList extends AppCompatActivity {
         }
     }
 
+    private void changeView(int index) {
+        switch (index) {
+            case 0:
+                CompetitionAdapter nowAdapter = new CompetitionAdapter(getApplicationContext(), nowItemList, Save_Path);
+                recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                recycleView.setAdapter(nowAdapter);
+                break;
+            case 1:
+                CompetitionAdapter pastAdapter = new CompetitionAdapter(getApplicationContext(), pastItemList, Save_Path);
+                recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                recycleView.setAdapter(pastAdapter);
+                break;
+
+            case 2:
+                CompetitionAdapter pastAdapter2 = new CompetitionAdapter(getApplicationContext(), itemList, Save_Path);
+                recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                recycleView.setAdapter(pastAdapter2);
+                break;
+        }
+    }
     public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
 
         @Override
@@ -227,9 +321,10 @@ public class CompetitionList extends AppCompatActivity {
                 String tempData = s;
 
                 Gson gson = new Gson();
-                ArrayList<Competition> itemList = new ArrayList<>();
+                pastItemList = new ArrayList<>();
+                 itemList = new ArrayList<>();
                 nowItemList = new ArrayList<>();
-                ArrayList<Competition> pastItemList = new ArrayList<>();
+
                 Competition[] items = gson.fromJson(tempData, Competition[].class);
                 String File_Name = "";
 
@@ -260,28 +355,14 @@ public class CompetitionList extends AppCompatActivity {
                     }
                 }
 
-                ingBt.setOnClickListener(v -> {
-                    CompetitionAdapter nowAdapter = new CompetitionAdapter(getApplicationContext(), nowItemList, Save_Path);
-                    recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                    recycleView.setAdapter(nowAdapter);
-                });
-
-                finishBt.setOnClickListener(v -> {
-                    CompetitionAdapter pastAdapter = new CompetitionAdapter(getApplicationContext(), pastItemList, Save_Path);
-                    recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                    recycleView.setAdapter(pastAdapter);
-                });
-
-                joinedBt.setOnClickListener(v -> {
-                    CompetitionAdapter pastAdapter = new CompetitionAdapter(getApplicationContext(), itemList, Save_Path);
-                    recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                    recycleView.setAdapter(pastAdapter);
-                });
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
+
+
 
         public long getDate(String getPeriod) throws ParseException {
             long now = System.currentTimeMillis();

@@ -67,7 +67,7 @@
 	
 	<!-- 내 기록 상세보기 공개여부 업데이트 -->
 	<select id="RidingOpenSet" parameterType="Map" resultType="com.mtbcraft.dto.RidingRecord">
-		update riding_record set rr_open = #{rr_open} where rr_rider=#{rr_rider} and rr_num=#{rr_num} 
+		update riding_record set rr_open = #{rr_open} where rr_rider=#{rr_rider} and rr_num=#{rr_num}
 	</select>
 	
 	<!-- 코스보기 -->
@@ -122,9 +122,9 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 	</select>
 	
 	<!-- 스크랩 코스 삭제 -->
-	<select id="delScrap" parameterType="String" resultType="com.mtbcraft.dto.Scrap_Status">
+	<delete id="delScrap">
 		delete from scrap_status where ss_rnum = #{ss_rnum}
-	</select>
+	</delete>
 	
 	<!-- 주행기록전체보기 -->
 	<select id="getRidingRecordAll" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
@@ -262,6 +262,32 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 		select course_riview.*, r_nickname, r_image from course_riview, rider
 		where cr_rnum = #{c_num}
 		and r_id = cr_rider
+	</select>
+
+
+	<select id="foinsert" resultType="com.mtbcraft.dto.RidingRecord">
+		insert into riding_record
+		(rr_rider, rr_date, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name, rr_foname)
+		values
+		(
+		#{rr_rider},
+		#{rr_date, jdbcType=TIMESTAMP},
+		#{rr_distance},
+		#{rr_topspeed},
+		#{rr_avgspeed},
+		#{rr_high},
+		#{rr_gpx},
+		#{rr_open},
+		#{rr_breaktime},
+		#{rr_time},
+		#{rr_area},
+		#{rr_name},
+		#{rr_foname}
+		)
+	</select>
+
+	<select id="foupdate" resultType="com.mtbcraft.dto.RidingRecord">
+		update riding_record set rr_name = rr_name+1 where rr_name=#{rr_foname}
 	</select>
 
 </mapper>

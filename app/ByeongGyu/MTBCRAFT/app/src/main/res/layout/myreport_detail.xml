@@ -18,8 +18,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#000"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:background="#fff"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
             tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -70,14 +70,31 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
         String hour_s = String.valueOf(hour);
 
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Log.d("dfdf",itemList.get(position).getRr_rider());
+        switch(itemList.get(position).getRr_rider()){
+            case "1401287":
+                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo1));
+
+                break;
+
+            case "2병규":
+                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo2));
+                break;
+            case "괴물쥐":
+                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo3));
+                break;
+            default:
+                break;
+        }
+
+
         testViewHolder.record_name.setText(itemList.get(position).getRr_name());
         testViewHolder.record_date.setText(itemList.get(position).getRr_date());
         testViewHolder.record_adress.setText(itemList.get(position).getRr_area());
         testViewHolder.my_dis.setText(total);
         testViewHolder.my_get.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
         testViewHolder.my_time.setText(hour_s+"시간 "+min+"분 "+ sec+"초");
-
-
 
 
         testViewHolder.mView.setOnClickListener(v -> {
@@ -108,6 +125,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
             my_dis = itemView.findViewById(R.id.my_dis);
             my_get = itemView.findViewById(R.id.my_get);
             my_time = itemView.findViewById(R.id.my_time);
+            my_image = itemView.findViewById(R.id.myimage);
             viewClick = itemView.findViewById(R.id.viewClick);
         }
 
