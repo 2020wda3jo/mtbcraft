@@ -445,14 +445,23 @@
                 android:background="@drawable/sos_sound"
                 tools:ignore="MissingConstraints" />
 
-            <Button
+            <Spinner
+                android:id="@+id/help"
+                android:layout_width="50dp"
+                android:layout_height="55dp"
+                android:background="@drawable/help"
+                android:layout_marginLeft="50dp"
+                android:spinnerMode="dialog"
+                android:layout_weight="1" />
+
+          <!--  <Button
                 android:id="@+id/help"
                 android:layout_width="50dp"
                 android:layout_height="55dp"
                 android:background="@drawable/help"
                 tools:ignore="MissingConstraints"
                 android:onClick="myOnClick"
-                android:layout_marginLeft="50dp"/>
+                android:layout_marginLeft="50dp"/>-->
         </LinearLayout>
 
     </GridLayout>

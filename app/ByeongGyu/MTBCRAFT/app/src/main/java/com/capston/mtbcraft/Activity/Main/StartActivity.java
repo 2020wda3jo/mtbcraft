@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -14,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,13 +26,17 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -50,13 +56,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 @SuppressLint("HandlerLeak")
-public class StartActivity extends FragmentActivity
+public class StartActivity extends AppCompatActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
     private SoundPool soundPool;
     private SoundManager soundManager;
@@ -103,6 +110,11 @@ public class StartActivity extends FragmentActivity
     private Thread timeThread = null;
     private Boolean isRunning = true;
 
+    private ArrayList<String> arrayList;
+    private ArrayAdapter<String> arrayAdapter;
+    private Spinner spinner;
+    private ArrayList<String> list;
+    private String number;
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
@@ -130,6 +142,75 @@ public class StartActivity extends FragmentActivity
         binding = RidingStartBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        SharedPreferences phone = getSharedPreferences("sosphone",MODE_PRIVATE);
+        number = phone.getString("sosphone","");
+
+        //id refernece for wizet
+        spinner = (Spinner)findViewById(R.id.help);
+
+        //input array data
+    list = new ArrayList<>();
+        list.add("");
+        list.add("119에 전화");
+        list.add("119에 위치전송");
+        list.add("지정번호에 전화"+number);
+        list.add("지정번호에 위치전송"+number);
+
+
+        //using ArrayAdapter
+        ArrayAdapter spinnerAdapter;
+        spinnerAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list);
+        spinner.setAdapter(spinnerAdapter);
+
+        //event listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),"선택된 아이템 : "+position+spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
+                String tel = "tel:01047527613";
+                String tel2 = "tel:"+number;
+                switch(position){
+                    case 1:
+                        startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel)));
+                        break;
+                    case 2:
+                        try{
+                            SmsManager smsManager = SmsManager.getDefault();
+                            String sms = "" +
+                                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. " ;
+                            smsManager.sendTextMessage("010-4752-7613", null, sms, null, null);
+                            Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
+                        }catch(Exception e){
+                            Toast.makeText(getApplicationContext(), "전송에 실패하였습니다. 내장전화앱으로 전환합니다.",Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case 3:
+                        startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel2)));
+                        break;
+                    case 4:
+                        try{
+                            SmsManager smsManager = SmsManager.getDefault();
+                            String sms = "" +
+                                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. " ;
+                            smsManager.sendTextMessage(number, null, sms, null, null);
+                            Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
+                        }catch(Exception e){
+                            Toast.makeText(getApplicationContext(), "전송에 실패하였습니다. 내장전화앱으로 전환합니다.",Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         Intent intentt = new Intent(this.getIntent());
         intentt.getStringExtra("c_name");
@@ -176,7 +257,7 @@ public class StartActivity extends FragmentActivity
 
         RidingTimer.sendEmptyMessage(0);
 
-        send_sms = (Button) findViewById(R.id.help);
+        //send_sms = (Button) findViewById(R.id.help);
         cur_status = Run; //현재상태를 런상태로 변경
         binding.mapLayout.setVisibility(View.VISIBLE); //지도
         binding.speedPre.setVisibility(View.VISIBLE); //지도탭에서 보여지는거
@@ -203,20 +284,7 @@ public class StartActivity extends FragmentActivity
             }
         });
 
-        send_sms.setOnClickListener(v -> {
-            //
-            String number = "010-6507-7613";
-            String sms = "" +
-                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. " ;
-            try{
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(number, null, sms, null, null);
-                Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
-            }catch(Exception e){
-                Toast.makeText(getApplicationContext(), "전송에 실패하였습니다. 내장전화앱으로 전환합니다.",Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        });
+
 
         button2.setOnClickListener(v -> {
             //형변환한거
@@ -572,6 +640,8 @@ public class StartActivity extends FragmentActivity
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
         lonngitude = location.getLongitude();
+
+
 
 
         Location A = new Location("pointA");

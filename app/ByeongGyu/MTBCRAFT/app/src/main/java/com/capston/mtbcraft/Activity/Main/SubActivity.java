@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
@@ -32,13 +30,13 @@ import com.capston.mtbcraft.Activity.Danger.Danger;
 import com.capston.mtbcraft.Activity.Mission.Mission;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
+import com.capston.mtbcraft.Activity.Setting.SettingActivity;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.databinding.ActivitySubmainBinding;
 import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -55,7 +53,11 @@ public class SubActivity extends AppCompatActivity{
     private String LoginId, Nickname;
     private ImageView userImage;
     private SharedPreferences auto;
-
+    private Toolbar toolbar;
+    private ActionBar actionBar;
+    private NavigationView navigationView;
+    private View header;
+    private TextView InFoUserId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,17 +86,18 @@ public class SubActivity extends AppCompatActivity{
 
 
         /* 드로우 레이아웃 네비게이션 부분들 */
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        View header = navigationView.getHeaderView(0);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        header = navigationView.getHeaderView(0);
         userImage = (ImageView) header.findViewById(R.id.user_image);
-        TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
+        InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(Nickname + "님 환영합니다");
+
 
         //닉네임명에 따른 이미지변경(임시)
         switch(Nickname){
@@ -170,10 +173,16 @@ public class SubActivity extends AppCompatActivity{
                     startActivity(danger);
                     break;
 
-                //위험구역
+                //입산통제
                 case R.id.no_mtb:
                     Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
                     startActivity(nomtb);
+                    break;
+
+                //설정
+                case R.id.settings:
+                    Intent setting = new Intent(getApplicationContext(), SettingActivity.class);
+                    startActivity(setting);
                     break;
             }
             return true;

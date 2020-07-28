@@ -44,6 +44,10 @@
             android:id="@+id/no_mtb"
             android:icon="@drawable/nav_nomtb"
             android:title="입산통제구간" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/nav_nomtb"
+            android:title="설정" />
     </group>
 
 
