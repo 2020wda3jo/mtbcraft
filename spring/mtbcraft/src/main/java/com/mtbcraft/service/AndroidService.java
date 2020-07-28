@@ -1,39 +1,16 @@
 package com.mtbcraft.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
+import com.mtbcraft.dto.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.mapper.AndroidMapper;
-import com.mtbcraft.dto.AnLogin;
-import com.mtbcraft.dto.App_Competition;
-import com.mtbcraft.dto.App_CourseReview;
-import com.mtbcraft.dto.App_Mission;
-import com.mtbcraft.dto.App_MissionRanking;
-import com.mtbcraft.dto.App_RidingRecord;
-import com.mtbcraft.dto.App_Tag;
-import com.mtbcraft.dto.Badge;
-import com.mtbcraft.dto.CompClub;
-import com.mtbcraft.dto.CompScore;
-import com.mtbcraft.dto.Competition;
-import com.mtbcraft.dto.Competition_Status;
-import com.mtbcraft.dto.Course;
-import com.mtbcraft.dto.DangerousArea;
-import com.mtbcraft.dto.Like_Status;
-import com.mtbcraft.dto.Login;
-import com.mtbcraft.dto.LoginInfo;
-import com.mtbcraft.dto.Mission;
-import com.mtbcraft.dto.Mission_Status;
-import com.mtbcraft.dto.RidingRecord;
-import com.mtbcraft.dto.Scrap_Status;
 
 
 @Service
@@ -227,5 +204,9 @@ public class AndroidService {
 
 	public void foupdate(RidingRecord record) {
 		androidMapper.foupdate(record);
+	}
+
+	public LoginInfo getClubUser(String loginId) {
+		return androidMapper.getClubUser(loginId);
 	}
 }

@@ -56,23 +56,17 @@ import java.util.Map;
 public class CompetitionList extends AppCompatActivity {
 private ActivityCompetitionBinding binding;
     private TextView memberId;
-
     private DrawerLayout mDrawerLayout;
-
     private RecyclerView recycleView;
-
-
     private String LoginId, Nickname, Image, Save_Path;
-
     private int nowSize = 0;
-
     private ArrayList<String> joinedList = new ArrayList<>();
     private ArrayList<Competition> nowItemList;
-
     private ImageView imageView;
     private ArrayList<Competition> pastItemList;
     private ArrayList<Competition> itemList;
     private ImageView userImage;
+    private String myclub="";
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,21 +78,25 @@ private ActivityCompetitionBinding binding;
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
         Nickname = auto.getString("r_nickname", "");
-        Image = auto.getString("r_image", "");
+        myclub = auto.getString("myclub","");
+
         Save_Path = getFilesDir().getPath();
-        Bitmap mem_Image = BitmapFactory.decodeFile(new File(Save_Path + "/" + Image).getAbsolutePath());
 
         memberId = findViewById(R.id.memberId);
         memberId.setText(Nickname + " 님");
+
+
 
         recycleView = findViewById(R.id.recycleView1);
 
         imageView = findViewById(R.id.comp_mem_image);
 
+
         /* 로그인 정보 가져오기 */
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
         Nickname = auto.getString("r_nickname", "");
+        myclub = auto.getString("r_clubname","");
 
         /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -113,17 +111,27 @@ private ActivityCompetitionBinding binding;
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(Nickname + "님 환영합니다");
 
+        //경쟁전 유저 정보
+        binding.memberId.setText("@"+LoginId);
+        binding.nickname.setText(Nickname);
+        binding.clubName.setText(myclub);
+
+
+
         //닉네임명에 따른 이미지변경(임시)
         switch(Nickname){
             case "배고파":
                 userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
+                binding.compMemImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
                 break;
 
             case "2병규":
                 userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
+                binding.compMemImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
                 break;
             case "괴물쥐":
                 userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
+                binding.compMemImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
                 break;
             default:
                 break;

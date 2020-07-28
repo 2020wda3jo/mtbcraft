@@ -94,6 +94,7 @@ public class LoginAccess extends AppCompatActivity {
                     autoLogin.commit();
 
                     new getLoginInfo().execute();
+                    new getUserClub().execute();
                     Toast toast = Toast.makeText(getApplicationContext(), rider+"님 로그인했습니다.", Toast.LENGTH_SHORT); toast.show();
                     Intent intent = new Intent(LoginAccess.this, SubActivity.class);
                     startActivity(intent);
@@ -116,6 +117,39 @@ public class LoginAccess extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/android/getClubUser/" + userid);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+            return body;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            String tempData = s;
+            Log.d("클럽정보",s);
+            Gson gson = new Gson();
+            LoginInfo item = gson.fromJson(tempData, LoginInfo.class);
+            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor autoLogin = auto.edit();
+            autoLogin.putString("r_clubname", item.getCb_name());
+            autoLogin.commit();
+        }
+    }
+
+
+
+    public class getUserClub extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
             HttpClient.Builder http = new HttpClient.Builder("GET", "/android/getLoginInfo/" + userid);
             //Http 요청 전송
             HttpClient post = http.create();
@@ -132,6 +166,7 @@ public class LoginAccess extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             String tempData = s;
+            Log.d("회원정보",s);
             Gson gson = new Gson();
             LoginInfo item = gson.fromJson(tempData, LoginInfo.class);
             SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -146,6 +181,7 @@ public class LoginAccess extends AppCompatActivity {
             autoLogin.commit();
         }
     }
+
 
     public void FileDownload(String directory, String url)
     {

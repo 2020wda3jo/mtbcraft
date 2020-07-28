@@ -5,7 +5,16 @@ public class LoginInfo {
 	private int cj_club;
 	private String r_nickname;
 	private String r_image;
-	
+	private String cb_name;
+
+	public String getCb_name() {
+		return cb_name;
+	}
+
+	public void setCb_name(String cb_name) {
+		this.cb_name = cb_name;
+	}
+
 	public int getCj_club() {
 		return cj_club;
 	}

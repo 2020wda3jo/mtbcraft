@@ -80,6 +80,7 @@ public class SubActivity extends AppCompatActivity{
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
         Nickname = auto.getString("r_nickname", "");
+        binding.idinfo.setText(Nickname+"님 저희와 함께");
 
 
         /* 드로우 레이아웃 네비게이션 부분들 */
@@ -216,7 +217,7 @@ public class SubActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(String s) {
             try {
-                Log.d("JSON_RESULT", s);
+                Log.d("키로수 더할꺼임", s);
                 String tempData = s;
                 jarray = new JSONArray(tempData);
 

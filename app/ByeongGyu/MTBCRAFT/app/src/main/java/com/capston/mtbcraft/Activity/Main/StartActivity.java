@@ -85,6 +85,7 @@ public class StartActivity extends FragmentActivity
     private ArrayList<Double> ele = new ArrayList<>();
     private ArrayList<Float> godoArray = new ArrayList<>();
     private TextToSpeech tts;
+    private Button sns_sound;
 
     //형변환용변수
     private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "";
@@ -137,6 +138,19 @@ public class StartActivity extends FragmentActivity
         soundPool = new SoundPool.Builder().build();
         soundManager = new SoundManager(this,soundPool);
         soundManager.addSound(0,R.raw.sos);
+
+        //긴급알림
+        Button sns_sound = (Button) findViewById(R.id.sos_sound);
+        sns_sound.setOnClickListener(v -> {
+            if(!play){
+                playSoundId=soundManager.playSound(0);
+                play = true;
+            }else{
+                soundManager.playSound(0);
+                play = false;
+            }
+
+        });
 
         timeThread = new Thread(new timeThread());
         timeThread.start();
@@ -192,7 +206,8 @@ public class StartActivity extends FragmentActivity
         send_sms.setOnClickListener(v -> {
             //
             String number = "010-6507-7613";
-            String sms = "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요.";
+            String sms = "" +
+                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. " ;
             try{
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(number, null, sms, null, null);
@@ -671,22 +686,6 @@ public class StartActivity extends FragmentActivity
         }
 
         Log.d("지금속도는",String.valueOf(getSpeed));
-
-        //긴급알림
-
-
-
-        Button sns_sound = (Button) findViewById(R.id.sos_sound);
-        sns_sound.setOnClickListener(v -> {
-            if(!play){
-                playSoundId=soundManager.playSound(0);
-                play = true;
-            }else{
-                soundManager.playSound(0);
-                play = false;
-            }
-
-        });
 
 
         if (mLastlocation != null) {

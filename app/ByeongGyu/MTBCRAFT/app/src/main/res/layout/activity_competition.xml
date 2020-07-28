@@ -16,9 +16,9 @@
         <LinearLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="190dp"
             android:orientation="vertical"
-            android:layout_marginTop="10dp"
+            android:background="@drawable/comp_back"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             tools:ignore="MissingConstraints">
 
@@ -26,6 +26,7 @@
                 android:id="@+id/comp_mem_image"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:layout_marginTop="20dp"
                 android:layout_gravity="center" />
 
             <TextView
@@ -34,20 +35,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="유저아이디"
-                android:textSize="15dp"
+                android:textSize="19dp"
                 android:textStyle="bold"
+                android:textColor="#fff"
                 app:layout_constraintBottom_toTopOf="@+id/textView4"
                 app:layout_constraintStart_toEndOf="@+id/comp_mem_image"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="UnknownId" />
 
             <TextView
-                android:id="@+id/member"
+                android:id="@+id/nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="아이디"
-                android:textSize="15dp" />
+                android:textSize="17dp"
+                android:textColor="#fff"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/club_name"
@@ -55,7 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="클럽이름"
-                android:textSize="15dp" />
+                android:textColor="#fff"
+                android:textSize="17dp" />
 
         </LinearLayout>
 
@@ -64,6 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#fff"
+            app:tabIndicatorColor="#0b701c"
+            app:tabIndicatorHeight="3dp"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
             tools:ignore="MissingConstraints">
 

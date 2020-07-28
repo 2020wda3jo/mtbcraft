@@ -286,8 +286,11 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 		)
 	</select>
 
-	<select id="foupdate" resultType="com.mtbcraft.dto.RidingRecord">
+	<select id="foupdate" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
 		update riding_record set rr_name = rr_name+1 where rr_name=#{rr_foname}
 	</select>
 
+	<select id="getClubUser" parameterType="String" resultType="com.mtbcraft.dto.LoginInfo">
+		select cb_name from club where cb_num= (select cj_num from club_join where cj_rider=#{LoginId})
+	</select>
 </mapper>

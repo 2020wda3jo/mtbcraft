@@ -14,6 +14,15 @@ public class Club {
 	private int cb_member;
 
 	private int cb_premium;
+	private String app_userid;
+
+	public String getApp_userid() {
+		return app_userid;
+	}
+
+	public void setApp_userid(String app_userid) {
+		this.app_userid = app_userid;
+	}
 
 	public int getCb_num() {
 		return cb_num;

@@ -13,9 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.mtbcraft.dto.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -35,28 +37,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mtbcraft.dto.AnLogin;
-import com.mtbcraft.dto.App_Competition;
-import com.mtbcraft.dto.App_CourseReview;
-import com.mtbcraft.dto.App_Mission;
-import com.mtbcraft.dto.App_MissionRanking;
-import com.mtbcraft.dto.App_RidingRecord;
-import com.mtbcraft.dto.App_Tag;
-import com.mtbcraft.dto.Badge;
-import com.mtbcraft.dto.CompClub;
-import com.mtbcraft.dto.CompScore;
-import com.mtbcraft.dto.Competition;
-import com.mtbcraft.dto.Competition_Status;
-import com.mtbcraft.dto.Course;
-import com.mtbcraft.dto.DangerousArea;
-import com.mtbcraft.dto.Gpx;
-import com.mtbcraft.dto.Like_Status;
-import com.mtbcraft.dto.Login;
-import com.mtbcraft.dto.LoginInfo;
-import com.mtbcraft.dto.Mission;
-import com.mtbcraft.dto.Mission_Status;
-import com.mtbcraft.dto.RidingRecord;
-import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.service.AndroidService;
 import com.mtbcraft.service.MemberService;
 import com.mtbcraft.service.RidingService;
@@ -78,26 +58,27 @@ public class AndroidController {
 	public @ResponseBody Map<String, String> login(AnLogin login) throws Exception {
 
 		List<AnLogin> list = androidService.LoginProcess(login);
-
-		System.out.println("dfdfdf" + list);
-		System.out.println(login.getR_pw());
-
+		
 		Map<String, String> result = new HashMap<String, String>();
-
-		if (list.toString() == "[]") {
+		if(list.toString() == "[]") {
 			result.put("Status", "로그인실패");
-			return result;
 		} else {
 			result.put("Status", "Ok");
 			result.put("r_id", login.getR_id());
-			return result;
 		}
+		return result;
 	}
 	
 	//안드로이드 로그인 후 유저 정보 가져오기
 	@RequestMapping(value = "/android/getLoginInfo/{LoginId}")
 	public @ResponseBody LoginInfo getLoginInfo(@PathVariable String LoginId) throws Exception{
 		return androidService.getLoginInfo(LoginId);
+	}
+
+	//안드로이드 로그인 후 클럽 정보 가져오기
+	@RequestMapping(value = "/android/getClubUser/{LoginId}")
+	public @ResponseBody LoginInfo getClubUser(@PathVariable String LoginId) throws Exception{
+		return androidService.getClubUser(LoginId);
 	}
 
 
