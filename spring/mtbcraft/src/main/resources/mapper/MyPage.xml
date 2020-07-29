@@ -27,5 +27,15 @@
 		( select rr_rider, sum(rr_distance) total from riding_record, rider where r_id=rr_rider and r_nickname=#{nickname} group by rr_rider )
 		where r_id = rr_rider
 	</select>
+	
+	<!-- 사용자 닉네임 조회 -->
+	<select id="getUserNickname" parameterType="String" resultType="String" >
+		select R_NICKNAME  from rider where r_id=#{r_id}
+	</select>
+	
+	<!-- 사용자 총주행거리 조회 -->
+	<select id="getUserTotalDistance" parameterType="String" resultType="double">
+		select TRUNC(sum(RR_DISTANCE)/1000,2) from riding_record where rr_rider=#{r_id}
+	</select>
 </mapper>
 

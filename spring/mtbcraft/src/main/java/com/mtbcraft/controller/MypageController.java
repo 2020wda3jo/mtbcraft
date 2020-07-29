@@ -34,7 +34,8 @@ public class MypageController {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String rider = userDetails.getUsername();
 		
-		model.addAttribute("rider", rider);
+		model.addAttribute("rider", myPageService.getUserNickname(rider));
+		model.addAttribute("total", myPageService.getUserTotalDistance(rider));
 		
 		return "mypage/myRiding";
 	}
@@ -55,10 +56,10 @@ public class MypageController {
 		return "mypage/badge";
 	}
 	
-	@RequestMapping("/info/mypage/riding/{rider}")
+	@RequestMapping("/info/mypage/riding")
 	@ResponseBody
-	public List<RidingRecord> getRR(@PathVariable String rider){
-		return myPageService.getRR(rider);
+	public List<RidingRecord> getRR(Principal principal){
+		return myPageService.getRR(principal.getName());
 	}
 	
 	@PostMapping("/info/history")

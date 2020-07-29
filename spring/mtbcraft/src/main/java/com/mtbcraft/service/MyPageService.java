@@ -40,4 +40,13 @@ public class MyPageService {
 		return myPageMapper.getUserInfo(nickname);
 	}
 	
+	//사용자 닉네임 조회
+	public String getUserNickname(String r_id) {
+		return myPageMapper.getUserNickname(r_id);
+	}
+	
+	//사용자 총주행거리 조회
+	public double getUserTotalDistance(String r_id) {
+		return myPageMapper.getUserTotalDistance(r_id);
+	}
 }

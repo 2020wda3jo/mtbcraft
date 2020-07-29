@@ -22,4 +22,10 @@ public interface MyPageMapper {
 	
 	//사용자 정보 조회
 	public Rider getUserInfo(String nickname);
+	
+	//사용자 닉네임 조회
+	public String getUserNickname(String r_id);
+	
+	//사용자 총주행거리 조회
+	public double getUserTotalDistance(String r_id);
 }
