@@ -459,7 +459,7 @@ public class RidingController {
 	}
 	
 	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
-		String path = "/home/ec2-user/data/gpx/"+gpxFile;
+		String path = "D:\\gp\\2020-07-09_14_09_25_BIKE_BIKEROAD.gpx";
 		//String path = "C:\\Users\\woolu\\Desktop\\workspace\\data\\gpx\\"+gpxFile;
 		File file = new File(path);
 		String txt = "";
