@@ -159,8 +159,12 @@
 	</select>
 	
 	<!-- 전체 라이딩 평균 기록 조회 -->
-	<select resultType="com.mtbcraft.dto.Avg_RidingRecord" id="getAVGRR">
-		select round(avg(rr_distance),2) distance, round(avg(rr_topspeed),2) topspeed, round(avg(rr_avgspeed),2) avgspeed, round(avg(rr_time),2) time, round(avg(rr_high),2) avghigh from riding_record 
+	<select parameterType="String" resultType="com.mtbcraft.dto.Avg_RidingRecord" id="getAVGRR">
+		select * from (
+		  select round(avg(rr_distance),2) distance, round(avg(rr_topspeed),2) topspeed, round(avg(rr_avgspeed),2) avgspeed, round(avg(rr_time),2) time, round(avg(rr_high),2) avghigh from riding_record
+		), (
+		  select round(avg(rr_distance),2) user_distance, round(avg(rr_topspeed),2) user_topspeed, round(avg(rr_avgspeed),2) user_avgspeed, round(avg(rr_time),2) user_time, round(avg(rr_high),2) user_avghigh from riding_record where RR_RIDER=#{rider}
+		) 
 	</select>
 </mapper>
 

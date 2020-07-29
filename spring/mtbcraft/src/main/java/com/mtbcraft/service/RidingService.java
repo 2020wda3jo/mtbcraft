@@ -162,7 +162,7 @@ public class RidingService {
 	}
 	
 	//전체 라이딩 평균 기록 조회
-	public Avg_RidingRecord getAVGRR() {
-		return ridingMapper.getAVGRR();
+	public Avg_RidingRecord getAVGRR(String rider) {
+		return ridingMapper.getAVGRR(rider);
 	}
 }

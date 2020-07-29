@@ -97,5 +97,5 @@ public interface RidingMapper {
 	public List<Nomtb> getNoMtbArea();
 	
 	//전체 라이딩 평균 기록 조회
-	public Avg_RidingRecord getAVGRR();
+	public Avg_RidingRecord getAVGRR(String rider);
 }
