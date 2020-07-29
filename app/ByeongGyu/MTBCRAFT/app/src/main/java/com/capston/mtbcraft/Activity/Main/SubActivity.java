@@ -261,6 +261,7 @@ public class SubActivity extends AppCompatActivity{
                         hour = min/60;
                         sec = sec % 60;
                         min = min % 60;
+
                         if(hour == 0){
                             hour=0;
                         }

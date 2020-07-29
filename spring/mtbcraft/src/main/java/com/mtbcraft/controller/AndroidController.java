@@ -350,7 +350,7 @@ public class AndroidController {
 	@RequestMapping("/app/riding/CourseSearch")
 	public String CourseSearch() throws Exception{
 		
-		return "/android/course_search";
+		return "/android/Android_CourseSearch";
 	}
 	
 	//위험지역 마커
