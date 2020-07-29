@@ -75,9 +75,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
         switch(itemList.get(position).getRr_rider()){
             case "1401287":
                 testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo1));
-
                 break;
-
             case "2병규":
                 testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo2));
                 break;
@@ -85,8 +83,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
                 testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo3));
                 break;
             default:
+                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.common_google_signin_btn_icon_light));
                 break;
         }
+
+
 
 
         testViewHolder.record_name.setText(itemList.get(position).getRr_name());

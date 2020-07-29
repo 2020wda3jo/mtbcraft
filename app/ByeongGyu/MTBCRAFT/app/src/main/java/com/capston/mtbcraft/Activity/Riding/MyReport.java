@@ -89,6 +89,7 @@ public class MyReport extends AppCompatActivity  {
                 break;
         }
 
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();

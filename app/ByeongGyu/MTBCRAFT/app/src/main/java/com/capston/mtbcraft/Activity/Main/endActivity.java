@@ -56,6 +56,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static net.daum.mf.map.api.MapView.CurrentLocationTrackingMode.TrackingModeOff;
+
 public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
     private RidingEndBinding binding;
 
@@ -155,12 +157,12 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         lineChart.setData(chartData);
         lineChart.invalidate();
-
+        chartData.setValueTextSize(17f);
 
         mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
+        mapView.setCurrentLocationTrackingMode(TrackingModeOff);
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
@@ -192,37 +194,24 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         binding.addr.setText(text);
 
         //휴식시간 및 지속시간
-        int hour;
-        int min;
-        int sec = IngTime;
+        /* 하단 데이터 */
+        int hour, min, sec = IngTime;
+        min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
 
-        min = sec/60;
-        hour = min/60;
-        sec = sec % 60;
-        min = min % 60;
-        if(hour == 0){
-            hour=0;
-        }
-        if(min==0){
-            min=0;
-        }
+        Log.d("라이딩시간",hour+"시간 "+min+"분 "+sec+"초");
+        binding.ending.setText(hour + "시간 " + min + "분 " + sec + "초"); //지속시간
 
-        int r_sec = RestTime;
-        int r_hour;
-        int r_min;
+        int r_hour, r_min, r_sec = RestTime;
 
-        r_min = r_sec/60;
-        r_hour = r_min/60;
-        r_sec = r_sec%60;
-        r_min = r_min % 60;
+        r_min = r_sec/60; r_hour = r_min/60; r_sec = r_sec % 60; r_min = r_min % 60;
         if(r_hour == 0){
             r_hour=00;
         }
         if(r_min==0){
             r_min=00;
         }
-        binding.ending.setText(String.valueOf(hour+"시간 "+min+"분 "+sec+"초")); //지속시간
-        binding.endresttime.setText(String.valueOf(r_hour+"시간 "+r_min+"분 "+r_sec+"초")); //휴식시간
+
+        binding.endresttime.setText(r_hour + "시간 " + r_min + "분 " + r_sec + "초"); //휴식시간
 
         binding.endget.setText(String.valueOf(Getgodo));
         double killlo = 0;

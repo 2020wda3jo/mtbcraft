@@ -167,7 +167,6 @@ public class StartActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"선택된 아이템 : "+position+spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
                 String tel = "tel:01047527613";
                 String tel2 = "tel:"+number;
                 switch(position){
@@ -284,8 +283,6 @@ public class StartActivity extends AppCompatActivity
             }
         });
 
-
-
         button2.setOnClickListener(v -> {
             //형변환한거
             if (hap == 0) {
@@ -330,6 +327,10 @@ public class StartActivity extends AppCompatActivity
                 startActivity(intent);
                 finish();
                 mapViewContainer.removeAllViews();
+
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationManager.removeUpdates(this);
+
             }
         });
 
