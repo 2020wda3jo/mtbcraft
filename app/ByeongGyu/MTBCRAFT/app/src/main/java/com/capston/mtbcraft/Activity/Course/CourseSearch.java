@@ -32,7 +32,7 @@ public class CourseSearch extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     WebView webview;
-    private static final String ENTRY_URL = "http://192.168.42.69:8080/app/riding/CourseSearch";
+    private static final String ENTRY_URL = "http://53.92.32.2:8080/app/riding/CourseSearch";
     String LoginId, Nickname;
     ImageView userImage;
     SharedPreferences auto;

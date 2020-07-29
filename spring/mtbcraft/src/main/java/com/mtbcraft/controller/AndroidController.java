@@ -347,10 +347,10 @@ public class AndroidController {
 	}
 	
 	//코스검색
-	@RequestMapping("/riding/Android_CourseSearch")
+	@RequestMapping("/app/riding/CourseSearch")
 	public String CourseSearch() throws Exception{
 		
-		return "/riding/Android_CourseSearch";
+		return "/android/course_search";
 	}
 	
 	//위험지역 마커

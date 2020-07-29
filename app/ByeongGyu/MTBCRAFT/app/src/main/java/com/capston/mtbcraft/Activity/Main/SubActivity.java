@@ -252,6 +252,23 @@ public class SubActivity extends AppCompatActivity{
 
                     //오늘 주행한거
                     if(oTime.equals(test.substring(0,10))){
+
+                        int hour;
+                        int min;
+                        int sec = riding_time;
+
+                        min = sec/60;
+                        hour = min/60;
+                        sec = sec % 60;
+                        min = min % 60;
+                        if(hour == 0){
+                            hour=0;
+                        }
+                        if(min==0){
+                            min=0;
+                        }
+                        binding.mainTime.setText(hour + "시간 " + min + "분 " + sec + "초");
+
                         dis+= jObject.getInt("rr_distance");
                         killlo = (int) (dis / 1000.0);
                         if (dis >= 1000) {
@@ -264,21 +281,7 @@ public class SubActivity extends AppCompatActivity{
                     }
                 }
 
-                int hour;
-                int min;
-                int sec = riding_time;
 
-                min = sec/60;
-                hour = min/60;
-                sec = sec % 60;
-                min = min % 60;
-                if(hour == 0){
-                    hour=0;
-                }
-                if(min==0){
-                    min=0;
-                }
-                binding.mainTime.setText(hour + "시간 " + min + "분 " + sec + "초");
 
                 killlo = (int) (total_dis / 1000.0);
                 if (total_dis >= 1000) {
