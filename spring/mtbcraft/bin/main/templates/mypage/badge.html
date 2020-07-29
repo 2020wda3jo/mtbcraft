@@ -25,23 +25,27 @@
 			<div class="row">
 			
 				<div class="col-lg-4 sidebar ftco-animate">
-					<div class="sidebar-box clubinfo">
-		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
-		              </div>
-		              
-		              <h2 th:text="${rider}+'님'">사용자명</h2>
-		              <h2>안라하세요!</h2>
-		            </div>
-		            
-		            <div class="sidebar-box clubinfo">
-		            	<a href="/mypage/riding">내가 지나온 길</a>
-		            	<a href="#">내가 쓴 게시글</a>
-		            	<a href="#">내가 쓴 댓글</a>
-		            	<a href="/mypage/badge">내 배지 보기</a>
-		            </div>
-		            
-				</div>
-				
+						<div class="sidebar-box clubinfo">
+							<div class="clubimg"
+								style="background-image: url('/imgs/main3.jpg');"></div>
+
+							<h2 th:text="${#authentication.name}+'님'">사용자명</h2>
+							<h2>현재 포인트</h2>
+							<a class="r_point" id="r_point" th:text="${list} + P"></a>
+							<div class="buttonBox">
+								<button class="btn" onclick="checkPoint()">커스텀 배지 등록</button>
+								<p>200p가 필요합니다.</p>
+							</div>
+						</div>
+
+						<div class="sidebar-box clubinfo">
+							<a href="/mypage/riding">내가 지나온 길</a> 
+							<a href="#">내가 쓴 게시글</a> 
+							<a href="#">내가 쓴 댓글</a> 
+							<a href="/mypage/badge">내 배지 보기</a> 							
+<!-- 							<a href="/entertainment/badgeCheck">커스텀 배지</a> -->
+						</div>
+					</div>
 				
 				<div class="col-lg-8 ftco-animate board">
 					<h1>내 배지 보기</h1>
@@ -57,13 +61,43 @@
 							<p th:text="${badge.bg_name}"></p>
 						</div>
 					</div>
-					
-					
+					<hr>
+					<h1>커스텀 배지 보기</h1>
+					<p>커스텀 배지를 만들어 보아요!</p>
+					<div class="flex">
+					<div class="cbadgeitem" th:each="cbadge:${cbadgeList}">
+						<div class="cbgimg">
+							<img alt="" src="#" th:src="|/entertainment/img/badge/${cbadge.cbg_image}|">
+						</div>
+						<p th:text="${cbadge.cbg_name}"></p>
+					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</section>
-
+<script>
+			//     $(document).ready(function() {
+			//        $.ajax({
+			//           url : "/entertainment/badgeCheck/get",
+			//           dataType : "json",
+			//           cache : false,
+			//           data : {r_point : $("#r_point").text()},
+			//           success : function(data) {
+			//                    $("#list").val(data);
+			//              }
+			//           });
+			//     });
+			function checkPoint() {
+				if ($("#r_point").text() < 200) { 
+					alert("포인트가 부족합니다");
+					return;
+				} else {
+					alert("배지 등록페이지로 이동합니다.");
+					location.href = "/entertainment/badgeUpload";
+				}
+			}
+		</script>
 
 
 <footer th:replace="footer2"></footer>

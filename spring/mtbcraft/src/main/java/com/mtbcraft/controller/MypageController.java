@@ -1,5 +1,6 @@
 package com.mtbcraft.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mtbcraft.dto.RidingRecord;
+import com.mtbcraft.service.EntertainmentService;
 import com.mtbcraft.service.MyPageService;
 
 
@@ -21,6 +23,8 @@ import com.mtbcraft.service.MyPageService;
 public class MypageController {
 	@Autowired
 	private MyPageService myPageService;
+	@Autowired
+	private EntertainmentService entertainmentService;
 	
 	
 	// 일반 회원 마이페이지 라이딩 보기
@@ -37,14 +41,18 @@ public class MypageController {
 	
 	// 배지 조회페이지 수정필요
 	@RequestMapping("/mypage/badge")
-	public String badge(Model model,Authentication authentication) throws Exception {
+	public String badge(Model model,Authentication authentication, Principal principal) throws Exception {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		int list = entertainmentService.getBadgeCheck(principal.getName());
 		String rider = userDetails.getUsername();
 		
+		model.addAttribute("list", list);
 		model.addAttribute("rider", rider);
-		model.addAttribute("badgeList", myPageService.getBadge(rider));
+//		model.addAttribute("badgeList", myPageService.getBadge(rider));
+		model.addAttribute("badgeList",entertainmentService.getBadge(rider));
+		model.addAttribute("cbadgeList",entertainmentService.getCustomBadge(rider));
 		
-		return "entertainment/badge";
+		return "mypage/badge";
 	}
 	
 	@RequestMapping("/info/mypage/riding/{rider}")

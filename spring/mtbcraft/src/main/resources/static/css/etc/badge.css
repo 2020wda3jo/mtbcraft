@@ -98,18 +98,24 @@ table.type09 tbody tr td:nth-child(4){
 }
 
 .btn {
+	padding-top : 10px;
 	text-align : center;
-	width: 20%;
+	width: 49%;
 	background-color: white;
-	color : #369;
+	color : orange;
 	font-weight: bold;
-	border: 0.1px solid black;
 	margin-left: 15px;
 }
 
 .btn:hover {
-	background-color: #369;
+	background-color: orange;
 	color: white;
+}
+.buttonBox {
+	text-align : center;
+}
+.buttonBox p {
+	text-align : center;
 }
 
 .full {
@@ -126,7 +132,28 @@ textarea.full {
 	justify-content: flex-start;
 	flex-wrap: wrap;
 }
+.cbadgeitem {
+	border : 1px solid gray;
+	border-radius : 10px;
+	width: 30%;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
 
+.cbadgeitem div {
+	width : 200px;
+	height : 200px;
+}
+
+.cbadgeitem p{
+	text-align : center;
+}
+.cbgimg img {
+	border-radius : 0px;
+	background-color : white;
+	width: 100%;
+	height: 100%;
+}
 .badgeitem {
 	border : 1px solid gray;
 	border-radius : 10px;

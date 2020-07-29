@@ -202,7 +202,7 @@ public class EntertainController {
 
 	}
 
-	 // 배지 등록 가능 체크 페이지
+//	 // 배지 등록 가능 체크 페이지
     @RequestMapping(value = "/entertainment/badgeCheck", method = RequestMethod.GET)
     public String getBadgeCheck(Model model, Principal principal, Authentication authentication) throws Exception {
        int list = entertainmentService.getBadgeCheck(principal.getName());
@@ -226,23 +226,24 @@ public class EntertainController {
 
 
 	// 배지 이미지, 값 등록
-	@RequestMapping(value = "/entertainment/badgeUpload/test", method = RequestMethod.POST)
-	public String badgeUpload(@RequestPart MultipartFile files, CustomBadge badge, Principal principal) throws Exception {
-		String filename = files.getOriginalFilename();
-		String directory = "C:\\ServerFiles\\badge";
-		String filepath = Paths.get(directory, filename).toString();
-		badge.setCbg_image(filename);
-		badge.setCbg_id(principal.getName());
-		entertainmentService.BadgeUpload(badge);
+		@RequestMapping(value = "/entertainment/badgeUpload/test", method = RequestMethod.POST)
+		public String badgeUpload(@RequestPart MultipartFile files, CustomBadge badge, Principal principal) throws Exception {
+			String filename = files.getOriginalFilename();
+//			String directory = "C:\\ServerFiles\\badge"; //로컬
+			String directory = "/home/ec2-user/data/cbadge"; //서버
+			String filepath = Paths.get(directory, filename).toString();
+			badge.setCbg_image(filename);
+			badge.setCbg_id(principal.getName());
+			entertainmentService.BadgeUpload(badge);
 
-		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
-		stream.write(files.getBytes());
-		stream.close();
-		entertainmentService.pricePoint(principal.getName());
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+			stream.write(files.getBytes());
+			stream.close();
+			entertainmentService.pricePoint(principal.getName());
 
-		return "entertainment/success";
+			return "entertainment/success";
 
-	}
+		}
 	
 	// 외부 이미지 가져오기
 	@GetMapping(value = "/imagetest")
@@ -272,11 +273,11 @@ public class EntertainController {
 	}
 	
 	//이미지 로딩
-	@GetMapping(value = "/entertainment/img/{path}/{imageFile}")
-	public @ResponseBody byte[] getImage(@PathVariable String path, @PathVariable String imageFile) throws IOException {
-		InputStream in = null;
-	   // in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+path+"/"+imageFile)); 
-	    in = new  BufferedInputStream(new FileInputStream("C:\\ServerFiles\\"+path+"\\"+imageFile)); 
-	    return IOUtils.toByteArray(in);
-	}
+		@GetMapping(value = "/entertainment/img/{path}/{imageFile}")
+		public @ResponseBody byte[] getImage(@PathVariable String path, @PathVariable String imageFile) throws IOException {
+			InputStream in = null;
+		    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+path+"/"+imageFile)); //서버
+//		    in = new  BufferedInputStream(new FileInputStream("C:\\ServerFiles\\"+path+"\\"+imageFile)); //로컬
+		    return IOUtils.toByteArray(in);
+		}
 }
