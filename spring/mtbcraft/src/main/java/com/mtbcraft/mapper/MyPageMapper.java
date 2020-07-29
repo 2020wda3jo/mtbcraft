@@ -10,6 +10,7 @@ import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Like_Status;
+import com.mtbcraft.dto.Reply;
 import com.mtbcraft.dto.Rider;
 import com.mtbcraft.dto.RidingRecord;
 
@@ -35,4 +36,10 @@ public interface MyPageMapper {
 	
 	//SNS 게시글 조회
 	public List<Board> getUserSNSPost(String r_id);
+	
+	//댓글 조회
+	public List<Reply> getUserReply(String r_id);
+	
+	//원본 게시글 조회
+	public Board getOriginPost(int b_num);
 }

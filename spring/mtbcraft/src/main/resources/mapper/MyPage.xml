@@ -40,13 +40,22 @@
 	
 	<!-- 클럽게시판 게시글 조회 -->
 	<select id="getUserClubPost" parameterType="String" resultType="com.mtbcraft.dto.Board">
-		<![CDATA[ select b_num, b_title, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD where B_RIDER=#{r_id} and B_CLUB<>999 ]]>
+		<![CDATA[ select b_num, b_title, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD where B_RIDER=#{r_id} and B_CLUB<>999 order by b_day desc ]]>
 	</select>
 	
 	<!-- SNS 게시글 조회 -->
 	<select id="getUserSNSPost" parameterType="String" resultType="com.mtbcraft.dto.Board">
-		select b_num, b_title, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD where B_RIDER=#{r_id} and B_CLUB=999
+		select b_num, b_title, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD where B_RIDER=#{r_id} and B_CLUB=999 order by b_day desc
 	</select>
 	
+	<!-- 댓글 조회 -->
+	<select id="getUserReply" parameterType="String" resultType="com.mtbcraft.dto.Reply">
+		select re_num, re_board, re_content, to_char(re_day, 'YYYY-MM-DD HH24:MI:SS') re_day from reply where re_rider=#{r_id} order by re_day desc
+	</select>
+	
+	<!-- 원본 게시글 조회 -->
+	<select id="getOriginPost" parameterType="int" resultType="com.mtbcraft.dto.Board">
+		select b_title, b_content, b_day, b_file, b.R_NICKNAME b_rider, b.R_IMAGE b_img, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD a, RIDER b where r_id=b_rider and b_num=#{b_num}
+	</select>
 </mapper>
 

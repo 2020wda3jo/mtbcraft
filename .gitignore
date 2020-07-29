@@ -1,3 +1,10 @@
 !**/bin/**
 
 spring\mtbcraft\bin\
+
+mtbcraft\bin\
+
+mtbcraft/bin/
+
+spring/mtbcraft/bin/
+*.class

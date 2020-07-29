@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mtbcraft.dto.Board;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.service.EntertainmentService;
 import com.mtbcraft.service.MyPageService;
@@ -89,6 +90,22 @@ public class MypageController {
 		model.addAttribute("sns", myPageService.getUserSNSPost(principal.getName()) );
 		
 		return "mypage/myPost";
+	}
+	
+	@GetMapping("/mypage/reply")
+	public String goMyReply(Principal principal, Model model) {
+		
+		model.addAttribute("rider", myPageService.getUserNickname(principal.getName()) );
+		
+		model.addAttribute("replys", myPageService.getUserReply(principal.getName()) );
+		
+		return "mypage/myReply";
+	}
+	
+	@RequestMapping("/info/mypage/post/{b_num}")
+	@ResponseBody
+	public Board getPostInfo(@PathVariable int b_num) {
+		return myPageService.getOriginPost(b_num);
 	}
 	
 		
