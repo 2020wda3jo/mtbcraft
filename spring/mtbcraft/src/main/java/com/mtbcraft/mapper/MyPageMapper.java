@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.Badge;
+import com.mtbcraft.dto.Board;
 import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
@@ -28,4 +29,10 @@ public interface MyPageMapper {
 	
 	//사용자 총주행거리 조회
 	public double getUserTotalDistance(String r_id);
+	
+	//클럽게시판 게시글 조회
+	public List<Board> getUserClubPost(String r_id);
+	
+	//SNS 게시글 조회
+	public List<Board> getUserSNSPost(String r_id);
 }

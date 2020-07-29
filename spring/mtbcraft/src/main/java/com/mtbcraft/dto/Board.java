@@ -27,6 +27,16 @@ public class Board {
 	
 	private String b_img;
 	
+	private String customDate;
+	
+	public String getCustomDate() {
+		return customDate;
+	}
+
+	public void setCustomDate(String customDate) {
+		this.customDate = customDate;
+	}
+
 	public String getB_img() {
 		return b_img;
 	}

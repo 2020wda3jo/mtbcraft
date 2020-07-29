@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.dto.Badge;
+import com.mtbcraft.dto.Board;
 import com.mtbcraft.dto.Course_Review;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Like_Status;
@@ -48,5 +49,15 @@ public class MyPageService {
 	//사용자 총주행거리 조회
 	public double getUserTotalDistance(String r_id) {
 		return myPageMapper.getUserTotalDistance(r_id);
+	}
+	
+	//클럽게시판 게시글 조회
+	public List<Board> getUserClubPost(String r_id){
+		return myPageMapper.getUserClubPost(r_id);
+	}
+	
+	//SNS 게시글 조회
+	public List<Board> getUserSNSPost(String r_id){
+		return myPageMapper.getUserSNSPost(r_id);
 	}
 }

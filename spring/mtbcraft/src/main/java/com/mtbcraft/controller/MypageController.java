@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +81,15 @@ public class MypageController {
 		return "mypage/userInfo";
 	}
 	
+	@GetMapping("/mypage/post")
+	public String goMyPost(Principal principal, Model model) {
+		
+		model.addAttribute("rider", myPageService.getUserNickname(principal.getName()) );
+		model.addAttribute("club", myPageService.getUserClubPost(principal.getName()) );
+		model.addAttribute("sns", myPageService.getUserSNSPost(principal.getName()) );
+		
+		return "mypage/myPost";
+	}
 	
 		
 		
