@@ -284,7 +284,8 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					$('#bt_mode').text("스크랩하기");
 					
 					var rr_avgspeed,rr_topspeed,rr_distance,rr_high,rr_time,
-					total_avgspeed, total_topspeed,total_distance,total_high,total_time;
+					total_avgspeed, total_topspeed,total_distance,total_high,total_time,
+					user_avgspeed, user_topspeed,user_distance,user_high,user_time;
 					
 					rr_avgspeed = data.rr_avgspeed;
 					rr_topspeed = data.rr_topspeed;
@@ -304,6 +305,12 @@ function getRidingRecordByRR_Num(rr_num, mode){
 							total_distance = data2.distance;
 							total_high = data2.avgspeed;
 							total_time = data2.time/60;
+							
+							user_avgspeed = data2.user_avgspeed
+							user_topspeed = data2.user_topspeed;
+							user_distance = data2.user_distance;
+							user_high = data2.user_avgspeed;
+							user_time = data2.user_time/60;
 							
 							Highcharts.chart('container2', {
 								
@@ -351,6 +358,10 @@ function getRidingRecordByRR_Num(rr_num, mode){
 								  }, {
 								    name: '해당코스',
 								    data: [rr_topspeed, rr_avgspeed, rr_distance, rr_high],
+								    pointPlacement: 'on'
+								  },{
+								    name: '나의기록',
+								    data: [user_topspeed, user_avgspeed, user_distance, user_high],
 								    pointPlacement: 'on'
 								  }],
 						
@@ -406,7 +417,8 @@ function getRidingRecordByRR_Num(rr_num, mode){
 							        name: 'Population',
 							        data: [
 							            ['해당코스', rr_time],
-							            ['전체코스', total_time]            
+							            ['전체코스', total_time],
+							            ['나의기록', user_time]            
 							        ],
 							        dataLabels: {
 							            enabled: true,

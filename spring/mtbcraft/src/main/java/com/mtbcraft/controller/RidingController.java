@@ -478,8 +478,8 @@ public class RidingController {
 	//라이딩기록 전체 평균정보
 	@RequestMapping(value="/info/riding/totalavg", method = RequestMethod.GET)
 	@ResponseBody
-	public Avg_RidingRecord getAVGRR() {
-		return ridingService.getAVGRR();
+	public Avg_RidingRecord getAVGRR(Principal principal) {
+		return ridingService.getAVGRR(principal.getName());
 	}
 	
 	//이미지 로딩
