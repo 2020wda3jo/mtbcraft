@@ -181,14 +181,14 @@ public class MyReport extends AppCompatActivity  {
                 String tempData = s;
 
                 Gson gson = new Gson();
-                ArrayList<ScrapStatus> itemList = new ArrayList<>();
-                ScrapStatus[] items = gson.fromJson(tempData, ScrapStatus[].class);
+                ArrayList<RidingRecord> itemList = new ArrayList<>();
+                RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
 
-                for(ScrapStatus item: items){
+                for(RidingRecord item: items){
                     itemList.add(item);
                 }
 
-                ScrapAdapter adapter = new ScrapAdapter(getApplicationContext(), itemList);
+                RecyclerAdapter adapter = new RecyclerAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);
             }catch(Exception e){
