@@ -21,9 +21,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Control.NoMtb;
-import com.capston.mtbcraft.Activity.Danger.Danger;
-import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
@@ -61,7 +60,7 @@ public class CourseSearch extends AppCompatActivity {
                     String keyword = LoginId;
 
                     String script = "javascript:function afterLoad() {"
-                            + "document.getElementById('userid').value = '" + keyword + "';"
+                            + "document.getElementById('userid').value = '" + keyword + " "
                             + "};"
                             + "afterLoad();";
 
@@ -83,6 +82,7 @@ public class CourseSearch extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setTitle("MTBCRAFT");
         actionBar.setDisplayHomeAsUpEnabled(true);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -145,7 +145,7 @@ public class CourseSearch extends AppCompatActivity {
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
                 case R.id.friend_chodae:
@@ -161,7 +161,7 @@ public class CourseSearch extends AppCompatActivity {
 
                 //위험구역
                 case R.id.nav_danger:
-                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
                     break;
 

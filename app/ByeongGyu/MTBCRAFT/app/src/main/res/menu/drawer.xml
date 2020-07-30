@@ -38,7 +38,7 @@
             android:title="친구초대하기" />
         <item
             android:id="@+id/nav_danger"
-            android:icon="@drawable/nav_nomtb"
+            android:icon="@drawable/danger"
             android:title="위험구역" />
         <item
             android:id="@+id/no_mtb"
@@ -46,7 +46,7 @@
             android:title="입산통제구간" />
         <item
             android:id="@+id/settings"
-            android:icon="@drawable/nav_nomtb"
+            android:icon="@drawable/setting_icon"
             android:title="설정" />
     </group>
 

@@ -1,5 +1,6 @@
 package com.capston.mtbcraft.Activity.Setting;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +11,6 @@ import com.capston.mtbcraft.databinding.SettingActivityBinding;
 
 public class SettingActivity extends AppCompatActivity {
     private SettingActivityBinding binding;
-    private SharedPreferences set;
-    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,10 +20,13 @@ public class SettingActivity extends AppCompatActivity {
 
         binding.saveBt.setOnClickListener(v ->{
             //저장을 하기위해 editor를 이용하여 값을 저장시켜준다.
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             String text = binding.phoneNum.getText().toString(); // 사용자가 입력한 저장할 데이터
-            editor.putString("sosphone",text); // key, value를 이용하여 저장하는 형
-            editor.commit();
+
+
+            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor autoLogin = auto.edit();
+            autoLogin.putString("sosphone", text);
+            autoLogin.commit();
             finish();
         });
 

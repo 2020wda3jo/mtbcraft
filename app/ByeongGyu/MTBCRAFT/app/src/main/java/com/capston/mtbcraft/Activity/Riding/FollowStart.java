@@ -101,7 +101,7 @@ public class FollowStart extends FragmentActivity
     private TextToSpeech tts;
 
     //형변환용변수
-    private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "";
+    private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "", comp_point;
 
     private List<Address> addr = null;
     private Geocoder gCoder;
@@ -147,6 +147,8 @@ public class FollowStart extends FragmentActivity
         Intent intentt = new Intent(this.getIntent());
         intentt.getStringExtra("c_name");
         int check = intentt.getIntExtra("check", 0);
+        if ( check == 1)
+            comp_point = intentt.getStringExtra("comp_point");
         String comp_num = intentt.getStringExtra("comp_num");
         binding.couseInfo.setText(intentt.getStringExtra("c_name"));
         Log.d("확인",intentt.getStringExtra("c_name") + ""+ intentt.getStringExtra("gpx"));
@@ -329,7 +331,16 @@ public class FollowStart extends FragmentActivity
                 intent.putExtra("minLon", minLon); //최소경도
                 intent.putExtra("wido", witch_lat); //위도(지도보여줄거
                 intent.putExtra("kyun", witch_lon); //경도(지도보여줄거)
-                intent.putExtra("rr_comp", "null");
+                intent.putExtra("comp_name", intentt.getStringExtra("comp_name"));
+                if ( check == 1 ) {
+                    intent.putExtra("rr_comp", comp_num);
+                    intent.putExtra("comp_point", comp_point);
+                }
+                else {
+                    intent.putExtra("rr_comp", "null");
+                    intent.putExtra("comp_point", "0");
+                }
+                intent.putExtra("check", check);
                 intent.putExtra("course_name",course_name);
 
                 Log.d("로그랑",total_time+ " " + hap + " " + maX + " " + avg + " " + getgodo + " " +rest + " " + adress_value + " " );

@@ -3,62 +3,64 @@
 <head>
 <meta charset="utf-8" />
 <script	src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=08b19f25437b5687e1a81ed13ccdadc8&libraries=services"></script>
-<link rel="stylesheet" href="/css/webview/search.css" />
+<link rel="stylesheet" href="/css/app/search.css" />
 </head>
 
 <body>
 <div id="mainbox">
-	<div id="box_search_course" style="margin:0 auto;">
-			<form id="form_search" onsubmit="searchPlaces(); return false;">
-				<h2 style="text-align: center;">장소 검색</h2>
-				<input id="keyword" name="search_loation" type="text" value="" >
-				<button type="submit">검색하기</button> 
-			</form>
+	<div id="box_search_course">
+		<form id="form_search" onsubmit="searchPlaces(); return false;">
+			<h2>장소 검색</h2>
+			<input type="hidden" id="userid" />
+			<input id="keyword" name="search_loation" type="text" placeholder="장소를 입력하세요" size="30" value="" class="form_height"/>
+			<button type="submit" class="form_height2">검색하기</button>
+		</form>
+		<div id="hidden">
 			<ul id="placesList"></ul>
-	       	<div id="pagination"></div>
+			<div id="pagination"></div>
+		</div>
 	</div>
 </div>
-<div id="map" style="width:100%; height:400px;"></div>
+<div id="map"></div>
 
 
 <div id="box_courseInfo">
 	<h2>선택한 코스 정보</h2>
 	<div id="courseInfo">
 	</div>
-	<table class="type09">
+	<table class="course">
 		<thead>
 		<tr>
 			<th scope="cols">코스명</th>
-			<th scope="cols" id="cif_name">짧은 코스</th>
+			<th scope="cols" id="cif_name"></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr>
 			<th scope="row">라이딩 일시</th>
-			<td id="cif_date">716m</td>
+			<td id="cif_date"></td>
 			<th scope="row">추천수</th>
-			<td id="cif_like">7</td>
+			<td id="cif_like"></td>
 		</tr>
 		<tr>
 			<th scope="row">전체 거리</th>
-			<td id="cif_total">23.5km</td>
+			<td id="cif_total"></td>
 			<th scope="row">평균 속도</th>
-			<td id="cif_avg">17.2km/h</td>
+			<td id="cif_avg"></td>
 		</tr>
 		<tr>
 			<th scope="row">획득 고도</th>
-			<td id="cif_high">716m</td>
+			<td id="cif_high"></td>
 			<th scope="row">주행시간</th>
-			<td id="cif_time">7</td>
+			<td id="cif_time"></td>
 		</tr>
 		<tr>
 			<th scope="row">최고 속도</th>
-			<td id="cif_top">716m</td>
+			<td id="cif_top"></td>
 			<th scope="row">휴식시간</th>
-			<td id="cif_break">7</td>
+			<td id="cif_break"></td>
 		</tr>
 
 		</tbody>
@@ -530,41 +532,41 @@
 	        el.removeChild (el.lastChild);
 	    }
 	}
-	 function getRidingRecordByRR_Num(rr_num, mode){
-		 $.ajax({
-				url : "/getRidingRecordByRR_Num",
-				type : "GET",
-				data : {rr_num : rr_num},
-				dataType : "json",
-				cache : false, 
-				success : function(data) {
-					var str = "라이딩 일시 : "+data.rr_date+"<br />"
-						+ "전체거리 : "+data.rr_distance
-						+ "위치 : "+data.rr_area
-						+ "주행시간 : "+data.rr_distance
-						+ "휴식시간 : "+data.rr_distance
-						+ "최고속도 : "+data.rr_topspeed
-						+ "평균속도 : "+data.rr_distance
-						+ "획득고도 : "+data.rr_high;
-					$('#courseInfo').html(str);
-					$("#bt_rr_open").val(data.rr_open);
-					$("#bt_rr_num").val(data.rr_num);
-					if(mode=="course"){
-						$('#bt_Open').text("스크랩하기");
-					}else if(mode=="ridingrecord"){
-						if(data.rr_open==1){
-							$('#bt_Open').text("비공개로 전환하기");
-						}else{
-							$('#bt_Open').text("공개로 전환하기");
-						}
-					}
-					
-						
-				}
-		});
-	 }
-</script>
+	function getRidingRecordByRR_Num(rr_num, mode){
+		$.ajax({
+			url : "/getRidingRecordByRR_Num",
+			type : "GET",
+			data : {rr_num : rr_num},
+			dataType : "json",
+			cache : false,
+			success : function(data) {
+				$('#cif_name').text(data.rr_name);
+				$("#cif_date").text(data.rr_open);
+				$("#cif_like").text(data.rr_like);
+				$("#cif_total").text(data.rr_distance);
+				$("#cif_avg").text(data.rr_avgspeed);
+				$("#cif_high").text(data.rr_high);
+				$("#cif_time").text(data.rr_time);
+				$("#cif_high").text(data.rr_high);
+				$("#cif_top").text(data.rr_topspeed);
+				$("#cif_break").text(data.rr_breaktime);
 
-sdafsdfsdfsda
+
+
+				if(mode=="course"){
+					$('#bt_Open').text("스크랩하기");
+				}else if(mode=="ridingrecord"){
+					if(data.rr_open==1){
+						$('#bt_Open').text("비공개로 전환하기");
+					}else{
+						$('#bt_Open').text("공개로 전환하기");
+					}
+				}
+
+
+			}
+		});
+	}
+</script>
 </body>
 </html>

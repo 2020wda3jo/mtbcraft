@@ -71,6 +71,7 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
     String rr_comp="";
     String address_dong="";
     String course_name="";
+    String comp_point="";
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
 
 
@@ -127,6 +128,7 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
         adress_value = intent.getStringExtra("addr");
         address_dong = intent.getStringExtra("address_dong");
         course_name = intent.getStringExtra("course_name");
+        comp_point = intent.getStringExtra("comp_point");
 
 
         Log.d("End Activity", Distence + " " + MaxSpeed + " " + AvgSpeed + " " + Getgodo + " " + RestTime + " " + IngTime +" " +check + " " + rr_comp + " "+ comp_name+ " " + adress_value      );
@@ -372,13 +374,12 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
                     params2.put("rr_comp", rr_comp);
                     params2.put("r_club", String.valueOf(r_club));
                     params2.put("LoginId", LoginId);
+                    params2.put("m_point", comp_point);
                     updateCompScore.execute(params2);
                 }
 
                 // gpx 파일 보냄
-                SendGPXFile sendObj = new SendGPXFile();
-                sendObj.setFileName("gpx_" + nowTime + ".gpx");
-                sendObj.setFilepath(getFilesDir().getPath() + "/");
+                SendGPXFile sendObj = new SendGPXFile(getFilesDir().getPath() + "/", "gpx_" + nowTime + ".gpx");
                 sendObj.upload();
             }catch(Exception e){
                 e.printStackTrace();
@@ -517,14 +518,7 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
         }
         @Override
         protected void onPostExecute(String s) {
-            try{
-                Log.d("JSON_RESULT", s);
-                Toast.makeText(getApplicationContext(), "기록이 저장되었습니다.", Toast.LENGTH_LONG).show();
-                finish();
 
-            }catch(Exception e){
-                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
-            }
         }
     }
 
@@ -818,6 +812,7 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
                         params5[k].put("LoginId", LoginId);
                         params5[k].put("mc_mission", String.valueOf(clearList.get(k).getM_num()));
                         params5[k].put("mc_time", time2);
+                        params5[k].put("m_point", String.valueOf(clearList.get(k).getM_point()));
                         IMC[k].executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params5[k]);
                     }
                 }

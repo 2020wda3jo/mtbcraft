@@ -9,7 +9,6 @@ import android.graphics.*;
 import android.location.*;
 import android.net.Uri;
 import android.os.*;
-import android.util.Log;
 import android.view.*;
 import android.webkit.*;
 import android.widget.*;
@@ -25,9 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
-import com.capston.mtbcraft.Activity.Danger.Danger;
-import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.*;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.Recycler.Adapter.CompClubAdapter;
@@ -44,7 +42,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -162,7 +159,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
                 case R.id.friend_chodae:
@@ -178,7 +175,7 @@ public class CompetitionDetail extends AppCompatActivity implements LocationList
 
                 //위험구역
                 case R.id.nav_danger:
-                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
                     break;
 

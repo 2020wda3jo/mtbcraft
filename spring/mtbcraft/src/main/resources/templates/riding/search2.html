@@ -31,6 +31,7 @@
 	<input type="button" value="내 정보보기" onclick="moveMyInfo()">
 	<input type="button" value="코스 검색하기" onclick="moveSearchCourse()">
 	<input type="button" value="위험지역등록하기" onclick="show_post_DA()">
+	<input type="button" value="입산통제지역등록하기" onclick="show_pr();">
 </div>
 
 <div id="mainbox">
@@ -66,6 +67,18 @@
 			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
 		</form>
 		<button type="button" onclick="regDA()">등록신청</button>
+		<button type="button" onclick="cancel_post_DA()">취소</button>
+	</div>
+	<div id="box_post_DA2">
+		<form id="form_post_nomtb" action="/nomtbAction" method="post"  enctype="multipart/form-data">
+			<label>위도</label><input type="text" id="no_lot" name="nomtb_lot" size="18">
+			<label>경도</label><input type="text" id="no_lon" name="nomtb_lon" size="18">
+			<label>산 이름</label><input type="text" id="no_addr" name="nomtb_addr" size="8" required>
+			<label>한줄평</label><input type="text" id="no_content" name="nomtb_content" size="40" required>
+			<label>이미지첨부</label><input type="file" id="file" name="file" accept="image/*">
+			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
+		</form>
+		<button type="button" onclick="regNomtb()">등록신청</button>
 		<button type="button" onclick="cancel_post_DA()">취소</button>
 	</div>
 	

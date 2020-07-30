@@ -24,6 +24,8 @@ public class CourseHolder extends RecyclerView.ViewHolder {
     public LinearLayout viewClick;
     public View mView;
     public WebView webview;
+
+
     public CourseHolder(View itemView) {
         super(itemView);
 
@@ -39,7 +41,6 @@ public class CourseHolder extends RecyclerView.ViewHolder {
         likebt = itemView.findViewById(R.id.likeimg);
         like_count = itemView.findViewById(R.id.like_count);
         viewClick = itemView.findViewById(R.id.viewClick);
-
         webview = itemView.findViewById(R.id.course_view);
 
 

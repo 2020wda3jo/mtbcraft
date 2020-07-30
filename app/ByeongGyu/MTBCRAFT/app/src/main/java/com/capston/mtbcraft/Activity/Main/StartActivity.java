@@ -143,7 +143,7 @@ public class StartActivity extends AppCompatActivity
         View view = binding.getRoot();
         setContentView(view);
 
-        SharedPreferences phone = getSharedPreferences("sosphone",MODE_PRIVATE);
+        SharedPreferences phone = getSharedPreferences("auto",MODE_PRIVATE);
         number = phone.getString("sosphone","");
 
         //id refernece for wizet
@@ -167,8 +167,10 @@ public class StartActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),"선택된 아이템 : "+position+spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
                 String tel = "tel:01047527613";
                 String tel2 = "tel:"+number;
+                Log.d("전화번호", tel2);
                 switch(position){
                     case 1:
                         startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel)));
@@ -283,6 +285,8 @@ public class StartActivity extends AppCompatActivity
             }
         });
 
+
+
         button2.setOnClickListener(v -> {
             //형변환한거
             if (hap == 0) {
@@ -327,10 +331,6 @@ public class StartActivity extends AppCompatActivity
                 startActivity(intent);
                 finish();
                 mapViewContainer.removeAllViews();
-
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                locationManager.removeUpdates(this);
-
             }
         });
 

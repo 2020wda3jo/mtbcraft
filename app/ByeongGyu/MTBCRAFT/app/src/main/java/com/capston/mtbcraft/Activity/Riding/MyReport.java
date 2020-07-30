@@ -3,8 +3,6 @@ package com.capston.mtbcraft.Activity.Riding;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,16 +24,17 @@ import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.Recycler.Adapter.RecyclerAdapter;
+import com.capston.mtbcraft.Recycler.Adapter.ScrapAdapter;
 import com.capston.mtbcraft.dto.RidingRecord;
+import com.capston.mtbcraft.dto.ScrapStatus;
 import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,7 +88,6 @@ public class MyReport extends AppCompatActivity  {
                 break;
         }
 
-
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -129,7 +127,7 @@ public class MyReport extends AppCompatActivity  {
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission=new Intent(getApplicationContext(), Mission.class);
+                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
             }
@@ -183,14 +181,14 @@ public class MyReport extends AppCompatActivity  {
                 String tempData = s;
 
                 Gson gson = new Gson();
-                ArrayList<RidingRecord> itemList = new ArrayList<>();
-                RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
+                ArrayList<ScrapStatus> itemList = new ArrayList<>();
+                ScrapStatus[] items = gson.fromJson(tempData, ScrapStatus[].class);
 
-                for(RidingRecord item: items){
+                for(ScrapStatus item: items){
                     itemList.add(item);
                 }
 
-                RecyclerAdapter adapter = new RecyclerAdapter(getApplicationContext(), itemList);
+                ScrapAdapter adapter = new ScrapAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);
             }catch(Exception e){

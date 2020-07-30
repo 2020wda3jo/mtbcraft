@@ -3,15 +3,18 @@ package com.capston.mtbcraft.Activity.Course;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,22 +25,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Control.NoMtb;
-import com.capston.mtbcraft.Activity.Danger.Danger;
-import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.Recycler.Adapter.CourseAdapter;
 import com.capston.mtbcraft.Recycler.Adapter.RecyclerAdapter;
 import com.capston.mtbcraft.dto.RidingRecord;
-import com.capston.mtbcraft.gpxparser.GPXParser;
-import com.capston.mtbcraft.gpxparser.Gpx;
 import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 public class CourseList extends AppCompatActivity {
     private RecyclerAdapter adapter;
@@ -47,6 +48,15 @@ public class CourseList extends AppCompatActivity {
 
     String LoginId, Nickname;
     ImageView userImage;
+
+    CourseAdapter courseAdapter, likeAdapter, highAdapter, disAdapter;
+    Button moreButton;
+    TextView textView1, textView2, textView3, textView4;
+    ArrayList<RidingRecord> itemList = new ArrayList<>();
+    ArrayList<RidingRecord> likeList = new ArrayList<>();
+    ArrayList<RidingRecord> highList = new ArrayList<>();
+    ArrayList<RidingRecord> disList = new ArrayList<>();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.courselist);
@@ -54,7 +64,13 @@ public class CourseList extends AppCompatActivity {
 
         RidingRecord rrr = new RidingRecord();
         Intent intent = new Intent(this.getIntent());
-        rrr.setLoginId(intent.getStringExtra("rider_id")); ;
+        rrr.setLoginId(intent.getStringExtra("rider_id"));
+
+        moreButton = findViewById(R.id.more_button);
+        textView1 = findViewById(R.id.textView17);
+        textView2 = findViewById(R.id.textView18);
+        textView3 = findViewById(R.id.textView19);
+        textView4 = findViewById(R.id.textView20);
 
         /* 로그인 정보 가져오기 */
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -129,7 +145,7 @@ public class CourseList extends AppCompatActivity {
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
                 case R.id.friend_chodae:
@@ -145,7 +161,7 @@ public class CourseList extends AppCompatActivity {
 
                 //위험구역
                 case R.id.nav_danger:
-                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
                     break;
 
@@ -156,6 +172,81 @@ public class CourseList extends AppCompatActivity {
                     break;
             }
             return true;
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int lastPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition() + 1;
+                int totalCount = recyclerView.getAdapter().getItemCount();
+
+                Log.e("끝포지션", String.valueOf(totalCount));
+                Log.e("라스트포지션", String.valueOf(lastPosition));
+
+
+                if(lastPosition == totalCount){
+                    if ( courseAdapter.itemList.size() == courseAdapter.count){
+                        moreButton.setVisibility(View.GONE);
+                    }
+                }
+
+                moreButton.setOnClickListener( v -> {
+                    if ( courseAdapter.itemList.size() - (courseAdapter.count+5) > 0) {
+                        courseAdapter.count += 5;
+                        likeAdapter.count += 5;
+                        highAdapter.count += 5;
+                        disAdapter.count += 5;
+                        recyclerView.requestLayout();
+                    }
+                    else{
+                        courseAdapter.count += courseAdapter.itemList.size() - courseAdapter.count;
+                        likeAdapter.count += courseAdapter.itemList.size() - courseAdapter.count;
+                        highAdapter.count += courseAdapter.itemList.size() - courseAdapter.count;
+                        disAdapter.count += courseAdapter.itemList.size() - courseAdapter.count;
+                        recyclerView.requestLayout();
+                    }
+                });
+            }
+        });
+
+        textView1.setOnClickListener( v -> {
+            recyclerView.setAdapter(courseAdapter);
+            textView1.setTypeface(null, Typeface.BOLD);
+            textView2.setTypeface(null, Typeface.NORMAL);
+            textView3.setTypeface(null, Typeface.NORMAL);
+            textView4.setTypeface(null, Typeface.NORMAL);
+        });
+
+        textView2.setOnClickListener( v -> {
+            recyclerView.setAdapter(likeAdapter);
+            textView1.setTypeface(null, Typeface.NORMAL);
+            textView2.setTypeface(null, Typeface.BOLD);
+            textView3.setTypeface(null, Typeface.NORMAL);
+            textView4.setTypeface(null, Typeface.NORMAL);
+        });
+
+        textView3.setOnClickListener( v -> {
+            recyclerView.setAdapter(highAdapter);
+            textView1.setTypeface(null, Typeface.NORMAL);
+            textView2.setTypeface(null, Typeface.NORMAL);
+            textView3.setTypeface(null, Typeface.BOLD);
+            textView4.setTypeface(null, Typeface.NORMAL);
+        });
+
+        textView4.setOnClickListener( v -> {
+            recyclerView.setAdapter(disAdapter);
+            textView1.setTypeface(null, Typeface.NORMAL);
+            textView2.setTypeface(null, Typeface.NORMAL);
+            textView3.setTypeface(null, Typeface.NORMAL);
+            textView4.setTypeface(null, Typeface.BOLD);
         });
 
         try{
@@ -195,15 +286,50 @@ public class CourseList extends AppCompatActivity {
             try{
                 String tempData = s;
                 Gson gson = new Gson();
-                ArrayList<RidingRecord> itemList = new ArrayList<>();
+                ArrayList<Integer> likeCount = new ArrayList<Integer>();
+                ArrayList<Integer> highCount = new ArrayList<Integer>();
+                ArrayList<Integer> disCount = new ArrayList<Integer>();
                 RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
 
                 for(RidingRecord item: items){
                     itemList.add(item);
+
+                    likeCount.add(item.getRr_like());
+                    highCount.add(item.getRr_high());
+                    disCount.add(item.getRr_distance());
                 }
-                CourseAdapter adapter = new CourseAdapter(getApplicationContext(), itemList);
+
+                Collections.sort(likeCount);
+                Collections.sort(highCount);
+                Collections.sort(disCount);
+
+                Collections.reverse(likeCount);
+                Collections.reverse(highCount);
+                Collections.reverse(disCount);
+
+                for ( int i = 0; i < likeCount.size(); i++){
+                    for ( int j = 0; j < itemList.size(); j++) {
+                        if (likeCount.get(i) == itemList.get(j).getRr_like()){
+                            likeList.add(itemList.get(j));
+                        }
+
+                        if (highCount.get(i) == itemList.get(j).getRr_high()){
+                            highList.add(itemList.get(j));
+                        }
+
+                        if (disCount.get(i) == itemList.get(j).getRr_distance()) {
+                            disList.add(itemList.get(j));
+                        }
+                    }
+                }
+
+                courseAdapter = new CourseAdapter(getApplicationContext(), itemList);
+                likeAdapter = new CourseAdapter(getApplicationContext(), likeList);
+                highAdapter = new CourseAdapter(getApplicationContext(), highList);
+                disAdapter = new CourseAdapter(getApplicationContext(), disList);
+
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                recyclerView.setAdapter(adapter);
+                recyclerView.setAdapter(courseAdapter);
             }catch(Exception e){
                 e.printStackTrace();
             }

@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity{
             Button loginbt = (Button)findViewById(R.id.login_bt);
             TextView userid = (TextView)findViewById(R.id.userid);
             TextView userpw = (TextView)findViewById(R.id.userpw);
+            Button registerbt = (Button)findViewById(R.id.join);
 
 
             loginbt.setOnClickListener(v -> {
@@ -63,6 +64,11 @@ public class LoginActivity extends AppCompatActivity{
                 startActivity(intent);
                 //Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
                 finish();
+            });
+
+            registerbt.setOnClickListener( v -> {
+                Intent intent = new Intent ( getApplicationContext(), registerActivity.class);
+                startActivity(intent);
             });
         }else{
             Intent intent=new Intent(getApplicationContext(), SubActivity.class);

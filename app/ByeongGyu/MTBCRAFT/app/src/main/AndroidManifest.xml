@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.DIAL_PHONE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:required="true" />
@@ -27,15 +28,21 @@
         android:hardwareAccelerated="false"
         android:largeHeap="true">
 
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false"/>
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="8819eab741cd2e061a5bb0e04dbe8a96" />
-        <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="frzpsowm1l" />
+
+<!--        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCa8UBfxfwsrydbQwFng-J7D_O1lnOUOss" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCa8UBfxfwsrydbQwFng-J7D_O1lnOUOss" />
+            android:value="AIzaSyBDek3jWvi_OJgo33xSeccnaaHxIqIlG_0" />
+
 
         <activity android:name=".Activity.Main.MainActivity">
             <intent-filter>
@@ -57,11 +64,18 @@
         <activity android:name=".Activity.Course.CourseDetail" />
         <activity android:name=".Activity.Scrap.MyScrap" />
         <activity android:name=".Activity.Scrap.MyScrapDetail" />
+        <activity android:name=".Activity.Mission.MissionList" />
+        <activity android:name=".Activity.Mission.MissionDetail" />
+        <activity android:name=".Activity.Main.registerActivity" />
+        <activity android:name=".AddressActivity" />
         <activity android:name=".Activity.Course.CourseSearch" />
         <activity android:name=".Activity.Competition.CompetitionDetail" />
         <activity android:name=".Activity.Competition.CompetitionList" />
         <activity android:name=".Activity.Riding.FollowStart" />
         <activity android:name=".Activity.Riding.FollowEndActivity"/>
+        <activity android:name=".Activity.Danger.DangerList" />
+        <activity android:name=".Activity.Danger.DangerRegister" />
+        <activity android:name=".Activity.Setting.SettingActivity" />
 
     </application>
 

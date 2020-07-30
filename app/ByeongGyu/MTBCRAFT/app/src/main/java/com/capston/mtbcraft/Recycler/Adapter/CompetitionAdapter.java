@@ -83,6 +83,7 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
             intent.putExtra("save_path",Save_Path);
             intent.putExtra("c_gpx",itemList.get(position).getC_gpx());
             intent.putExtra("c_name",itemList.get(position).getC_name());
+            intent.putExtra("comp_point", String.valueOf(itemList.get(position).getComp_point()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             v.getContext().startActivity(intent);
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,12 +25,11 @@ import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
-import com.capston.mtbcraft.Activity.Danger.Danger;
-import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.FollowStart;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.R;
-import com.capston.mtbcraft.databinding.ActivitySubmainBinding;
 import com.capston.mtbcraft.databinding.ScrapDetailBinding;
 import com.capston.mtbcraft.gpxparser.GPXParser;
 import com.capston.mtbcraft.gpxparser.Gpx;
@@ -160,7 +157,7 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
                 case R.id.friend_chodae:
@@ -176,7 +173,7 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
 
                 //위험구역
                 case R.id.nav_danger:
-                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
                     break;
 

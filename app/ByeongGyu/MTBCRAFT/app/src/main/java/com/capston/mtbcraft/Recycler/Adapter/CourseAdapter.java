@@ -14,15 +14,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.capston.mtbcraft.Activity.Course.CourseDetail;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.dto.RidingRecord;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
+public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> implements OnMapReadyCallback {
 
     public Context mContext;
     public ArrayList<RidingRecord> itemList;
     RidingRecord item;
     WebView webview;
+    public int count = 5;
+
     public CourseAdapter(Context mContext, ArrayList<RidingRecord> itemList) {
         this.mContext = mContext;
         this.itemList = itemList;
@@ -59,8 +64,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         float km = (float) (des/1000.0);
         String total = String.valueOf(km)+"Km";
 
-
-
         switch(itemList.get(position).getRr_rider()){
             case "1401287":
                 testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo1));
@@ -85,12 +88,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
         testViewHolder.c_date.setText(itemList.get(position).getRr_date());
         testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
         testViewHolder.webview.loadUrl("http://53.92.32.2:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
-
         testViewHolder.webview.getSettings().setJavaScriptEnabled(true);
+
 
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
-            Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
             Intent intent = new Intent(v.getContext(), CourseDetail.class);
             intent.putExtra("c_num",String.valueOf(itemList.get(position).getRr_num()));
             intent.putExtra("c_distance",itemList.get(position).getRr_distance());
@@ -105,6 +107,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return count;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+
+
     }
 }

@@ -17,17 +17,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
-import com.capston.mtbcraft.Activity.Danger.Danger;
-import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.Activity.Setting.SettingActivity;
@@ -35,8 +37,10 @@ import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.databinding.ActivitySubmainBinding;
 import com.capston.mtbcraft.network.HttpClient;
 import com.google.android.material.navigation.NavigationView;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -153,7 +157,7 @@ public class SubActivity extends AppCompatActivity{
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
                 case R.id.friend_chodae:
@@ -169,7 +173,7 @@ public class SubActivity extends AppCompatActivity{
 
                 //위험구역
                 case R.id.nav_danger:
-                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
                     break;
 
@@ -261,7 +265,6 @@ public class SubActivity extends AppCompatActivity{
                         hour = min/60;
                         sec = sec % 60;
                         min = min % 60;
-
                         if(hour == 0){
                             hour=0;
                         }
@@ -272,6 +275,7 @@ public class SubActivity extends AppCompatActivity{
 
                         dis+= jObject.getInt("rr_distance");
                         killlo = (int) (dis / 1000.0);
+
                         if (dis >= 1000) {
                             binding.mainKm.setText(killlo +"km");
                         }else{

@@ -56,8 +56,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.daum.mf.map.api.MapView.CurrentLocationTrackingMode.TrackingModeOff;
-
 public class endActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
     private RidingEndBinding binding;
 
@@ -157,12 +155,12 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         lineChart.setData(chartData);
         lineChart.invalidate();
-        chartData.setValueTextSize(17f);
+
 
         mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
-        mapView.setCurrentLocationTrackingMode(TrackingModeOff);
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
         polyline.setLineColor(Color.argb(128, 255, 51, 0)); // Polyline 컬러 지정.
@@ -194,24 +192,37 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         binding.addr.setText(text);
 
         //휴식시간 및 지속시간
-        /* 하단 데이터 */
-        int hour, min, sec = IngTime;
-        min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
+        int hour;
+        int min;
+        int sec = IngTime;
 
-        Log.d("라이딩시간",hour+"시간 "+min+"분 "+sec+"초");
-        binding.ending.setText(hour + "시간 " + min + "분 " + sec + "초"); //지속시간
+        min = sec/60;
+        hour = min/60;
+        sec = sec % 60;
+        min = min % 60;
+        if(hour == 0){
+            hour=0;
+        }
+        if(min==0){
+            min=0;
+        }
 
-        int r_hour, r_min, r_sec = RestTime;
+        int r_sec = RestTime;
+        int r_hour;
+        int r_min;
 
-        r_min = r_sec/60; r_hour = r_min/60; r_sec = r_sec % 60; r_min = r_min % 60;
+        r_min = r_sec/60;
+        r_hour = r_min/60;
+        r_sec = r_sec%60;
+        r_min = r_min % 60;
         if(r_hour == 0){
             r_hour=00;
         }
         if(r_min==0){
             r_min=00;
         }
-
-        binding.endresttime.setText(r_hour + "시간 " + r_min + "분 " + r_sec + "초"); //휴식시간
+        binding.ending.setText(String.valueOf(hour+"시간 "+min+"분 "+sec+"초")); //지속시간
+        binding.endresttime.setText(String.valueOf(r_hour+"시간 "+r_min+"분 "+r_sec+"초")); //휴식시간
 
         binding.endget.setText(String.valueOf(Getgodo));
         double killlo = 0;
@@ -361,9 +372,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 }
 
                 // gpx 파일 보냄
-                SendGPXFile sendObj = new SendGPXFile();
-                sendObj.setFileName("gpx_" + nowTime + ".gpx");
-                sendObj.setFilepath(getFilesDir().getPath() + "/");
+                SendGPXFile sendObj = new SendGPXFile(getFilesDir().getPath() + "/", "gpx_" + nowTime + ".gpx");
                 sendObj.upload();
             }catch(Exception e){
                 e.printStackTrace();
@@ -502,14 +511,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         }
         @Override
         protected void onPostExecute(String s) {
-            try{
-                Log.d("JSON_RESULT", s);
-                Toast.makeText(getApplicationContext(), "기록이 저장되었습니다.", Toast.LENGTH_LONG).show();
-                finish();
 
-            }catch(Exception e){
-                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
-            }
         }
     }
 
@@ -803,6 +805,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                         params5[k].put("LoginId", LoginId);
                         params5[k].put("mc_mission", String.valueOf(clearList.get(k).getM_num()));
                         params5[k].put("mc_time", time2);
+                        params5[k].put("m_point", String.valueOf(clearList.get(k).getM_point()));
                         IMC[k].executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params5[k]);
                     }
                 }
@@ -811,22 +814,15 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 AlertDialog.Builder alert_confirm = new AlertDialog.Builder((Context) endActivity);
                 // 메세지
                 String text = "라이딩 기록이 저장되었습니다";
-                String text1 = "";
                 String text2 = "";
 
                 alert_confirm.setMessage(text);
 
-                if (!rr_comp.equals("null")) {
-                    text1 = comp_name;
-                    alert_confirm.setMessage( text +"\n" + text1+"에 참가하셨습니다\n");
-                }
-
                 if ( !rr_comp.equals("null") || clearList.size() >= 1){
-                    text1 = comp_name;
                     for ( int l = 0; l < clearList.size(); l++){
                         text2 += clearList.get(l).getM_name() + " 미션 성공\n";
                     }
-                    alert_confirm.setMessage( text +"\n" + text1+"에 참가하셨습니다\n" + text2);
+                    alert_confirm.setMessage( text + "\n" + text2);
                 }
                 // 확인 버튼 리스너
                 alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {

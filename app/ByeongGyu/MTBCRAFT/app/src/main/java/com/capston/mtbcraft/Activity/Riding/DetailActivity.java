@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -28,9 +26,8 @@ import com.capston.mtbcraft.Activity.Competition.CompetitionList;
 import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
-import com.capston.mtbcraft.Activity.Danger.Danger;
-import com.capston.mtbcraft.Activity.Main.SubActivity;
-import com.capston.mtbcraft.Activity.Mission.Mission;
+import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.gpxparser.GPXParser;
@@ -161,7 +158,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                     break;
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), Mission.class);
+                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
                 case R.id.friend_chodae:
@@ -177,7 +174,7 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
 
                 //위험구역
                 case R.id.nav_danger:
-                    Intent danger = new Intent(getApplicationContext(), Danger.class);
+                    Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
                     break;
 
@@ -223,35 +220,6 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
             tagGet.execute(par);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public class OpenSet extends AsyncTask<Map<String, String>, Integer, String> {
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) {
-
-            // Http 요청 준비 작업
-            //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("POST", "/android/recordset/open");
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-
-            // 응답 본문 가져오기
-            String body = post.getBody();
-
-            return body;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.d("디테일 ", s);
         }
     }
 
@@ -371,10 +339,30 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
                 //공개 및 비공개 이미지 변경
                 Log.d("공개여부는요",String.valueOf(rr_open));
                 if(rr_open == 1){
-
+                    set_open.setVisibility(View.GONE);
                     set_noopen.setVisibility(View.VISIBLE);
+                    set_noopen.setOnClickListener(v->{
+                        Log.d("온클릭","set_noopen");
+
+                        OpenSet openset = new OpenSet();
+                        Map<String, String> open = new HashMap<String, String>();
+                        open.put("rr_num", rr_num);
+                        open.put("rr_rider", rr_rider);
+                        open.put("open", "0");
+                        openset.execute(open);
+                    });
                 }else{
+                    set_noopen.setVisibility(View.GONE);
                     set_open.setVisibility(View.VISIBLE);
+                    set_open.setOnClickListener(v->{
+                        Log.d("온클릭","setopen");
+                        OpenSet openset = new OpenSet();
+                        Map<String, String> open = new HashMap<String, String>();
+                        open.put("rr_num", rr_num);
+                        open.put("rr_rider", rr_rider);
+                        open.put("open", "1");
+                        openset.execute(open);
+                    });
                 }
                 //주행시간 계산
                 int hour, min, sec = Integer.parseInt(secS);
@@ -446,6 +434,40 @@ public class DetailActivity extends AppCompatActivity implements MapView.Current
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public class OpenSet extends AsyncTask<Map<String, String>, Integer, String> {
+
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("POST", "/android/recordset/open");
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+
+            // 응답 본문 가져오기
+            String body = post.getBody();
+
+            return body;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("디테일 ", s);
+            GetTask getTask = new GetTask();
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("rr_num", rr_num);
+            params.put("rr_rider", rr_rider);
+            getTask.execute(params);
         }
     }
     @Override
