@@ -117,6 +117,14 @@ public interface AndroidMapper {
 	public List<App_MissionRanking> getMisRanking() throws Exception;
 	
 	public List<App_CourseReview> getCourseRiview(@Param("c_num") int c_num) throws Exception;
+	
+	public void updateCourseReview(App_CourseReview C_review) throws Exception;
+	
+	public void insertCourseReview(App_CourseReview C_review) throws Exception;
+	
+	public void deleteCourseReview(String cr_num) throws Exception;
+	
+	public int sameCheck(String LoginId) throws Exception;
 
     void foinsert(RidingRecord record);
 

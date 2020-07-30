@@ -197,6 +197,22 @@ public class AndroidService {
 	public List<App_CourseReview> getCourseRiview(@Param("c_num") int c_num) throws Exception{
 		return androidMapper.getCourseRiview(c_num);
 	}
+	
+	public void updateCourseReview (App_CourseReview C_review) throws Exception{
+		androidMapper.updateCourseReview(C_review);
+	}
+	
+	public void insertCourseReview (App_CourseReview C_review) throws Exception{
+		androidMapper.insertCourseReview(C_review);
+	}
+	
+	public void deleteCourseReview(String cr_num) throws Exception{
+		androidMapper.deleteCourseReview(cr_num);
+	}
+	
+	public int sameCheck(String LoginId) throws Exception{
+		return androidMapper.sameCheck(LoginId);
+	}
 
     public void foinsert(RidingRecord record) {
 		androidMapper.foinsert(record);

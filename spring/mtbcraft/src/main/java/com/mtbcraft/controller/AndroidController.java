@@ -509,4 +509,92 @@ public class AndroidController {
 		androidService.foupdate(record);
 		return result;
 	}
+	
+	@RequestMapping(value = "/app/updateCourseReview")
+	@ResponseBody
+	public void updateCourseReview(HttpServletRequest request) throws Exception {
+		App_CourseReview C_review = new App_CourseReview();
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		String today = null;
+		today = formatter.format(cal.getTime());
+		Timestamp ts = Timestamp.valueOf(today);
+
+		C_review.setCr_content(request.getParameter("cr_content"));
+		C_review.setCr_images(request.getParameter("cr_image"));
+		C_review.setCr_num(Integer.parseInt(request.getParameter("cr_num")));
+		C_review.setCr_time(ts);
+		androidService.updateCourseReview(C_review);
+	}
+
+	@RequestMapping(value = "/app/insertCourseReview")
+	@ResponseBody
+	public void insertCourseReview(HttpServletRequest request) throws Exception {
+		App_CourseReview C_review = new App_CourseReview();
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		String today = null;
+		today = formatter.format(cal.getTime());
+		Timestamp ts = Timestamp.valueOf(today);
+
+		C_review.setCr_content(request.getParameter("cr_content"));
+		C_review.setCr_images(request.getParameter("cr_image"));
+		C_review.setCr_time(ts);
+		C_review.setCr_rider(request.getParameter("cr_rider"));
+		C_review.setCr_rnum(Integer.parseInt(request.getParameter("cr_rnum")));
+		androidService.insertCourseReview(C_review);
+	}
+
+	@RequestMapping(value = "/app/deleteCourseReview")
+	@ResponseBody
+	public void deleteCourseReview(HttpServletRequest request) throws Exception {
+		String cr_num = "";
+
+		cr_num = request.getParameter("cr_num");
+
+		androidService.deleteCourseReview(cr_num);
+	}
+
+	@RequestMapping(value = "/app/sameCheck/{id}")
+	@ResponseBody
+	public String sameCheck(@PathVariable(value = "id") String id) throws Exception {
+		int response;
+
+		response = androidService.sameCheck(id);
+
+		if (response == 0)
+			return "ok";
+		else
+			return "no";
+	}
+	
+	@RequestMapping(value = "/app/insertreg")
+	@ResponseBody
+	public void insertReg(HttpServletRequest request) throws Exception {
+		Member member  = new Member();
+		
+		member.setR_id(request.getParameter("id"));
+		member.setR_pw(request.getParameter("pw"));
+		member.setR_name(request.getParameter("name"));
+		member.setR_nickname(request.getParameter("nickname"));	
+		member.setR_birth(request.getParameter("birth"));
+		member.setR_phone(request.getParameter("phone"));
+		member.setR_gender(request.getParameter("gender"));
+		member.setR_addr(request.getParameter("addr1"));
+		member.setR_addr2(request.getParameter("addr2"));
+		member.setR_type(request.getParameter("type"));
+		member.setR_image(request.getParameter("image"));
+
+		memberService.memberInsert(member);
+	}
+	
+	// 사용자 등록 위험 지역 조회
+	@RequestMapping(value = "app/danger/{rr_rider}")
+	public @ResponseBody List<DangerousArea> getUserDangerousArea(@PathVariable(value="rr_rider") String rr_rider) throws Exception {
+		return ridingService.getUserDangerousArea(rr_rider);
+	}
+	
+	
 }
