@@ -23,7 +23,7 @@ import com.capston.mtbcraft.dto.ScrapStatus;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class ScrapAdapter extends RecyclerView.Adapter<ScrapAdapter.MyRecordHolder>{
+public class ScrapAdapter extends RecyclerView.Adapter<ScrapHolder>{
 
     public Context mContext;
     public ArrayList<ScrapStatus> itemList;
@@ -36,16 +36,16 @@ public class ScrapAdapter extends RecyclerView.Adapter<ScrapAdapter.MyRecordHold
 
     @NonNull
     @Override
-    public MyRecordHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ScrapHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.myreport_item , viewGroup,false);
 
-        return new MyRecordHolder(v);
+        return new ScrapHolder(v);
     }
 
     @SuppressLint("ResourceType")
     @Override
-    public void onBindViewHolder(@NonNull final MyRecordHolder testViewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final ScrapHolder testViewHolder, final int position) {
         //item = itemList.get(position);
         int hour;
         int min;
@@ -71,8 +71,7 @@ public class ScrapAdapter extends RecyclerView.Adapter<ScrapAdapter.MyRecordHold
 
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        Log.d("dfdf",itemList.get(position).getRr_rider());
-        switch(itemList.get(position).getRr_rider()){
+        switch(itemList.get(position).getSs_rider()){
             case "1401287":
                 testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo1));
                 break;
@@ -86,9 +85,6 @@ public class ScrapAdapter extends RecyclerView.Adapter<ScrapAdapter.MyRecordHold
                 testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.common_google_signin_btn_icon_light));
                 break;
         }
-
-
-
 
         testViewHolder.record_name.setText(itemList.get(position).getRr_name());
         testViewHolder.record_date.setText(itemList.get(position).getRr_date());
@@ -104,27 +100,6 @@ public class ScrapAdapter extends RecyclerView.Adapter<ScrapAdapter.MyRecordHold
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             v.getContext().startActivity(intent);
         });
-    }
-
-
-    class MyRecordHolder extends RecyclerView.ViewHolder {
-        public TextView record_name, record_date,record_adress, my_dis, my_get, my_time;
-        public ImageView my_image;
-        public LinearLayout viewClick;
-        public final View mView;
-        public MyRecordHolder( View itemView) {
-            super(itemView);
-            mView = itemView;
-            record_name = itemView.findViewById(R.id.record_name);
-            record_date = itemView.findViewById(R.id.record_date);
-            record_adress = itemView.findViewById(R.id.record_adress);
-            my_dis = itemView.findViewById(R.id.my_dis);
-            my_get = itemView.findViewById(R.id.my_get);
-            my_time = itemView.findViewById(R.id.my_time);
-            my_image = itemView.findViewById(R.id.myimage);
-            viewClick = itemView.findViewById(R.id.viewClick);
-        }
-
     }
 
     @Override

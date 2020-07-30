@@ -200,6 +200,8 @@ public class MyScrap extends AppCompatActivity  {
                     itemList.add(item);
                 }
 
+                ScrapStatus scrap = new ScrapStatus();
+                Log.d("dfdfdf", String.valueOf(itemList.get(0)));
                 MyScrapAdapter adapter = new MyScrapAdapter(getApplicationContext(), itemList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                 recyclerView.setAdapter(adapter);
