@@ -38,8 +38,14 @@
 		<div class="divBox"></div>
 		<div class="goods">
 			<a href="#" th:each="goods:${goodsList}" th:href="'/community/market/'+${goods.g_num}">
-				<div class="imgBox">
+				<div class="imgBox" th:if="${goods.g_status}==0">
 					<img alt="" src="/imgs/f_logo.png" th:src="'/data/img/goods/'+${goods.g_image}">
+				</div>
+				<div class="imgBox soldout" th:if="${goods.g_status}==1" th:style="|background-image: url('/data/img/goods/${goods.g_image}');|">
+					<img alt="" src="/imgs/soldout.png">
+				</div>
+				<div class="imgBox soldout" th:if="${goods.g_status}==2" th:style="|background-image: url('/data/img/goods/${goods.g_image}');|">
+					<img alt="" src="/imgs/soldout.png">
 				</div>
 				<h2 th:text="${goods.g_title}">자전거 다 판다.</h2>
 				<span th:text="${goods.g_content}">대구 북구 복현동</span>

@@ -70,3 +70,11 @@
 	text-align: right;
 	margin-right: 10px;
 }
+.soldout img{
+	opacity: 0.7;
+}
+
+.soldout {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
