@@ -87,7 +87,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> implements
         testViewHolder.c_dis.setText(total);
         testViewHolder.c_date.setText(itemList.get(position).getRr_date());
         testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
-        testViewHolder.webview.loadUrl("http://53.92.32.2:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
+        testViewHolder.webview.loadUrl("http://53.92.32.7:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
         testViewHolder.webview.getSettings().setJavaScriptEnabled(true);
 
 

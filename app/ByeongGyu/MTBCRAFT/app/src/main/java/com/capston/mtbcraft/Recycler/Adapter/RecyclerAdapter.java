@@ -100,7 +100,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
 
         testViewHolder.mView.setOnClickListener(v -> {
             Context context = v.getContext();
-            Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, position +"번째 아이템 클릭"+itemList.get(position).getRr_num(),  Toast.LENGTH_LONG).show();
             Intent intent = new Intent(v.getContext(), DetailActivity.class);
             intent.putExtra("rr_num",itemList.get(position).getRr_num());
             intent.putExtra("rr_rider",itemList.get(position).getRr_rider());

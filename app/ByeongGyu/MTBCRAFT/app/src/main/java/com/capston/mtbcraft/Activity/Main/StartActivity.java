@@ -167,7 +167,7 @@ public class StartActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"선택된 아이템 : "+position+spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(),"선택된 아이템 : "+position+spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
                 String tel = "tel:01047527613";
                 String tel2 = "tel:"+number;
                 Log.d("전화번호", tel2);

@@ -183,8 +183,8 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         RadioGroup openselect = (RadioGroup)findViewById(R.id.selectgroup);
 
         //앞에서 받아온값들을 텍스트로 설정
-        binding.endavg.setText(String.valueOf(AvgSpeed)); //평균속도
-        binding.endmax.setText(String.valueOf(MaxSpeed)); //최대속도
+        binding.endavg.setText(String.valueOf(AvgSpeed+"km/h")); //평균속도
+        binding.endmax.setText(String.valueOf(MaxSpeed+"km/h")); //최대속도
 
 
         //주소 텍스트
@@ -192,9 +192,9 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         binding.addr.setText(text);
 
         //휴식시간 및 지속시간
+        int sec = IngTime;
         int hour;
         int min;
-        int sec = IngTime;
 
         min = sec/60;
         hour = min/60;
@@ -221,10 +221,10 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
         if(r_min==0){
             r_min=00;
         }
-        binding.ending.setText(String.valueOf(hour+"시간 "+min+"분 "+sec+"초")); //지속시간
-        binding.endresttime.setText(String.valueOf(r_hour+"시간 "+r_min+"분 "+r_sec+"초")); //휴식시간
+        binding.ending.setText(hour + "시간 " + min + "분 " + sec + "초"); //지속시간
+        binding.endresttime.setText(r_hour + "시간 " + r_min + "분 " + r_sec + "초"); //휴식시간
 
-        binding.endget.setText(String.valueOf(Getgodo));
+        binding.endget.setText(Getgodo +"m");
         double killlo = 0;
 
         if (dis >= 1000) {

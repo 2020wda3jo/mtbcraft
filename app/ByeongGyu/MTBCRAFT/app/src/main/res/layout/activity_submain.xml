@@ -39,6 +39,36 @@
             android:layout_marginTop="40dp"
             tools:ignore="MissingConstraints">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/banner"
+                tools:ignore="MissingConstraints">
+
+
+                <TextView
+                    android:id="@+id/textView39"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="아무도 안 가본 길을 가라"
+                    android:textColor="#fff"
+                    android:layout_marginTop="70dp"
+                    android:textSize="27dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="그리고 공유하자 다 같이 가자"
+                    android:textColor="#fff"
+                    android:textSize="27dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
         <LinearLayout
             android:layout_width="380dp"
             android:layout_gravity="center"
@@ -143,6 +173,9 @@
 
 
             </LinearLayout>
+
+
+
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
