@@ -225,4 +225,8 @@ public class AndroidService {
 	public LoginInfo getClubUser(String loginId) {
 		return androidMapper.getClubUser(loginId);
 	}
+	
+	public void insertDanger(DangerousArea d_area) throws Exception{
+		androidMapper.insertDanger(d_area);
+	}
 }

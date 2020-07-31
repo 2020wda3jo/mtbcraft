@@ -591,10 +591,22 @@ public class AndroidController {
 	}
 	
 	// 사용자 등록 위험 지역 조회
-	@RequestMapping(value = "app/danger/{rr_rider}")
+	@RequestMapping(value = "/app/danger/{rr_rider}")
 	public @ResponseBody List<DangerousArea> getUserDangerousArea(@PathVariable(value="rr_rider") String rr_rider) throws Exception {
 		return ridingService.getUserDangerousArea(rr_rider);
 	}
 	
-	
+	@RequestMapping(value = "/app/insertDanger")
+	public void insertDanger(HttpServletRequest request) throws Exception{
+		DangerousArea d_area = new DangerousArea();
+		
+		d_area.setDa_rider(request.getParameter("da_rider"));
+		d_area.setDa_addr(request.getParameter("da_addr"));
+		d_area.setDa_content(request.getParameter("da_content"));
+		d_area.setDa_image(request.getParameter("da_image"));
+		d_area.setDa_latitude(request.getParameter("da_latitude"));
+		d_area.setDa_longitude(request.getParameter("da_longitude"));
+		
+		androidService.insertDanger(d_area);
+	}
 }

@@ -131,4 +131,6 @@ public interface AndroidMapper {
 	void foupdate(RidingRecord record);
 
 	LoginInfo getClubUser(String loginId);
+	
+	public void insertDanger (DangerousArea d_area) throws Exception;
 }
