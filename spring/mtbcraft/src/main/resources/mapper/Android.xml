@@ -7,11 +7,10 @@
 		begin
 		
 		insert into riding_record
-		(rr_rider, rr_date, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name)
+		(rr_rider, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name)
 		values
 		(
 		#{rr_rider},
-		#{rr_date},
 		#{rr_distance},
 		#{rr_topspeed},
 		#{rr_avgspeed},
