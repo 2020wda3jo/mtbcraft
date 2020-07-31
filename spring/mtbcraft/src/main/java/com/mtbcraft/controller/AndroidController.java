@@ -412,22 +412,7 @@ public class AndroidController {
 		return androidService.selectRecord();
 	}
 	
-	@RequestMapping(value="/app/riding/taginsert")
-	public Map<String, String>  Taginsert(HttpServletRequest request) throws Exception {
-
-		System.out.println(request.getParameter("rr_num") + " " + request.getParameter("rr_rider") + " " + request.getParameter("address_dong"));
-
-		App_Tag tag = new App_Tag();
-		tag.setTs_rnum(Integer.parseInt(request.getParameter("rr_num")));
-		tag.setTs_rider(request.getParameter("rr_rider"));
-		tag.setTs_tag(request.getParameter("address_dong"));
-
-		androidService.TagInsert(tag);
-		// 안드로이드에게 전달하는 데이터
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("data1", "성공했쩡");
-		return result;
-	}
+	
 	
 	@RequestMapping(value = "/app/getAllMission/{LoginId}")
 	public @ResponseBody List<App_Mission> getAllMission ( @PathVariable(value="LoginId") String LoginId) throws Exception {
