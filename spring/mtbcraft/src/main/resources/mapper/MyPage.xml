@@ -45,7 +45,7 @@
 	
 	<!-- SNS 게시글 조회 -->
 	<select id="getUserSNSPost" parameterType="String" resultType="com.mtbcraft.dto.Board">
-		select b_num, b_title, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD where B_RIDER=#{r_id} and B_CLUB=999 order by b_day desc
+		select b_num, b_content, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD where B_RIDER=#{r_id} and B_CLUB=999 order by b_day desc
 	</select>
 	
 	<!-- 댓글 조회 -->

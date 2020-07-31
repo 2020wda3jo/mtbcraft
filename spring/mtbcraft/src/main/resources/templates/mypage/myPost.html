@@ -78,7 +78,10 @@
 					    <tbody>
 						    <tr th:each="post:${sns}">
 						        <th scope="row" th:text="'#'+${post.b_num}"></th>
-						        <td><a href="/community/mutub" th:text="${post.b_title}"></a></td>
+						        <td>
+						        	<a href="/community/mutub" th:if="${#strings.length(post.b_content)}<=28" th:text="${post.b_content}"></a>
+						        	<a href="/community/mutub" th:unless="${#strings.length(post.b_content)}<=28" th:text="${#strings.substring(post.b_content,0,28)}+'....'"></a>
+					        	</td>
 						        <td th:text="${post.customDate}"></td>
 						    </tr>
 					    </tbody>
