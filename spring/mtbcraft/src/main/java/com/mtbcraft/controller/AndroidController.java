@@ -90,14 +90,11 @@ public class AndroidController {
 		RidingRecord record = new RidingRecord();
 
 		// 현재날짜 timestamp
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		// formatter.setTimeZone(TimeZone.getTimeZone("GMT+09"));
-		Calendar cal = Calendar.getInstance();
-		String today = null;
-		today = formatter.format(cal.getTime());
-		Timestamp ts = Timestamp.valueOf(today);
+		Date today = new java.util.Date();
+		Timestamp timestamp = new Timestamp(today.getTime());
+
 		record.setRr_rider(request.getParameter("rr_rider"));
-		record.setRr_date(ts);
+		record.setRr_date(timestamp);
 		record.setRr_distance(Integer.parseInt(request.getParameter("rr_distance")));
 		record.setRr_topspeed(Integer.parseInt(request.getParameter("rr_topspeed")));
 		record.setRr_avgspeed(Integer.parseInt(request.getParameter("rr_avgspeed")));
