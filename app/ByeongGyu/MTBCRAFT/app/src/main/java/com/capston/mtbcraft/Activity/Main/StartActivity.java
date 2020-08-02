@@ -331,6 +331,7 @@ public class StartActivity extends AppCompatActivity
                 startActivity(intent);
                 finish();
                 mapViewContainer.removeAllViews();
+                locationManager.removeUpdates(this);
             }
         });
 
@@ -782,13 +783,13 @@ public class StartActivity extends AppCompatActivity
             hap = hap + mLastlocation.distanceTo(location);
             cha_dis = String.format("%.0f", hap);
 
-            binding.dis.setText(String.format("%.2f", hap));
+            binding.dis.setText(String.format("%.1f", hap));
             binding.mDistance.setText(String.format("%.1f", hap) + "m");
 
             double killlo;
             if (hap >= 1000) {
-                killlo = hap / 1000.0;
-                binding.dis.setText(String.format("%.2f", killlo));
+                killlo = hap / 0;
+                binding.dis.setText(String.format("%.1f", killlo));
                 binding.mDistance.setText(String.format("%.1f", killlo) + "km");
             }
 
@@ -797,6 +798,7 @@ public class StartActivity extends AppCompatActivity
             binding.avgspeed.setText(String.format("%.1f", Double.parseDouble(String.valueOf(avg))));
             cha_avg = String.format("%.0f", (avg));
 
+            //획득고도
             //획득고도
             getgodoval = (int) (location.getAltitude() - mLastlocation.getAltitude());
             if (getgodoval > 0) {

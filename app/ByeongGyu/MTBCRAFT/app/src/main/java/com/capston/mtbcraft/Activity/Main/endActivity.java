@@ -155,6 +155,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         lineChart.setData(chartData);
         lineChart.invalidate();
+        lineDataSet.setValueTextSize(0);
 
 
         mapView = new MapView(this);
@@ -229,7 +230,6 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         if (dis >= 1000) {
             killlo = dis / 1000.0;
-
             binding.enddis.setText(String.format("%.1f", killlo) + "km");
         }else{
             binding.enddis.setText(Distence+"m");

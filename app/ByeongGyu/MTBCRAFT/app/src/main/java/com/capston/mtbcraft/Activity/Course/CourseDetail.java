@@ -104,6 +104,8 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
     private EditText editText;
     private Uri temp;
     private CourseReviewAdapter adapter3;
+    private String rr_rider="", rr_date="", rr_area="", rr_name="", rr_like="";
+    int rr_distance=0, rr_topspeed=0, rr_avgspeed=0, rr_high=0, rr_breaktime=0, rr_time=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,8 +294,8 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, LoginId+"님이 코스를 공유하였습니다. 해당URL을 누르면 해당 페이지로 이동합니다.");
-                intent.putExtra(Intent.EXTRA_TEXT, "http://13.209.229.237:8080/");
+                intent.putExtra(Intent.EXTRA_SUBJECT, Nickname+"님이"+rr_name+"코스를 공유하였습니다. 해당URL을 누르면 해당 페이지로 이동합니다. ");
+                intent.putExtra(Intent.EXTRA_TEXT, "http://13.209.229.237:8080/app/riding/course_share/"+c_num);
 
                 Intent chooser = Intent.createChooser(intent, "친구에게 공유하기");
                 startActivity(chooser);
@@ -508,8 +510,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
                     //json값을 받기위한 변수들
                     JSONArray jarray = new JSONArray(tempData);
-                    String rr_rider="", rr_date="", rr_area="", rr_name="", rr_like="";
-                    int rr_distance=0, rr_topspeed=0, rr_avgspeed=0, rr_high=0, rr_breaktime=0, rr_time=0;
+
                     for (int i = 0; i < jarray.length(); i++) {
                         JSONObject jObject = jarray.getJSONObject(i);
 
