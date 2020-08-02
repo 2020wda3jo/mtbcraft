@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<script src="/test/js/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <script src="/js/jquery-3.5.1.min.js"></script>
 </head>
 <body>
-<!-- 위는 로컬에 적용하는 KEY, 아래는 서버에 적용하는 KEY입니다. 로컬에서는 상단KEY를 쓰고 아래 KEY를 주석처리해주세요.-->
-
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=08b19f25437b5687e1a81ed13ccdadc8&libraries=services"></script>
 <input type="hidden" id="rr_num" th:value="${rr_num}" />
 	<div id="mymap" style="width:100%; height:200px;"></div>
-	
-
-
 <script>
-
-
-
 var mapContainer = document.getElementById('mymap'), // 지도를 표시할 div 
 mapOption = { 
     center: new kakao.maps.LatLng(35.89617906303501, 128.62171907592318), // 지도의 중심좌표
@@ -76,27 +68,5 @@ console.log(rr_num+"dfdfd");
 	drawPolylineByRR_Num(polyline,rr_num);
 });
 </script>
-
-
-  <script src="/test/js/jquery.min.js"></script>
-  <script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="/test/js/popper.min.js"></script>
-  <script src="/test/js/bootstrap.min.js"></script>
-  <script src="/test/js/jquery.easing.1.3.js"></script>
-  <script src="/test/js/jquery.waypoints.min.js"></script>
-  <script src="/test/js/jquery.stellar.min.js"></script>
-  <script src="/test/js/owl.carousel.min.js"></script>
-  <script src="/test/js/jquery.magnific-popup.min.js"></script>
-  <script src="/test/js/aos.js"></script>
-  <script src="/test/js/jquery.animateNumber.min.js"></script>
-  <script src="/test/js/bootstrap-datepicker.js"></script>
-  <script src="/test/js/jquery.timepicker.min.js"></script>
-  <script src="/test/js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="/test/js/google-map.js"></script>
-  <script src="/test/js/main.js"></script>
-
-  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 </body>
 </html> 

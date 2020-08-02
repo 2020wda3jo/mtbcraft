@@ -457,7 +457,7 @@ public class AndroidController {
 	@RequestMapping("/app/riding/course_view/{rr_num}")
 	public String course_view(@PathVariable int rr_num, Model model) throws Exception{
 		model.addAttribute("rr_num", rr_num);
-		return "/android/course_view";
+		return "android/course_view";
 	}
 	
 	//RR_NUM으로 RIDINGRECORD 조회
