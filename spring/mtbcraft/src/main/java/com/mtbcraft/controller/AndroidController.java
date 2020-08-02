@@ -459,6 +459,13 @@ public class AndroidController {
 		model.addAttribute("rr_num", rr_num);
 		return "android/course_view";
 	}
+
+	@RequestMapping("/app/riding/course_share/{rr_num}")
+	public String course_share(@PathVariable int rr_num, Model model) throws Exception{
+		model.addAttribute("rr_num", rr_num);
+		return "android/course_share";
+	}
+
 	
 	//RR_NUM으로 RIDINGRECORD 조회
 	@RequestMapping(value="/getRidingRecordByRR_Num/{rr_num}", method = RequestMethod.GET)
