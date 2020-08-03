@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header2"></head>
+<link rel="stylesheet" href="/css/riding/course.css?after"/>
+<link rel="stylesheet" href="/css/riding/main.css?abc"/>
+<!-- 위는 로컬에 적용하는 KEY, 아래는 서버에 적용하는 KEY입니다. 로컬에서는 상단KEY를 쓰고 아래 KEY를 주석처리해주세요.-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
+
+<STYLE>
+#box_post_DA2 {
+display:none;}
+</STYLE>
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/riding_img.jpg');" data-stellar-background-ratio="0.5">
+	   <div class="overlay"></div>
+	   <div class="container">
+	     <div class="row no-gutters slider-text align-items-end justify-content-center">
+	       <div class="col-md-9 ftco-animate text-center">
+	       		<h1 class="mb-2 bread">MY RIDING</h1>
+	            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">HOME <i class="ion-ios-arrow-forward"></i></a></span> <span>Riding <i class="ion-ios-arrow-forward"></i></span></p>
+	       </div>
+	     </div>
+	   </div>
+	</section>
+
+<!-- 메인 기능 버튼 -->
+<div id="ridingmainbtn">
+	<input type="button" value="내 정보보기" onclick="moveMyInfo()">
+	<input type="button" value="코스 검색하기" onclick="moveSearchCourse()">
+	<input type="button" value="위험지역등록하기" onclick="show_post_DA()">
+	<input type="button" value="입산통제지역등록하기" onclick="show_pr();">
+</div>
+
+<div id="mainbox">
+	<div id="myInfoBox">
+		<div id="myRecords">
+		<h2>나의 기록</h2>
+		<ul>
+			<li class="li_rr" th:each="record : ${ridingrecords}" th:id="${record.rr_num}">
+				<span th:text="${record.rr_area}"></span>
+				<span class="float_R" th:text="${record.rr_gpx}"></span>
+			</li>
+		</ul>
+		</div>
+		<div id="myScraps">
+		<h2>나의 스크랩 코스</h2>
+			<ul>
+				<li class="li_sc" th:each="course : ${scrapcourses}" th:id="${course.rr_num}" >
+					<span th:text="${course.rr_area}"></span>
+					<span>코스명 : </span>
+					<span th:text="${course.rr_name}"></span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div id="mymap" style="width:69%; height:600px;">
+		<!-- 위험지역 보기 버튼 -->
+		<div id="showDAbtn" class="showBtn">
+			<label for="chk_DA">위험지역 보기</label> <input id="chk_DA" name="DA" type="checkbox">
+			</div>
+			<div id="showDAbtn" class="showBtn" style="margin-top:60px;">
+			<label for="chk_NO">통제지역 보기</label> <input id="chk_NO" name="NO" type="checkbox">
+		</div>
+	</div>
+	
+	<div id="box_post_DA">
+		<form id="form_post_DA" action="/dangerousArea" method="post"  enctype="multipart/form-data">
+			<label>위도</label><input type="text" id="DA_Lat" name="da_latitude" size="18">
+			<label>경도</label><input type="text" id="DA_Lon" name="da_longitude" size="18">
+			<label>등록주소</label><input type="text" id="DA_addr" name="da_addr" size="8" required>
+			<label>한줄평</label><input type="text" id="DA_content" name="da_content" size="40" required>
+			<label>이미지첨부</label><input type="file" id="file" name="file" accept="image/*">
+			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
+		</form>
+		<button type="button" onclick="regDA()">등록신청</button>
+		<button type="button" onclick="cancel_post_DA()">취소</button>
+	</div>
+	
+	<div id="box_post_DA2">
+		<form id="form_post_nomtb" action="/nomtbAction" method="post"  enctype="multipart/form-data">
+			<label>위도</label><input type="text" id="no_lot" name="nomtb_lot" size="18">
+			<label>경도</label><input type="text" id="no_lon" name="nomtb_lon" size="18">
+			<label>산 이름</label><input type="text" id="no_addr" name="nomtb_addr" size="8" required>
+			<label>한줄평</label><input type="text" id="no_content" name="nomtb_content" size="40" required>
+			<label>이미지첨부</label><input type="file" id="file" name="file" accept="image/*">
+			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
+		</form>
+		<button type="button" onclick="regNomtb()">등록신청</button>
+		<button type="button" onclick="cancel_post_DA()">취소</button>
+	</div>
+	
+	<div id="courseInfo">
+		<div id="box_courseInfo">
+			<h2>선택한 코스 정보</h2>
+				<table class="type09">
+				    <thead>
+					    <tr>
+					        <th scope="cols">코스명</th>
+					        <th scope="cols" id="cif_name">짧은 코스</th>
+					    </tr>
+				    </thead>
+				    <tbody>
+				   		 <tr>
+					        <th scope="row">라이딩 일시</th>
+					        <td id="cif_date">716m</td>
+					        <th scope="row">추천수</th>
+					        <td id="cif_like">7</td>
+					    </tr>
+					    <tr>
+					        <th scope="row">전체 거리</th>
+					        <td id="cif_total">23.5km</td>
+					        <th scope="row">평균 속도</th>
+					        <td id="cif_avg">17.2km/h</td>
+					    </tr>
+					    <tr>
+					        <th scope="row">획득 고도</th>
+					        <td id="cif_high">716m</td>
+					        <th scope="row">주행시간</th>
+					        <td id="cif_time">7</td>
+					    </tr>
+					    <tr>
+					        <th scope="row">최고 속도</th>
+					        <td id="cif_top">716m</td>
+					        <th scope="row">휴식시간</th>
+					        <td id="cif_break">7</td>
+					    </tr>
+					    
+			    	</tbody>
+			</table>
+			<div>
+				<div class="hashtag"></div>
+				<button onClick="javascript:goDetail('테스트');">태그등록</button>
+			</div>
+			<button id="bt_mode" onclick="change()">스크랩하기</button>
+			<button id="bt_like" onclick="like()">추천!</button>
+			<button id='chrrnamebtn'  onclick='changeRR_Name()'>코스명 변경하기</button>
+		</div>
+		
+		
+		<div id="courseReview">
+			<h2>코스 한줄평</h2>
+			<ul class="comment-list">
+				
+			</ul>
+		</div>
+		
+		<form id="postReview"  action="/riding/review" method="post"  enctype="multipart/form-data">
+			
+			<input class="form-control" type="text" size="50" id="cr_content" name="cr_content" placeholder="리뷰를 작성하세요!">
+			<input type="file" id="cr_images" name="files">
+			<input type="hidden" id="cr_rider" name="cr_rider">
+			<input type="hidden" id="cr_rnum" name="cr_rnum">
+		</form>
+		<div id="rvbtnbox">
+			<button class="btnregreview" type="button" onclick="postReview()">리뷰 등록하기</button>
+		</div>
+		<input type="hidden" id="bt_rr_open">
+		<input type="hidden" id="selected_rr_num">
+	</div>
+	<div id="newfooter">
+		<footer th:replace="footer2"></footer>
+	</div>
+</div>
+
+
+    <div style="height:1000px;"> </div>
+
+    <!-- 팝업뜰때 배경 -->
+    <div id="mask"></div>
+
+    <!--Popup Start -->
+    <div id="layerbox" class="layerpop"
+        style="width: 700px; height: 350px;">
+        <article class="layerpop_area">
+        <div class="title">해시태그 등록</div>
+        <div class="content">
+        	<table>
+		      <tr>
+		      	<td>등록자명</td>
+		      	<td><input type="text" id="ts_rider" th:value="${rider}"></td>
+		      </tr>
+		      
+		      <tr>
+		      	<td>해시태그</td>
+		      	<td> <input type="text" id="ts_tag" placeholder="#해시태그를 입력하세요"></td>
+		      </tr>
+		      
+	   		</table>
+       </div>
+        <button onclick="javascript:saveTag();">등록</button>
+        <button onclick="javascript:popupClose();">취소</button>
+        </article>
+    </div>
+
+
+
+
+<script type="text/javascript" src="/js/riding/basic.js?after"></script>
+<script type="text/javascript" src="/js/riding/course.js?after"></script>
+
+<!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="/test/js/jquery.min.js"></script>
+  <script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="/test/js/popper.min.js"></script>
+  <script src="/test/js/bootstrap.min.js"></script>
+  <script src="/test/js/jquery.easing.1.3.js"></script>
+  <script src="/test/js/jquery.waypoints.min.js"></script>
+  <script src="/test/js/jquery.stellar.min.js"></script>
+  <script src="/test/js/owl.carousel.min.js"></script>
+  <script src="/test/js/jquery.magnific-popup.min.js"></script>
+  <script src="/test/js/aos.js"></script>
+  <script src="/test/js/jquery.animateNumber.min.js"></script>
+  <script src="/test/js/bootstrap-datepicker.js"></script>
+  <script src="/test/js/jquery.timepicker.min.js"></script>
+  <script src="/test/js/scrollax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="/test/js/google-map.js"></script>
+  <script src="/test/js/main.js"></script>
+
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
