@@ -610,4 +610,12 @@ public class AndroidController {
 		
 		androidService.insertDanger(d_area);
 	}
+
+	//긴급 위치알림
+	@RequestMapping(value = "/app/dangergps/{lat}/{lon}")
+	public  String dangerGps(Model model, @PathVariable(value="lat") String lat, @PathVariable(value="lon") String lon) throws Exception {
+	model.addAttribute("lat",lat);
+	model.addAttribute("lon",lon);
+		return "android/helpgps";
+	}
 }

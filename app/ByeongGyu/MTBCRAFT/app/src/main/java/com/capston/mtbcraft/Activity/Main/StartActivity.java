@@ -179,7 +179,7 @@ public class StartActivity extends AppCompatActivity
                         try{
                             SmsManager smsManager = SmsManager.getDefault();
                             String sms = "" +
-                                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. " ;
+                                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. http://13.209.229.237:8080/app/dangergps/35.896252/128.621814";
                             smsManager.sendTextMessage("010-4752-7613", null, sms, null, null);
                             Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
                         }catch(Exception e){
@@ -195,7 +195,7 @@ public class StartActivity extends AppCompatActivity
                         try{
                             SmsManager smsManager = SmsManager.getDefault();
                             String sms = "" +
-                                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. " ;
+                                    "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. http://13.209.229.237:8080/app/dangergps/35.896252/128.621814";
                             smsManager.sendTextMessage(number, null, sms, null, null);
                             Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
                         }catch(Exception e){
