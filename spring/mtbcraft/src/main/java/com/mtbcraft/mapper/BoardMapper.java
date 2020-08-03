@@ -24,5 +24,8 @@ public interface BoardMapper {
 	
 	// 게시글 삭제
 	public boolean deleteBoard(int b_num);
+	
+	//조회수 증가
+	public void updateHit(int b_num);
 }
 

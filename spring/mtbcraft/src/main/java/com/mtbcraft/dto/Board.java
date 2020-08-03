@@ -14,6 +14,8 @@ public class Board {
 	private String b_title;
 
 	private String b_content;
+	
+	private int b_hit;
 
 	private Timestamp b_day;
 
@@ -25,9 +27,27 @@ public class Board {
 	
 	private int b_type;
 	
+	private int b_subject;
+	
 	private String b_img;
 	
 	private String customDate;
+	
+	public int getB_hit() {
+		return b_hit;
+	}
+
+	public int getB_subject() {
+		return b_subject;
+	}
+
+	public void setB_subject(int b_subject) {
+		this.b_subject = b_subject;
+	}
+	
+	public void setB_hit(int b_hit) {
+		this.b_hit = b_hit;
+	}
 	
 	public String getCustomDate() {
 		return customDate;

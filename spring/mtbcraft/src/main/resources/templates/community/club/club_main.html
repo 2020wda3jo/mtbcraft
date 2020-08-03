@@ -22,7 +22,7 @@
 			
 				<div class="col-lg-4 sidebar ftco-animate">
 					<div class="sidebar-box clubinfo">
-		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');" th:style="'background-image: url(/imgs/'+${club.cb_image}+');'">
+		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');" th:style="'background-image: url(/data/img/club/'+${club.cb_image}+');'">
 		              </div>
 		              
 		              <h2 th:text="${club.cb_name}">클럽명</h2>
@@ -52,11 +52,13 @@
 	             		</thead>
 	             		<tbody>
 	             			<tr th:each="post:${postlist}">
-	             			<td scope="row" class="r">자유</td>
+	             			<td scope="row" class="r" th:if="${post.b_subject}==0" th:text="자유"></td>
+	             			<td scope="row" class="r" th:if="${post.b_subject}==1" th:text="라이딩"></td>
+	             			<td scope="row" class="r" th:if="${post.b_subject}==2" th:text="질문"></td>
 	             			<td class="c" th:text="${post.b_title}" th:id="${post.b_num}">오늘 기온 장난아닙니다ㅠㅠ</td>
 	             			<td class="j" th:text="${post.b_rider}">180137</td>
 	             			<td class="j" th:text="${post.date}">2020-06-07</td>
-	             			<td>21</td>
+	             			<td th:text="${post.b_hit}">21</td>
 	             			<input type="hidden" id="b_num" th:value="${post.b_num}">
 	             			</tr>
 	             			
@@ -66,10 +68,6 @@
 	             	<div class="pageclub">
 		             	<a href="#">이전</a>
 		             	<a href="#">1</a>
-		             	<a href="#">2</a>
-		             	<a href="#">3</a>
-		             	<a href="#">4</a>
-		             	<a href="#">5</a>
 		             	<a href="#">다음</a>
 	             	</div>
 	             	

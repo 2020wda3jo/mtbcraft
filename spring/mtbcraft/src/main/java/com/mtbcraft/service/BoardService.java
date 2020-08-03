@@ -45,4 +45,9 @@ public class BoardService {
 	public boolean deleteBoard(int b_num) {
 		return boardMapper.deleteBoard(b_num);
 	}
+	
+	//조회수 증가
+	public void updateHit(int b_num) {
+		boardMapper.updateHit(b_num);
+	}
 }
