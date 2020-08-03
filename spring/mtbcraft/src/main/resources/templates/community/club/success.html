@@ -3,7 +3,7 @@
 <head th:replace="header"></head>
 
 <h1>성공!</h1>
-<form action="/community/club" method="get">
+<form action="/community/club" th:action="'/community/club/'+${c_num}" method="get">
 	<input type="submit" value="돌아가기">
 </form>
 

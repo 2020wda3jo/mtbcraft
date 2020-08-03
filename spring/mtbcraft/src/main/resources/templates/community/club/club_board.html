@@ -15,12 +15,11 @@
       </thead>
       
       <tr th:each="board : ${list}">
-      <th th:text="${board.b_num}"></th>
-      <th th:text="${board.b_title}"></th>
-      <th th:text="${board.b_rider}"></th>
-      <th th:text="${board.b_day}"></th>
-      <th th:text="${board.b_club}"></th>
-      
+	      <th th:text="${board.b_num}"></th>
+	      <th th:text="${board.b_title}"></th>
+	      <th th:text="${board.b_rider}"></th>
+	      <th th:text="${board.b_day}"></th>
+	      <th th:text="${board.b_hit}"></th>
       </tr>
       
       <tfoot>

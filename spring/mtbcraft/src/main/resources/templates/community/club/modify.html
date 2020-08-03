@@ -48,10 +48,10 @@
 		</div>
 	</div>
 	
-   <input type="hidden" id="b_club" name="b_club" th:value="${b_club}">
+   <input type="hidden" id="b_club" name="b_club" th:value="${board.b_club}">
    
    
-    <form action="/community" method="get">
+    <form action="/community" th:action="'/community/club/'+${board.b_club}" method="get">
 		<input type="submit" value="돌아가기">
 	</form>
 </div>

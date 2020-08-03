@@ -43,7 +43,7 @@
 	</select>
 	
 	<select id="getClub" parameterType="String" resultType="com.mtbcraft.dto.Club">
-		select * from club order by cb_num
+		<![CDATA[ select * from club where cb_num<>999 order by cb_num ]]>
 	</select>	
 	
 	<insert id="signClub" parameterType="com.mtbcraft.dto.Club_Join">
@@ -63,17 +63,7 @@
 	<!-- SNS게시글 조회 -->
 	<select id="getSNSList" parameterType="String" resultType="com.mtbcraft.dto.Board">
 		<![CDATA[
-			select b_num, r_image b_img, rider.r_nickname b_rider, b_content, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') b_title, b_file, b_type 
-			from board, rider
-			where board.b_rider=rider.r_id and b_club=999 and b_type=0 or (
-			board.b_rider=rider.r_id and
-			b_type=1 and exists 
-			(select cj_rider from club_join where cj_club=
-			  ( select cj_club from 
-			    (select * from club_join where cj_rider=#{rider} order by cj_join desc) 
-			    where rownum < 2 and cj_withdraw is null ) 
-			    and cj_withdraw is null and club_join.cj_rider=board.b_rider)
-			) order by b_day desc
+			SELECT b_num, r_image b_img, rider.r_nickname b_rider, b_content, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') b_title, b_file, b_type  FROM board, rider where b_rider=r_id and b_club=999 order by b_day desc
 		]]>
 	</select>
 	

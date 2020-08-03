@@ -28,15 +28,22 @@ public class BoardController {
 	@RequestMapping(value = "/createBoard/check", method = RequestMethod.POST)
 	public String boardCreate(Board board, MultipartFile uploadfile) throws Exception {
 
-		String filename = uploadfile.getOriginalFilename();
-
+		String filename;
+		if(!uploadfile.isEmpty()) {
+			filename = uploadfile.getOriginalFilename();
+			board.setB_file(filename);
+			System.out.println("파일있음");
+		}else {
+			System.out.println("파일없음");
+		}
+		
+		
 		/*
 		 * String directory = "/home/ec2-user/data/club"; //String directory =
 		 * "C:\\ServerFiles"; String filepath = Paths.get(directory,
 		 * filename).toString();
 		 */
-
-		board.setB_file(filename);
+		
 		boardService.insertBoard(board);
 
 		// Save the file locally
