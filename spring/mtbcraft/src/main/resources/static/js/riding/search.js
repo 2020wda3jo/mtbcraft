@@ -99,6 +99,7 @@ function loadCourse(){
 					dataType : "json",
 					cache : false,
 					success : function(data2) {
+						console.log(data2);
 						var point = data2.infos;
 						var linePath = [];
 						var rr_num = data2.rr_num;
@@ -107,13 +108,25 @@ function loadCourse(){
 							linePath.push(location);
 						}
 						// 지도에 표시할 선을 생성합니다
-						var polyline = new kakao.maps.Polyline({
+						var polyline;
+						if(data2.status=='new'){
+							polyline = new kakao.maps.Polyline({
 						    path: linePath, // 선을 구성하는 좌표배열 입니다
-						    strokeWeight: 7, // 선 의 두께 입니다
-						    strokeColor: "#FF6600", // 선의 색깔입니다
+						    strokeWeight: 4, // 선의 두께 입니다
+						    strokeColor: "#ff0000", // 선의 색깔입니다
 						    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
 						    strokeStyle: 'solid' // 선의 스타일입니다
-						});
+							});
+						}else{
+							polyline = new kakao.maps.Polyline({
+						    path: linePath, // 선을 구성하는 좌표배열 입니다
+						    strokeWeight: 4, // 선의 두께 입니다
+						    strokeColor: "#0036bf", // 선의 색깔입니다
+						    strokeOpacity: 0.4, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+						    strokeStyle: 'solid' // 선의 스타일입니다
+							});
+						}
+						
 						var mode = 'course';
 						kakao.maps.event.addListener(polyline, 'click', function() {
 							$("#box_courseInfo").show();

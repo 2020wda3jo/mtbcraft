@@ -9,8 +9,15 @@ public class Gpx {
 	private double maxLon;
 	private double minLon;
 	private int rr_num;
+	private String status;
 	private List<Info_GPX> infos;
 	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public int getRr_num() {
 		return rr_num;
 	}

@@ -14,7 +14,7 @@
 	
 	<!-- 라이딩 넘버로 GPX파일명 조회 -->
 	<select id="getGpxFileByRR_Num" parameterType="Integer" resultType="String">
-		SELECT RR_GPX FROM RIDING_RECORD WHERE RR_NUM=#{rr_num}
+		select (case when rr_date >= to_char(sysdate-7,'YYYYMMDD') then concat('NEW/',rr_gpx) else rr_gpx end) from riding_record where rr_num=#{rr_num}
 	</select>
 	
 	<!-- 라이딩 넘버로 라이딩기록 조회 -->

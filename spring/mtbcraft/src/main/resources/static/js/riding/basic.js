@@ -46,8 +46,8 @@ var polyline = new kakao.maps.Polyline({
         new kakao.maps.LatLng(33.45178067090639, 126.5726886938753) 
     ], // 선을 구성하는 좌표배열 입니다
     strokeWeight: 7, // 선의 두께 입니다
-    strokeColor: "#FF6600", // 선의 색깔입니다
-    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+    strokeColor: "#0036bf", // 선의 색깔입니다
+    strokeOpacity: 0.8, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
     strokeStyle: 'solid' // 선의 스타일입니다
 });
 
@@ -603,16 +603,7 @@ function hourminsec(text){
  }
  
  function moveMyInfo(){
-	 var form = document.createElement("form");
-	form.setAttribute("method", "Post");  
-	form.setAttribute("action", "/riding/course"); 
-  	var hiddenField = document.createElement("input");
-	hiddenField.setAttribute("type", "hidden");
-	hiddenField.setAttribute("name", "rider");
-    hiddenField.setAttribute("value", $("#hiddenID").val());
-     form.appendChild(hiddenField);
-     document.body.appendChild(form);
-     form.submit();
+	 location.href="/riding/course";
  }
  function moveSearchCourse(){
 	 location.href = "/riding/search";
