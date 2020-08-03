@@ -68,7 +68,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
+import static android.speech.tts.TextToSpeech.ERROR;
 @SuppressLint("HandlerLeak")
 public class FollowStart extends FragmentActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
@@ -98,7 +98,7 @@ public class FollowStart extends FragmentActivity
     private ArrayList<Double> witch_lon = new ArrayList<>();
     private ArrayList<Double> ele = new ArrayList<>();
     private ArrayList<Float> godoArray = new ArrayList<>();
-    private TextToSpeech course_tts;
+    private TextToSpeech tts;
 
     //형변환용변수
     private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "", comp_point;
@@ -115,7 +115,7 @@ public class FollowStart extends FragmentActivity
     long PauseTime;
     private Thread timeThread = null;
     private Boolean isRunning = true;
-private String course_name="";
+    String course_name = "";
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
@@ -143,6 +143,19 @@ private String course_name="";
         binding = FlowBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        // TTS를 생성하고 OnInitListener로 초기화 한다.
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != ERROR) {
+                    // 언어를 선택한다.
+                    tts.setLanguage(Locale.KOREAN);
+                }
+            }
+        });
+
+        tts.speak(course_name,TextToSpeech.QUEUE_FLUSH, null);
 
         Intent intentt = new Intent(this.getIntent());
         intentt.getStringExtra("c_name");
@@ -196,8 +209,6 @@ private String course_name="";
         binding.statusLayout.setVisibility(View.GONE);
         binding.resumeBt.setVisibility(View.GONE);
 
-        //코스정보 알림
-        textToSpeech = new TextToSpeech(this, this);
         Thread uThread = new Thread() {
             @Override
             public void run() {
@@ -852,12 +863,7 @@ private String course_name="";
             textToSpeech.setSpeechRate(1f);
             textToSpeech.speak(value, TextToSpeech.QUEUE_FLUSH, null);
         }
-        if (i == TextToSpeech.SUCCESS) {
-            course_tts.setLanguage(Locale.KOREAN);
-            course_tts.setPitch(0.6f);
-            course_tts.setSpeechRate(1f);
-            course_tts.speak(course_name, TextToSpeech.QUEUE_FLUSH, null);
-        }
+
     }
 
 

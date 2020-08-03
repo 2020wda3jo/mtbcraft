@@ -1015,7 +1015,7 @@ public class StartActivity extends AppCompatActivity
                     break;
                 case "긴급문자":
                     break;
-                case "지인통화":
+                case "전화":
                     startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel2)));
                         break;
                 case "긴급통화":
