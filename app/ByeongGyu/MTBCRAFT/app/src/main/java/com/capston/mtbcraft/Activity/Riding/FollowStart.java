@@ -98,7 +98,7 @@ public class FollowStart extends FragmentActivity
     private ArrayList<Double> witch_lon = new ArrayList<>();
     private ArrayList<Double> ele = new ArrayList<>();
     private ArrayList<Float> godoArray = new ArrayList<>();
-    private TextToSpeech tts;
+    private TextToSpeech course_tts;
 
     //형변환용변수
     private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "", comp_point;
@@ -115,7 +115,7 @@ public class FollowStart extends FragmentActivity
     long PauseTime;
     private Thread timeThread = null;
     private Boolean isRunning = true;
-
+private String course_name="";
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
@@ -153,7 +153,7 @@ public class FollowStart extends FragmentActivity
         binding.couseInfo.setText(intentt.getStringExtra("c_name"));
         Log.d("확인",intentt.getStringExtra("c_name") + ""+ intentt.getStringExtra("gpx"));
 
-        String course_name = intentt.getStringExtra("c_name");
+        course_name = intentt.getStringExtra("c_name");
 
 
 
@@ -196,6 +196,8 @@ public class FollowStart extends FragmentActivity
         binding.statusLayout.setVisibility(View.GONE);
         binding.resumeBt.setVisibility(View.GONE);
 
+        //코스정보 알림
+        textToSpeech = new TextToSpeech(this, this);
         Thread uThread = new Thread() {
             @Override
             public void run() {
@@ -849,6 +851,12 @@ public class FollowStart extends FragmentActivity
             textToSpeech.setPitch(0.6f);
             textToSpeech.setSpeechRate(1f);
             textToSpeech.speak(value, TextToSpeech.QUEUE_FLUSH, null);
+        }
+        if (i == TextToSpeech.SUCCESS) {
+            course_tts.setLanguage(Locale.KOREAN);
+            course_tts.setPitch(0.6f);
+            course_tts.setSpeechRate(1f);
+            course_tts.speak(course_name, TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 
