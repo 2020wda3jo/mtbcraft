@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mtbcraft.dto.Badge;
+import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
@@ -78,4 +79,9 @@ public interface EntertainmentMapper {
 	// 미완료 미션 조회
 	public List<Mission> getNoCompleteMission(String rider);
 
+	//순위 조회 -5위까지
+	public List<Club> getRank5(int comp);
+	
+	//순위 조회 -전체
+	public List<Club> getRank(int comp);
 }

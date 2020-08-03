@@ -15,6 +15,16 @@ public class Club {
 
 	private int cb_premium;
 	private String app_userid;
+	private int cs_score;
+	
+
+	public int getCs_score() {
+		return cs_score;
+	}
+
+	public void setCs_score(int cs_score) {
+		this.cs_score = cs_score;
+	}
 
 	public String getApp_userid() {
 		return app_userid;

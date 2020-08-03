@@ -68,17 +68,18 @@
 	
 	<!-- 참여한 최근 경쟁전4 조회 -->
 	<select id="getRecentComp4" parameterType="String" resultType="com.mtbcraft.dto.Competition">
-		<![CDATA[ select * from ( select distinct COMPETITION.COMP_NUM, COMPETITION.COMP_CONTENT, COMPETITION.COMP_PERIOD, COMPETITION.COMP_IMAGE, COMPETITION.COMP_NAME from RIDING_RECORD, COMPETITION where RIDING_RECORD.RR_COMP=COMPETITION.COMP_NUM and RR_RIDER=#{rider} and RR_COMP is not null order by comp_num desc) where rownum<=4 ]]>
+		<![CDATA[ select * from (select cs_comp, count(cs_comp) cnt from COMPETITION_STATUS group by cs_comp ), (select distinct COMPETITION.COMP_NUM, COMPETITION.COMP_CONTENT, COMPETITION.COMP_PERIOD, COMPETITION.COMP_IMAGE, COMPETITION.COMP_NAME from RIDING_RECORD, COMPETITION where RIDING_RECORD.RR_COMP=COMPETITION.COMP_NUM and RR_RIDER='1801317') 
+					where cs_comp=comp_num and rownum <=4 ]]>
 	</select>
 	
 	<!-- 진행중인 경쟁전 2개 조회 -->
 	<select id="getIngComp2" resultType="com.mtbcraft.dto.Competition">
-		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') > sysdate order by comp_num desc ) where rownum<=2 ]]>
+		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') > sysdate order by comp_num desc ), (select cs_comp, count(cs_comp) cnt from COMPETITION_STATUS group by cs_comp ) where cs_comp=comp_num and rownum<=2 ]]>
 	</select>
 
 	<!-- 종료된 경쟁전 2개 조회 -->
 	<select id="getEndComp2" resultType="com.mtbcraft.dto.Competition">
-		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') < sysdate order by comp_num desc ) where rownum<=2 ]]>
+		<![CDATA[ select * from ( select * from COMPETITION where to_date(SUBSTR(comp_period,9), 'YYYYMMDD') < sysdate order by comp_num desc ), (select cs_comp, count(cs_comp) cnt from COMPETITION_STATUS group by cs_comp ) where cs_comp=comp_num and rownum<=2 ]]>
 	</select>
 	
 	<!-- 번호로 경쟁전 조회 -->
@@ -124,5 +125,15 @@
 		select sq1.*, bg_image m_img from ( select s1.*, s2.cnt from ( select * from mission where not exists ( select mc_mission from mission_complete where mc_rider=#{rider} and mc_mission=m_num) ) s1,
 		( select m_num, count(mc_num) cnt from mission,mission_complete where m_num=mc_mission(+) group by m_num ) s2 where s1.m_num=s2.m_num ) sq1, badge 
 		where badge.bg_num=m_badge
+	</select>
+	
+	<!-- 순위 조회 -5위까지 -->
+	<select id="getRank5" parameterType="int" resultType="com.mtbcraft.dto.Club">
+		<![CDATA[ select * from (select * from club, COMPETITION_STATUS where cb_num=cs_club and cs_comp=#{comp} order by cs_score desc) where rownum<=5 ]]>
+	</select>
+	
+	<!-- 순위 조회 -전체 -->
+	<select id="getRank" parameterType="int" resultType="com.mtbcraft.dto.Club">
+		select * from club, COMPETITION_STATUS where cb_num=cs_club and cs_comp=#{comp} order by cs_score desc
 	</select>
 </mapper>

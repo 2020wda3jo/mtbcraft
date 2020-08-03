@@ -9,7 +9,7 @@ private String comp_name;
 private String comp_period;
 private String comp_content;
 private String comp_image;
-
+private int cnt;
 private String start;
 private String end;
 private String c_area;
@@ -19,6 +19,12 @@ private String c_name;
 private String bg_image;
 private String bg_name;
 
+public int getCnt() {
+	return cnt;
+}
+public void setCnt(int cnt) {
+	this.cnt = cnt;
+}
 public String getBg_name() {
 	return bg_name;
 }

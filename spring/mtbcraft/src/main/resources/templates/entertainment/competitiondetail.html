@@ -91,97 +91,12 @@
 		             			<tr>
 		             			<th scope="cols">순위</th>
 		             			<th scope="cols" >클럽</th>
-		             			<th scope="cols">참여</th>
 		             			<th scope="cols">점수</th>
 		             			</tr>
 		             		</thead>
-		             		<tbody>
+		             		<input type="hidden" id="comp_num" th:value="${comp.comp_num}">
+		             		<tbody id="rank">
 		             		
-		             			<tr>
-		             			<td scope="row">1위</td>
-		             			<td>3조</td>
-		             			<td>24</td>
-		             			<td>28963</td>
-		             			
-		             			
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">2위</td>
-		             			<td>독수리</td>
-		             			<td>37</td>
-		             			<td>26163</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">3위</td>
-		             			<td>바위</td>
-		             			<td>24</td>
-		             			<td>20963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">4위</td>
-		             			<td>부엉이</td>
-		             			<td >24</td>
-		             			<td>18263</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">5위</td>
-		             			<td>날개</td>
-		             			<td>24</td>
-		             			<td>18027</td>
-		             			</tr>
-		             			<tr>
-		             			<td scope="row">6위</td>
-		             			<td>3조</td>
-		             			<td>24</td>
-		             			<td>28963</td>
-		             			
-		             			
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">7위</td>
-		             			<td>독수리</td>
-		             			<td>37</td>
-		             			<td>26163</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">8위</td>
-		             			<td>바위</td>
-		             			<td>24</td>
-		             			<td>20963</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">9위</td>
-		             			<td>부엉이</td>
-		             			<td>24</td>
-		             			<td>18263</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">10위</td>
-		             			<td>날개</td>
-		             			<td>24</td>
-		             			<td>18027</td>
-		             			</tr>
-		             			<tr>
-		             			<td scope="row">11위</td>
-		             			<td>부엉이</td>
-		             			<td>24</td>
-		             			<td>18263</td>
-		             			</tr>
-		             			
-		             			<tr>
-		             			<td scope="row">12위</td>
-		             			<td>날개</td>
-		             			<td>24</td>
-		             			<td>18027</td>
-		             			</tr>
 		             			
 		             		</tbody>
 		             	</table>
@@ -387,6 +302,23 @@
 		 $(document).ready(function(){
 			var c_gpx = $("#c_gpx").val();
 			drawPolylineByRR_Num(polyline, c_gpx);
+			
+			$.ajax({
+				url:"/info/comp/rank/"+$("#comp_num").val(),
+				type : "GET",
+				cache : false,
+				success : function(data){
+					console.log(data);
+					for(var j=0;j<data.length;j++){
+						var str= "<tr><td scope='row' class='r'>"
+						+(j+1)+"위</td><td class='c'>"
+						+data[j].cb_name+"</td><td>"
+						+data[j].cs_score+"</td></tr>";
+						
+						$("#rank").append(str);
+					}
+				}
+			});
 		 });
 
 	</script>

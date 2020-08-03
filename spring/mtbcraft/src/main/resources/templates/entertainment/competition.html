@@ -63,7 +63,7 @@
 		               <h3 class="heading"><a href="#" th:text="${comp.comp_name}">용평 MTB 축제</a></h3>
 		               <p class="clearfix">
 		                 <a href="#" class="float-left read">자세히보기</a>
-		                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 3</a>
+		                 <a href="#" class="float-right meta-chat" th:text="'참여중인 클럽 : '+${comp.cnt}">참여중인 클럽 : 3</a>
 		               </p>
 		             </div>
 		           </div>
@@ -96,12 +96,12 @@
 			               <h3 class="heading"><a href="#" th:text="${comping1.comp_name}">용평 MTB 축제</a></h3>
 			               <p class="clearfix">
 			                 <a href="#" class="float-left read">자세히보기</a>
-			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			                 <a href="#" class="float-right meta-chat" th:text="'참여중인 클럽 : '+${comping1.cnt}">참여중인 클럽 : 10</a>
 			               </p>
 			             </div>
 			           </div>
 			         </div>
-			         
+			         <input type="hidden" id="comp0" th:value="${comping1.comp_num}">
 	         		<div class="col-md-4 ftco-animate">
 			           <div class="blog-entry">
 			             <div class="text pt-3 pb-4">
@@ -110,47 +110,11 @@
 			             			<tr>
 			             			<th scope="cols" class="r">순위</th>
 			             			<th scope="cols" >클럽</th>
-			             			<th scope="cols" class="j">참여</th>
 			             			<th scope="cols">점수</th>
 			             			</tr>
 			             		</thead>
-			             		<tbody>
+			             		<tbody id="rank0">
 			             		
-			             			<tr>
-			             			<td scope="row" class="r">1위</td>
-			             			<td class="c">독수리</td>
-			             			<td class="j">37</td>
-			             			<td>18263</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">2위</td>
-			             			<td class="c">3조</td>
-			             			<td class="j">24</td>
-			             			<td>18163</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">3위</td>
-			             			<td class="c">날개</td>
-			             			<td class="cnt">24</td>
-			             			<td>15963</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">4위</td>
-			             			<td class="c">부엉이</td>
-			             			<td class="j">24</td>
-			             			<td>13263</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">5위</td>
-			             			<td class="c">바위</td>
-			             			<td class="j">24</td>
-			             			<td>13027</td>
-			             			</tr>
-			             			
 			             		</tbody>
 			             	</table>
 			             </div>
@@ -172,12 +136,12 @@
 			               <h3 class="heading"><a href="#" th:text="${comping2.comp_name}">용평 MTB 축제</a></h3>
 			               <p class="clearfix">
 			                 <a href="#" class="float-left read">자세히보기</a>
-			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			                 <a href="#" class="float-right meta-chat" th:text="'참여중인 클럽 : '+${comping2.cnt}">참여중인 클럽 : 10</a>
 			               </p>
 			             </div>
 			           </div>
 			         </div>
-			         
+			         <input type="hidden" id="comp1" th:value="${comping2.comp_num}">
 	         		<div class="col-md-4 ftco-animate">
 			           <div class="blog-entry">
 			             <div class="text pt-3 pb-4">
@@ -186,47 +150,11 @@
 			             			<tr>
 			             			<th scope="cols" class="r">순위</th>
 			             			<th scope="cols" >클럽</th>
-			             			<th scope="cols" class="j">참여</th>
 			             			<th scope="cols">점수</th>
 			             			</tr>
 			             		</thead>
-			             		<tbody>
+			             		<tbody id="rank1">
 			             		
-			             			<tr>
-			             			<td scope="row" class="r">1위</td>
-			             			<td class="c">3조</td>
-			             			<td class="j">24</td>
-			             			<td>28963</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">2위</td>
-			             			<td class="c">독수리</td>
-			             			<td class="j">37</td>
-			             			<td>26163</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">3위</td>
-			             			<td class="c">바위</td>
-			             			<td class="j">24</td>
-			             			<td>20963</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">4위</td>
-			             			<td class="c">부엉이</td>
-			             			<td class="j">24</td>
-			             			<td>18263</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">5위</td>
-			             			<td class="c">날개</td>
-			             			<td class="cnt">24</td>
-			             			<td>18027</td>
-			             			</tr>
-			             			
 			             		</tbody>
 			             	</table>
 			             </div>
@@ -264,12 +192,12 @@
 			               <h3 class="heading"><a href="#" th:text="${compend1.comp_name}">용평 MTB 축제</a></h3>
 			               <p class="clearfix">
 			                 <a href="#" class="float-left read">자세히보기</a>
-			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			                 <a href="#" class="float-right meta-chat" th:text="'참여했던 클럽 : '+${compend1.cnt}">참여중인 클럽 : 10</a>
 			               </p>
 			             </div>
 			           </div>
 			         </div>
-			         
+			         <input type="hidden" id="comp2" th:value="${compend1.comp_num}">
 	         		<div class="col-md-4 ftco-animate">
 			           <div class="blog-entry">
 			             <div class="text pt-3 pb-4">
@@ -278,47 +206,11 @@
 			             			<tr>
 			             			<th scope="cols" class="r">순위</th>
 			             			<th scope="cols" >클럽</th>
-			             			<th scope="cols" class="j">참여</th>
 			             			<th scope="cols">점수</th>
 			             			</tr>
 			             		</thead>
-			             		<tbody>
+			             		<tbody id="rank2">
 			             		
-			             			<tr>
-			             			<td scope="row" class="r">1위</td>
-			             			<td class="c">3조</td>
-			             			<td class="j">75</td>
-			             			<td>45963</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">2위</td>
-			             			<td class="c">도봉산7080</td>
-			             			<td class="j">37</td>
-			             			<td>36163</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">3위</td>
-			             			<td class="c">바위</td>
-			             			<td class="j">24</td>
-			             			<td>20963</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">4위</td>
-			             			<td class="c">부엉이</td>
-			             			<td class="j">24</td>
-			             			<td>18263</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">5위</td>
-			             			<td class="c">날개</td>
-			             			<td class="cnt">24</td>
-			             			<td>18027</td>
-			             			</tr>
-			             			
 			             		</tbody>
 			             	</table>
 			             </div>
@@ -340,12 +232,12 @@
 			               <h3 class="heading"><a href="#" th:text="${compend2.comp_name}">용평 MTB 축제</a></h3>
 			               <p class="clearfix">
 			                 <a href="#" class="float-left read">자세히보기</a>
-			                 <a href="#" class="float-right meta-chat">참여중인 클럽 : 10</a>
+			                 <a href="#" class="float-right meta-chat" th:text="'참여했던 클럽 : '+${compend2.cnt}">참여중인 클럽 : 10</a>
 			               </p>
 			             </div>
 			           </div>
 			         </div>
-			         
+			         <input type="hidden" id="comp3" th:value="${compend2.comp_num}">
 	         		<div class="col-md-4 ftco-animate">
 			           <div class="blog-entry">
 			             <div class="text pt-3 pb-4">
@@ -354,47 +246,11 @@
 			             			<tr>
 			             			<th scope="cols" class="r">순위</th>
 			             			<th scope="cols" >클럽</th>
-			             			<th scope="cols" class="j">참여</th>
 			             			<th scope="cols">점수</th>
 			             			</tr>
 			             		</thead>
-			             		<tbody>
+			             		<tbody id="rank3">
 			             		
-			             			<tr>
-			             			<td scope="row" class="r">1위</td>
-			             			<td class="c">독수리</td>
-			             			<td class="j">37</td>
-			             			<td>18263</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">2위</td>
-			             			<td class="c">3조</td>
-			             			<td class="j">24</td>
-			             			<td>18163</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">3위</td>
-			             			<td class="c">날개</td>
-			             			<td class="cnt">24</td>
-			             			<td>15963</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">4위</td>
-			             			<td class="c">부엉이</td>
-			             			<td class="j">24</td>
-			             			<td>13263</td>
-			             			</tr>
-			             			
-			             			<tr>
-			             			<td scope="row" class="r">5위</td>
-			             			<td class="c">바위</td>
-			             			<td class="j">24</td>
-			             			<td>13027</td>
-			             			</tr>
-			             			
 			             		</tbody>
 			             	</table>
 			             </div>
@@ -414,7 +270,30 @@
     
     
 
-
+	<script type="text/javascript">
+		$(document).ready(function(){
+			for(var i=0;i<4;i++){
+				$.ajax({
+					url:"/info/comp/rank5/"+$("#comp"+i).val(),
+					async:false,
+					type : "GET",
+					cache : false,
+					success : function(data){
+						console.log(data);
+						for(var j=0;j<data.length;j++){
+							var str= "<tr><td scope='row' class='r'>"
+							+(j+1)+"위</td><td class='c'>"
+							+data[j].cb_name+"</td><td>"
+							+data[j].cs_score+"</td></tr>";
+							
+							$("#rank"+i).append(str);
+						}
+					}
+				});
+			}
+			
+		});
+	</script>
 	
 	
 	<footer th:replace="footer2"></footer>

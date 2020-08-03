@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mtbcraft.dto.Badge;
+import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.Course;
@@ -122,5 +123,15 @@ public class EntertainmentService {
 	// 미완료 미션 조회
 	public List<Mission> getNoCompleteMission(String rider) {
 		return entertainmentMapper.getNoCompleteMission(rider);
+	}
+	
+	//순위 조회 -5위까지
+	public List<Club> getRank5(int comp){
+		return entertainmentMapper.getRank5(comp);
+	}
+	
+	//순위 조회 -전체
+	public List<Club> getRank(int comp){
+		return entertainmentMapper.getRank(comp);
 	}
 }

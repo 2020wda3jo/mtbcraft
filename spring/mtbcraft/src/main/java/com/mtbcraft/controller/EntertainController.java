@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mtbcraft.dto.Badge;
+import com.mtbcraft.dto.Club;
 import com.mtbcraft.dto.CompIng;
 import com.mtbcraft.dto.Competition;
 import com.mtbcraft.dto.CustomBadge;
@@ -64,9 +65,9 @@ public class EntertainController {
 	}
 	
 	// 경쟁전
-	@RequestMapping(value="/entertainment/competition", method = RequestMethod.POST)
-	public String competitions(String rider, Model model) {
-		List<Competition> complist = entertainmentService.getRecentComp4(rider);
+	@RequestMapping(value="/entertainment/competition", method = RequestMethod.GET)
+	public String competitions(Principal principal, Model model) {
+		List<Competition> complist = entertainmentService.getRecentComp4(principal.getName());
 		List<Competition> compinglist = entertainmentService.getIngComp2();
 		List<Competition> compendlist = entertainmentService.getEndComp2();
 		
@@ -270,6 +271,20 @@ public class EntertainController {
 		}
 		fis.close();
 		gpx.setting(txt);
+	}
+	
+	//랭킹조회 - 5등까지
+	@GetMapping("/info/comp/rank5/{comp}")
+	@ResponseBody
+	public List<Club> getRank5(@PathVariable int comp){
+		return entertainmentService.getRank5(comp);
+	}
+	
+	//랭킹조회 - 전체
+	@GetMapping("/info/comp/rank/{comp}")
+	@ResponseBody
+	public List<Club> getRank(@PathVariable int comp){
+		return entertainmentService.getRank(comp);
 	}
 	
 	//이미지 로딩
