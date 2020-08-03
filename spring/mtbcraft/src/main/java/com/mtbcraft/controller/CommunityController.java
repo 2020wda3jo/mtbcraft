@@ -79,26 +79,27 @@ public class CommunityController {
 	}
 
 	// 커뮤니티 클럽 게시판 글 상세
-		@RequestMapping(value = "/community/club/boardGet", method = RequestMethod.GET)
-		public String boardGet(@RequestParam("b_num") int b_num, Model model) {
-			model.addAttribute("board", boardService.getBoardNum(b_num));
-
-			return "community/club/boardGet";
-		}
+	@RequestMapping(value = "/community/club/boardGet", method = RequestMethod.GET)
+	public String boardGet(@RequestParam("b_num") int b_num, Model model) {
+		model.addAttribute("board", boardService.getBoardNum(b_num));
+		boardService.updateHit(b_num);
+		return "community/club/boardGet";
+	}
 	
 	// 게시글 수정
 	@RequestMapping(value = "/community/club/boardUpdate", method = RequestMethod.GET)
 	public String modify(@RequestParam("b_num") int b_num, Board board, Model model) {
-		model.addAttribute("board", boardService.getBoardNum(b_num));
 		boardService.updateBoard(board);
-		return "community/club/club2";
+		model.addAttribute("board", boardService.getBoardNum(b_num));
+		return "community/club/boardGet";
 	}
 	
 	// 게시글 삭제
 	@RequestMapping(value = "/community/club/boardDelete")
 	public String delete(@RequestParam("b_num") int b_num) {
+		Board b = boardService.getBoardNum(b_num);
 		boardService.deleteBoard(b_num);
-		return "community/club/club2";
+		return "redirect:/community/club/"+b.getB_club();
 	}
 	
 	// 커뮤니티 클럽 게시판 글 수정
@@ -199,11 +200,12 @@ public class CommunityController {
 
 	// 커뮤니티 클럽 가입
 	@RequestMapping(value = "/join/decision/{cb_num}/{cj_rider}", method = RequestMethod.GET)
-	public String clubSignUp(@PathVariable int cb_num, @PathVariable String cj_rider) throws Exception {
+	public String clubSignUp(@PathVariable int cb_num, @PathVariable String cj_rider, Model model) throws Exception {
 		Club_Join cj = new Club_Join();
 		cj.setCj_club(cb_num);
 		cj.setCj_rider(cj_rider);
 		communityService.signClub(cj);
+		model.addAttribute("c_num", cb_num);
 		return "/community/club/success";
 	}
 
@@ -618,8 +620,8 @@ public class CommunityController {
 	@GetMapping(value = "/data/img/{place}/{b_file}")
 	public @ResponseBody byte[] getImage(@PathVariable String place ,@PathVariable String b_file) throws IOException {
 		InputStream in = null;
-	    //in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+place+"/"+b_file));
-	    in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\"+place+"\\"+b_file)); 
+	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+place+"/"+b_file));
+	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\"+place+"\\"+b_file)); 
 	    return IOUtils.toByteArray(in);
 	}
 }
