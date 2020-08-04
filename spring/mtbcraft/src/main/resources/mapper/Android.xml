@@ -323,7 +323,7 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 	</select>
 
 	<select id="getClubUser" parameterType="String" resultType="com.mtbcraft.dto.LoginInfo">
-		select cb_name from club where cb_num= (select cj_num from club_join where cj_rider=#{LoginId})
+		select cb_name from club where cb_num= (select cj_club from club_join where cj_rider=#{LoginId})
 	</select>
 	
 	<select id="insertDanger" parameterType="com.mtbcraft.dto.DangerousArea">

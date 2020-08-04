@@ -181,6 +181,13 @@ public class SubActivity extends AppCompatActivity{
                     Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
                     startActivity(nomtb);
                     break;
+
+                //설정
+                case R.id.settings:
+                    Intent setting = new Intent(getApplicationContext(), SettingActivity.class);
+                    startActivity(setting);
+                    break;
+
             }
             return true;
         });

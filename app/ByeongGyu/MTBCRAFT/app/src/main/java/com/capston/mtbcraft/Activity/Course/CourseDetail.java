@@ -444,6 +444,9 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             UploadTask2 uploadTask = new UploadTask2(getFilesDir().getPath() + "/", register_Name, register_image);
             uploadTask.execute();
 
+            editText.setText("");
+            register_image.setImageResource(R.drawable.image_plus);
+
             try {
                 new getReviewTask().execute();
                 recycleView.setVisibility(View.VISIBLE);
@@ -815,7 +818,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
                             change_Name = getImageNameToUri(data.getData());
                         }
 
-
                         // 이미지 표시
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -984,14 +986,7 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
 
         @Override
         protected void onPostExecute(String s) {
-            try {
-                if ( register == false )
-                    imageView.setImageBitmap(BitmapFactory.decodeFile(String.valueOf(new File(Save_Path + "/" + change_Name))));
-                else
-                    imageView.setImageBitmap(BitmapFactory.decodeFile(String.valueOf(new File(Save_Path + "/" + register_Name))));
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "저장에 실패했습니다. 관리자에게 문의하세요", Toast.LENGTH_LONG).show();
-            }
+
         }
     }
 
@@ -1348,8 +1343,12 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             holder.textView1.setText(itemList.get(position).getR_nickname());
             holder.textView2.setText(temp);
             holder.textView3.setText(itemList.get(position).getCr_content());
-/*            holder.imageView1.setImageBitmap(myBitmap1);
-            holder.imageView2.setImageBitmap(myBitmap2);*/
+
+            Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+            holder.imageView1.setImageBitmap(user_image);
+
+
+
             if ( itemList.get(position).getCr_images() == null)
                 holder.imageView2.setVisibility(View.GONE);
 

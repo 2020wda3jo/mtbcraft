@@ -1013,13 +1013,13 @@ public class StartActivity extends AppCompatActivity
                 Log.d("a의값은",a);
             }
             switch(a){
-                case "긴급문자":
+                case "위치전송":
                     String sms = "" +
                             "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. http://13.209.229.237:8080/app/dangergps/35.896599/128.621009";
                     smsManager.sendTextMessage(number, null, sms, null, null);
                     Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
                     break;
-                case "긴급전화":
+                case "119에 전화":
                     startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel)));
                     break;
                 case "지인에게 문자":
@@ -1031,7 +1031,7 @@ public class StartActivity extends AppCompatActivity
                     startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel2)));
                     break;
                 default:
-                    break;
+                break;
             }
 
         }
