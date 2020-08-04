@@ -88,6 +88,10 @@ public class RidingController {
 	public Gpx getGpxByRR_Num(int rr_num) throws Exception {
 		String gpxFile = ridingService.getGpxFileByRR_Num(rr_num);
 		Gpx gpx = new Gpx();
+		if(gpxFile.contains("NEW")||gpxFile.contains("new")) {
+			gpxFile = gpxFile.split("/")[1];
+			gpx.setStatus("new");
+		}
 		makeGpx(gpx, gpxFile);
 		gpx.setRr_num(rr_num);
 		return gpx;
