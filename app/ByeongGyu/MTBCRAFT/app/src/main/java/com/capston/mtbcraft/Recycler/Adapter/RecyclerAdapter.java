@@ -3,6 +3,8 @@ package com.capston.mtbcraft.Recycler.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.capston.mtbcraft.Activity.Riding.DetailActivity;
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.dto.RidingRecord;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -27,11 +30,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
 
     public Context mContext;
     public ArrayList<RidingRecord> itemList;
+    public String r_image;
 
 
-    public RecyclerAdapter(Context mContext, ArrayList<RidingRecord> itemList) {
+    public RecyclerAdapter(Context mContext, ArrayList<RidingRecord> itemList, String r_image) {
         this.mContext = mContext;
         this.itemList = itemList;
+        this.r_image = r_image;
     }
 
     @NonNull
@@ -72,20 +77,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyReco
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Log.d("dfdf",itemList.get(position).getRr_rider());
-        switch(itemList.get(position).getRr_rider()){
-            case "1401287":
-                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo1));
-                break;
-            case "2병규":
-                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo2));
-                break;
-            case "괴물쥐":
-                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo3));
-                break;
-            default:
-                testViewHolder.my_image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.common_google_signin_btn_icon_light));
-                break;
-        }
+
+        Bitmap user_image = BitmapFactory.decodeFile(new File(mContext.getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        testViewHolder.my_image.setImageBitmap(user_image);
 
 
 

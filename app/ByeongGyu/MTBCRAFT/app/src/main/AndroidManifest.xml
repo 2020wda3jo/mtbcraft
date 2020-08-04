@@ -73,9 +73,9 @@
         <activity android:name=".Activity.Competition.CompetitionList" />
         <activity android:name=".Activity.Riding.FollowStart" />
         <activity android:name=".Activity.Riding.FollowEndActivity"/>
-        <activity android:name=".Activity.Danger.DangerList" />
-        <activity android:name=".Activity.Danger.DangerRegister" />
         <activity android:name=".Activity.Setting.SettingActivity" />
+        <activity android:name=".Activity.Danger.DangerRegister" />
+        <activity android:name=".Activity.Danger.DangerList" />
 
     </application>
 

@@ -86,6 +86,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
 
     int r_club;
     int dis;
+    int riding_point=0;
 
     //형 변환
     String comp_name, adress_value;
@@ -346,6 +347,8 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 params.put("rr_name", binding.ridingNameinput.getText().toString());
                 params.put("rr_comp", rr_comp);
                 networkTask1.execute(params);
+
+                riding_point += Distence;
 
                 GetRecordTask getRecordTask = new GetRecordTask();
                 getRecordTask.execute();
@@ -806,6 +809,7 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                         params5[k].put("mc_mission", String.valueOf(clearList.get(k).getM_num()));
                         params5[k].put("mc_time", time2);
                         params5[k].put("m_point", String.valueOf(clearList.get(k).getM_point()));
+                        riding_point += clearList.get(k).getM_point();
                         IMC[k].executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params5[k]);
                     }
                 }
@@ -815,14 +819,15 @@ public class endActivity extends AppCompatActivity implements MapView.CurrentLoc
                 // 메세지
                 String text = "라이딩 기록이 저장되었습니다";
                 String text2 = "";
+                String text3 = riding_point + " 라이딩 포인트 획득 !";
 
-                alert_confirm.setMessage(text);
+                alert_confirm.setMessage(text + "\n" + text3);
 
-                if ( !rr_comp.equals("null") || clearList.size() >= 1){
+                if ( clearList.size() >= 1){
                     for ( int l = 0; l < clearList.size(); l++){
                         text2 += clearList.get(l).getM_name() + " 미션 성공\n";
                     }
-                    alert_confirm.setMessage( text + "\n" + text2);
+                    alert_confirm.setMessage( text + "\n" + text2 + "\n" + text3);
                 }
                 // 확인 버튼 리스너
                 alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {

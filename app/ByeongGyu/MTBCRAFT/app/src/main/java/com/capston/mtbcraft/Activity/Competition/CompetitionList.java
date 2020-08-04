@@ -3,6 +3,8 @@ package com.capston.mtbcraft.Activity.Competition;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +26,7 @@ import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
@@ -53,11 +56,10 @@ private ActivityCompetitionBinding binding;
     private TextView memberId;
     private DrawerLayout mDrawerLayout;
     private RecyclerView recycleView;
-    private String LoginId, Nickname, Image, Save_Path;
+    private String LoginId, Nickname, Save_Path, r_image;
     private int nowSize = 0;
     private ArrayList<String> joinedList = new ArrayList<>();
     private ArrayList<Competition> nowItemList;
-    private ImageView imageView;
     private ArrayList<Competition> pastItemList;
     private ArrayList<Competition> itemList;
     private ImageView userImage;
@@ -74,24 +76,14 @@ private ActivityCompetitionBinding binding;
         LoginId = auto.getString("LoginId", "");
         Nickname = auto.getString("r_nickname", "");
         myclub = auto.getString("myclub","");
+        r_image = auto.getString("r_image", "");
 
         Save_Path = getFilesDir().getPath();
 
         memberId = findViewById(R.id.memberId);
         memberId.setText(Nickname + " 님");
 
-
-
         recycleView = findViewById(R.id.recycleView1);
-
-        imageView = findViewById(R.id.comp_mem_image);
-
-
-        /* 로그인 정보 가져오기 */
-        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        LoginId = auto.getString("LoginId", "");
-        Nickname = auto.getString("r_nickname", "");
-        myclub = auto.getString("r_clubname","");
 
         /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -111,26 +103,9 @@ private ActivityCompetitionBinding binding;
         binding.nickname.setText(Nickname);
         binding.clubName.setText(myclub);
 
-
-
-        //닉네임명에 따른 이미지변경(임시)
-        switch(Nickname){
-            case "배고파":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
-                binding.compMemImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
-                break;
-
-            case "2병규":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
-                binding.compMemImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
-                break;
-            case "괴물쥐":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
-                binding.compMemImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
-                break;
-            default:
-                break;
-        }
+        Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        userImage.setImageBitmap(user_image);
+        binding.compMemImage.setImageBitmap(user_image);
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
@@ -140,47 +115,62 @@ private ActivityCompetitionBinding binding;
             switch (id) {
                 //홈
                 case R.id.nav_home:
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
+                    home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home);
                     break;
+
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
-
+                    finish();
                     break;
+
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
+                    finish();
                     break;
+
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
+                    finish();
                     break;
+
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
+                    finish();
                     break;
+
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
+                    finish();
                     break;
+
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
+                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
+                    finish();
                     break;
-                case R.id.friend_chodae:
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
-                    intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
 
-                    Intent chooser = Intent.createChooser(intent, "초대하기");
+                case R.id.friend_chodae:
+                    Intent friend = new Intent();
+                    friend.setAction(Intent.ACTION_SEND);
+                    friend.setType("text/plain");
+                    friend.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    friend.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
+
+                    Intent chooser = Intent.createChooser(friend, "초대하기");
                     startActivity(chooser);
                     break;
 
@@ -188,12 +178,14 @@ private ActivityCompetitionBinding binding;
                 case R.id.nav_danger:
                     Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
+                    finish();
                     break;
 
                 //위험구역
                 case R.id.no_mtb:
                     Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
                     startActivity(nomtb);
+                    finish();
                     break;
             }
             return true;
@@ -375,10 +367,6 @@ private ActivityCompetitionBinding binding;
             Date nowTime = sdfNow.parse(temp);
             Date periodTime = sdfNow.parse(String.valueOf(getPeriod.substring(8, 16)));
 
-/*            SimpleDateFormat sdfNow2 = new SimpleDateFormat("yyyyMMdd");
-            int day1 = Integer.parseInt(sdfNow2.format(date));
-            int day2 =  Integer.parseInt(getPeriod.substring(8,16));*/
-
             return (nowTime.getTime() - periodTime.getTime()) / (24 * 60 * 60 * 1000);
 
         }
@@ -392,9 +380,6 @@ private ActivityCompetitionBinding binding;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         switch (id) {
@@ -418,7 +403,6 @@ private ActivityCompetitionBinding binding;
         protected String doInBackground(Map<String, String>... maps) {
 
             File dir = new File(Save_Path);
-            //상위 디렉토리가 존재하지 않을 경우 생성
 
             if (!dir.exists()) {
                 dir.mkdirs();

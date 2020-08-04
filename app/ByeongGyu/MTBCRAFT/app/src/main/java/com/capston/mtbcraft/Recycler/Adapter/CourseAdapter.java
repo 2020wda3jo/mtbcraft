@@ -2,6 +2,9 @@ package com.capston.mtbcraft.Recycler.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> implements OnMapReadyCallback {
@@ -29,10 +33,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> implements
     RidingRecord item;
     WebView webview;
     public int count = 5;
+    private String r_image;
 
-    public CourseAdapter(Context mContext, ArrayList<RidingRecord> itemList) {
+
+    public CourseAdapter(Context mContext, ArrayList<RidingRecord> itemList, String r_image) {
         this.mContext = mContext;
         this.itemList = itemList;
+        this.r_image = r_image;
     }
 
     @NonNull
@@ -45,6 +52,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> implements
 
     @Override
     public void onBindViewHolder(@NonNull final CourseHolder testViewHolder, final int position) {
+
 
         int hour;
         int min;
@@ -66,20 +74,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseHolder> implements
         float km = (float) (des/1000.0);
         String total = String.valueOf(km)+"Km";
 
-        switch(itemList.get(position).getRr_rider()){
-            case "1401287":
-                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo1));
-                break;
-            case "2병규":
-                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo2));
-                break;
-            case "괴물쥐":
-                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.peo3));
-                break;
-            default:
-                testViewHolder.imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.common_google_signin_btn_icon_light));
-                break;
-        }
+        Bitmap user_image = BitmapFactory.decodeFile(new File(mContext.getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        testViewHolder.imageView.setImageBitmap(user_image);
 
         testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
         testViewHolder.c_name.setText(itemList.get(position).getRr_name());

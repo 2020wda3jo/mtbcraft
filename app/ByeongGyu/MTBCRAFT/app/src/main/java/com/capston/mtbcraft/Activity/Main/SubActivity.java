@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
@@ -41,6 +43,7 @@ import com.google.android.material.navigation.NavigationView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -54,7 +57,7 @@ public class SubActivity extends AppCompatActivity{
     private ViewFlipper v_fillipper;
     private JSONArray jarray;
     private JSONObject jObject;
-    private String LoginId, Nickname;
+    private String LoginId, Nickname, r_image;
     private ImageView userImage;
     private SharedPreferences auto;
     private Toolbar toolbar;
@@ -87,6 +90,7 @@ public class SubActivity extends AppCompatActivity{
         LoginId = auto.getString("LoginId", "");
         Nickname = auto.getString("r_nickname", "");
         binding.idinfo.setText(Nickname+"님 저희와 함께");
+        r_image = auto.getString("r_image","");
 
 
         /* 드로우 레이아웃 네비게이션 부분들 */
@@ -102,22 +106,8 @@ public class SubActivity extends AppCompatActivity{
         InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(Nickname + "님 환영합니다");
 
-
-        //닉네임명에 따른 이미지변경(임시)
-        switch(Nickname){
-            case "배고파":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
-                break;
-
-            case "2병규":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
-                break;
-            case "괴물쥐":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
-                break;
-            default:
-                break;
-        }
+        Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        userImage.setImageBitmap(user_image);
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
@@ -127,47 +117,56 @@ public class SubActivity extends AppCompatActivity{
             switch (id) {
                 //홈
                 case R.id.nav_home:
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
+                    home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(home);
                     break;
+
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
-
                     break;
+
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
                     break;
+
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
                     break;
+
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
                     break;
+
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
                     break;
+
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
+                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
                     break;
-                case R.id.friend_chodae:
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
-                    intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
 
-                    Intent chooser = Intent.createChooser(intent, "초대하기");
+                case R.id.friend_chodae:
+                    Intent friend = new Intent();
+                    friend.setAction(Intent.ACTION_SEND);
+                    friend.setType("text/plain");
+                    friend.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    friend.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
+
+                    Intent chooser = Intent.createChooser(friend, "초대하기");
                     startActivity(chooser);
                     break;
 
@@ -177,16 +176,10 @@ public class SubActivity extends AppCompatActivity{
                     startActivity(danger);
                     break;
 
-                //입산통제
+                //위험구역
                 case R.id.no_mtb:
                     Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
                     startActivity(nomtb);
-                    break;
-
-                //설정
-                case R.id.settings:
-                    Intent setting = new Intent(getApplicationContext(), SettingActivity.class);
-                    startActivity(setting);
                     break;
             }
             return true;

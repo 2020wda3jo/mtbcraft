@@ -9,6 +9,7 @@
 <input type="hidden" id="rr_num" th:value="${rr_num}" />
 	<div id="mymap" style="width:100%; height:200px;"></div>
 <script>
+    var rr_num = $("#rr_num").val();
 var mapContainer = document.getElementById('mymap'), // 지도를 표시할 div 
 mapOption = { 
     center: new kakao.maps.LatLng(35.89617906303501, 128.62171907592318), // 지도의 중심좌표
@@ -29,6 +30,8 @@ var polyline = new kakao.maps.Polyline({
     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
     strokeStyle: 'solid' // 선의 스타일입니다
 });
+
+
 
 //rr_num으로 지도에 경로 그리기
 function drawPolylineByRR_Num(polyline, rr_num){

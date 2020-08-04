@@ -120,6 +120,8 @@ public class StartActivity extends AppCompatActivity
     private String number;
     Intent intent;
     SpeechRecognizer mRecognizer;
+    private SmsManager smsManager;
+    private String tel="";
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
@@ -151,7 +153,7 @@ public class StartActivity extends AppCompatActivity
         SharedPreferences phone = getSharedPreferences("auto",MODE_PRIVATE);
         number = phone.getString("sosphone","");
 
-
+        smsManager = SmsManager.getDefault();
         //음성인식
         intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName());
@@ -177,7 +179,7 @@ public class StartActivity extends AppCompatActivity
         }
 
         //input array data
-    list = new ArrayList<>();
+        list = new ArrayList<>();
         list.add("");
         list.add("119에 전화");
         list.add("119에 위치전송");
@@ -194,8 +196,8 @@ public class StartActivity extends AppCompatActivity
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               // Toast.makeText(getApplicationContext(),"선택된 아이템 : "+position+spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
-                String tel = "tel:01047527613";
+                // Toast.makeText(getApplicationContext(),"선택된 아이템 : "+position+spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
+                tel = "tel:01047527613";
                 tel2 = "tel:"+number;
                 Log.d("전화번호", tel2);
                 switch(position){
@@ -1011,15 +1013,22 @@ public class StartActivity extends AppCompatActivity
                 Log.d("a의값은",a);
             }
             switch(a){
-                case "지인문자":
-                    break;
                 case "긴급문자":
+                    String sms = "" +
+                            "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. http://13.209.229.237:8080/app/dangergps/35.896599/128.621009";
+                    smsManager.sendTextMessage(number, null, sms, null, null);
+                    Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.",Toast.LENGTH_LONG).show();
                     break;
-                case "전화":
+                case "긴급전화":
+                    startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel)));
+                    break;
+                case "지인에게 문자":
+                    String sms2 = "" +
+                            "산에서 다쳤어요! 도와주세요! 제 위치는 "+latitude+", "+lonngitude+"이고 주소는 "+address_dong+"에요. http://13.209.229.237:8080/app/dangergps/35.896599/128.621009";
+                    smsManager.sendTextMessage(number, null, sms2, null, null);
+                    break;
+                case "지인에게 통화":
                     startActivity(new Intent("android.intent.action.CALL", Uri.parse(tel2)));
-                        break;
-                case "긴급통화":
-
                     break;
                 default:
                     break;

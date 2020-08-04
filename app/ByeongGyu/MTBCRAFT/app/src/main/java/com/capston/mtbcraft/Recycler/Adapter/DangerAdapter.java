@@ -12,16 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.capston.mtbcraft.R;
 import com.capston.mtbcraft.dto.DangerousArea;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
 public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.DangerHolder> {
     public Context mContext;
     public ArrayList<DangerousArea> itemList;
+    public GoogleMap mMap;
 
-    public DangerAdapter(Context mContext, ArrayList<DangerousArea> itemList) {
+    public DangerAdapter(Context mContext, ArrayList<DangerousArea> itemList, GoogleMap mMap) {
         this.mContext = mContext;
         this.itemList = itemList;
+        this.mMap = mMap;
     }
 
     @NonNull
@@ -36,14 +42,28 @@ public class DangerAdapter extends RecyclerView.Adapter<DangerAdapter.DangerHold
     public void onBindViewHolder(@NonNull DangerHolder holder, int position) {
         String status ="";
 
+        holder.mView.setOnClickListener( v -> {
+            mMap.clear();
+
+            MarkerOptions mOptions = new MarkerOptions();
+            // 마커 타이틀
+            mOptions.title("마커 좌표");
+
+            mOptions.position(new LatLng(Double.parseDouble(itemList.get(position).getDa_latitude()), Double.parseDouble(itemList.get(position).getDa_longitude())));
+
+            mMap.addMarker(mOptions);
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(itemList.get(position).getDa_latitude()), Double.parseDouble(itemList.get(position).getDa_longitude())), 15));
+        });
+
         //holder.imageView.setImageBitmap(myBitmap);
         holder.textView1.setText(itemList.get(position).getDa_addr());
         holder.textView2.setText(itemList.get(position).getDa_content());
-        if ( itemList.get(position).getDa_status().equals("0"))
-            status = "수락";
-        if ( itemList.get(position).getDa_status().equals("1"))
+        if (itemList.get(position).getDa_status().equals("0"))
             status = "신청중";
-        if ( itemList.get(position).getDa_status().equals("2"))
+        if (itemList.get(position).getDa_status().equals("1"))
+            status = "수락";
+        if (itemList.get(position).getDa_status().equals("2"))
             status = "거절";
         holder.textView3.setText(status);
 

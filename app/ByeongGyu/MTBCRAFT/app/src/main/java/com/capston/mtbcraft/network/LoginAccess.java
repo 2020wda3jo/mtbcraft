@@ -9,8 +9,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.capston.mtbcraft.Activity.Main.SubActivity;
+import com.capston.mtbcraft.Recycler.Adapter.CompClubAdapter;
 import com.capston.mtbcraft.dto.LoginInfo;
 import com.google.gson.Gson;
 
@@ -21,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -30,7 +33,7 @@ public class LoginAccess extends AppCompatActivity {
 
     String userid="", userpw="";
 
-    String Save_Path;
+    String Save_Path, rider;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +87,7 @@ public class LoginAccess extends AppCompatActivity {
                 JSONObject jsonObject;
                 jsonObject = new JSONObject(s);
                 String status = jsonObject.getString("Status");
-                String rider = jsonObject.getString("r_id");
+                rider = jsonObject.getString("r_id");
 
                 if(status.equals("Ok") ){
                     //자동로그인을 위한 앱 내부 저장
@@ -95,10 +98,6 @@ public class LoginAccess extends AppCompatActivity {
 
                     new getLoginInfo().execute();
                     new getUserClub().execute();
-                    Toast toast = Toast.makeText(getApplicationContext(), rider+"님 로그인했습니다.", Toast.LENGTH_SHORT); toast.show();
-                    Intent intent = new Intent(LoginAccess.this, SubActivity.class);
-                    startActivity(intent);
-                    finish();
 
                 }else{
                     Toast toast = Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT); toast.show();
@@ -177,65 +176,76 @@ public class LoginAccess extends AppCompatActivity {
             autoLogin.putString("r_image", item.getR_image());
             autoLogin.putString("r_nickname", item.getR_nickname());
 
-            FileDownload("member", item.getR_image());
             autoLogin.commit();
+            DownloadClubTask downloadClubTask = new DownloadClubTask("rider", item.getR_image());
+            downloadClubTask.execute();
         }
     }
 
+    public class DownloadClubTask extends AsyncTask<Map<String, String>, Integer, String> {
+        String directory = "";
+        String url = "";
 
-    public void FileDownload(String directory, String url)
-    {
-        String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url; // URL
-        DownloadThread dThread;
-        File dir = new File(Save_Path);
-        // 폴더가 존재하지 않을 경우 폴더를 만듦
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
-        // 다운로드 폴더에 동일한 파일명이 존재하는지 확인
-        if (new File(Save_Path + "/" + url).exists() == false) {
-            dThread = new DownloadThread(fileURL, Save_Path + "/" + url);
-            dThread.start();
-        }
-    }
-
-
-    // 쓰레드로 다운로드 돌림
-    class DownloadThread extends Thread {
-        String ServerUrl;
-        String LocalPath;
-
-        DownloadThread(String serverPath, String localPath) {
-            ServerUrl = serverPath;
-            LocalPath = localPath;
+        public DownloadClubTask(String directory, String url) {
+            this.directory = directory;
+            this.url = url;
         }
 
         @Override
-        public void run() {
-            URL gpxUrl;
-            int Read;
-            try {
-                gpxUrl = new URL(ServerUrl);
-                HttpURLConnection conn = (HttpURLConnection) gpxUrl
-                        .openConnection();
-                int len = conn.getContentLength();
-                byte[] tmpByte = new byte[len];
-                InputStream is = conn.getInputStream();
-                File file = new File(LocalPath);
-                FileOutputStream fos = new FileOutputStream(file);
-                for (;;) {
-                    Read = is.read(tmpByte);
-                    if (Read <= 0) {
-                        break;
-                    }
-                    fos.write(tmpByte, 0, Read);
-                }
-                is.close();
-                fos.close();
-                conn.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
+        protected String doInBackground(Map<String, String>... maps) {
+
+            File dir = new File(Save_Path);
+            //상위 디렉토리가 존재하지 않을 경우 생성
+
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
+
+            String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url;
+            String LocalPath = Save_Path + "/" + url;
+
+            if (new File(Save_Path + "/" + url).exists() == false) {
+                URL imgUrl = null;
+                try {
+                    imgUrl = new URL(fileURL);
+
+                    //서버와 접속하는 클라이언트 객체 생성
+                    HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
+                    int response = conn.getResponseCode();
+
+                    File file = new File(LocalPath);
+
+                    InputStream is = conn.getInputStream();
+                    OutputStream outStream = new FileOutputStream(file);
+
+                    byte[] buf = new byte[1024];
+                    int len = 0;
+
+                    while ((len = is.read(buf)) > 0) {
+                        outStream.write(buf, 0, len);
+                    }
+
+                    outStream.close();
+                    is.close();
+                    conn.disconnect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor autoLogin = auto.edit();
+            autoLogin.putString("r_image", url);
+            autoLogin.commit();
+
+            Toast toast = Toast.makeText(getApplicationContext(), rider+"님 로그인했습니다.", Toast.LENGTH_SHORT); toast.show();
+            Intent intent = new Intent(LoginAccess.this, SubActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 }

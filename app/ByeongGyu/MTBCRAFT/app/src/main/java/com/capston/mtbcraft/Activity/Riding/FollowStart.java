@@ -68,7 +68,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import static android.speech.tts.TextToSpeech.ERROR;
+
 @SuppressLint("HandlerLeak")
 public class FollowStart extends FragmentActivity
         implements LocationListener, MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener, MapView.MapViewEventListener, MapView.POIItemEventListener, TextToSpeech.OnInitListener {
@@ -115,7 +115,7 @@ public class FollowStart extends FragmentActivity
     long PauseTime;
     private Thread timeThread = null;
     private Boolean isRunning = true;
-    String course_name = "";
+
     // CalloutBalloonAdapter 인터페이스 구현
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
         private final View mCalloutBalloon;
@@ -144,19 +144,6 @@ public class FollowStart extends FragmentActivity
         View view = binding.getRoot();
         setContentView(view);
 
-        // TTS를 생성하고 OnInitListener로 초기화 한다.
-        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status != ERROR) {
-                    // 언어를 선택한다.
-                    tts.setLanguage(Locale.KOREAN);
-                }
-            }
-        });
-
-        tts.speak(course_name,TextToSpeech.QUEUE_FLUSH, null);
-
         Intent intentt = new Intent(this.getIntent());
         intentt.getStringExtra("c_name");
         int check = intentt.getIntExtra("check", 0);
@@ -166,7 +153,7 @@ public class FollowStart extends FragmentActivity
         binding.couseInfo.setText(intentt.getStringExtra("c_name"));
         Log.d("확인",intentt.getStringExtra("c_name") + ""+ intentt.getStringExtra("gpx"));
 
-        course_name = intentt.getStringExtra("c_name");
+        String course_name = intentt.getStringExtra("c_name");
 
 
 
@@ -863,7 +850,6 @@ public class FollowStart extends FragmentActivity
             textToSpeech.setSpeechRate(1f);
             textToSpeech.speak(value, TextToSpeech.QUEUE_FLUSH, null);
         }
-
     }
 
 

@@ -75,7 +75,7 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
 
 
-    int check, clearCount=0;
+    int check, clearCount=0, riding_point=0;
 
     MapView mapView;
     //DB로 전송하기 위한 변수
@@ -353,6 +353,8 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
                 params.put("rr_fonum", course_name);
                 networkTask1.execute(params);
 
+                riding_point+= Distence;
+
                 GetRecordTask getRecordTask = new GetRecordTask();
                 getRecordTask.execute();
 
@@ -375,6 +377,8 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
                     params2.put("r_club", String.valueOf(r_club));
                     params2.put("LoginId", LoginId);
                     params2.put("m_point", comp_point);
+
+                    riding_point += Integer.parseInt(comp_point);
                     updateCompScore.execute(params2);
                 }
 
@@ -813,6 +817,8 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
                         params5[k].put("mc_mission", String.valueOf(clearList.get(k).getM_num()));
                         params5[k].put("mc_time", time2);
                         params5[k].put("m_point", String.valueOf(clearList.get(k).getM_point()));
+
+                        riding_point += clearList.get(k).getM_point();
                         IMC[k].executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params5[k]);
                     }
                 }
@@ -823,20 +829,31 @@ public class FollowEndActivity extends AppCompatActivity implements MapView.Curr
                 String text = "라이딩 기록이 저장되었습니다";
                 String text1 = "";
                 String text2 = "";
+                String text3 = riding_point + " 라이딩 포인트 획득 !";
 
-                alert_confirm.setMessage(text);
+                alert_confirm.setMessage(text + "\n" + text3);
 
-                if (!rr_comp.equals("null")) {
+                // 경쟁전 완료
+                if (!rr_comp.equals("null") && clearList.size() < 1) {
                     text1 = comp_name;
-                    alert_confirm.setMessage( text +"\n" + text1+"에 참가하셨습니다\n");
+                    alert_confirm.setMessage( text +"\n" + text1+"에 참가하셨습니다\n" + text3);
                 }
 
+                // 경쟁전X, 미션 완료
+                if ( rr_comp.equals("null") && clearList.size() >= 1 ){
+                    for ( int l = 0; l < clearList.size(); l++){
+                        text2 += clearList.get(l).getM_name() + " 미션 성공\n";
+                    }
+                    alert_confirm.setMessage( text + "\n" + text2 + "\n" + text3);
+                }
+
+                // 미션, 경쟁전 완료
                 if ( !rr_comp.equals("null") || clearList.size() >= 1){
                     text1 = comp_name;
                     for ( int l = 0; l < clearList.size(); l++){
                         text2 += clearList.get(l).getM_name() + " 미션 성공\n";
                     }
-                    alert_confirm.setMessage( text +"\n" + text1+"에 참가하셨습니다\n" + text2);
+                    alert_confirm.setMessage( text +"\n" + text1+"에 참가하셨습니다\n" + text2 + "\n" + text3);
                 }
                 // 확인 버튼 리스너
                 alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {

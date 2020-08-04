@@ -3,6 +3,8 @@ package com.capston.mtbcraft.Activity.Scrap;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Mission.MissionList;
 import com.capston.mtbcraft.Activity.Riding.FollowStart;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
@@ -50,6 +53,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -61,7 +65,7 @@ import java.util.Map;
 
 public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     private ScrapDetailBinding binding;
-    private String c_num, gpx, c_name, LoginId, Nickname;
+    private String c_num, gpx, c_name, LoginId, Nickname, r_image;
     private DrawerLayout mDrawerLayout;
     private GPXParser mParser = new GPXParser();
     private Gpx parsedGpx = null;
@@ -88,7 +92,7 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId", "");
         Nickname = auto.getString("r_nickname", "");
-
+        r_image = auto.getString("r_image", "");
 
         /* 드로우 레이아웃 네비게이션 부분들 */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -103,21 +107,8 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(Nickname + "님 환영합니다");
 
-        //닉네임명에 따른 이미지변경(임시)
-        switch(Nickname){
-            case "배고파":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo1));
-                break;
-
-            case "2병규":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo2));
-                break;
-            case "괴물쥐":
-                userImage.setImageDrawable(getResources().getDrawable(R.drawable.peo3));
-                break;
-            default:
-                break;
-        }
+        Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        userImage.setImageBitmap(user_image);
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
@@ -127,60 +118,101 @@ public class MyScrapDetail extends AppCompatActivity implements MapView.CurrentL
             switch (id) {
                 //홈
                 case R.id.nav_home:
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
+                    home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home);
                     break;
+
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
+                    Intent home2 = new Intent(getApplicationContext(), SubActivity.class);
+                    home2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home2);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
-
+                    finish();
                     break;
+
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
+                    Intent home3 = new Intent(getApplicationContext(), SubActivity.class);
+                    home3.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home3);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
+                    finish();
                     break;
+
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent home4 = new Intent(getApplicationContext(), SubActivity.class);
+                    home4.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home4);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
+                    finish();
                     break;
+
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
+                    Intent home5 = new Intent(getApplicationContext(), SubActivity.class);
+                    home5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home5);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
+                    finish();
                     break;
+
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent home6 = new Intent(getApplicationContext(), SubActivity.class);
+                    home6.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home6);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
+                    finish();
                     break;
+
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
+                    Intent home7 = new Intent(getApplicationContext(), SubActivity.class);
+                    home7.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home7);
+                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
+                    finish();
                     break;
-                case R.id.friend_chodae:
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
-                    intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
 
-                    Intent chooser = Intent.createChooser(intent, "초대하기");
+                case R.id.friend_chodae:
+                    Intent friend = new Intent();
+                    friend.setAction(Intent.ACTION_SEND);
+                    friend.setType("text/plain");
+                    friend.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    friend.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
+
+                    Intent chooser = Intent.createChooser(friend, "초대하기");
                     startActivity(chooser);
                     break;
 
                 //위험구역
                 case R.id.nav_danger:
+                    Intent home8 = new Intent(getApplicationContext(), SubActivity.class);
+                    home8.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home8);
                     Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
+                    finish();
                     break;
 
                 //위험구역
                 case R.id.no_mtb:
+                    Intent home9 = new Intent(getApplicationContext(), SubActivity.class);
+                    home9.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home9);
                     Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
                     startActivity(nomtb);
+                    finish();
                     break;
             }
             return true;

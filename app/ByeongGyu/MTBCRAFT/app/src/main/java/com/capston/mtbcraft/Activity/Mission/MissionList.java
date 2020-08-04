@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,7 @@ import com.capston.mtbcraft.Activity.Control.NoMtb;
 import com.capston.mtbcraft.Activity.Course.CourseList;
 import com.capston.mtbcraft.Activity.Course.CourseSearch;
 import com.capston.mtbcraft.Activity.Danger.DangerList;
+import com.capston.mtbcraft.Activity.Main.SubActivity;
 import com.capston.mtbcraft.Activity.Riding.MyReport;
 import com.capston.mtbcraft.Activity.Scrap.MyScrap;
 import com.capston.mtbcraft.Activity.Setting.SettingActivity;
@@ -48,6 +51,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,25 +59,20 @@ import java.util.Map;
 
 public class MissionList extends AppCompatActivity {
 
-    TextView memberId, textView5, textView6, textView7, textView8;
+    private TextView memberId, textView5, textView6, textView7, textView8;
+    private DrawerLayout mDrawerLayout;
+    private RecyclerView recycleView;
+    private String LoginId, Nickname, Image, Save_Path, r_image;
+    private RadioButton radioButton1, radioButton2;
+    private int allCount, sucCount, nowCount=0;
+    private ImageView imageView, userImage;
+    private CheckBox checkBox;
+    private NavigationView navigationView;
+    private View header;
 
-    DrawerLayout mDrawerLayout;
-
-    RecyclerView recycleView;
-
-    String LoginId, Nickname, Image, Save_Path;
-
-    RadioButton radioButton1, radioButton2;
-
-    int allCount, sucCount;
-
-    ArrayList<Mission> itemList = new ArrayList<>();
-    ArrayList<Mission> joinedList = new ArrayList<>();
-    ArrayList<MissionRanking> itemList3 = new ArrayList<>();
-
-    ImageView imageView;
-
-    CheckBox checkBox;
+    public ArrayList<Mission> itemList = new ArrayList<>();
+    public ArrayList<Mission> joinedList = new ArrayList<>();
+    public ArrayList<MissionRanking> itemList3 = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -83,12 +82,20 @@ public class MissionList extends AppCompatActivity {
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         LoginId = auto.getString("LoginId","");
         Nickname = auto.getString("r_nickname", "");
+        r_image = auto.getString("r_image", "");
         Image = auto.getString("r_image", "");
         Save_Path = getFilesDir().getPath();
         Bitmap mem_Image = BitmapFactory.decodeFile(new File(Save_Path + "/" + Image).getAbsolutePath());
 
         memberId = findViewById(R.id.memberId);
         memberId.setText(Nickname + " 님");
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        header = navigationView.getHeaderView(0);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
+        Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        userImage.setImageBitmap(user_image);
 
         recycleView = findViewById(R.id.recycleView1);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
@@ -114,6 +121,7 @@ public class MissionList extends AppCompatActivity {
         TextView InFoUserId = (TextView) header.findViewById(R.id.infouserid);
         InFoUserId.setText(Nickname+"님 환영합니다");
         imageView.setImageBitmap(mem_Image);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
 
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
@@ -124,47 +132,62 @@ public class MissionList extends AppCompatActivity {
             switch (id) {
                 //홈
                 case R.id.nav_home:
+                    Intent home = new Intent(getApplicationContext(), SubActivity.class);
+                    home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(home);
                     break;
+
                 //라이딩 기록
                 case R.id.nav_mylist:
-                    Intent mylist = new Intent(getApplicationContext(), MyReport.class);
+                    Intent mylist=new Intent(getApplicationContext(), MyReport.class);
                     startActivity(mylist);
-
+                    finish();
                     break;
+
                 //코스보기
                 case R.id.nav_courselist:
-                    Intent courselist = new Intent(getApplicationContext(), CourseList.class);
+                    Intent courselist=new Intent(getApplicationContext(), CourseList.class);
                     courselist.putExtra("rider_id", LoginId);
                     startActivity(courselist);
+                    finish();
                     break;
+
                 //코스검색
                 case R.id.nav_course_search:
-                    Intent coursesearch = new Intent(getApplicationContext(), CourseSearch.class);
+                    Intent coursesearch=new Intent(getApplicationContext(), CourseSearch.class);
                     startActivity(coursesearch);
+                    finish();
                     break;
+
                 //스크랩 보관함
                 case R.id.nav_course_get:
-                    Intent courseget = new Intent(getApplicationContext(), MyScrap.class);
+                    Intent courseget=new Intent(getApplicationContext(), MyScrap.class);
                     startActivity(courseget);
+                    finish();
                     break;
+
                 //경쟁전
                 case R.id.nav_comp:
-                    Intent comp = new Intent(getApplicationContext(), CompetitionList.class);
+                    Intent comp=new Intent(getApplicationContext(), CompetitionList.class);
                     startActivity(comp);
+                    finish();
                     break;
+
                 //미션
                 case R.id.nav_mission:
-                    Intent mission = new Intent(getApplicationContext(), MissionList.class);
+                    Intent mission=new Intent(getApplicationContext(), MissionList.class);
                     startActivity(mission);
+                    finish();
                     break;
-                case R.id.friend_chodae:
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
-                    intent.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
 
-                    Intent chooser = Intent.createChooser(intent, "초대하기");
+                case R.id.friend_chodae:
+                    Intent friend = new Intent();
+                    friend.setAction(Intent.ACTION_SEND);
+                    friend.setType("text/plain");
+                    friend.putExtra(Intent.EXTRA_SUBJECT, LoginId + "님이 귀하를 초대합니다. 앱 설치하기");
+                    friend.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
+
+                    Intent chooser = Intent.createChooser(friend, "초대하기");
                     startActivity(chooser);
                     break;
 
@@ -172,18 +195,14 @@ public class MissionList extends AppCompatActivity {
                 case R.id.nav_danger:
                     Intent danger = new Intent(getApplicationContext(), DangerList.class);
                     startActivity(danger);
+                    finish();
                     break;
 
-                //입산통제
+                //위험구역
                 case R.id.no_mtb:
                     Intent nomtb = new Intent(getApplicationContext(), NoMtb.class);
                     startActivity(nomtb);
-                    break;
-
-                //설정
-                case R.id.settings:
-                    Intent setting = new Intent(getApplicationContext(), SettingActivity.class);
-                    startActivity(setting);
+                    finish();
                     break;
             }
             return true;
@@ -275,19 +294,8 @@ public class MissionList extends AppCompatActivity {
 
                     String File_Name = itemList.get(i).getBg_image();
 
-                    String fileURL = "http://13.209.229.237:8080/app/getGPX/badge/" + File_Name; // URL
-                    DownloadThread dThread;
-                    File dir = new File(Save_Path);
-                    // 폴더가 존재하지 않을 경우 폴더를 만듦
-                    if (!dir.exists()) {
-                        dir.mkdir();
-                    }
-                    // 다운로드 폴더에 동일한 파일명이 존재하는지 확인
-                    if (new File(Save_Path + "/" + File_Name).exists() == false) {
-                        dThread = new DownloadThread(fileURL, Save_Path + "/" + File_Name);
-                        dThread.start();
-                    }
-
+                    DownloadTask downloadTask = new DownloadTask( "badge", File_Name, itemList.size());
+                    downloadTask.execute();
                 }
 
                 allCount = itemList.size();
@@ -296,14 +304,80 @@ public class MissionList extends AppCompatActivity {
                 textView6.setText("경쟁전 참여 횟수   " + typeScore[1] + "회");
                 textView7.setText("미션 완료 갯수       " + typeScore[2] + "개");
 
-                MissionAdapter adapter = new MissionAdapter(getApplicationContext(), itemList, Save_Path);
-/*
-                recycleView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-*/
-                recycleView.setAdapter(adapter);
-
             }catch(Exception e){
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public class DownloadTask extends AsyncTask<Map<String, String>, Integer, String> {
+        String directory = "";
+        String url = "";
+        String LocalPath;
+        int Size;
+
+        public DownloadTask(String directory, String url, int Size) {
+            this.directory = directory;
+            this.url = url;
+            this.Size = Size;
+        }
+
+        @Override
+        protected synchronized String doInBackground(Map<String, String>... maps) {
+
+            File dir = new File(Save_Path);
+            //상위 디렉토리가 존재하지 않을 경우 생성
+
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String fileURL = "http://13.209.229.237:8080/app/getGPX/" + directory + "/" + url;
+            LocalPath = Save_Path + "/" + url;
+
+            if (new File(Save_Path + "/" + url).exists() == false) {
+                URL imgUrl = null;
+                try {
+                    imgUrl = new URL(fileURL);
+
+                    //서버와 접속하는 클라이언트 객체 생성
+                    HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
+                    int response = conn.getResponseCode();
+
+                    File file = new File(LocalPath);
+
+                    InputStream is = conn.getInputStream();
+                    OutputStream outStream = new FileOutputStream(file);
+
+                    byte[] buf = new byte[1024];
+                    int len = 0;
+
+                    while ((len = is.read(buf)) > 0) {
+                        outStream.write(buf, 0, len);
+                    }
+
+                    outStream.close();
+                    is.close();
+                    conn.disconnect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected synchronized void onPostExecute(String s) {
+            try {
+                nowCount++;
+                Log.e("나우", String.valueOf(nowCount));
+                Log.e("사이즈", String.valueOf(Size));
+                if ( nowCount == Size){
+                    MissionAdapter adapter = new MissionAdapter(getApplicationContext(), itemList, Save_Path);
+                    recycleView.setAdapter(adapter);
+                }
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "다운로드 실패", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -421,36 +495,6 @@ public class MissionList extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private static class MissionItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private int outerMargin;
-
-        public MissionItemDecoration(Context context) {
-            spanCount = 2;
-            spacing = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, context.getResources().getDisplayMetrics());
-            outerMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, context.getResources().getDisplayMetrics());
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int maxCount = parent.getAdapter().getItemCount();
-            int position = parent.getChildAdapterPosition(view);
-            int column = position % spanCount;
-            int row = position / spanCount;
-            int lastRow = (maxCount - 1) / spanCount;
-
-            outRect.left = column * spacing / spanCount;
-            outRect.right = spacing - (column + 1) * spacing / spanCount;
-            outRect.top = spacing * 2;
-
-            if (row == lastRow) {
-                outRect.bottom = outerMargin;
-            }
-        }
     }
 
     public void FileDownload(String directory, String url)
