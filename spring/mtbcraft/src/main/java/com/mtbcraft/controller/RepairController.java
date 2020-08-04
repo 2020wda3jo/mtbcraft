@@ -1,14 +1,18 @@
 package com.mtbcraft.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mtbcraft.dto.Qna;
 import com.mtbcraft.dto.Repair_Apply;
+import com.mtbcraft.dto.Repair_Shop;
 import com.mtbcraft.service.RepairService;
 
 @Controller
@@ -51,8 +55,15 @@ public class RepairController {
 	// 정비소 검색 - 임시
 	@RequestMapping(value = "/repair/search", method = RequestMethod.GET)
 	public String repairSearch(Model model) {
-		model.addAttribute("shopList", repairService.getRepairShop());
+		model.addAttribute("shopList", repairService.getRepairShop("%북구%"));
 		return "repair/search";
+	}
+	
+	// 정비소 검색 - 주소로
+	@RequestMapping(value = "/repair/shop_info/{area}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Repair_Shop> repairSearch(@PathVariable String area) {
+		return repairService.getRepairShop("%"+area+"%");
 	}
 	
 	// 정비소 상세 보기

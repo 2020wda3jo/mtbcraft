@@ -47,7 +47,8 @@
 				</div>
 			</div>
 		</div>
-		
+		<input type="hidden" id="lat" th:value="${shop.rs_lat}">
+		<input type="hidden" id="lng" th:value="${shop.rs_lon}">
 		<div class="menu">
 			<a href="#" th:href="'/repair/qna/'+${shop.rs_id}">문의하기</a>
 			<a href="#" th:href="'/repair/apply/'+${shop.rs_id}">신청하기</a>
@@ -97,6 +98,21 @@
 	
 	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 	var map = new kakao.maps.Map(mapContainer, mapOption); 
+	
+	// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+	var bounds = new kakao.maps.LatLngBounds(); 
+	
+	
+	
+	$(document).ready(function(){
+		var marker = new kakao.maps.Marker({ position : new kakao.maps.LatLng($("#lat").val(), $("#lng").val()) });
+	    marker.setMap(map);
+	    
+	    // LatLngBounds 객체에 좌표를 추가합니다
+	    bounds.extend( new kakao.maps.LatLng($("#lat").val(), $("#lng").val()) );
+	    
+	    map.setBounds(bounds);
+	});
 </script>
 
 <!-- loader -->

@@ -19,6 +19,9 @@
 		#{r_type,jdbcType=INTEGER})
 	</select>
 
+	<select id="regRepair_Shop" parameterType="com.mtbcraft.dto.Repair_Shop">
+		insert into Repair_shop(rs_id, rs_info, rs_holiday, rs_time, rs_lat, rs_lon) values(#{rs_id}, #{rs_info}, #{rs_holiday}, '09001800', #{rs_lat}, #{rs_lon})
+	</select>
 	<select id="getRidingRecord" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
 		select * from riding_record where rr_rider = #{rr_rider} order by rr_num desc
 	</select>

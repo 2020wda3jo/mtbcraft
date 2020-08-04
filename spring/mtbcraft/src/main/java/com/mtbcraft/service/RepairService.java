@@ -78,8 +78,8 @@ public class RepairService {
 	}
 	
 	//정비소 조회(임시)
-	public List<Repair_Shop> getRepairShop(){
-		return repairMapper.getRepairShop();
+	public List<Repair_Shop> getRepairShop(String area){
+		return repairMapper.getRepairShop(area);
 	}
 	
 	//정비소 상세정보 조회

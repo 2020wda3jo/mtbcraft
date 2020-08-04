@@ -9,6 +9,7 @@ import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Login;
 import com.mtbcraft.dto.Member;
 import com.mtbcraft.dto.No_Danger;
+import com.mtbcraft.dto.Repair_Shop;
 import com.mtbcraft.dto.RidingRecord;
 
 @Repository("com.mtbcraft.mapper")
@@ -17,6 +18,7 @@ public interface MemberMapper {
 	//회원가입 작성
 	public String memberInsert(Member member) throws Exception;
 	public String memberLogin(Login login) throws Exception;
+	public void regRepair_Shop(Repair_Shop rs);
 	
 	// 사용자 라이딩 기록 검색
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception;

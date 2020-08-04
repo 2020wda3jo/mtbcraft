@@ -10,6 +10,25 @@ public class Repair_Shop {
 	private String r_addr2;
 	private String r_image;
 	private String r_nickname;
+	private String rs_lat;
+	private String rs_lon;
+	
+	
+	public String getRs_lat() {
+		return rs_lat;
+	}
+	public void setRs_lat(String rs_lat) {
+		this.rs_lat = rs_lat;
+	}
+	public String getRs_lon() {
+		return rs_lon;
+	}
+	public void setRs_lon(String rs_lon) {
+		this.rs_lon = rs_lon;
+	}
+	public void setOpentime(String opentime) {
+		this.opentime = opentime;
+	}
 	
 	/* 웹출력용변수 */
 	private String opentime;

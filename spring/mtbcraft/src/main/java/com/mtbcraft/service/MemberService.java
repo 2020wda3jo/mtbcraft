@@ -9,6 +9,7 @@ import com.mtbcraft.dto.Course;
 import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Member;
 import com.mtbcraft.dto.No_Danger;
+import com.mtbcraft.dto.Repair_Shop;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.mapper.MemberMapper;
 
@@ -23,7 +24,9 @@ public class MemberService {
 	public String memberInsert(Member member) throws Exception {
 		return memberMapper.memberInsert(member);
 	}
-	
+	public void regRepair_Shop(Repair_Shop rs) {
+		memberMapper.regRepair_Shop(rs);
+	}
 	//주행기록 가져오기
 	public List<RidingRecord> getRidingRecord(String rr_rider) throws Exception {
 		return memberMapper.getRidingRecord(rr_rider);

@@ -45,7 +45,7 @@ public interface RepairMapper {
 	public List<Repair_Apply> rider_getRepairApply(String rider);
 	
 	//정비소 조회 (임시)
-	public List<Repair_Shop> getRepairShop();
+	public List<Repair_Shop> getRepairShop(String area);
 	
 	//정비소 상세정보 조회
 	public Repair_Shop getRepairShopDetail(String rs_id);
