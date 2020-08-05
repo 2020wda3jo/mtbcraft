@@ -257,6 +257,7 @@ public class FollowStart extends FragmentActivity
                 }
             }
         };
+        uThread.start();
 
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);

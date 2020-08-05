@@ -401,9 +401,9 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             Log.d("스크랩",c_num+" "+LoginId);
             ScrapTask scrap = new ScrapTask();
             Map<String, String> params = new HashMap<String, String>();
-                params.put("c_num", c_num);
-                params.put("ss_rider", LoginId);
-                scrap.execute(params);
+            params.put("c_num", c_num);
+            params.put("ss_rider", LoginId);
+            scrap.execute(params);
 
         });
 
@@ -515,91 +515,91 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
         }
     }
 
-        public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
-            @Override
-            protected String doInBackground(Map<String, String>... maps) {
-                // Http 요청 준비 작업
-                //URL은 현재 자기 아이피번호를 입력해야합니다.
-                HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/course/"+c_num);
-                // Parameter 를 전송한다.
-                http.addAllParameters(maps[0]);
-                //Http 요청 전송
-                HttpClient post = http.create();
-                post.request();
+    public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/course/"+c_num);
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
 
-                // 응답 상태코드 가져오기
-                int statusCode = post.getHttpStatusCode();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
 
-                // 응답 본문 가져오기
-                String body = post.getBody();
+            // 응답 본문 가져오기
+            String body = post.getBody();
 
-                return body;
-            }
+            return body;
+        }
 
-            @Override
-            protected void onPostExecute(String s) {
-                try {
-                    String tempData = s;
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                String tempData = s;
 
-                    //json값을 받기위한 변수들
-                    JSONArray jarray = new JSONArray(tempData);
+                //json값을 받기위한 변수들
+                JSONArray jarray = new JSONArray(tempData);
 
-                    for (int i = 0; i < jarray.length(); i++) {
-                        JSONObject jObject = jarray.getJSONObject(i);
-
-                        /*상단 데이터 */
-                        rr_rider = jObject.getString("rr_rider");
-                        rr_date = jObject.getString("rr_date");
-                        rr_name = jObject.getString("rr_name");
-
-                        /*하단 데이터 */
-                        rr_distance = jObject.getInt("rr_distance");
-                        rr_topspeed = jObject.getInt("rr_topspeed");
-                        rr_avgspeed = jObject.getInt("rr_avgspeed");
-                        rr_time = jObject.getInt("rr_time");
-                        rr_high = jObject.getInt("rr_high");
-                        rr_breaktime = jObject.getInt("rr_breaktime");
-                        rr_like = jObject.getString("rr_like");
-                        rr_area = jObject.getString("rr_area");
-                    }
+                for (int i = 0; i < jarray.length(); i++) {
+                    JSONObject jObject = jarray.getJSONObject(i);
 
                     /*상단 데이터 */
-                    c_name.setText(rr_name);
-                    r_rider_name.setText(rr_rider);
-                    c_date.setText(rr_date);
+                    rr_rider = jObject.getString("rr_rider");
+                    rr_date = jObject.getString("rr_date");
+                    rr_name = jObject.getString("rr_name");
 
-                    /* 하단 데이터 */
-                    int hour, min, sec = rr_time;
-                    min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
-
-                    Log.d("라이딩시간",hour+"시간 "+min+"분 "+sec+"초");
-                    //휴식시간 계산
-                    int b_hour, b_min, b_sec = rr_breaktime;
-                    b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
-
-                    int des = rr_distance;
-                    float km = (float) (des/1000.0);
-                    String total = km+"Km";
-
-                    c_ride_max.setText(rr_topspeed+"km/h");
-                    c_avg.setText(rr_avgspeed+"km/h");
-                    c_getgodo.setText(rr_high+"m");
-
-                    String time = hour+"시간 "+min+"분 "+sec+"초";
-                    String r_time = b_hour+"시간 "+b_min+"분 "+b_sec+"초";
-                    c_ride_time.setText(time);
-                    c_rest_time.setText(r_time);
-
-                    c_addr.setText(rr_area);
-                    like_count.setText(rr_like);
-                    c_dis.setText(total);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-
+                    /*하단 데이터 */
+                    rr_distance = jObject.getInt("rr_distance");
+                    rr_topspeed = jObject.getInt("rr_topspeed");
+                    rr_avgspeed = jObject.getInt("rr_avgspeed");
+                    rr_time = jObject.getInt("rr_time");
+                    rr_high = jObject.getInt("rr_high");
+                    rr_breaktime = jObject.getInt("rr_breaktime");
+                    rr_like = jObject.getString("rr_like");
+                    rr_area = jObject.getString("rr_area");
                 }
+
+                /*상단 데이터 */
+                c_name.setText(rr_name);
+                r_rider_name.setText(rr_rider);
+                c_date.setText(rr_date);
+
+                /* 하단 데이터 */
+                int hour, min, sec = rr_time;
+                min = sec/60; hour = min/60; sec = sec % 60; min = min % 60;
+
+                Log.d("라이딩시간",hour+"시간 "+min+"분 "+sec+"초");
+                //휴식시간 계산
+                int b_hour, b_min, b_sec = rr_breaktime;
+                b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
+
+                int des = rr_distance;
+                float km = (float) (des/1000.0);
+                String total = km+"Km";
+
+                c_ride_max.setText(rr_topspeed+"km/h");
+                c_avg.setText(rr_avgspeed+"km/h");
+                c_getgodo.setText(rr_high+"m");
+
+                String time = hour+"시간 "+min+"분 "+sec+"초";
+                String r_time = b_hour+"시간 "+b_min+"분 "+b_sec+"초";
+                c_ride_time.setText(time);
+                c_rest_time.setText(r_time);
+
+                c_addr.setText(rr_area);
+                like_count.setText(rr_like);
+                c_dis.setText(total);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
             }
         }
+    }
 
     public class getReviewTask extends AsyncTask<Map<String, String>, Integer, String> {
 
