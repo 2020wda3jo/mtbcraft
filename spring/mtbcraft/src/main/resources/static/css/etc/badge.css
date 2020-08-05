@@ -154,6 +154,13 @@ textarea.full {
 	width: 100%;
 	height: 100%;
 }
+.cbgimg {
+	padding-top : 10px;
+	width: 90%;
+	height: 80%;
+	margin: 0 auto;
+	background-color: white;
+}
 .badgeitem {
 	border : 1px solid gray;
 	border-radius : 10px;
