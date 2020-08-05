@@ -256,6 +256,10 @@ public class DangerRegister extends AppCompatActivity implements OnMapReadyCallb
 
             insertTask.execute(params);
 
+            Intent intent = new Intent(v.getContext(), SubActivity.class);
+            startActivity(intent);
+            Intent intent2 = new Intent(v.getContext(), DangerList.class);
+            startActivity(intent2);
             finish();
 
         });
