@@ -230,7 +230,7 @@ public class EntertainController {
 		@RequestMapping(value = "/entertainment/badgeUpload/test", method = RequestMethod.POST)
 		public String badgeUpload(@RequestPart MultipartFile files, CustomBadge badge, Principal principal) throws Exception {
 			String filename = files.getOriginalFilename();
-//			String directory = "C:\\ServerFiles\\badge"; //로컬
+//			String directory = "C:\\ServerFiles\\cbadge"; //로컬
 			String directory = "/home/ec2-user/data/cbadge"; //서버
 			String filepath = Paths.get(directory, filename).toString();
 			badge.setCbg_image(filename);
