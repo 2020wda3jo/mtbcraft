@@ -420,6 +420,11 @@ public class CommunityController {
 	public String tradeget(Model model) {
 		
 		List<Goods> goodsList = communityService.getGoodsList();
+		for(int i=0;i<goodsList.size();i++) {
+			if( goodsList.get(i).getG_content().length() > 25 ) {
+				goodsList.get(i).setG_content( goodsList.get(i).getG_content().substring(0, 25)+"..." );
+			}
+		}
 		model.addAttribute("goodsList", goodsList);
 		
 		return "community/market";

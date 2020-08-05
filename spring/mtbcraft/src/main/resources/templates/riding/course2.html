@@ -45,8 +45,6 @@ display:none;}
 		<h2>나의 스크랩 코스</h2>
 			<ul>
 				<li class="li_sc" th:each="course : ${scrapcourses}" th:id="${course.rr_num}" >
-					<span th:text="${course.rr_area}"></span>
-					<span>코스명 : </span>
 					<span th:text="${course.rr_name}"></span>
 				</li>
 			</ul>
