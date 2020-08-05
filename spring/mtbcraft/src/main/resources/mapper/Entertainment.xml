@@ -84,7 +84,8 @@
 	
 	<!-- 번호로 경쟁전 조회 -->
 	<select id="getComp" parameterType="int" resultType="com.mtbcraft.dto.Competition">
-		select * from COMPETITION, COURSE, BADGE where COMPETITION.COMP_COURSE = c_num and COMPETITION.COMP_BADGE=BADGE.BG_NUM and comp_num=#{comp_num}
+		<!-- select * from COMPETITION, COURSE, BADGE where COMPETITION.COMP_COURSE = c_num and COMPETITION.COMP_BADGE=BADGE.BG_NUM and comp_num=#{comp_num} -->
+		select * from COMPETITION, COURSE, BADGE, (select cs_comp, count(cs_comp) cnt from COMPETITION_STATUS where CS_COMP=#{comp_num} group by cs_comp) where COMPETITION.COMP_COURSE = c_num and COMPETITION.COMP_BADGE=BADGE.BG_NUM and comp_num=cs_comp
 	</select>
 	
 	<!-- 성공한 미션 조회 -->

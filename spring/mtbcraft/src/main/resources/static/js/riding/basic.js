@@ -1,6 +1,7 @@
 $(document).ready(function() {
 		$('#courseInfo').hide();
 		$('#box_post_DA').hide();
+		$("#box_post_DA2").hide();
 		
 });
 
@@ -685,8 +686,10 @@ function show_pr(){
  //위험지역등록 취소 눌렀을 때
  function cancel_post_DA(){
 	 $("#box_post_DA").hide();
+	 $("#box_post_DA2").hide();
 	 da_Point.setMap(null);
 	 postmode = false;
+	 
  }
  
  //리뷰 등록버튼 눌렀을 때
