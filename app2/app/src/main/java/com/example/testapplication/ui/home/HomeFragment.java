@@ -2,28 +2,22 @@ package com.example.testapplication.ui.home;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.testapplication.MainActivity;
 import com.example.testapplication.R;
-import com.example.testapplication.databinding.FragmentHomeBinding;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.ui.BaseFragment;
 
 
-import java.io.File;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,12 +54,6 @@ public class HomeFragment extends BaseFragment {
 
         SharedPreferences auto = requireContext().getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String r_image = auto.getString("r_image", "");
-
-        ImageView img = view.findViewById(R.id.imageView);
-/*        Picasso.get().load("http://13.209.229.237:8080/app/getGPX/mission/missionbg1.png")
-                .into(img);*/
-        Bitmap myBitmap = BitmapFactory.decodeFile(String.valueOf(new File(Save_Path + "/" + r_image)));
-        img.setImageBitmap(myBitmap);
 
         model.message.observe(getViewLifecycleOwner(), message -> {
             Log.i("Home", message);

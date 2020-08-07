@@ -60,7 +60,6 @@ public class LoginAccess extends AppCompatActivity {
                     if ( response.code() == 200) {
                         AnLogin body = response.body();
                         try {
-                            Log.e("ㅋㅋ", body.getStatus());
                             String status = body.getStatus();
                             rider = body.getR_id();
 
@@ -164,8 +163,6 @@ public class LoginAccess extends AppCompatActivity {
                     outputStream.write(fileReader, 0, read);
 
                     fileSizeDownloaded += read;
-
-                    Log.d("File Download: " , fileSizeDownloaded + " of " + fileSize);
                 }
 
                 outputStream.flush();
