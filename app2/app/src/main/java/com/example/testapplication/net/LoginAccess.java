@@ -11,26 +11,34 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testapplication.MainActivity;
+import com.example.testapplication.dto.AnLogin;
 import com.example.testapplication.dto.LoginInfo;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginAccess extends AppCompatActivity {
 
     String userid="", userpw="";
 
     String Save_Path, rider;
+
+    protected ServerApi serverApi;
+
+    private Call<AnLogin> request;
+    private Call<LoginInfo> loginInfo;
+    private Call<ResponseBody> getFile;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,142 +48,141 @@ public class LoginAccess extends AppCompatActivity {
             userpw = intent.getStringExtra("UserPw");
 
             Save_Path = getFilesDir().getPath();
-            LoginAccess.GetTask getTask = new LoginAccess.GetTask();
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("r_id", userid);
-            params.put("r_pw", userpw);
-            getTask.execute(params);
+            serverApi = Server.getInstance().getApi();
+
+            AnLogin login = new AnLogin();
+            login.setR_id(userid);
+            login.setR_pw(userpw);
+            request = serverApi.Login(login);
+            request.enqueue(new Callback<AnLogin>() {
+                @Override
+                public void onResponse(Call<AnLogin> call, Response<AnLogin> response) {
+                    if ( response.code() == 200) {
+                        AnLogin body = response.body();
+                        try {
+                            Log.e("ㅋㅋ", body.getStatus());
+                            String status = body.getStatus();
+                            rider = body.getR_id();
+
+                            if(status.equals("Ok") ){
+                                //자동로그인을 위한 앱 내부 저장
+                                SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                                SharedPreferences.Editor autoLogin = auto.edit();
+                                autoLogin.putString("LoginId", rider);
+                                autoLogin.commit();
+
+                                loginInfo = serverApi.getLoginInfo(userid);
+                                loginInfo.enqueue(new Callback<LoginInfo>() {
+                                    @Override
+                                    public void onResponse(Call<LoginInfo> call, Response<LoginInfo> response) {
+                                        if ( response.code() == 200) {
+                                            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                                            SharedPreferences.Editor autoLogin = auto.edit();
+                                            autoLogin.putString("r_clubname", response.body().getCb_name());
+                                            autoLogin.putInt("r_club", response.body().getCj_club());
+                                            if ( response.body().getR_image() == null)
+                                                response.body().setR_image("noImage.jpg");
+                                            autoLogin.putString("r_image", response.body().getR_image());
+                                            autoLogin.putString("r_nickname", response.body().getR_nickname());
+
+                                            String r_image = response.body().getR_image();
+
+                                            autoLogin.commit();
+
+                                            getFile = serverApi.getFile("rider", response.body().getR_image());
+                                            getFile.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    if ( response.code() == 200 ){
+                                                        writeResponseBodyToDisk(response.body(), r_image);
+
+                                                        Toast toast = Toast.makeText(getApplicationContext(), rider+"님 로그인했습니다.", Toast.LENGTH_SHORT); toast.show();
+                                                        Intent intent = new Intent(LoginAccess.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<LoginInfo> call, Throwable t) {
+
+                                    }
+                                });
+
+                            }else{
+                                Toast toast = Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT); toast.show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AnLogin> call, Throwable t) {
+                    Log.e("되나?","안된다");
+                }
+            });
 
         }catch(Exception e){
 
         }
     }
 
-    public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
+    private void writeResponseBodyToDisk(ResponseBody body, String name) {
+        try {
+            // todo change the file location/name according to your needs
+            File futureStudioIconFile = new File(Save_Path + "/" + name);
 
-        @Override
-        protected String doInBackground(Map<String, String>... maps) {
-
-            // Http 요청 준비 작업
-            //URL은 현재 자기 아이피번호를 입력해야합니다.
-
-            HttpClient.Builder http = new HttpClient.Builder("POST", "/android/login");
-            Log.d("urlrlrl", String.valueOf(http));
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-
-            // 응답 본문 가져오기
-            String body = post.getBody();
-
-            return body;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.d("로그: ",s);
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
 
             try {
-                JSONObject jsonObject;
-                jsonObject = new JSONObject(s);
-                String status = jsonObject.getString("Status");
-                rider = jsonObject.getString("r_id");
+                byte[] fileReader = new byte[4096];
 
-                if(status.equals("Ok") ){
-                    //자동로그인을 위한 앱 내부 저장
-                    SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor autoLogin = auto.edit();
-                    autoLogin.putString("LoginId", rider);
-                    autoLogin.commit();
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
 
-                    new getLoginInfo().execute();
-                    new getUserClub().execute();
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
 
-                }else{
-                    Toast toast = Toast.makeText(getApplicationContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT); toast.show();
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("File Download: " , fileSizeDownloaded + " of " + fileSize);
                 }
-                Log.d("json가져옴",status);
-                Log.d("json가져옴",rider);
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+                outputStream.flush();
+
+            } catch (IOException e) {
+
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
             }
+        } catch (IOException e) {
 
-        }
-    }
-
-    public class getLoginInfo extends AsyncTask<Map<String, String>, Integer, String> {
-        @Override
-        protected String doInBackground(Map<String, String>... maps) {
-            // Http 요청 준비 작업
-            //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/android/getClubUser/" + userid);
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-
-            // 응답 본문 가져오기
-            String body = post.getBody();
-            return body;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            String tempData = s;
-            Log.d("클럽정보",s);
-            Gson gson = new Gson();
-            LoginInfo item = gson.fromJson(tempData, LoginInfo.class);
-            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-            SharedPreferences.Editor autoLogin = auto.edit();
-            autoLogin.putString("r_clubname", item.getCb_name());
-            autoLogin.commit();
-        }
-    }
-
-
-
-    public class getUserClub extends AsyncTask<Map<String, String>, Integer, String> {
-        @Override
-        protected String doInBackground(Map<String, String>... maps) {
-            // Http 요청 준비 작업
-            //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/android/getLoginInfo/" + userid);
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-
-            // 응답 본문 가져오기
-            String body = post.getBody();
-            return body;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            String tempData = s;
-            Log.d("회원정보",s);
-            Gson gson = new Gson();
-            LoginInfo item = gson.fromJson(tempData, LoginInfo.class);
-            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-            SharedPreferences.Editor autoLogin = auto.edit();
-            autoLogin.putInt("r_club", item.getCj_club());
-            if ( item.getR_image() == null)
-                item.setR_image("noImage.jpg");
-            autoLogin.putString("r_image", item.getR_image());
-            autoLogin.putString("r_nickname", item.getR_nickname());
-
-            autoLogin.commit();
-            DownloadClubTask downloadClubTask = new DownloadClubTask("rider", item.getR_image());
-            downloadClubTask.execute();
         }
     }
 

@@ -9,7 +9,7 @@ public class Server{
 
     private Server(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .baseUrl("http://13.209.229.237:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ServerApi.class);

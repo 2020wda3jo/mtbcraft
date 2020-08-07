@@ -40,7 +40,9 @@
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".AddressActivity" />
-        <activity android:name=".registerActivity" />
+        <activity
+            android:name=".registerActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

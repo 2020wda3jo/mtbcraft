@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -72,6 +73,7 @@ public class registerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         ArrayAdapter<String> arrayAdapter;
 
@@ -93,10 +95,10 @@ public class registerActivity extends AppCompatActivity {
 
         Save_Path = getFilesDir().getPath();
 
-        ImageView imageView = findViewById(R.id.imageView);
+/*        ImageView imageView = findViewById(R.id.imageView);
         imageView.setOnClickListener( v -> {
             finish();
-        });
+        });*/
 
         Spinner spinner = findViewById(R.id.spinner);
 
@@ -114,18 +116,6 @@ public class registerActivity extends AppCompatActivity {
                 arrayList);
 
         spinner.setAdapter(arrayAdapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),arrayList.get(i)+"가 선택되었습니다.",
-                        Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-
 
         imageView2.setOnClickListener( v -> {
             Intent intent = new Intent();
@@ -216,6 +206,16 @@ public class registerActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public class InsertRegTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -435,4 +435,6 @@ public class registerActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 }
