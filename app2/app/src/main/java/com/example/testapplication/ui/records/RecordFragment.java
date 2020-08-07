@@ -10,8 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.testapplication.R;
-import com.example.testapplication.data.User;
-import com.example.testapplication.net.Server;
+import com.example.testapplication.dto.User;
 import com.example.testapplication.ui.BaseFragment;
 
 import retrofit2.Call;

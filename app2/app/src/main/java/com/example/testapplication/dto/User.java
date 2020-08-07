@@ -1,4 +1,4 @@
-package com.example.testapplication.data;
+package com.example.testapplication.dto;
 
 public class User {
     public int id;

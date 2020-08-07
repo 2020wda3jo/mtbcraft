@@ -1,6 +1,6 @@
 package com.example.testapplication.net;
 
-import com.example.testapplication.data.User;
+import com.example.testapplication.dto.User;
 
 import java.util.List;
 
