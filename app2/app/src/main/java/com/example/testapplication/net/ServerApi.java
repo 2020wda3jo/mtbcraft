@@ -1,5 +1,6 @@
 package com.example.testapplication.net;
 
+import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.dto.User;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface ServerApi {
 
     @GET("users/{id}")
     Call<User> getUser(@Path("id") int id);
+
+    @GET("api/get/{rr_rider}")
+    Call<List<RidingRecord>> getMyRecord(@Path("rr_rider") String rr_rider);
 }

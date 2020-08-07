@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface AndroidMapper {
 
 	//안드로이드 로그인
-	public List<AnLogin> LoginProcess(AnLogin login) throws Exception;
+	public AnLogin LoginProcess(AnLogin login) throws Exception;
 	
 	//안드로이드 유저 정보 가져오기
 	public LoginInfo getLoginInfo(String LoginId) throws Exception;
@@ -129,8 +129,6 @@ public interface AndroidMapper {
     void foinsert(RidingRecord record);
 
 	void foupdate(RidingRecord record);
-
-	LoginInfo getClubUser(String loginId);
 	
 	public void insertDanger (DangerousArea d_area) throws Exception;
 }
