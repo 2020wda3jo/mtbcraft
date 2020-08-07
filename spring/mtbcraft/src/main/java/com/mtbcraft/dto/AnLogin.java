@@ -3,23 +3,14 @@ package com.mtbcraft.dto;
 public class AnLogin  {
 	public String r_id;
 	public String r_pw;
-	public String r_nickname;
-	public String cb_name;
+	public String Status;
 
-	public String getR_nickname() {
-		return r_nickname;
+	public String getStatus() {
+		return Status;
 	}
 
-	public void setR_nickname(String r_nickname) {
-		this.r_nickname = r_nickname;
-	}
-
-	public String getCb_name() {
-		return cb_name;
-	}
-
-	public void setCb_name(String cb_name) {
-		this.cb_name = cb_name;
+	public void setStatus(String status) {
+		Status = status;
 	}
 
 	public AnLogin() {}

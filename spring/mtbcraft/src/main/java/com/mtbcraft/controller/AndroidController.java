@@ -31,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,18 +56,17 @@ public class AndroidController {
 	
 	// 안드로이드 세션로그인
 	@RequestMapping(value = "/android/login")
-	public @ResponseBody Map<String, String> login(AnLogin login) throws Exception {
+	public @ResponseBody AnLogin login(@RequestBody AnLogin login) throws Exception {
 
-		List<AnLogin> list = androidService.LoginProcess(login);
+		AnLogin list = androidService.LoginProcess(login);
 		
-		Map<String, String> result = new HashMap<String, String>();
 		if(list.toString() == "[]") {
-			result.put("Status", "로그인실패");
-		} else {
-			result.put("Status", "Ok");
-			result.put("r_id", login.getR_id());
+			list.setStatus("로그인실패");
 		}
-		return result;
+		else {
+			list.setStatus("Ok");
+		}
+		return list;
 	}
 	
 	//안드로이드 로그인 후 유저 정보 가져오기
@@ -74,13 +74,6 @@ public class AndroidController {
 	public @ResponseBody LoginInfo getLoginInfo(@PathVariable String LoginId) throws Exception{
 		return androidService.getLoginInfo(LoginId);
 	}
-
-	//안드로이드 로그인 후 클럽 정보 가져오기
-	@RequestMapping(value = "/android/getClubUser/{LoginId}")
-	public @ResponseBody LoginInfo getClubUser(@PathVariable String LoginId) throws Exception{
-		return androidService.getClubUser(LoginId);
-	}
-
 
 	// 주행기록 등록(안드로이드)
 	@RequestMapping(value = "/api/upload")
@@ -135,6 +128,8 @@ public class AndroidController {
 	// 주행기록 가져오기
 	@RequestMapping(value = "/api/get/{rr_rider}")
 	public @ResponseBody List<App_RidingRecord> getRidingRecord(@PathVariable String rr_rider) throws Exception {
+
+
 		return androidService.readRecord(rr_rider);
 	}
 

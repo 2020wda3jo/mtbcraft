@@ -1,12 +1,13 @@
 package com.example.testapplication.net;
 
+
 import com.example.testapplication.dto.AnLogin;
 import com.example.testapplication.dto.LoginInfo;
+
+import com.example.testapplication.dto.RidingRecord;
+
 import com.example.testapplication.dto.User;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -31,4 +32,8 @@ public interface ServerApi {
 
     @GET("app/getGPX/{directory}/{url}")
     Call<ResponseBody> getFile(@Path("directory") String directory, @Path("url") String url);
+
+    @GET("api/get/{rr_rider}")
+    Call<List<RidingRecord>> getMyRecord(@Path("rr_rider") String rr_rider);
+
 }
