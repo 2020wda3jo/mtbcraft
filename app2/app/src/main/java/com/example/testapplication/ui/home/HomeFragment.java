@@ -1,5 +1,7 @@
 package com.example.testapplication.ui.home;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,20 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.testapplication.MainActivity;
 import com.example.testapplication.R;
-import com.example.testapplication.databinding.FragmentHomeBinding;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.ui.BaseFragment;
 
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -45,6 +44,16 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        String Save_Path = requireContext().getFilesDir().getPath();
+
+        model.message.observe(getViewLifecycleOwner(), message->{
+            Log.i("Home", message);
+        });
+
+        SharedPreferences auto = requireContext().getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        String r_image = auto.getString("r_image", "");
 
         model.message.observe(getViewLifecycleOwner(), message -> {
             Log.i("Home", message);

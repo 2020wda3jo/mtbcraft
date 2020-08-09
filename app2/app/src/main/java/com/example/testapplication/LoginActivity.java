@@ -61,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("UserId",userid.getText().toString());
                 intent.putExtra("UserPw", userpw.getText().toString());
                 startActivity(intent);
-                //Toast toast = Toast.makeText(getApplicationContext(), LoginId+"님 로그인되었습니다", Toast.LENGTH_SHORT); toast.show();
                 finish();
             });
 
