@@ -27,10 +27,10 @@ public interface ServerApi {
     @GET("users/{id}")
     Call<User> getUser(@Path("id") int id);
 
-    @POST("android/login")
+    @POST("login")
     Call<AnLogin> Login(@Body AnLogin login);
 
-    @GET("android/getLoginInfo/{LoginId}")
+    @GET("getLoginInfo/{LoginId}")
     Call<LoginInfo> getLoginInfo(@Path("LoginId") String LoginId);
 
     @GET("app/getGPX/{directory}/{url}")

@@ -56,7 +56,7 @@ public class AndroidController {
 	private RidingService ridingService;
 	
 	// 안드로이드 세션로그인
-	@RequestMapping(value = "/android/login")
+	@RequestMapping(value = "login")
 	public @ResponseBody AnLogin login(@RequestBody AnLogin login) throws Exception {
 
 		AnLogin list = androidService.LoginProcess(login);
@@ -71,7 +71,7 @@ public class AndroidController {
 	}
 	
 	//안드로이드 로그인 후 유저 정보 가져오기
-	@RequestMapping(value = "/android/getLoginInfo/{LoginId}")
+	@RequestMapping(value = "getLoginInfo/{LoginId}")
 	public @ResponseBody LoginInfo getLoginInfo(@PathVariable String LoginId) throws Exception{
 		return androidService.getLoginInfo(LoginId);
 	}
