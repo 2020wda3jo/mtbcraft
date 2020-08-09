@@ -98,4 +98,16 @@ public interface RidingMapper {
 	
 	//전체 라이딩 평균 기록 조회
 	public Avg_RidingRecord getAVGRR(String rider);
+	
+	//사용자의 총 라이딩 횟수 조회
+	public int countRidingRecord(String rider);
+	
+	//추천코스 - 초급자용
+	public List<RidingRecord> getBeginnerCourse();
+	
+	//추천코스 - 입문자용
+	public List<RidingRecord> getRecommandCourse(String rider);
+	
+	//사용자 닉네임 조회
+	public String getRiderNickName(String rider);
 }

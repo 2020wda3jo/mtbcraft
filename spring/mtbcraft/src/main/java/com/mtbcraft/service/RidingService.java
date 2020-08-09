@@ -165,4 +165,24 @@ public class RidingService {
 	public Avg_RidingRecord getAVGRR(String rider) {
 		return ridingMapper.getAVGRR(rider);
 	}
+	
+	//사용자의 총 라이딩 횟수 조회
+	public int countRidingRecord(String rider) {
+		return ridingMapper.countRidingRecord(rider);
+	}
+	
+	//추천코스 제공 - 초급자용
+	public List<RidingRecord> getBeginnerCourse(){
+		return ridingMapper.getBeginnerCourse();
+	}
+	
+	//추천코스 - 입문자용
+	public List<RidingRecord> getRecommandCourse(String rider){
+		return ridingMapper.getRecommandCourse(rider);
+	}
+	
+	//사용자 닉네임 조회
+	public String getRiderNickName(String rider) {
+		return ridingMapper.getRiderNickName(rider);
+	}
 }
