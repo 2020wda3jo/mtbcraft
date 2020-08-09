@@ -54,7 +54,7 @@ public class HomeFragment extends BaseFragment {
         mainKm = (TextView) view.findViewById(R.id.main_km);
         rider = (TextView) view.findViewById(R.id.idinfo);
 
-        
+
 
         MyInfo = serverApi.getMyRecord("345");
         MyInfo.enqueue(new Callback<List<RidingRecord>>() {
