@@ -1,13 +1,15 @@
 package com.example.testapplication.ui.home;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.ui.BaseFragment;
+import com.example.testapplication.ui.riding.StartActivity;
 
 
 import java.util.List;
@@ -29,8 +32,8 @@ import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment {
     private Call<List<RidingRecord>> MyInfo;
-    private Button ridingstart;
-    private TextView mainTime, mainKm, rider;
+    private ImageView ridingstart;
+    private TextView mainTime, mainKm, rider, main_dis;
     public static HomeFragment newInstance(){
         return new HomeFragment();
     }
@@ -41,6 +44,7 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    @SuppressLint("WrongViewCast")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -58,14 +62,25 @@ public class HomeFragment extends BaseFragment {
         model.message.observe(getViewLifecycleOwner(), message -> {
             Log.i("Home", message);
         });
-
+        ridingstart = (ImageView) view.findViewById(R.id.ridingstart);
         mainTime = (TextView) view.findViewById(R.id.main_time);
         mainKm = (TextView) view.findViewById(R.id.main_km);
         rider = (TextView) view.findViewById(R.id.idinfo);
+        main_dis = (TextView) view.findViewById(R.id.main_dis);
+        rider.setText(LoginInfo()+"님 저희와 함께");
+
+        /* Button b = view.findViewById(R.id.button);
+        b.setOnClickListener(v->{
+            model.CourseName.setValue("영진전문대");
+            controller.navigate(R.id.action_nav_courseview_to_courseDetail);
+        });*/
 
 
-
-        MyInfo = serverApi.getMyRecord("345");
+        ridingstart.setOnClickListener(v->{
+           Intent intent = new Intent(getActivity(), StartActivity.class);
+           startActivity(intent);
+        });
+        MyInfo = serverApi.getMyRecord(LoginInfo());
         MyInfo.enqueue(new Callback<List<RidingRecord>>() {
             @Override
             public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
@@ -81,13 +96,17 @@ public class HomeFragment extends BaseFragment {
                         int dis = 0;
                         int riding_time = 0;
                         int killlo=0;
+                        int total_dis=0;
                         String date = "";
                         for(RidingRecord test : record) {
                             dis += test.getRr_distance();
                             riding_time += test.getRr_time();
                             date = test.getRr_date();
-
+                            total_dis += test.getRr_distance();
                             //오늘 주행한거
+                            Log.d("내용확인",oTime+" "+ date.substring(0,10));
+                            if(oTime.equals(date.substring(0,10))) {
+                                Log.d("if문임","if문임");
                                 int hour;
                                 int min;
                                 int sec = riding_time;
@@ -112,10 +131,17 @@ public class HomeFragment extends BaseFragment {
                                     mainKm.setText(dis + "m");
                                 }
 
+                            }else{
+                                Log.d("dfdf","if문밖");
 
                             }
-
-                        Log.d("합한거는?",dis+" " + riding_time+" " +date);
+                            killlo = (int) (total_dis / 1000.0);
+                            if (total_dis >= 1000) {
+                                main_dis.setText(killlo +"km를 주행하셨어요");
+                            }else{
+                                main_dis.setText(total_dis+"m");
+                            }
+                        }
                     }catch(Exception e){
                         e.printStackTrace();
                     }

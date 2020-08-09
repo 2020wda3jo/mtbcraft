@@ -21,7 +21,7 @@ public interface AndroidMapper {
 	public String insertRecord(RidingRecord record) throws Exception;
 	
 	//안드로이드 앱에서 라이딩 기록 저장 ( 경쟁전 포함 )
-	public String insertRecordWithComp(RidingRecord record) throws Exception;
+	public RidingRecord insertRecordWithComp(RidingRecord record) throws Exception;
 
 	//주행기록 전체보기
 	public List<RidingRecord> getRidingRecordAll();
@@ -106,7 +106,7 @@ public interface AndroidMapper {
 	
 	public List<RidingRecord> getRecord();
 
-	public void Taginsert(App_Tag tag);
+	public Tag_Status Taginsert(Tag_Status tag);
 	
 	public List<App_Mission> getAllMission(@Param("LoginId") String LoginId) throws Exception;
 	

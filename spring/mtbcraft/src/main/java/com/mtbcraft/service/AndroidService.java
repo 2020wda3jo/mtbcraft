@@ -33,7 +33,7 @@ public class AndroidService {
 		return androidMapper.insertRecord(record);
 	}
 	
-	public String insertRecordWithComp(RidingRecord record) throws Exception{
+	public RidingRecord insertRecordWithComp(RidingRecord record) throws Exception{
 		return androidMapper.insertRecordWithComp(record);
 	}
 	
@@ -173,8 +173,8 @@ public class AndroidService {
 		return androidMapper.getRecord();
 	}
 
-	public void TagInsert(App_Tag tag) {
-		androidMapper.Taginsert(tag);
+	public Tag_Status TagInsert(Tag_Status tag) {
+		return androidMapper.Taginsert(tag);
 		
 	}
 	

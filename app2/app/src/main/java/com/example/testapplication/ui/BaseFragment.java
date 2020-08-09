@@ -1,6 +1,8 @@
 package com.example.testapplication.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +26,8 @@ public class BaseFragment extends Fragment {
     protected MainViewModel model;
     protected NavController controller;
     protected ServerApi serverApi;
-
+    SharedPreferences auto;
+    String r_image="", r_rider="";
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -38,6 +41,14 @@ public class BaseFragment extends Fragment {
         model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         controller = Navigation.findNavController(view);
         serverApi = Server.getInstance().getApi();
+
+        auto = requireContext().getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        r_image = auto.getString("r_image", "");
+        r_rider = auto.getString("LoginId","");
+    }
+
+    public String LoginInfo(){
+        return r_rider;
     }
 
     protected void showServerFailure(){

@@ -40,8 +40,12 @@ public class LoginAccess extends AppCompatActivity {
     private Call<LoginInfo> loginInfo;
     private Call<ResponseBody> getFile;
 
+    public String info(){
+        return userid;
+    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         try{
             Intent intent = new Intent(this.getIntent());
             userid = intent.getStringExtra("UserId");

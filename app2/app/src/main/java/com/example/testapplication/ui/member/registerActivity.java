@@ -1,4 +1,4 @@
-package com.example.testapplication;
+package com.example.testapplication.ui.member;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,9 +11,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
+import com.example.testapplication.R;
 import com.example.testapplication.net.HttpClient;
 
 import java.io.DataOutputStream;

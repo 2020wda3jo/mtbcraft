@@ -13,4 +13,6 @@
     <string name="menu_course_search">코스 찾기</string>
     <string name="menu_course_scrap">스크랩 보관함</string>
     <string name="menu_competition_view">경쟁전</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

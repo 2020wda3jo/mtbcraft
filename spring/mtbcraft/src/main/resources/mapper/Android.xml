@@ -5,7 +5,7 @@
 	{call
 		declare
 		begin
-		
+
 		insert into riding_record
 		(rr_rider, rr_distance, rr_topspeed, rr_avgspeed, rr_high, rr_gpx, rr_open, rr_breaktime, rr_time, rr_area, rr_name)
 		values
@@ -22,7 +22,7 @@
 		#{rr_area},
 		#{rr_name}		
 		);
-		
+
 		update rider set r_point = r_point + #{rr_distance} where r_id = #{rr_rider};
 	end
 	}
@@ -55,7 +55,7 @@
 	end
 	}
 	</select>
-	
+
 <!-- 안드로이드 로그인 -->
 	<select id="LoginProcess" parameterType="hashMap" resultType="com.mtbcraft.dto.AnLogin">
 		select r_id, r_pw from rider where r_id = #{r_id} and r_pw = #{r_pw}

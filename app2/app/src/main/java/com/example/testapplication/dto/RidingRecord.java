@@ -1,57 +1,21 @@
 package com.example.testapplication.dto;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.sql.Timestamp;
-
 public class RidingRecord {
-    @SerializedName("rr_num")
-    @Expose
     private int rr_num;
-    @SerializedName("rr_rider")
-    @Expose
     private String rr_rider;
-    @SerializedName("rr_date")
-    @Expose
     private String rr_date;
-    @SerializedName("rr_distance")
-    @Expose
     private int rr_distance;
-    @SerializedName("rr_topspeed")
-    @Expose
     private int rr_topspeed;
-    @SerializedName("rr_avgspeed")
-    @Expose
     private int rr_avgspeed;
-    @SerializedName("rr_high")
-    @Expose
     private int rr_high;
-    @SerializedName("rr_gpx")
-    @Expose
     private String rr_gpx;
-    @SerializedName("rr_open")
-    @Expose
     private int rr_open;
-    @SerializedName("rr_breaktime")
-    @Expose
     private int rr_breaktime;
-    @SerializedName("rr_time")
-    @Expose
     private int rr_time;
-    @SerializedName("rr_area")
-    @Expose
     private String rr_area;
-    @SerializedName("rr_comp")
-    @Expose
     private int rr_comp;
-    @SerializedName("rr_like")
-    @Expose
     private int rr_like;
-    @SerializedName("rr_name")
-    @Expose
     private String rr_name;
-
     public int getRr_num() {
         return rr_num;
     }

@@ -1,4 +1,4 @@
-package com.example.testapplication;
+package com.example.testapplication.ui.member;
 
 import android.Manifest;
 import android.app.Activity;
@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.testapplication.MainActivity;
+import com.example.testapplication.R;
 import com.example.testapplication.net.LoginAccess;
 
 import java.util.ArrayList;
