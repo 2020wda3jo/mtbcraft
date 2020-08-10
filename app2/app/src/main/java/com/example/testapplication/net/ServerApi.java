@@ -54,4 +54,7 @@ public interface ServerApi {
     //위험지역가져오기
     @GET("android/riding/danger")
     Call<List<DangerousArea>> getDangerArea();
+
+    @GET("android/get/{loginId}")
+    Call<List<RidingRecord>> getRecord(@Path("loginId") String loginId);
 }

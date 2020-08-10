@@ -87,7 +87,7 @@ public class AndroidController {
 	}
 
 	// 주행기록 가져오기
-	@RequestMapping(value = "/api/get/{rr_rider}")
+	@RequestMapping(value = "get/{rr_rider}")
 	public @ResponseBody List<App_RidingRecord> getRidingRecord(@PathVariable String rr_rider) throws Exception {
 		return androidService.readRecord(rr_rider);
 	}

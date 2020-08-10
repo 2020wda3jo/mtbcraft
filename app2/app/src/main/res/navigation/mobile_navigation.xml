@@ -15,7 +15,12 @@
         android:id="@+id/nav_records"
         android:name="com.example.testapplication.ui.records.RecordFragment"
         android:label="@string/menu_records"
-        tools:layout="@layout/fragment_records" />
+        tools:layout="@layout/fragment_records" >
+        <action
+            android:id="@+id/action_nav_records_to_myDetailFragment"
+            app:destination="@id/myDetailFragment" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/nav_course_view"
@@ -42,6 +47,12 @@
         android:name="com.example.testapplication.ui.courses.CourseDetailFragment"
         android:label=""
         tools:layout="@layout/fragment_course_detail" />
+
+    <fragment
+        android:id="@+id/myDetailFragment"
+        android:name="com.example.testapplication.ui.records.MyDetailFragment"
+        android:label="내 기록"
+        tools:layout="@layout/fragment_my_detail" />
 
 
 </navigation>
