@@ -166,5 +166,39 @@
 		  select round(avg(rr_distance),2) user_distance, round(avg(rr_topspeed),2) user_topspeed, round(avg(rr_avgspeed),2) user_avgspeed, round(avg(rr_time),2) user_time, round(avg(rr_high),2) user_avghigh from riding_record where RR_RIDER=#{rider}
 		) 
 	</select>
+	
+	<!-- 사용자의 총 라이딩 횟수 조회 -->
+	<select id="countRidingRecord" parameterType="String" resultType="int">
+		select count(rr_rider) from riding_record where rr_rider=#{rider}
+	</select>
+	
+	<!-- 추천코스 제공 - 초급자용 -->
+	<select id="getBeginnerCourse" resultType="com.mtbcraft.dto.RidingRecord">
+		<![CDATA[
+			select * from (
+				select * from (
+				select rna, (rank1+rank2) rank from 
+				( select sq1.*, rownum rank1 from (select rr_num rna, rr_distance, abs(rr_distance-dis) from riding_record, (select avg(rr_distance) dis from (select * from riding_record a order by rr_distance) where rownum < 10) order by 3) sq1 ),
+				( select sq2.*, rownum rank2 from (select rr_num rnb, rr_distance, abs(rr_high-h) from riding_record, (select avg(rr_high) h from (select * from riding_record a order by rr_high) where rownum < 10) order by 3) sq2 )
+				where rna=rnb order by 2 ) where rownum<=3), riding_record where rr_num=rna order by rank
+		  ]]>
+	</select>
+	
+	<!-- 추천코스 - 입문자용 -->
+	<select id="getRecommandCourse" parameterType="String" resultType="com.mtbcraft.dto.RidingRecord">
+	 <![CDATA[
+		select * from (
+		select * from (
+		select rna, (ranka+rankb) rank from 
+		(select a.*, rownum ranka from (select rr_num rna, rr_distance, rr_high, rr_time, rr_avgspeed, h, abs(rr_high-h) from riding_record, (select avg(rr_distance) dis, avg(rr_high) h, avg(rr_time) t, avg(rr_avgspeed) avs from riding_record where rr_rider = #{rider} group by rr_rider) order by 7) a) subq,
+		(select b.*, rownum rankb from (select rr_num rnb, rr_distance, rr_high, rr_time, rr_avgspeed, dis, abs(rr_distance-dis) from riding_record, (select avg(rr_distance) dis, avg(rr_high) h, avg(rr_time) t, avg(rr_avgspeed) avs from riding_record where rr_rider = #{rider} group by rr_rider) order by 7) b) 
+		where rna=rnb order by 2) where rownum<=3), riding_record where rr_num=rna order by rank
+	]]>
+	</select>
+	
+	<!-- 사용자 닉네임 조회 -->
+	<select id="getRiderNickName" parameterType="String" resultType="String">
+		select r_nickname from rider where r_id=#{rider}
+	</select>
 </mapper>
 

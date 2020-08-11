@@ -21,7 +21,7 @@ public class AndroidService {
 	private AndroidMapper androidMapper;
 	
 	//로그인
-	public List<AnLogin> LoginProcess(AnLogin login) throws Exception{
+	public AnLogin LoginProcess(AnLogin login) throws Exception{
 		return androidMapper.LoginProcess(login);
 	}
 	
@@ -33,7 +33,7 @@ public class AndroidService {
 		return androidMapper.insertRecord(record);
 	}
 	
-	public String insertRecordWithComp(RidingRecord record) throws Exception{
+	public RidingRecord insertRecordWithComp(RidingRecord record) throws Exception{
 		return androidMapper.insertRecordWithComp(record);
 	}
 	
@@ -173,8 +173,8 @@ public class AndroidService {
 		return androidMapper.getRecord();
 	}
 
-	public void TagInsert(App_Tag tag) {
-		androidMapper.Taginsert(tag);
+	public Tag_Status TagInsert(Tag_Status tag) {
+		return androidMapper.Taginsert(tag);
 		
 	}
 	
@@ -220,10 +220,6 @@ public class AndroidService {
 
 	public void foupdate(RidingRecord record) {
 		androidMapper.foupdate(record);
-	}
-
-	public LoginInfo getClubUser(String loginId) {
-		return androidMapper.getClubUser(loginId);
 	}
 	
 	public void insertDanger(DangerousArea d_area) throws Exception{

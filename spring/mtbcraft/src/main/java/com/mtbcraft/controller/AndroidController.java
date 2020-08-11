@@ -31,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +43,7 @@ import com.mtbcraft.service.MemberService;
 import com.mtbcraft.service.RidingService;
 
 @Controller
+@RequestMapping(value = "/android/")
 public class AndroidController {
 
 	@Autowired
@@ -54,86 +56,38 @@ public class AndroidController {
 	private RidingService ridingService;
 	
 	// 안드로이드 세션로그인
-	@RequestMapping(value = "/android/login")
-	public @ResponseBody Map<String, String> login(AnLogin login) throws Exception {
+	@RequestMapping(value = "login")
+	public @ResponseBody AnLogin login(@RequestBody AnLogin login) throws Exception {
 
-		List<AnLogin> list = androidService.LoginProcess(login);
+		AnLogin list = androidService.LoginProcess(login);
 		
-		Map<String, String> result = new HashMap<String, String>();
 		if(list.toString() == "[]") {
-			result.put("Status", "로그인실패");
-		} else {
-			result.put("Status", "Ok");
-			result.put("r_id", login.getR_id());
+			list.setStatus("로그인실패");
 		}
-		return result;
+		else {
+			list.setStatus("Ok");
+		}
+		return list;
 	}
 	
 	//안드로이드 로그인 후 유저 정보 가져오기
-	@RequestMapping(value = "/android/getLoginInfo/{LoginId}")
+	@RequestMapping(value = "getLoginInfo/{LoginId}")
 	public @ResponseBody LoginInfo getLoginInfo(@PathVariable String LoginId) throws Exception{
 		return androidService.getLoginInfo(LoginId);
 	}
 
-	//안드로이드 로그인 후 클럽 정보 가져오기
-	@RequestMapping(value = "/android/getClubUser/{LoginId}")
-	public @ResponseBody LoginInfo getClubUser(@PathVariable String LoginId) throws Exception{
-		return androidService.getClubUser(LoginId);
-	}
-
-
 	// 주행기록 등록(안드로이드)
-	@RequestMapping(value = "/api/upload")
-	// 주소변경예정 @RequestMapping(value = "/android/recordInsert")
+	@RequestMapping(value = "riding/upload")
 	@ResponseBody
-	public Map<String, String> insertriding(HttpServletRequest request) throws Exception {
-		RidingRecord record = new RidingRecord();
+	public RidingRecord insertriding(@RequestBody RidingRecord record) throws Exception {
+		RidingRecord insert = androidService.insertRecordWithComp(record);
 
-		// 현재날짜 timestamp
-		Date today = new java.util.Date();
-		Timestamp timestamp = new Timestamp(today.getTime());
-
-		record.setRr_rider(request.getParameter("rr_rider"));
-		record.setRr_date(timestamp);
-		record.setRr_distance(Integer.parseInt(request.getParameter("rr_distance")));
-		record.setRr_topspeed(Integer.parseInt(request.getParameter("rr_topspeed")));
-		record.setRr_avgspeed(Integer.parseInt(request.getParameter("rr_avgspeed")));
-		record.setRr_high(Integer.parseInt(request.getParameter("rr_high")));
-		record.setRr_gpx(request.getParameter("rr_gpx"));
-		record.setRr_open(Integer.parseInt(request.getParameter("rr_open")));
-		record.setRr_breaktime(Integer.parseInt(request.getParameter("rr_breaktime")));
-		record.setRr_time(Integer.parseInt(request.getParameter("rr_time")));
-		record.setRr_area(request.getParameter("rr_area"));
-		record.setRr_name(request.getParameter("rr_name"));
-		if ( !request.getParameter("rr_comp").equals("null")) {
-			record.setRr_comp(Integer.parseInt(request.getParameter("rr_comp")));
-			androidService.insertRecordWithComp(record);
-		}
-		else
-			androidService.insertRecord(record);
-		// 안드로이드로부터 받은 데이터
-		System.out.println("rr_rider " + request.getParameter("rr_rider")); // 회원아이디
-		System.out.println("rr_distance " + request.getParameter("rr_distance")); // 오늘날짜
-		System.out.println("rr_topspeed " + request.getParameter("rr_topspeed")); // 소요시간
-		System.out.println("rr_avgspeed " + request.getParameter("rr_avgspeed")); // 이동거리
-		System.out.println("rr_high " + request.getParameter("rr_high")); // 최대속도
-		System.out.println("rr_gpx " + request.getParameter("rr_gpx")); // 평균속도
-		System.out.println("rr_open " + request.getParameter("rr_open")); // 획득고도
-		System.out.println("rr_breaktime " + request.getParameter("rr_breaktime")); // gpx
-		System.out.println("rr_time " + request.getParameter("rr_time")); // 공개여부
-		System.out.println("rr_area " + request.getParameter("rr_area")); // 획득고도
-		System.out.println("rr_name"+request.getParameter("rr_name"));
-		System.out.println("rr_comp "+request.getParameter("rr_comp"));
-
-		// 안드로이드에게 전달하는 데이터
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("data1", request.getParameter("rr_rider"));
-
-		return result;
+		System.out.println(record.getRr_name());
+		return insert;
 	}
 
 	// 주행기록 가져오기
-	@RequestMapping(value = "/api/get/{rr_rider}")
+	@RequestMapping(value = "get/{rr_rider}")
 	public @ResponseBody List<App_RidingRecord> getRidingRecord(@PathVariable String rr_rider) throws Exception {
 		return androidService.readRecord(rr_rider);
 	}
@@ -350,7 +304,7 @@ public class AndroidController {
 	}
 	
 	//위험지역 마커
-	@RequestMapping("/app/riding/danger")
+	@RequestMapping("riding/danger")
 	public @ResponseBody List<DangerousArea> RidingDanger() throws Exception {
 		return androidService.getDanger();
 	}
@@ -399,33 +353,22 @@ public class AndroidController {
 		androidService.updateMissionStatus(LoginId, typeScore1, typeScore2);
 	}
 	
-	@RequestMapping(value = "/app/insertMissionCom", method = RequestMethod.PUT)
 	@ResponseBody
 	public void insertMissionCom ( String LoginId, int mc_mission, Timestamp mc_time ) throws Exception {
 		androidService.insertMissionCom(LoginId, mc_mission, mc_time);
 	}
 	
-	@RequestMapping(value="/app/riding/getrecord")
+	@RequestMapping(value="riding/getrecord")
 	@ResponseBody
 	public  List<RidingRecord>getRecord () throws Exception {
 		return androidService.selectRecord();
 	}
 	
-	@RequestMapping(value="/app/riding/taginsert")
-	public Map<String, String>  Taginsert(HttpServletRequest request) throws Exception {
-		
-		System.out.println(request.getParameter("rr_num") + " " + request.getParameter("rr_rider") + " " + request.getParameter("address_dong"));
+	@RequestMapping(value="riding/taginsert")
+	public Tag_Status  Taginsert(Tag_Status tag) throws Exception {
+		Tag_Status tag_sta = androidService.TagInsert(tag);
 
-		App_Tag tag = new App_Tag();
-		tag.setTs_rnum(Integer.parseInt(request.getParameter("rr_num")));
-		tag.setTs_rider(request.getParameter("rr_rider"));
-		tag.setTs_tag(request.getParameter("address_dong"));
-
-		androidService.TagInsert(tag);
-		// 안드로이드에게 전달하는 데이터
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("data1", "성공했쩡");
-		return result;
+		return tag_sta;
 	}
 	
 	@RequestMapping(value = "/app/getAllMission/{LoginId}")

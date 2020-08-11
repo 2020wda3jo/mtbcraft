@@ -74,7 +74,7 @@
 			
 				<div class="col-lg-4 sidebar ftco-animate">
 					<div class="sidebar-box clubinfo">
-		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
+		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');" th:style="'background-image: url(/data/img/club/'+${club.cb_image}+');'">
 		              </div>
 		              
 		              <h2 th:text="${club.cb_name}">클럽명</h2>

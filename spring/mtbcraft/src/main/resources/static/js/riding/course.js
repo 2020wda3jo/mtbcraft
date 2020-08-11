@@ -1,5 +1,6 @@
 //나의 기록 클릭시
 $(".li_rr").click(function(){
+	$("#recom_info").hide();
 	drawPolylineByRR_Num(polyline, this.id);
 	$("#courseInfo").show();
 	$("#bt_like").hide();
@@ -10,6 +11,7 @@ $(".li_rr").click(function(){
 
 //스크랩코스 클릭시 
 $(".li_sc").click(function(){
+	$("#recom_info").hide();
 	drawPolylineByRR_Num(polyline, this.id);
 	$("#courseInfo").show();
 	$("#bt_like").show();
@@ -38,3 +40,93 @@ $(".li_sc").click(function(){
 			}
 	});
  }
+ 
+ function recom(r_num){
+	console.log(r_num);
+	
+	var result = confirm('스크랩하시겠습니까?');
+	if(result){
+		$.ajax({
+		url : "/riding/scrap/"+r_num+"/"+userId,
+		type : "post",
+		cache : false,
+		complete : function(data){
+			if(data.responseText=="success"){
+				alert('해당 코스를 스크랩하였습니다!');
+			}else if(data.responseText=="fail"){
+				alert('이미 스크랩한 코스입니다!');
+			}else if(data.responseText=="failMyRR"){
+				alert('나의 주행기록입니다...');
+			}
+			}
+		});	
+	}
+	
+		
+ }
+ 
+ $(document).ready(function(){
+			
+	for(var i=0;i<3;i++){
+		var mapContainer = document.getElementById('rmap'+$(".recom_num")[i].value), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+	        level: 3 // 지도의 확대 레벨
+	    };
+
+		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+		
+		$.ajax({
+			 url : "/getGpxByRR_Num",
+			 type : "GET",
+			 data : {rr_num : $(".recom_num")[i].value},
+			 dataType : "json",
+			 async : false,
+			 cache : false,
+			 success : function(data) {
+					
+					var point = data.infos;
+					var linePath = [];
+					
+					// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+					var bounds = new kakao.maps.LatLngBounds();
+			
+					for(var i=0;i<point.length;i++){
+						var location = new kakao.maps.LatLng(point[i].lat, point[i].lon);
+						linePath.push(location);
+						bounds.extend(location);
+					}
+					
+					// 지도에 표시할 선을 생성합니다
+					var temp_polyline = new kakao.maps.Polyline({
+					    path: linePath, // 선을 구성하는 좌표배열 입니다
+					    strokeWeight: 10, // 선의 두께 입니다
+					    strokeColor: '#00FF7F', // 선의 색깔입니다
+					    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+					    strokeStyle: 'solid' // 선의 스타일입니다
+					});
+					
+					// 지도에 표시할 선을 생성합니다
+					var temp_polyline2 = new kakao.maps.Polyline({
+					    path: linePath, // 선을 구성하는 좌표배열 입니다
+					    strokeWeight: 5, // 선의 두께 입니다
+					    strokeColor: '#8B008B', // 선의 색깔입니다
+					    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+					    strokeStyle: 'solid' // 선의 스타일입니다
+					});
+					
+					// 지도에 선을 표시합니다 
+					temp_polyline.setPath(linePath);
+					// 지도에 선을 표시합니다 
+					temp_polyline.setMap(map);
+					// 지도에 선을 표시합니다 
+					temp_polyline2.setPath(linePath);
+					// 지도에 선을 표시합니다 
+					temp_polyline2.setMap(map);
+					// 맵을 이동시킵니다.
+					map.setBounds(bounds);
+			}
+		});
+	}
+});

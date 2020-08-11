@@ -209,3 +209,52 @@ table.type09 td {
 	width: 70px;
 	border-radius: 20%;
 }
+
+.recom_info {
+	margin-top : 30px;
+	float: right;
+	width : 69%;
+}
+
+.flex {
+	display: flex;
+	justify-content: space-between;
+}
+
+.ri_box {
+	width: 30%;
+}
+
+.rmap {
+	width: 100%;
+	height: 300px;
+	margin-bottom: 10px;
+}
+.font700{
+	font-weight: 700;
+	margin-bottom: 10px;
+}
+
+.ri_box table {
+	width: 100%;
+}
+
+.ri_box table thead tr {
+	border-bottom : 2px solid blue;
+}
+
+.ri_box table tbody tr th {
+	width: 30%;
+}
+
+.ri_box table tbody tr td {
+	width: 70%;
+}
+
+.ta_right {
+	text-align: right;
+}
+
+.color_orange {
+	color: orange;
+}

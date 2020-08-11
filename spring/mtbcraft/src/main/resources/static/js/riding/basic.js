@@ -1,6 +1,7 @@
 $(document).ready(function() {
 		$('#courseInfo').hide();
 		$('#box_post_DA').hide();
+		$("#box_post_DA2").hide();
 		
 });
 
@@ -289,7 +290,7 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					
 					rr_avgspeed = data.rr_avgspeed;
 					rr_topspeed = data.rr_topspeed;
-					rr_distance = data.rr_distance/1000;
+					rr_distance = data.rr_distance/100;
 					rr_high = data.rr_high/10;
 					rr_time = data.rr_time/60;
 					
@@ -302,14 +303,14 @@ function getRidingRecordByRR_Num(rr_num, mode){
 							
 							total_avgspeed = data2.avgspeed;
 							total_topspeed = data2.topspeed;
-							total_distance = data2.distance;
-							total_high = data2.avgspeed;
+							total_distance = data2.distance/100;
+							total_high = data2.avghigh/10;
 							total_time = data2.time/60;
 							
 							user_avgspeed = data2.user_avgspeed
 							user_topspeed = data2.user_topspeed;
-							user_distance = data2.user_distance;
-							user_high = data2.user_avgspeed;
+							user_distance = data2.user_distance/100;
+							user_high = data2.user_avghigh/10;
 							user_time = data2.user_time/60;
 							
 							Highcharts.chart('container2', {
@@ -329,7 +330,7 @@ function getRidingRecordByRR_Num(rr_num, mode){
 								  },
 						
 								  xAxis: {
-								    categories: ['최고속도(km/h)', '평균속도(km/h)', '거리(km)', '획득고도(10m)'],
+								    categories: ['최고속도(km/h)', '평균속도(km/h)', '거리(100m)', '획득고도(10m)'],
 								    tickmarkPlacement: 'on',
 								    lineWidth: 0
 								  },
@@ -685,8 +686,10 @@ function show_pr(){
  //위험지역등록 취소 눌렀을 때
  function cancel_post_DA(){
 	 $("#box_post_DA").hide();
+	 $("#box_post_DA2").hide();
 	 da_Point.setMap(null);
 	 postmode = false;
+	 
  }
  
  //리뷰 등록버튼 눌렀을 때

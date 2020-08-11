@@ -84,7 +84,8 @@
 	
 	<!-- 번호로 경쟁전 조회 -->
 	<select id="getComp" parameterType="int" resultType="com.mtbcraft.dto.Competition">
-		select * from COMPETITION, COURSE, BADGE where COMPETITION.COMP_COURSE = c_num and COMPETITION.COMP_BADGE=BADGE.BG_NUM and comp_num=#{comp_num}
+		<!-- select * from COMPETITION, COURSE, BADGE where COMPETITION.COMP_COURSE = c_num and COMPETITION.COMP_BADGE=BADGE.BG_NUM and comp_num=#{comp_num} -->
+		select * from COMPETITION, COURSE, BADGE, (select cs_comp, count(cs_comp) cnt from COMPETITION_STATUS where CS_COMP=#{comp_num} group by cs_comp) where COMPETITION.COMP_COURSE = c_num and COMPETITION.COMP_BADGE=BADGE.BG_NUM and comp_num=cs_comp
 	</select>
 	
 	<!-- 성공한 미션 조회 -->
@@ -104,15 +105,7 @@
 	
 	<!-- 미션 상세 정보 조회시 성공 인원 조회 -->
 	<select id="getER_List" parameterType="int" resultType="com.mtbcraft.dto.EntertainRider">
-		select r_nickname nickname, r_image user_img, C.bg_image bg_img
-		from rider, ( 
-			select mc_rider, b.bg_image 
-			from mission_complete A, (
-				select m_num, bg_image 
-				from mission, badge 
-				where mission.m_badge=badge.bg_num) 
-			B where a.mc_mission=B.m_num and a.mc_mission = #{m_num} ) C 
-		where r_id=c.mc_rider
+		select r_nickname nickname, bg_image bg_img, r_image user_img from rider, badge where r_badge=bg_num and r_id in ( select mc_rider from mission_complete where mc_mission=#{m_num} )
 	</select>
 	
 	<!-- 전체 회원 조회 -->
