@@ -53,7 +53,7 @@
         <activity
             android:name=".ui.riding.EndActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.records.MyDetailFragment" />
+        <activity android:name=".ui.records.DetailActivity"/>
     </application>
 
 </manifest>

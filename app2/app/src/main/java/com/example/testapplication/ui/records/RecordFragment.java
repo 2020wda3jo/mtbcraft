@@ -1,5 +1,6 @@
 package com.example.testapplication.ui.records;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecordFragment extends BaseFragment {
+public class RecordFragment extends BaseFragment implements MyReportAdapter.OnItemClick{
     private Call<List<RidingRecord>> request;
     private RecyclerView recyclerView;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,5 +64,10 @@ public class RecordFragment extends BaseFragment {
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onItemClick(int position, RidingRecord memo) {
+
     }
 }

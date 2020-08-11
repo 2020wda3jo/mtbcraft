@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testapplication.ui.records.MyDetailFragment;
 import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
+import com.example.testapplication.ui.records.DetailActivity;
+import com.example.testapplication.ui.records.MyDetailFragment;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -32,6 +31,12 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
     public Context mContext;
     public ArrayList<RidingRecord> itemList;
     public String r_image;
+
+    public interface OnItemClick{
+        public void onItemClick(int position, RidingRecord memo);
+    }
+
+    private OnItemClick listener;
 
     public MyReportAdapter(FragmentActivity activity, ArrayList<RidingRecord> itemList) {
         this.mContext = activity;
@@ -70,21 +75,30 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
         int des = (itemList.get(position).getRr_distance());
         float km = (float) (des/1000.0);
         String total = String.valueOf(km)+"Km";
+
         String hour_s = String.valueOf(hour);
+
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         Log.d("dfdf",itemList.get(position).getRr_rider());
+
         Bitmap user_image = BitmapFactory.decodeFile(new File(mContext.getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
         testViewHolder.my_image.setImageBitmap(user_image);
+
+
+
+
         testViewHolder.record_name.setText(itemList.get(position).getRr_name());
         testViewHolder.record_date.setText(itemList.get(position).getRr_date());
         testViewHolder.record_adress.setText(itemList.get(position).getRr_area());
         testViewHolder.my_dis.setText(total);
-        testViewHolder.my_get.setText(itemList.get(position).getRr_high() +"m");
+        testViewHolder.my_get.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
         testViewHolder.my_time.setText(hour_s+"시간 "+min+"분 "+ sec+"초");
 
-        testViewHolder.mView.setOnClickListener(v -> {
 
-            Toast.makeText(mContext, String.valueOf(itemList.get(position).getRr_num()),Toast.LENGTH_LONG).show();
+        testViewHolder.mView.setOnClickListener(v -> {
+            RidingRecord record = itemList.get(position);
+            listener.onItemClick(position, record);
         });
     }
 

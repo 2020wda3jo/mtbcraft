@@ -1,10 +1,20 @@
 package com.example.testapplication;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -17,10 +27,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-
+    private ImageView img;
+    private TextView lay;
+    private View header;
+    private View view;
+    private ImageView userImage;
+    private SharedPreferences auto;
+    private String LoginId, Nickname, r_image;
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +60,22 @@ public class MainActivity extends AppCompatActivity {
 
         MainViewModel model = new ViewModelProvider(this).get(MainViewModel.class);
         model.message.setValue("Hello");
+
+        navigationView.findViewById(R.id.infouserid);
+        header = navigationView.getHeaderView(0);
+        lay = (TextView) header.findViewById(R.id.infouserid);
+        userImage = (ImageView) header.findViewById(R.id.user_image);
+
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        Nickname = auto.getString("r_nickname", "");
+        lay.setText(Nickname + "님 환영합니다");
+        r_image = auto.getString("r_image","");
+
+
+        Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        userImage.setImageBitmap(user_image);
+
+
     }
 
     @Override

@@ -55,6 +55,7 @@ public interface ServerApi {
     @GET("android/riding/danger")
     Call<List<DangerousArea>> getDangerArea();
 
+    //라이딩 기록
     @GET("android/get/{loginId}")
     Call<List<RidingRecord>> getRecord(@Path("loginId") String loginId);
 }
