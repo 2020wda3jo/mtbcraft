@@ -17,7 +17,7 @@
 	</select>
 	
 	<select id="getCustomBadge" parameterType="String" resultType="com.mtbcraft.dto.CustomBadge">
-		select * from custom_badge 
+		select * from custom_badge where cbg_id = #{rr_id}
 	</select>
 
 	<select id="getMission" resultType="com.mtbcraft.dto.Mission">
