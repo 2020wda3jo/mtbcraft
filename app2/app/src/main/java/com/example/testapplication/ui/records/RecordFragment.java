@@ -1,18 +1,12 @@
 package com.example.testapplication.ui.records;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,8 +22,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecordFragment extends BaseFragment implements MyReportAdapter.OnItemClick{
-    private Call<List<RidingRecord>> request;
+public class RecordFragment extends BaseFragment{
+    private Call<ArrayList<RidingRecord>> request;
+    private List<RidingRecord> items;
     private RecyclerView recyclerView;
     private MyReportAdapter adapter;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,34 +38,34 @@ public class RecordFragment extends BaseFragment implements MyReportAdapter.OnIt
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         request = serverApi.getRecord(model.r_Id.getValue());
-        request.enqueue(new Callback<List<RidingRecord>>() {
-            @Override
-            public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
-                if(response.code()==200){
-                    ArrayList<RidingRecord> itemList = new ArrayList<>();
-                    List<RidingRecord> itmes = response.body();
 
-                    for(RidingRecord record : itmes){
-                        itemList.add(record);
+
+        ArrayList<RidingRecord> itemList = new ArrayList<>();
+        request.enqueue(new Callback<ArrayList<RidingRecord>>() {
+            @Override
+            public void onResponse(Call<ArrayList<RidingRecord>> call, Response<ArrayList<RidingRecord>> response) {
+                if(response.code()==200){
+                    items = response.body();
+
+
+                    for(RidingRecord item: items){
+                        itemList.add(item);
                     }
-                    adapter=new MyReportAdapter(this);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
 
 
                     }
                 }
 
             @Override
-            public void onFailure(Call<List<RidingRecord>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<RidingRecord>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
-    }
+        adapter=new MyReportAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(adapter);
 
-    @Override
-    public void onItemClick(int position, RidingRecord memo) {
-        Intent intent=new Intent(getActivity(), MyDetailFragment.class);
-        startActivity(intent);
     }
 }

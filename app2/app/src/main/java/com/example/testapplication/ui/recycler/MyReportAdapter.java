@@ -21,6 +21,7 @@ import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.ui.records.DetailActivity;
 import com.example.testapplication.ui.records.MyDetailFragment;
+import com.example.testapplication.ui.records.RecordFragment;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -30,21 +31,25 @@ import java.util.List;
 import retrofit2.Callback;
 
 public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyRecordHolder>{
+
+
+
+
     public interface OnItemClick{
-        void onItemClick(int position, RidingRecord record);
+        void onItemClick(int position, RidingRecord memo);
     }
 
-    private List<RidingRecord> record;
     private OnItemClick listener;
-    public MyReportAdapter(OnItemClick listener) {
-        this.listener=listener;
+    public RecordFragment mContext;
+    public ArrayList<RidingRecord> itemList;
+    public String r_image;
+
+
+    public MyReportAdapter(RecordFragment recordFragment, ArrayList<RidingRecord> itemList) {
+        this.mContext = recordFragment;
+        this.itemList = itemList;
     }
 
-    public void setData(List<RidingRecord> data) { this.record=data; notifyDataSetChanged();}
-
-    public void setData(ArrayList<RidingRecord> record) { this.record=record; notifyDataSetChanged();}
-
-    @NonNull
     @Override
     public MyRecordHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
@@ -83,9 +88,6 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
 
         Log.d("dfdf",itemList.get(position).getRr_rider());
 
-        Bitmap user_image = BitmapFactory.decodeFile(new File(mContext.getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
-        testViewHolder.my_image.setImageBitmap(user_image);
-
 
 
 
@@ -98,8 +100,8 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
 
 
         testViewHolder.mView.setOnClickListener(v -> {
-            RidingRecord record = itemList.get(position);
-            listener.onItemClick(position, record);
+            Intent intent=new Intent(v.getContext(), DetailActivity.class);
+            v.getContext().startActivity(intent);
         });
     }
 

@@ -11,6 +11,7 @@ import com.example.testapplication.dto.Tag_Status;
 import com.example.testapplication.dto.User;
 import com.example.testapplication.ui.riding.EndActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -57,5 +58,5 @@ public interface ServerApi {
 
     //라이딩 기록
     @GET("android/get/{loginId}")
-    Call<List<RidingRecord>> getRecord(@Path("loginId") String loginId);
+    Call<ArrayList<RidingRecord>> getRecord(@Path("loginId") String loginId);
 }
