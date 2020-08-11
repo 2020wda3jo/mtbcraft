@@ -94,7 +94,7 @@ public class CompetitionViewFragment extends BaseFragment {
         });
 
         try {
-            new GetTask().execute();
+            new GetTask2().execute();
 
         }catch (Exception e){
 
@@ -179,7 +179,9 @@ public class CompetitionViewFragment extends BaseFragment {
                     }
                 }
 
-                new GetTask2().execute();
+                CompetitionAdapter adapter = new CompetitionAdapter(requireContext().getApplicationContext(), nowItemList, Save_Path, controller, model);
+                recycleView.setLayoutManager(new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                recycleView.setAdapter(adapter);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -237,9 +239,7 @@ public class CompetitionViewFragment extends BaseFragment {
                     pastItem = item;
                 }
 
-                CompetitionAdapter adapter = new CompetitionAdapter(requireContext().getApplicationContext(), nowItemList, Save_Path, controller, model);
-                recycleView.setLayoutManager(new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                recycleView.setAdapter(adapter);
+                new GetTask().execute();
 
             } catch (Exception e) {
                 e.printStackTrace();
