@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import com.example.testapplication.MainViewModel;
 import com.example.testapplication.R;
 import com.example.testapplication.net.Server;
+import com.example.testapplication.net.ServerApi;
 
 public class BaseFragment extends Fragment {
 

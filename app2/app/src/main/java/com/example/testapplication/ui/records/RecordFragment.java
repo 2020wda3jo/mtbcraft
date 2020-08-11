@@ -63,9 +63,9 @@ public class RecordFragment extends BaseFragment{
                 t.printStackTrace();
             }
         });
-        adapter=new MyReportAdapter(this);
+        /* adapter=new MyReportAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter); */
 
     }
 }

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.testapplication.MainViewModel;
 import com.example.testapplication.dto.Competition;
 import com.example.testapplication.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.ParseException;
@@ -55,8 +56,6 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
         String startDay = fullDay.substring(0,4) + "-" + fullDay.substring(4,6) + "-" + fullDay.substring(6,8);
         String endDay = fullDay.substring(8,12) + "-" + fullDay.substring(12,14) + "-" + fullDay.substring(14,16);
         String day = startDay + " ~ " + endDay;
-        String File_Name = itemList.get(position).getComp_image();
-        Bitmap myBitmap = BitmapFactory.decodeFile(new File(Save_Path + "/" + File_Name).getAbsolutePath());
 
         long howDay = 0;
         try {
@@ -72,7 +71,9 @@ public class CompetitionAdapter extends RecyclerView.Adapter<CompetitionAdapter.
 
 
         holder.textView1.setText(itemList.get(position).getComp_name());
-        holder.imageView.setImageBitmap(myBitmap);
+
+        Picasso.get().load("http://13.209.229.237:8080/app/getGPX/comp/" + itemList.get(position).getComp_image())
+                .into(holder.imageView);
 
         holder.mView.setOnClickListener( v -> {
 

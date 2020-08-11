@@ -42,6 +42,7 @@ import com.example.testapplication.SoundManager;
 import com.example.testapplication.databinding.ActivityRidingStartBinding;
 import com.example.testapplication.dto.DangerousArea;
 import com.example.testapplication.net.Server;
+import com.example.testapplication.net.ServerApi;
 import com.google.android.material.tabs.TabLayout;
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.CameraUpdateFactory;
