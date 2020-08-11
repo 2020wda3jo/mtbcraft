@@ -25,23 +25,24 @@ import com.example.testapplication.ui.records.MyDetailFragment;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Callback;
 
 public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyRecordHolder>{
-
-    public Context mContext;
-    public ArrayList<RidingRecord> itemList;
-    public String r_image;
-
     public interface OnItemClick{
-        public void onItemClick(int position, RidingRecord memo);
+        void onItemClick(int position, RidingRecord record);
     }
 
+    private List<RidingRecord> record;
     private OnItemClick listener;
-
-    public MyReportAdapter(FragmentActivity activity, ArrayList<RidingRecord> itemList) {
-        this.mContext = activity;
-        this.itemList = itemList;
+    public MyReportAdapter(OnItemClick listener) {
+        this.listener=listener;
     }
+
+    public void setData(List<RidingRecord> data) { this.record=data; notifyDataSetChanged();}
+
+    public void setData(ArrayList<RidingRecord> record) { this.record=record; notifyDataSetChanged();}
 
     @NonNull
     @Override

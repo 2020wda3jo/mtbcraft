@@ -31,6 +31,7 @@ import retrofit2.Response;
 public class RecordFragment extends BaseFragment implements MyReportAdapter.OnItemClick{
     private Call<List<RidingRecord>> request;
     private RecyclerView recyclerView;
+    private MyReportAdapter adapter;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // 최소한의 코드
@@ -52,9 +53,10 @@ public class RecordFragment extends BaseFragment implements MyReportAdapter.OnIt
                     for(RidingRecord record : itmes){
                         itemList.add(record);
                     }
-                    MyReportAdapter adapter = new MyReportAdapter(getActivity(), itemList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                    adapter=new MyReportAdapter(this);
                     recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
                     }
                 }
@@ -68,6 +70,7 @@ public class RecordFragment extends BaseFragment implements MyReportAdapter.OnIt
 
     @Override
     public void onItemClick(int position, RidingRecord memo) {
-
+        Intent intent=new Intent(getActivity(), MyDetailFragment.class);
+        startActivity(intent);
     }
 }
