@@ -27,7 +27,6 @@ public class BaseFragment extends Fragment {
     protected NavController controller;
     protected ServerApi serverApi;
     SharedPreferences auto;
-    String r_image="", r_rider="";
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -41,14 +40,6 @@ public class BaseFragment extends Fragment {
         model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         controller = Navigation.findNavController(view);
         serverApi = Server.getInstance().getApi();
-
-        auto = requireContext().getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        r_image = auto.getString("r_image", "");
-        r_rider = auto.getString("LoginId","");
-    }
-
-    public String LoginInfo(){
-        return r_rider;
     }
 
     protected void showServerFailure(){

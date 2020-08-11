@@ -41,7 +41,7 @@ public class RecordFragment extends BaseFragment implements MyReportAdapter.OnIt
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
-        request = serverApi.getRecord(LoginInfo());
+        request = serverApi.getRecord(model.r_Id.getValue());
         request.enqueue(new Callback<List<RidingRecord>>() {
             @Override
             public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {

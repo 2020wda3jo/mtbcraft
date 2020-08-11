@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private View view;
     private ImageView userImage;
     private SharedPreferences auto;
-    private String LoginId, Nickname, r_image;
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +66,14 @@ public class MainActivity extends AppCompatActivity {
         userImage = (ImageView) header.findViewById(R.id.user_image);
 
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        Nickname = auto.getString("r_nickname", "");
-        lay.setText(Nickname + "님 환영합니다");
-        r_image = auto.getString("r_image","");
+        model.r_Id.setValue(auto.getString("LoginId", ""));
+        model.r_Image.setValue(auto.getString("r_image", ""));
+        model.r_Nickname.setValue(auto.getString("r_nickname", ""));
+        model.r_ClubName.setValue(auto.getString("r_clubname", ""));
+        lay.setText(model.r_Nickname.getValue() + "님 환영합니다");
 
 
-        Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
+        Bitmap user_image = BitmapFactory.decodeFile(new File(getFilesDir().getPath() + "/" + model.r_Image.getValue()).getAbsolutePath());
         userImage.setImageBitmap(user_image);
 
 

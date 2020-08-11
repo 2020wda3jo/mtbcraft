@@ -67,7 +67,7 @@ public class HomeFragment extends BaseFragment {
         mainKm = (TextView) view.findViewById(R.id.main_km);
         rider = (TextView) view.findViewById(R.id.idinfo);
         main_dis = (TextView) view.findViewById(R.id.main_dis);
-        rider.setText(LoginInfo()+"님 저희와 함께");
+        rider.setText(model.r_Nickname.getValue()+"님 저희와 함께");
 
         /* Button b = view.findViewById(R.id.button);
         b.setOnClickListener(v->{
@@ -80,7 +80,7 @@ public class HomeFragment extends BaseFragment {
            Intent intent = new Intent(getActivity(), StartActivity.class);
            startActivity(intent);
         });
-        MyInfo = serverApi.getMyRecord(LoginInfo());
+        MyInfo = serverApi.getMyRecord(model.r_Id.getValue());
         MyInfo.enqueue(new Callback<List<RidingRecord>>() {
             @Override
             public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
