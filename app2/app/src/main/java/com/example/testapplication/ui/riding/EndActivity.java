@@ -21,7 +21,6 @@ import com.example.testapplication.databinding.FragmentRidingEndBinding;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.dto.Tag_Status;
 import com.example.testapplication.net.Server;
-import com.example.testapplication.net.ServerApi;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;

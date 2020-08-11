@@ -52,16 +52,9 @@ public class HomeFragment extends BaseFragment {
 
         String Save_Path = requireContext().getFilesDir().getPath();
 
-        model.message.observe(getViewLifecycleOwner(), message->{
-            Log.i("Home", message);
-        });
-
         SharedPreferences auto = requireContext().getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String r_image = auto.getString("r_image", "");
 
-        model.message.observe(getViewLifecycleOwner(), message -> {
-            Log.i("Home", message);
-        });
         ridingstart = (ImageView) view.findViewById(R.id.ridingstart);
         mainTime = (TextView) view.findViewById(R.id.main_time);
         mainKm = (TextView) view.findViewById(R.id.main_km);

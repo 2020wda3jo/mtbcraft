@@ -1,7 +1,5 @@
 package com.example.testapplication.ui;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import androidx.navigation.Navigation;
 import com.example.testapplication.MainViewModel;
 import com.example.testapplication.R;
 import com.example.testapplication.net.Server;
-import com.example.testapplication.net.ServerApi;
 
 public class BaseFragment extends Fragment {
 

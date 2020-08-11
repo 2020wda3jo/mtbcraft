@@ -54,5 +54,20 @@
         android:label="내 기록"
         tools:layout="@layout/fragment_my_detail" />
 
+    <fragment
+        android:id="@+id/nav_competition_view"
+        android:name="com.example.testapplication.ui.competitions.CompetitionViewFragment"
+        android:label="경쟁전"
+        tools:layout="@layout/fragment_competition_view" >
+        <action
+            android:id="@+id/action_nav_competition_view_to_competitionDetailFragment"
+            app:destination="@id/competitionDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/competitionDetailFragment"
+        android:name="com.example.testapplication.ui.competitions.CompetitionDetailFragment"
+        android:label="fragment_competition_detail"
+        tools:layout="@layout/fragment_competition_detail" />
+
 
 </navigation>
