@@ -110,11 +110,11 @@ display:none;}
 						</tr>
 						<tr>
 							<th>거리</th>
-							<td th:text="${r_course.rr_distance}+'Km'">
+							<td th:text="${r_course.rr_distance}/1000+' Km'">
 						</tr>
 						<tr>
 							<th>획득고도</th>
-							<td th:text="${r_course.rr_high}+'m'">
+							<td th:text="${r_course.rr_high}+' m'">
 						</tr>
 					</tbody>
 				</table>
