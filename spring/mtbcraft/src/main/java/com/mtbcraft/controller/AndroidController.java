@@ -43,7 +43,7 @@ import com.mtbcraft.service.MemberService;
 import com.mtbcraft.service.RidingService;
 
 @Controller
-@RequestMapping(value = "/android/")
+@RequestMapping(value = "/app/")
 public class AndroidController {
 
 	@Autowired
@@ -93,7 +93,7 @@ public class AndroidController {
 	}
 
 	// 주행기록 상세보기
-	@RequestMapping(value = "/api/get/{rr_rider}/{rr_num}")
+	@RequestMapping(value = "get/detail/{rr_num}")
 	public @ResponseBody List<RidingRecord> getRidingRecordDetail(@PathVariable String rr_rider,
 			@PathVariable String rr_num) throws Exception {
 		RidingRecord record = new RidingRecord();

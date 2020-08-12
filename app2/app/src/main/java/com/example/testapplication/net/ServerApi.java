@@ -57,6 +57,10 @@ public interface ServerApi {
     Call<List<DangerousArea>> getDangerArea();
 
     //라이딩 기록
-    @GET("android/get/{loginId}")
+    @GET("app/get/{loginId}")
     Call<ArrayList<RidingRecord>> getRecord(@Path("loginId") String loginId);
+
+    //라이딩 상세보기
+    @GET("app/get/detail/{rr_num}")
+    Call<List<RidingRecord>> getRecordDetail(@Path("rr_num") String rr_num);
 }
