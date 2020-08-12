@@ -258,3 +258,12 @@ table.type09 td {
 .color_orange {
 	color: orange;
 }
+
+.ui-dialog{
+	min-width: 700px;
+	min-height: 600px;
+}
+
+.ui-dialog h2 {
+	margin:  0;
+}

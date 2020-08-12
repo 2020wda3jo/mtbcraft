@@ -44,23 +44,57 @@ $(".li_sc").click(function(){
  function recom(r_num){
 	console.log(r_num);
 	
-	var result = confirm('스크랩하시겠습니까?');
-	if(result){
-		$.ajax({
-		url : "/riding/scrap/"+r_num+"/"+userId,
-		type : "post",
-		cache : false,
-		complete : function(data){
-			if(data.responseText=="success"){
-				alert('해당 코스를 스크랩하였습니다!');
-			}else if(data.responseText=="fail"){
-				alert('이미 스크랩한 코스입니다!');
-			}else if(data.responseText=="failMyRR"){
-				alert('나의 주행기록입니다...');
+	$.ajax({
+		url:"/info/riding/recom/"+r_num,
+		type:"get",
+		success:function(data){
+			console.log(data);
+			
+			var level;
+			if(data.percent>80){
+				level = "하";
+			}else if(data.percent>60){
+				level = "중하";
+			}else if(data.percent>40){
+				level = "중";
+			}else if(data.percent>20){
+				level = "중상";
+			}else{
+				level = "상";
 			}
-			}
-		});	
-	}
+			
+			
+			
+			$("#modal_cname").text( data.rs_name);
+			$("#modal_distance").text( parseInt(data.rs_distance)/1000 +'km');
+			$("#modal_high").text( data.rs_high+'m');
+			$("#modal_avgspeed").text( data.rs_avgspeed+'km/h');
+			$("#modal_cnt").text( data.rs_cnt+'회');
+			$("#modal_area").text( data.rs_area);
+			$("#modal_level").text( level+' ['+data.truerank+'/'+data.total+']' );
+		}
+	});
+	
+	$('#dialog-message').dialog({
+		modal: true, 
+		buttons: {
+				"스크랩하기": function() { $.ajax({
+				url : "/riding/scrap/"+r_num+"/"+userId,
+				type : "post",
+				cache : false,
+				complete : function(data){
+					if(data.responseText=="success"){
+						alert('해당 코스를 스크랩하였습니다!');
+					}else if(data.responseText=="fail"){
+						alert('이미 스크랩한 코스입니다!');
+					}else if(data.responseText=="failMyRR"){
+						alert('나의 주행기록입니다...');
+					}
+				}
+			}); },
+			"닫기": function() { $(this).dialog('close'); }
+		}
+	});
 	
 		
  }

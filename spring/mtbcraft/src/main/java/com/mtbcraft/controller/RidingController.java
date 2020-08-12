@@ -43,6 +43,7 @@ import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.No_Danger;
 import com.mtbcraft.dto.Nomtb;
 import com.mtbcraft.dto.PagingVO;
+import com.mtbcraft.dto.Recom_Course;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Scrap_Status;
 import com.mtbcraft.dto.Tag_Status;
@@ -69,8 +70,19 @@ public class RidingController {
 			scraplist.get(i).setRr_like(like);
 		}
 		model.addAttribute("rider", principal.getName());
+		model.addAttribute("nickname", ridingService.getRiderNickName(principal.getName()));
 		model.addAttribute("ridingrecords", rrlist);
 		model.addAttribute("scrapcourses", scraplist);
+		
+		int ridingCount = ridingService.countRidingRecord(principal.getName());
+		if(ridingCount>=5) {
+			model.addAttribute("r_status", 5);
+			model.addAttribute("recommand", ridingService.getRecommandCourse(principal.getName()));
+		}else {
+			model.addAttribute("r_status", ridingCount);
+			model.addAttribute("recommand", ridingService.getBeginnerCourse() );
+		}
+		
 		return "riding/course2";
 	}
 	
@@ -218,7 +230,6 @@ public class RidingController {
 	// 위험 지역 조회
 		@RequestMapping(value = "/riding/NO", method = RequestMethod.GET)
 		public @ResponseBody List<Nomtb> getNoMtbArea() throws Exception {
-			System.out.println("들어왔다");
 			return ridingService.getNoMtbArea();
 		}
 		
@@ -332,7 +343,7 @@ public class RidingController {
 		if(!files.isEmpty()) {
 			String filename = files.getOriginalFilename();
 	        String directory = "/home/ec2-user/data/review/";
-	        //String directory = "C:\\Users\\TACK\\Desktop\\study\\review\\";
+	        //String directory = "C:\\Users\\woolu\\Desktop\\workspace\\data\\review\\";
 	        String filepath = Paths.get(directory, filename).toString();             
 	        
 	        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
@@ -464,7 +475,7 @@ public class RidingController {
 	
 	private void makeGpx(Gpx gpx, String gpxFile) throws Exception {
 		String path = "/home/ec2-user/data/gpx/"+gpxFile;
-		//String path = "D:\\gp\\2020-07-09_14_07_30_BIKE_SHORTEST.gpx";
+		//String path = "C:\\Users\\woolu\\Desktop\\workspace\\data\\gpx\\"+gpxFile;
 		File file = new File(path);
 		String txt = "";
 		FileInputStream fis = new FileInputStream(file); 
@@ -486,12 +497,20 @@ public class RidingController {
 		return ridingService.getAVGRR(principal.getName());
 	}
 	
+	//맞춤형 추천 코스 조회
+	@RequestMapping(value = "/info/riding/recom/{rr_num}", method = RequestMethod.GET)
+	@ResponseBody
+	public Recom_Course getRecomCourse(@PathVariable int rr_num) {
+		return ridingService.getRecomCourse(rr_num);
+	}
+	
 	//이미지 로딩
 	@GetMapping(value = "/image/review/{imageFile}")
 	public @ResponseBody byte[] getImage(@PathVariable String imageFile) throws IOException {
 		InputStream in = null;
 	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/review/"+imageFile)); 
 	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\study\\review\\"+imageFile)); 
+	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\review\\"+imageFile)); 
 	    return IOUtils.toByteArray(in);
 	}
 		
