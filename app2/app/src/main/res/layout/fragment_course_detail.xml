@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:background="#fff"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/test"
                 android:layout_width="match_parent"
@@ -26,14 +27,14 @@
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                tools:ignore="MissingConstraints">
+                tools:ignore="MissingConstraints"
+                >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -44,7 +45,7 @@
                         android:src="@android:drawable/sym_def_app_icon" />
 
                     <TextView
-                        android:id="@+id/c_rider_name"
+                        android:id="@+id/Course_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -57,7 +58,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/c_name"
+                    android:id="@+id/CourseRiderName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="75dp"
@@ -67,7 +68,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/c_date"
+                    android:id="@+id/CourseDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="75dp"
@@ -119,13 +120,14 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/c_ride_time"
+                            android:id="@+id/Riding_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="0: 0: 0:"
+                            android:text="00:00:00"
                             android:textColor="#000"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -151,13 +153,14 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/c_rest_time"
+                            android:id="@+id/Riding_rest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="0:0:0"
+                            android:text="00:00:00"
                             android:textColor="#000"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -183,13 +186,14 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/c_dis"
+                            android:id="@+id/Riding_distance"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="0"
+                            android:text="0.0km"
                             android:textColor="#000"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -215,13 +219,14 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/c_ride_max"
-                            android:layout_width="match_parent"
+                            android:id="@+id/Riding_max"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="0"
+                            android:layout_gravity="center"
+                            android:text="00.0km/h"
                             android:textColor="#000"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -248,13 +253,14 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/c_avg"
-                            android:layout_width="match_parent"
+                            android:id="@+id/Riding_avg"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="0"
+                            android:layout_gravity="center"
+                            android:text="00.0km/h"
                             android:textColor="#000"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
 
@@ -282,13 +288,14 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/c_get"
-                            android:layout_width="match_parent"
+                            android:id="@+id/Riding_godo"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="0"
+                            android:layout_gravity="center"
+                            android:text="0.0km"
                             android:textColor="#000"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            tools:ignore="MissingConstraints" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -309,19 +316,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textSize="17dp"
+                            android:text="추천해요"
                             android:textColor="#000"
-                            android:textStyle="bold"
-                            android:text="추천해요" />
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/like_count"
+                            android:id="@+id/LikeCnt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="0"
-                            android:textSize="15dp"
                             android:textColor="#000"
+                            android:textSize="15dp"
                             tools:ignore="MissingConstraints" />
                     </LinearLayout>
                 </GridLayout>
@@ -331,8 +338,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="-100dp"
                     android:layout_marginLeft="50dp"
+                    android:layout_marginTop="-100dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -351,11 +358,11 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/c_addr"
+                        android:id="@+id/Riding_addr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="대한민국 대구광역시 북구 관문동"
+                        android:text="주소"
                         android:textColor="#000"
                         android:textSize="15dp" />
                 </LinearLayout>
@@ -404,21 +411,24 @@
 
                     </LinearLayout>
                 </GridLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp">
+
                     <TextView
                         android:id="@+id/textView40"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
+                        android:text="코스리뷰"
                         android:textColor="#000"
                         android:textSize="17dp"
-                        android:layout_marginLeft="10dp"
-                        android:textStyle="bold"
-                        android:text="코스리뷰" />
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/register_const"
                     android:layout_width="match_parent"
@@ -478,13 +488,6 @@
             </LinearLayout>
             <!-- </ScrollView>-->
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#fff"
-                android:theme="@style/ThemeOverlay.AppCompat.Light"
-                tools:ignore="MissingConstraints" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

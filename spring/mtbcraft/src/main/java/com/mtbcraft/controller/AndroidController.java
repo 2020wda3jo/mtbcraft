@@ -239,25 +239,25 @@ public class AndroidController {
 	}
 
 	// 웹뷰용 라이딩 기록
-	@RequestMapping(value = "/app/getRidingRecord")
+	@RequestMapping(value = "getRidingRecord")
 	public String getAppRidingRecord() {
 		return "riding/appRidingRecord";
 	}
 	
 	// 경쟁전 조회
-	@RequestMapping(value = "/app/competition")
+	@RequestMapping(value = "competition")
 	public @ResponseBody List<App_Competition> getCompetition() throws Exception {
 		return androidService.getCompetition();
 	}
 	
 	//경쟁전 참가내역 가져오기
-	@RequestMapping(value = "/app/competition/{rr_rider}")
+	@RequestMapping(value = "competition/{rr_rider}")
 	public @ResponseBody List<String> getjoinedComp(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
 		return androidService.getjoinedComp(rr_rider);
 	}
 	
 	// 경쟁전 코스 정보
-	@RequestMapping(value = "/app/getAppCompCourse")
+	@RequestMapping(value = "getAppCompCourse")
 	public String getAppCompCourse() {
 		return "entertainment/appCompCourse";
 	}
@@ -291,13 +291,13 @@ public class AndroidController {
 	
 
 	
-	@RequestMapping("/app/getCompClub/{cs_comp}")
+	@RequestMapping("getCompClub/{cs_comp}")
 	public @ResponseBody List<CompClub> getCompClub( @PathVariable(value = "cs_comp") int cs_comp) throws Exception {
 		return androidService.getCompClub(cs_comp);
 	}
 	
 	//코스검색
-	@RequestMapping("/app/riding/CourseSearch")
+	@RequestMapping("riding/CourseSearch")
 	public String CourseSearch() throws Exception{
 		return "android/Android_CourseSearch";
 	}
@@ -308,12 +308,12 @@ public class AndroidController {
 		return androidService.getDanger();
 	}
 
-	@RequestMapping("app/getCompBadge/{comp_badge}")
+	@RequestMapping("getCompBadge/{comp_badge}")
 	public @ResponseBody List<Badge> getCompBadge ( @PathVariable(value = "comp_badge") int comp_badge) throws Exception {
 		return androidService.getCompBadge(comp_badge);
 	}
 	
-	@RequestMapping("app/getCompScore/{comp_num}")
+	@RequestMapping("getCompScore/{comp_num}")
 	public @ResponseBody List<CompScore> getCompScore ( @PathVariable("comp_num") int comp_num) throws Exception {
 		return androidService.getCompScore(comp_num);
 	}
@@ -325,28 +325,28 @@ public class AndroidController {
 		androidService.updateCompScore(avg_speed, rr_comp, r_club, LoginId);
 	}
 	
-	@RequestMapping(value = "/app/getCompAllScore/{comp_num}")
+	@RequestMapping(value = "getCompAllScore/{comp_num}")
 	public @ResponseBody List<Competition_Status> getCompAllScore( @PathVariable(value="comp_num") int comp_num ) throws Exception {
 		return androidService.getCompAllScore(comp_num);
 	}
 	
-	@RequestMapping(value = "/app/updateRank", method = RequestMethod.PUT)
+	@RequestMapping(value = "updateRank", method = RequestMethod.PUT)
 	@ResponseBody
 	public void updateRank (int rr_comp, int r_club, int score, int rank) throws Exception {
 		androidService.updateRank(rr_comp, r_club, score, rank);
 	}
 	
-	@RequestMapping(value = "app/getMissionStatus/{LoginId}")
+	@RequestMapping(value = "getMissionStatus/{LoginId}")
 	public @ResponseBody List<Mission_Status> getMissionStatus ( @PathVariable(value="LoginId") String LoginId ) throws Exception {
 		return androidService.getMissionStatus(LoginId);
 	}
 	
-	@RequestMapping(value = "app/getNoClearMission/{LoginId}")
+	@RequestMapping(value = "getNoClearMission/{LoginId}")
 	public @ResponseBody List<Mission> getNoClearMission ( @PathVariable(value="LoginId") String LoginId ) throws Exception {
 		return androidService.getNoClearMission(LoginId);
 	}
 	
-	@RequestMapping(value = "/app/updateMissionStatus", method = RequestMethod.PUT)
+	@RequestMapping(value = "updateMissionStatus", method = RequestMethod.PUT)
 	@ResponseBody
 	public void updateMissionStatus ( String LoginId, int typeScore1, int typeScore2 ) throws Exception {
 		androidService.updateMissionStatus(LoginId, typeScore1, typeScore2);
@@ -370,28 +370,28 @@ public class AndroidController {
 		return tag_sta;
 	}
 	
-	@RequestMapping(value = "/app/getAllMission/{LoginId}")
+	@RequestMapping(value = "getAllMission/{LoginId}")
 	public @ResponseBody List<App_Mission> getAllMission ( @PathVariable(value="LoginId") String LoginId) throws Exception {
 		return androidService.getAllMission(LoginId);
 	}
 	
-	@RequestMapping(value = "/app/getComMission/{LoginId}")
+	@RequestMapping(value = "getComMission/{LoginId}")
 	public @ResponseBody List<String> getComMission ( @PathVariable(value="LoginId") String LoginId) throws Exception {
 		return androidService.getComMission(LoginId);
 	}
 	
-	@RequestMapping(value = "/app/getWhenCom/{LoginId}/{m_num}")
+	@RequestMapping(value = "getWhenCom/{LoginId}/{m_num}")
 	public @ResponseBody Date getWhenCom ( @PathVariable(value="LoginId") String LoginId,
 												@PathVariable(value="m_num") int m_num) throws Exception {
 		return androidService.getWhenCom(LoginId, m_num);
 	}
 	
-	@RequestMapping(value = "/app/getMisRanking")
+	@RequestMapping(value = "getMisRanking")
 	public @ResponseBody List<App_MissionRanking> getMisRanking () throws Exception {
 		return androidService.getMisRanking();
 	}
 	
-	@RequestMapping(value = "/app/getCourseReview/{c_num}")
+	@RequestMapping(value = "getCourseReview/{c_num}")
 	public @ResponseBody List<App_CourseReview> getCourseRiview (@PathVariable(value="c_num") int c_num) throws Exception{
 		return androidService.getCourseRiview(c_num);
 	}
@@ -419,7 +419,7 @@ public class AndroidController {
 		return rr;
 	}
 
-	@RequestMapping(value = "/app/riding/foup")
+	@RequestMapping(value = "riding/foup")
 	// 주소변경예정 @RequestMapping(value = "/android/recordInsert")
 	@ResponseBody
 	public Map<String, String> insertFollowRiding(HttpServletRequest request) throws Exception {
@@ -453,7 +453,7 @@ public class AndroidController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/app/updateCourseReview")
+	@RequestMapping(value = "updateCourseReview")
 	@ResponseBody
 	public void updateCourseReview(HttpServletRequest request) throws Exception {
 		App_CourseReview C_review = new App_CourseReview();
@@ -471,7 +471,7 @@ public class AndroidController {
 		androidService.updateCourseReview(C_review);
 	}
 
-	@RequestMapping(value = "/app/insertCourseReview")
+	@RequestMapping(value = "insertCourseReview")
 	@ResponseBody
 	public void insertCourseReview(HttpServletRequest request) throws Exception {
 		App_CourseReview C_review = new App_CourseReview();
@@ -490,7 +490,7 @@ public class AndroidController {
 		androidService.insertCourseReview(C_review);
 	}
 
-	@RequestMapping(value = "/app/deleteCourseReview")
+	@RequestMapping(value = "deleteCourseReview")
 	@ResponseBody
 	public void deleteCourseReview(HttpServletRequest request) throws Exception {
 		String cr_num = "";
@@ -500,7 +500,7 @@ public class AndroidController {
 		androidService.deleteCourseReview(cr_num);
 	}
 
-	@RequestMapping(value = "/app/sameCheck/{id}")
+	@RequestMapping(value = "sameCheck/{id}")
 	@ResponseBody
 	public String sameCheck(@PathVariable(value = "id") String id) throws Exception {
 		int response;
@@ -513,7 +513,7 @@ public class AndroidController {
 			return "no";
 	}
 	
-	@RequestMapping(value = "/app/insertreg")
+	@RequestMapping(value = "insertreg")
 	@ResponseBody
 	public void insertReg(HttpServletRequest request) throws Exception {
 		Member member  = new Member();
@@ -534,12 +534,12 @@ public class AndroidController {
 	}
 	
 	// 사용자 등록 위험 지역 조회
-	@RequestMapping(value = "/app/danger/{rr_rider}")
+	@RequestMapping(value = "danger/{rr_rider}")
 	public @ResponseBody List<DangerousArea> getUserDangerousArea(@PathVariable(value="rr_rider") String rr_rider) throws Exception {
 		return ridingService.getUserDangerousArea(rr_rider);
 	}
 	
-	@RequestMapping(value = "/app/insertDanger")
+	@RequestMapping(value = "insertDanger")
 	public void insertDanger(HttpServletRequest request) throws Exception{
 		DangerousArea d_area = new DangerousArea();
 		
@@ -554,7 +554,7 @@ public class AndroidController {
 	}
 
 	//긴급 위치알림
-	@RequestMapping(value = "/app/dangergps/{lat}/{lon}")
+	@RequestMapping(value = "dangergps/{lat}/{lon}")
 	public  String dangerGps(Model model, @PathVariable(value="lat") String lat, @PathVariable(value="lon") String lon) throws Exception {
 	model.addAttribute("lat",lat);
 	model.addAttribute("lon",lon);

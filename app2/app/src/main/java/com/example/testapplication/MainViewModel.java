@@ -23,7 +23,8 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<String> my_rec_avg = new MutableLiveData<>();
     public MutableLiveData<Integer> my_rec_open = new MutableLiveData<>();
     public MutableLiveData<String> my_rec_gpx = new MutableLiveData<>();
-
+    public MutableLiveData<Integer> like_count = new MutableLiveData<>();
+    public MutableLiveData<String> CourseRider = new MutableLiveData<>();
 
     //경쟁전
     public MutableLiveData<String> comp_num = new MutableLiveData<>();

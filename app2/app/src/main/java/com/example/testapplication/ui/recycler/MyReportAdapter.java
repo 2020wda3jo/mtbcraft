@@ -101,8 +101,6 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
             model.my_rec_max.setValue(itemList.get(position).getRr_topspeed() +"km/h");
             model.my_rec_avg.setValue(itemList.get(position).getRr_avgspeed() +"km/h");
             model.my_rec_gpx.setValue(itemList.get(position).getRr_gpx());
-
-
         });
     }
 

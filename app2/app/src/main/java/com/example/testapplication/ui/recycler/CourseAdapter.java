@@ -96,16 +96,40 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.MyRecordHo
         testViewHolder.webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         testViewHolder.webview.getSettings().setDomStorageEnabled(true);
 
+        //휴식시간 계산
+        int b_hour, b_min, b_sec = itemList.get(position).getRr_breaktime();
+        b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
+
+
+
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             testViewHolder.webview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }else{
             testViewHolder.webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-
+        int finalMin = min;
+        int finalSec = sec;
+        int finalB_min = b_min;
+        int finalB_sec = b_sec;
         testViewHolder.mView.setOnClickListener(v -> {
-
             controller.navigate(R.id.action_nav_course_view_to_nav_course_detail);
+            model.r_num.setValue(String.valueOf(itemList.get(position).getRr_num()));
+            model.my_rec_name.setValue(itemList.get(position).getRr_name());
+            model.my_rec_date.setValue(itemList.get(position).getRr_date());
+            model.my_rec_adress.setValue(itemList.get(position).getRr_area());
+            model.my_rec_dis.setValue(total);
+            model.my_rec_get.setValue(itemList.get(position).getRr_high() +"m");
+            model.my_rec_time.setValue(hour_s+"시간 "+ finalMin +"분 "+ finalSec +"초");
+            model.my_rec_rest.setValue(b_hour+"시간 "+ finalB_min +"분 "+ finalB_sec +"초");
+            model.my_rec_open.setValue(itemList.get(position).getRr_open());
+            model.my_rec_max.setValue(itemList.get(position).getRr_topspeed() +"km/h");
+            model.my_rec_avg.setValue(itemList.get(position).getRr_avgspeed() +"km/h");
+            model.my_rec_gpx.setValue(itemList.get(position).getRr_gpx());
+            model.like_count.setValue(itemList.get(position).getRr_like());
+            model.CourseRider.setValue(itemList.get(position).getRr_rider());
+
 
         });
     }
