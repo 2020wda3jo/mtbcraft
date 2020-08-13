@@ -97,9 +97,9 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
             model.my_rec_get.setValue(itemList.get(position).getRr_high() +"m");
             model.my_rec_time.setValue(hour_s+"시간 "+ finalMin +"분 "+ finalSec +"초");
             model.my_rec_rest.setValue(b_hour+"시간 "+ finalB_min +"분 "+ finalB_sec +"초");
-            model.my_rec_open.setValue(String.valueOf(itemList.get(position).getRr_open()));
-            model.my_rec_max.setValue(String.valueOf(itemList.get(position).getRr_topspeed())+"km/h");
-            model.my_rec_avg.setValue(String.valueOf(itemList.get(position).getRr_avgspeed())+"km/h");
+            model.my_rec_open.setValue(itemList.get(position).getRr_open());
+            model.my_rec_max.setValue(itemList.get(position).getRr_topspeed() +"km/h");
+            model.my_rec_avg.setValue(itemList.get(position).getRr_avgspeed() +"km/h");
             model.my_rec_gpx.setValue(itemList.get(position).getRr_gpx());
 
 

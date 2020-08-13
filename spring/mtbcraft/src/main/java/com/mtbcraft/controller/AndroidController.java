@@ -101,19 +101,18 @@ public class AndroidController {
 	}
 	
 	//주행기록 상세보기(공개여부설정)
-		@RequestMapping(value = "/android/recordset/open")
+		@RequestMapping(value = "recordset/open")
 		public @ResponseBody Map<String, String> RidingOpenSet(HttpServletRequest request) throws Exception {
 			RidingRecord record = new RidingRecord();
 			record.setRr_num(Integer.parseInt(request.getParameter("rr_num")));
-			record.setRr_rider(request.getParameter("rr_rider"));
-			record.setRr_open(Integer.parseInt(request.getParameter("open")));
-			System.out.println(request.getParameter("rr_num")+ " "+ request.getParameter("rr_rider")+" "+request.getParameter("open"));
-			
+			record.setRr_open(Integer.parseInt(request.getParameter("rr_open")));
+			System.out.println(request.getParameter("rr_num")+ " "+request.getParameter("rr_open"));
+
 			androidService.RidingOpenSet(record);
 			// 안드로이드에게 전달하는 데이터
 			Map<String, String> result = new HashMap<String, String>();
 			result.put("data1", "성공했쩡");
-			
+
 			return result;
 		}
 	
@@ -147,20 +146,20 @@ public class AndroidController {
 		}
 
 	// 코스 조회
-	@RequestMapping(value = "/app/riding/course")
+	@RequestMapping(value = "riding/course")
 	public @ResponseBody List<App_RidingRecord> getCourse() throws Exception {
 		return androidService.getCourse();
 	}
 
 	// 코스 조회
-	@RequestMapping(value = "/app/riding/course/{c_num}")
+	@RequestMapping(value = "riding/course/{c_num}")
 	public @ResponseBody List<Course> getCourseItem(@PathVariable(value = "c_num") String c_num) throws Exception {
 		System.out.println(c_num);
 		return androidService.getCourseItem(c_num);
 	}
 
 	// 코스 스크랩하기
-	@RequestMapping(value = "/app/riding/coursescrap")
+	@RequestMapping(value = "riding/coursescrap")
 	public @ResponseBody Map<String, String> coursescrap(HttpServletRequest request) throws Exception {
 		Scrap_Status scrap = new Scrap_Status();
 		scrap.setSs_rnum(Integer.parseInt(request.getParameter("c_num")));
@@ -177,20 +176,20 @@ public class AndroidController {
 	}
 
 	// 사용자 스크랩 코스 조회
-	@RequestMapping(value = "/app/riding/scrap/{rr_rider}")
+	@RequestMapping(value = "riding/scrap/{rr_rider}")
 	public @ResponseBody List<Scrap_Status> getScrap(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
 		return androidService.getScrap(rr_rider);
 	}
 
 	// 사용자 스크랩 코스 상세보기
-	@RequestMapping(value = "/app/riding/scrap/{rr_rider}/{ss_course}", method = RequestMethod.GET)
+	@RequestMapping(value = "riding/scrap/{rr_rider}/{ss_course}", method = RequestMethod.GET)
 	public @ResponseBody List<Course> getScrapDetail(@PathVariable(value = "rr_rider") String rr_rider,
 			@PathVariable(value = "ss_course") String ss_course) throws Exception {
 		return androidService.getScrapDetail(rr_rider, ss_course);
 	}
 	
 	//스크랩 삭제
-	@RequestMapping(value = "/app/riding/scrap/del/{ss_rnum}", method = RequestMethod.GET)
+	@RequestMapping(value = "riding/scrap/del/{ss_rnum}", method = RequestMethod.GET)
 	public void delScrap(@PathVariable(value = "ss_rnum") String ss_rnum) throws Exception {
 		System.out.println(ss_rnum);
 		androidService.delScrap(ss_rnum);
@@ -198,7 +197,7 @@ public class AndroidController {
 	}
 
 	//좋아요
-	@RequestMapping(value = "/app/riding/course/like", method = RequestMethod.POST)
+	@RequestMapping(value = "riding/course/like", method = RequestMethod.POST)
 	public @ResponseBody  Map<String, String> likeput(HttpServletRequest request) throws Exception {
 		System.out.println(request.getParameter("rr_rider") + " " +request.getParameter("rr_num"));
 		RidingRecord record = new RidingRecord();
@@ -212,19 +211,19 @@ public class AndroidController {
 	}
 	
 	//좋아요 읽기
-	@RequestMapping(value = "/app/riding/course/like/{rr_num}", method = RequestMethod.GET)
+	@RequestMapping(value = "riding/course/like/{rr_num}", method = RequestMethod.GET)
 	public @ResponseBody List<RidingRecord> getLikeCount(@PathVariable(value = "rr_num") int rr_num) throws Exception {
 		return androidService.getLikeCount(rr_num);
 	}
 	
 	//좋아요 상태
-		@RequestMapping(value = "/app/riding/course/like/{ls_rnum}/{ls_rider}", method = RequestMethod.GET)
+		@RequestMapping(value = "riding/course/like/{ls_rnum}/{ls_rider}", method = RequestMethod.GET)
 		public @ResponseBody List<Like_Status> getLikeStatus(@PathVariable(value = "ls_rnum") int ls_rnum, @PathVariable(value = "ls_rider") String ls_rider) throws Exception {
 			return androidService.getLikeStatus(ls_rnum, ls_rider);
 		}
 		
 	// 파일 다운로드
-	@RequestMapping(value = "/app/getGPX/{file_dir}/{file_name}", method = RequestMethod.GET)
+	@RequestMapping(value = "getGPX/{file_dir}/{file_name}", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> getImageAsResponseEntity( @PathVariable("file_name") String fileName, @PathVariable("file_dir") String fileDir ) throws IOException {
 		
 	    HttpHeaders headers = new HttpHeaders();
@@ -397,13 +396,13 @@ public class AndroidController {
 		return androidService.getCourseRiview(c_num);
 	}
 
-	@RequestMapping("/app/riding/course_view/{rr_num}")
+	@RequestMapping("riding/course_view/{rr_num}")
 	public String course_view(@PathVariable int rr_num, Model model) throws Exception{
 		model.addAttribute("rr_num", rr_num);
 		return "android/course_view";
 	}
 
-	@RequestMapping("/app/riding/course_share/{rr_num}")
+	@RequestMapping("riding/course_share/{rr_num}")
 	public String course_share(@PathVariable int rr_num, Model model) throws Exception{
 		model.addAttribute("rr_num", rr_num);
 		return "android/course_share";

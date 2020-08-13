@@ -1,13 +1,11 @@
 package com.example.testapplication.ui.records;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.testapplication.R;
-import com.example.testapplication.databinding.FragmentMyDetailBinding;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.gpx.GPXParser;
 import com.example.testapplication.gpx.Gpx;
@@ -42,6 +39,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -74,9 +72,9 @@ public class MyDetailFragment extends BaseFragment implements MapView.CurrentLoc
     private LinearLayout set_noopen, set_open;
     private SharedPreferences auto;
     private ImageView userImage;
-    private Call<List<RidingRecord>> record;
+    private Call<RidingRecord> record;
     List<Track> tracks;
-    private TextView RidingTime, RidingRest, RidingDistance, RidingMax, RidingAvg, RidingGet;
+    private TextView RidingTime, RidingRest, RidingDistance, RidingMax, RidingAvg, RidingGet, RidingAddr;
 
     public MyDetailFragment() {
         // Required empty public constructor
@@ -137,45 +135,71 @@ public class MyDetailFragment extends BaseFragment implements MapView.CurrentLoc
         RidingMax = (TextView) view.findViewById(R.id.Riding_max);
         RidingAvg = (TextView) view.findViewById(R.id.Riding_avg);
         RidingGet = (TextView) view.findViewById(R.id.Riding_godo);
+        RidingAddr = (TextView) view.findViewById(R.id.Riding_addr);
         RidingTime.setText(model.my_rec_time.getValue());
         RidingRest.setText(model.my_rec_rest.getValue());
         RidingDistance.setText(model.my_rec_dis.getValue());
         RidingMax.setText(model.my_rec_max.getValue());
         RidingAvg.setText(model.my_rec_avg.getValue());
         RidingGet.setText(model.my_rec_get.getValue());
+        RidingAddr.setText(model.my_rec_adress.getValue());
         set_open = (LinearLayout) view.findViewById(R.id.set_open);
         set_noopen = (LinearLayout) view.findViewById(R.id.set_noopen);
 
         set_open.setVisibility(View.GONE);
         set_noopen.setVisibility(View.GONE);
 
+        RidingRecord setRecord = new RidingRecord();
+        setRecord.setRr_num(Integer.parseInt(rr_num));
+        rr_open = model.my_rec_open.getValue();
         if(rr_open == 1){
-            set_open.setVisibility(View.GONE);
-            set_noopen.setVisibility(View.VISIBLE);
-            record = serverApi.getRecordDetail(rr_num);
-            record.enqueue(new Callback<List<RidingRecord>>() {
-                @Override
-                public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
-                    if(response.code() == 200){
-                        List<RidingRecord> record = response.body();
-                        for(RidingRecord Detail : record) {
-                            Log.d("오프ㅜㄴ", String.valueOf(Detail.getRr_open()));
-                        }
-
-
+            set_open.setVisibility(View.VISIBLE);
+            set_noopen.setVisibility(View.GONE);
+            setRecord.setRr_open(0);
+            HashMap<String, Object> input = new HashMap<>();
+            input.put("rr_num",rr_num);
+            input.put("rr_open","0");
+            set_open.setOnClickListener(v->{
+                record = serverApi.setOpen(input);
+                record.enqueue(new Callback<RidingRecord>() {
+                    @Override
+                    public void onResponse(Call<RidingRecord> call, Response<RidingRecord> response) {
+                        if(response.code()==200){
+                            set_open.setVisibility(View.GONE);
+                            set_noopen.setVisibility(View.VISIBLE);
                         }
                     }
 
-                @Override
-                public void onFailure(Call<List<RidingRecord>> call, Throwable t) {
-                    t.printStackTrace();
-                }
+                    @Override
+                    public void onFailure(Call<RidingRecord> call, Throwable t) {
+
+                    }
+                });
             });
 
-
         }else{
-            set_noopen.setVisibility(View.GONE);
-            set_open.setVisibility(View.VISIBLE);
+            set_noopen.setVisibility(View.VISIBLE);
+            set_open.setVisibility(View.GONE);
+
+            HashMap<String, Object> input = new HashMap<>();
+            input.put("rr_num",rr_num);
+            input.put("rr_open","1");
+            set_noopen.setOnClickListener(v->{
+                record = serverApi.setOpen(input);
+                record.enqueue(new Callback<RidingRecord>() {
+                    @Override
+                    public void onResponse(Call<RidingRecord> call, Response<RidingRecord> response) {
+                        if(response.code()==200){
+                            set_open.setVisibility(View.VISIBLE);
+                            set_noopen.setVisibility(View.GONE);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<RidingRecord> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+            });
         }
 
         Thread uThread = new Thread() {
@@ -225,26 +249,6 @@ public class MyDetailFragment extends BaseFragment implements MapView.CurrentLoc
             }
         };
         uThread.start(); // 작업 Thread 실행
-
-
-        record = serverApi.getRecordDetail(rr_num);
-        record.enqueue(new Callback<List<RidingRecord>>() {
-            @Override
-            public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
-                if(response.code()==200){
-
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<RidingRecord>> call, Throwable t) {
-
-            }
-        });
-
-
     }
     @Override
     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {

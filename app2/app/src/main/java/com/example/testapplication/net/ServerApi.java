@@ -12,11 +12,14 @@ import com.example.testapplication.dto.User;
 import com.example.testapplication.ui.riding.EndActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -63,4 +66,9 @@ public interface ServerApi {
     //라이딩 상세보기
     @GET("app/get/detail/{rr_num}")
     Call<List<RidingRecord>> getRecordDetail(@Path("rr_num") String rr_num);
+
+    //라이딩 공개설정
+    @FormUrlEncoded
+    @POST("app/recordset/open")
+    Call<RidingRecord> setOpen(@FieldMap HashMap<String, Object> param);
 }
