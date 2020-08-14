@@ -64,6 +64,12 @@ public class EntertainController {
 		return "entertainment/competitions";
 	}
 	
+	// 엔터테인먼트 가이드
+	@RequestMapping(value="/entertainment/guide")
+	public String guide() {
+		return "entertainment/guide";
+	}
+	
 	// 경쟁전
 	@RequestMapping(value="/entertainment/competition", method = RequestMethod.GET)
 	public String competitions(Principal principal, Model model) {
