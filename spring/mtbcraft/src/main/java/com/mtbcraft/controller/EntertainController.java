@@ -57,12 +57,6 @@ public class EntertainController {
 		
 		return "entertainment/main";
 	}
-
-	// 엔터테인먼트 메인테스트
-	@RequestMapping(value="/entertainment", method = RequestMethod.GET)
-	public String competitions22() {
-		return "entertainment/competitions";
-	}
 	
 	// 엔터테인먼트 가이드
 	@RequestMapping(value="/entertainment/guide")
@@ -147,8 +141,6 @@ public class EntertainController {
 		
 		String rate =( (int) Math.floor((success_rate*100)) )+"%";
 		
-		System.out.println(success_rate);
-		System.out.println(rate);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("rate", rate);

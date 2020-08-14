@@ -1,6 +1,7 @@
 package com.example.testapplication.ui.records;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import retrofit2.Response;
 public class RecordFragment extends BaseFragment{
     private Call<ArrayList<RidingRecord>> request;
     private List<RidingRecord> items;
+
     private RecyclerView recyclerView;
     private MyReportAdapter adapter;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,13 +49,14 @@ public class RecordFragment extends BaseFragment{
                 if(response.code()==200){
                     items = response.body();
 
-
+                    Log.d("됬나", String.valueOf(items));
                     for(RidingRecord item: items){
                         itemList.add(item);
                     }
 
-
-
+                    MyReportAdapter adapter = new MyReportAdapter(requireContext().getApplicationContext(), itemList, controller, model);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                    recyclerView.setAdapter(adapter);
 
                     }
                 }
@@ -61,6 +64,7 @@ public class RecordFragment extends BaseFragment{
             @Override
             public void onFailure(Call<ArrayList<RidingRecord>> call, Throwable t) {
                 t.printStackTrace();
+                Log.d("안됨","안댐");
             }
         });
         /* adapter=new MyReportAdapter(this);

@@ -584,8 +584,6 @@ public class CommunityController {
 		
 		goods.setG_num(g_num);
 		
-		System.out.println(price);
-		
 		if(price.contains("원")) {
 			 System.out.println( price.substring(0,  price.lastIndexOf("원") ) );
 			 goods.setG_price( Integer.parseInt( price.substring(0,  price.lastIndexOf("원") ) ) );

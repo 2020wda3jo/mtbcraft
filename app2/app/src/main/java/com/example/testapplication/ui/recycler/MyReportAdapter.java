@@ -2,9 +2,6 @@ package com.example.testapplication.ui.recycler;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,40 +11,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testapplication.MainViewModel;
 import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
-import com.example.testapplication.ui.records.DetailActivity;
-import com.example.testapplication.ui.records.MyDetailFragment;
-import com.example.testapplication.ui.records.RecordFragment;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Callback;
 
 public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyRecordHolder>{
 
-
-
-
-    public interface OnItemClick{
-        void onItemClick(int position, RidingRecord memo);
-    }
-
-    private OnItemClick listener;
-    public RecordFragment mContext;
+    public Context mContext;
     public ArrayList<RidingRecord> itemList;
-    public String r_image;
+    String Save_Path;
+    public NavController controller;
+    public MainViewModel model;
 
 
-    public MyReportAdapter(RecordFragment recordFragment, ArrayList<RidingRecord> itemList) {
-        this.mContext = recordFragment;
+    public MyReportAdapter(Context mContext, ArrayList<RidingRecord> itemList, NavController controller, MainViewModel model) {
+        this.mContext = mContext;
         this.itemList = itemList;
+        this.controller = controller;
+        this.model = model;
     }
 
     @Override
@@ -78,48 +65,60 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
             min=00;
         }
 
+        //휴식시간 계산
+        int b_hour, b_min, b_sec = itemList.get(position).getRr_breaktime();
+        b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
+
         int des = (itemList.get(position).getRr_distance());
         float km = (float) (des/1000.0);
-        String total = String.valueOf(km)+"Km";
-
+        String total = km +"Km";
         String hour_s = String.valueOf(hour);
 
-        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Log.d("dfdf",itemList.get(position).getRr_rider());
 
 
+        testViewHolder.my_rec_name.setText(itemList.get(position).getRr_name());
+        testViewHolder.my_rec_date.setText(itemList.get(position).getRr_date());
+        testViewHolder.my_rec_adress.setText(itemList.get(position).getRr_area());
+        testViewHolder.my_rec_dis.setText(total);
+        testViewHolder.my_rec_get.setText(itemList.get(position).getRr_high() +"m");
+        testViewHolder.my_rec_time.setText(hour_s+"시간 "+min+"분 "+ sec+"초");
 
-
-        testViewHolder.record_name.setText(itemList.get(position).getRr_name());
-        testViewHolder.record_date.setText(itemList.get(position).getRr_date());
-        testViewHolder.record_adress.setText(itemList.get(position).getRr_area());
-        testViewHolder.my_dis.setText(total);
-        testViewHolder.my_get.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
-        testViewHolder.my_time.setText(hour_s+"시간 "+min+"분 "+ sec+"초");
-
-
+        int finalMin = min;
+        int finalSec = sec;
+        int finalB_min = b_min;
+        int finalB_sec = b_sec;
         testViewHolder.mView.setOnClickListener(v -> {
-            Intent intent=new Intent(v.getContext(), DetailActivity.class);
-            v.getContext().startActivity(intent);
+            controller.navigate(R.id.action_nav_records_to_myDetailFragment);
+            model.r_num.setValue(String.valueOf(itemList.get(position).getRr_num()));
+            model.my_rec_name.setValue(itemList.get(position).getRr_name());
+            model.my_rec_date.setValue(itemList.get(position).getRr_date());
+            model.my_rec_adress.setValue(itemList.get(position).getRr_area());
+            model.my_rec_dis.setValue(total);
+            model.my_rec_get.setValue(itemList.get(position).getRr_high() +"m");
+            model.my_rec_time.setValue(hour_s+"시간 "+ finalMin +"분 "+ finalSec +"초");
+            model.my_rec_rest.setValue(b_hour+"시간 "+ finalB_min +"분 "+ finalB_sec +"초");
+            model.my_rec_open.setValue(itemList.get(position).getRr_open());
+            model.my_rec_max.setValue(itemList.get(position).getRr_topspeed() +"km/h");
+            model.my_rec_avg.setValue(itemList.get(position).getRr_avgspeed() +"km/h");
+            model.my_rec_gpx.setValue(itemList.get(position).getRr_gpx());
         });
     }
 
 
     class MyRecordHolder extends RecyclerView.ViewHolder {
-        public TextView record_name, record_date,record_adress, my_dis, my_get, my_time;
+        public TextView my_rec_name, my_rec_date,my_rec_adress, my_rec_dis, my_rec_get, my_rec_time;
         public ImageView my_image;
         public LinearLayout viewClick;
         public final View mView;
         public MyRecordHolder( View itemView) {
             super(itemView);
             mView = itemView;
-            record_name = itemView.findViewById(R.id.record_name);
-            record_date = itemView.findViewById(R.id.record_date);
-            record_adress = itemView.findViewById(R.id.record_adress);
-            my_dis = itemView.findViewById(R.id.my_dis);
-            my_get = itemView.findViewById(R.id.my_get);
-            my_time = itemView.findViewById(R.id.my_time);
+            my_rec_name = itemView.findViewById(R.id.record_name);
+            my_rec_date = itemView.findViewById(R.id.record_date);
+            my_rec_adress = itemView.findViewById(R.id.record_adress);
+            my_rec_dis = itemView.findViewById(R.id.my_dis);
+            my_rec_get = itemView.findViewById(R.id.my_get);
+            my_rec_time = itemView.findViewById(R.id.my_time);
             my_image = itemView.findViewById(R.id.myimage);
             viewClick = itemView.findViewById(R.id.viewClick);
         }

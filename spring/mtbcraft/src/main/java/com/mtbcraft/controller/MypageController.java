@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mtbcraft.dto.Board;
+import com.mtbcraft.dto.Rider;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.service.EntertainmentService;
 import com.mtbcraft.service.MyPageService;
@@ -67,8 +68,6 @@ public class MypageController {
 	@PostMapping("/info/history")
 	String goUserInfoPage(String beforePage, String userNickname, Model model) {
 		
-		System.out.println(beforePage);
-		System.out.println(userNickname);
 		
 		if(beforePage.equals("sns")) {
 			beforePage = "/community/mutub";
@@ -108,7 +107,19 @@ public class MypageController {
 		return myPageService.getOriginPost(b_num);
 	}
 	
+	@RequestMapping(value = "/mypage/change/badge/{bg_num}", method = RequestMethod.POST )
+	@ResponseBody
+	public String changeMyBadge(@PathVariable String bg_num, Principal principal) {
 		
+		Rider r = new Rider();
+		
+		r.setR_id(principal.getName());
+		r.setBadge(bg_num);
+		
+		myPageService.changeRiderBadge(r);
+		
+		return "succss";
+	}
 		
 		
 //		// 일반 회원 정보 변경

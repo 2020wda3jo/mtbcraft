@@ -11,6 +11,7 @@ import com.mtbcraft.dto.DangerousArea;
 import com.mtbcraft.dto.Like_Status;
 import com.mtbcraft.dto.Nomtb;
 import com.mtbcraft.dto.PagingVO;
+import com.mtbcraft.dto.Recom_Course;
 import com.mtbcraft.dto.RidingRecord;
 import com.mtbcraft.dto.Tag_Status;
 
@@ -110,4 +111,7 @@ public interface RidingMapper {
 	
 	//사용자 닉네임 조회
 	public String getRiderNickName(String rider);
+	
+	//추천코스 상세 정보 제공
+	public Recom_Course getRecomCourse(int rr_num);
 }

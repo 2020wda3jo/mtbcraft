@@ -71,4 +71,9 @@ public class MyPageService {
 	public Board getOriginPost(int b_num) {
 		return myPageMapper.getOriginPost(b_num);
 	}
+	
+	//대표배지 변경
+	public void changeRiderBadge(Rider rider) {
+		myPageMapper.changeRiderBadge(rider);
+	}
 }

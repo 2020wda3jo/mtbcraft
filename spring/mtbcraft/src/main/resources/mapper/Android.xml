@@ -83,7 +83,7 @@
 	
 	<!-- 내 기록 상세보기 공개여부 업데이트 -->
 	<select id="RidingOpenSet" parameterType="Map" resultType="com.mtbcraft.dto.RidingRecord">
-		update riding_record set rr_open = #{rr_open} where rr_rider=#{rr_rider} and rr_num=#{rr_num}
+		update riding_record set rr_open = #{rr_open} where rr_num=#{rr_num}
 	</select>
 	
 	<!-- 코스보기 -->

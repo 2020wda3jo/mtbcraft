@@ -200,5 +200,26 @@
 	<select id="getRiderNickName" parameterType="String" resultType="String">
 		select r_nickname from rider where r_id=#{rider}
 	</select>
+	
+	<!-- 추천코스 상세 정보 제공 -->
+	<select id="getRecomCourse" parameterType="int" resultType="com.mtbcraft.dto.Recom_Course">
+		select rr_name rs_name, rr_distance rs_distance, rr_high rs_high, rr_area rs_area, round((avgspd1+avgspd2)/2,2) rs_avgspeed, cnt rs_cnt,truerank, total, percent from (
+		    select rr_name,rr_distance, rr_high, rr_area, rr_avgspeed avgspd1 from riding_record where rr_num=#{rr_num}
+		), (
+		  select count(rr_foname) cnt, avg(rr_avgspeed) avgspd2 from riding_record where rr_foname=(select rr_name from riding_record where rr_num=#{rr_num})
+		), (
+		select truerank, total, round(truerank/total*100) percent from (
+		select rownum trueRank, C.* from (
+		select rr_numA, (rank_H+rank_D) from (
+		  select rownum rank_H, A.* from( 
+		  select rr_num rr_numA, rr_high from riding_record order by rr_high desc 
+		  ) A
+		),(
+		  select rownum rank_D, B.* from( 
+		  select rr_num rr_numB, rr_distance from riding_record order by rr_distance desc 
+		) B
+		) where rr_numA=rr_numB order by 2)C),(select count(rr_num) total from riding_record) where rr_numA=#{rr_num}
+		)
+	</select>
 </mapper>
 

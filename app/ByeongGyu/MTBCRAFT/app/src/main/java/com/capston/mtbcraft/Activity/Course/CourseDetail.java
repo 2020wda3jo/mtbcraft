@@ -316,21 +316,16 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             }
         });
 
-        share_bt.setOnClickListener(new View.OnClickListener(){
+        share_bt.setOnClickListener(v -> {
+            Intent intent1 = new Intent();
+            intent1.setAction(Intent.ACTION_SEND);
+            intent1.setType("text/plain");
+            intent1.putExtra(Intent.EXTRA_SUBJECT, Nickname+"님이"+rr_name+"코스를 공유하였습니다. 해당URL을 누르면 해당 페이지로 이동합니다. ");
+            intent1.putExtra(Intent.EXTRA_TEXT, "http://13.209.229.237:8080/app/riding/course_share/"+c_num);
 
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, Nickname+"님이"+rr_name+"코스를 공유하였습니다. 해당URL을 누르면 해당 페이지로 이동합니다. ");
-                intent.putExtra(Intent.EXTRA_TEXT, "http://13.209.229.237:8080/app/riding/course_share/"+c_num);
-
-                Intent chooser = Intent.createChooser(intent, "친구에게 공유하기");
-                startActivity(chooser);
-                mapViewContainer.removeAllViews();
-            }
+            Intent chooser = Intent.createChooser(intent1, "친구에게 공유하기");
+            startActivity(chooser);
+            mapViewContainer.removeAllViews();
         });
         MapPolyline polyline = new MapPolyline();
         polyline.setTag(1000);
@@ -404,7 +399,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             params.put("c_num", c_num);
             params.put("ss_rider", LoginId);
             scrap.execute(params);
-
         });
 
         button2.setOnClickListener(v->{

@@ -29,6 +29,7 @@
 
 .hashtag span {
 	margin-right: 15px;
+	margin-bottom: 15px;
 }
 
 .hashtag button {
@@ -66,7 +67,8 @@
     z-index: 1000;
     border: 2px solid #ccc;
     background: #fff;
-    cursor: move; }
+    cursor: move; 
+    }
 
 .layerpop_area .title {
     padding: 10px 10px 10px 10px;
@@ -95,3 +97,9 @@
     margin: 2%;
     color: #828282; }
 
+#layerbox {
+	text-align: center;
+}
+#layerbox button {
+	width: 90px;
+}
