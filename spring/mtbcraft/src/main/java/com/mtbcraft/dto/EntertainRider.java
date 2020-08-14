@@ -4,7 +4,14 @@ public class EntertainRider {
 	private String nickname;
 	private String user_img;
 	private String bg_img;
+	private int bg_num;
 	
+	public int getBg_num() {
+		return bg_num;
+	}
+	public void setBg_num(int bg_num) {
+		this.bg_num = bg_num;
+	}
 	public String getNickname() {
 		return nickname;
 	}

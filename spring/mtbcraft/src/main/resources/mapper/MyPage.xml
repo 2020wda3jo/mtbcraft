@@ -57,5 +57,10 @@
 	<select id="getOriginPost" parameterType="int" resultType="com.mtbcraft.dto.Board">
 		select b_title, b_content, b_day, b_file, b.R_NICKNAME b_rider, b.R_IMAGE b_img, to_char(b_day, 'YYYY-MM-DD HH24:MI:SS') customDate from BOARD a, RIDER b where r_id=b_rider and b_num=#{b_num}
 	</select>
+	
+	<!-- 대표배지 변경 -->
+	<update id="changeRiderBadge" parameterType="com.mtbcraft.dto.Rider">
+		update rider set r_badge=#{badge} where r_id=#{r_id}
+	</update>
 </mapper>
 

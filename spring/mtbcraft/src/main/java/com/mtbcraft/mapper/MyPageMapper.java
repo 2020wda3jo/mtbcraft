@@ -42,4 +42,7 @@ public interface MyPageMapper {
 	
 	//원본 게시글 조회
 	public Board getOriginPost(int b_num);
+	
+	//대표배지 변경
+	public void changeRiderBadge(Rider rider);
 }

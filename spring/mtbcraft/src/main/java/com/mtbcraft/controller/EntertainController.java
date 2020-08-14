@@ -135,8 +135,6 @@ public class EntertainController {
 		
 		String rate =( (int) Math.floor((success_rate*100)) )+"%";
 		
-		System.out.println(success_rate);
-		System.out.println(rate);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("rate", rate);
