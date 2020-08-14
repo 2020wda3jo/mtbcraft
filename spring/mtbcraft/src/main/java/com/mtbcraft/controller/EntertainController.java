@@ -57,12 +57,6 @@ public class EntertainController {
 		
 		return "entertainment/main";
 	}
-
-	// 엔터테인먼트 메인테스트
-	@RequestMapping(value="/entertainment", method = RequestMethod.GET)
-	public String competitions22() {
-		return "entertainment/competitions";
-	}
 	
 	// 경쟁전
 	@RequestMapping(value="/entertainment/competition", method = RequestMethod.GET)

@@ -23,7 +23,7 @@ display:none;}
 	       </div>
 	     </div>
 	   </div>
-	</section>
+</section>
 
 <!-- 메인 기능 버튼 -->
 <div id="ridingmainbtn">
@@ -165,7 +165,7 @@ display:none;}
 			</table>
 			<div>
 				<div class="hashtag"></div>
-				<button onClick="javascript:goDetail('테스트');">태그등록</button>
+				<button class="hashtagRegBtn" onClick="javascript:goDetail('테스트');">태그등록</button>
 			</div>
 			<button id="bt_mode" onclick="change()">스크랩하기</button>
 			<button id="bt_like" onclick="like()">추천!</button>
@@ -193,20 +193,19 @@ display:none;}
 		<input type="hidden" id="bt_rr_open">
 		<input type="hidden" id="selected_rr_num">
 	</div>
+	</div>
 	<div id="newfooter">
 		<footer th:replace="footer2"></footer>
 	</div>
-</div>
 
 
-    <div style="height:1000px;"> </div>
 
     <!-- 팝업뜰때 배경 -->
     <div id="mask"></div>
 
     <!--Popup Start -->
     <div id="layerbox" class="layerpop"
-        style="width: 700px; height: 350px;">
+        style="width: 320px; height: 200px;">
         <article class="layerpop_area">
         <div class="title">해시태그 등록</div>
         <div class="content">
