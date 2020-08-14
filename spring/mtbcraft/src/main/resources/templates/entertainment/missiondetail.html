@@ -71,7 +71,10 @@
 	   			<tbody>
 	   				<tr th:each="rider:${list}">
 	   					<th><img alt="" src="/imgs/logo.png" th:src="'/data/img/rider/'+${rider.user_img}"></th>
-	   					<th><img alt="" src="/imgs/logo.png" th:src="'/data/img/badge/'+${rider.bg_img}"></th>
+	   					<th>
+	   						<img alt="" src="/imgs/logo.png" th:if="${rider.bg_num}>=300" th:src="'/data/img/cbadge/'+${rider.bg_img}">
+	   						<img alt="" src="/imgs/logo.png" th:unless="${rider.bg_num}>=300" th:src="'/data/img/badge/'+${rider.bg_img}">
+	   					</th>
 	   					<th th:text="${rider.nickname}+' 님'">닉네임</th>
 	   				</tr>
 	   			</tbody>

@@ -17,7 +17,9 @@
 	</select>
 	
 	<select id="getCustomBadge" parameterType="String" resultType="com.mtbcraft.dto.CustomBadge">
-		select * from custom_badge where cbg_id = #{rr_id} order by cbg_num
+		select * from custom_badge
+		where cbg_id = #{rr_id}
+		order by cbg_num
 	</select>
 
 	<select id="getMission" resultType="com.mtbcraft.dto.Mission">
@@ -105,7 +107,13 @@
 	
 	<!-- 미션 상세 정보 조회시 성공 인원 조회 -->
 	<select id="getER_List" parameterType="int" resultType="com.mtbcraft.dto.EntertainRider">
-		select r_nickname nickname, bg_image bg_img, r_image user_img from rider, badge where r_badge=bg_num and r_id in ( select mc_rider from mission_complete where mc_mission=#{m_num} )
+		select bg_num, r_nickname nickname, bg_image bg_img, r_image user_img from rider, badge 
+		where 
+		r_badge=bg_num and r_id in ( select mc_rider from mission_complete where mc_mission=#{m_num} )
+		union
+		select cbg_num bg_num, r_nickname nickname, cbg_image bg_img, r_image user_img from rider, custom_badge 
+		where 
+		r_badge=cbg_num and r_id in ( select mc_rider from mission_complete where mc_mission=#{m_num} )
 	</select>
 	
 	<!-- 전체 회원 조회 -->

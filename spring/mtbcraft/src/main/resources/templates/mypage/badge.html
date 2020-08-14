@@ -52,7 +52,7 @@
                <p>벌써 배지를 이만큼 모으셨군요?!</p>
                
                <div class="flex">
-                  <div class="badgeitem" th:each="badge:${badgeList}">
+                  <div class="badgeitem" th:each="badge:${badgeList}" th:onclick="|changeBadge('${badge.bg_num}')|">
                      <div class="bgimg">
                         <img alt="" src="#" th:if="${#strings.substring(badge.bg_image,0,4)}=='comp'" th:src="|/entertainment/img/badge/${badge.bg_image}1.png|"> 
                         <img alt="" src="#" th:unless="${#strings.substring(badge.bg_image,0,4)}=='comp'" th:src="|/entertainment/img/badge/${badge.bg_image}|"> 
@@ -65,7 +65,7 @@
                <h1>커스텀 배지 보기</h1>
                <p>커스텀 배지를 만들어 보아요!</p>
                <div class="flex">
-               <div class="cbadgeitem" th:each="cbadge:${cbadgeList}">
+               <div class="cbadgeitem" th:each="cbadge:${cbadgeList}" th:onclick="|changeBadge('${cbadge.cbg_num}')|">
                   <div class="cbgimg">
                      <img alt="" src="#" th:src="|/entertainment/img/cbadge/${cbadge.cbg_image}|">
                   </div>
@@ -98,6 +98,23 @@
                alert("배지 등록페이지로 이동합니다.");
                location.href = "/entertainment/badgeUpload";
             }
+         }
+         
+         function changeBadge(bg_num){
+        	 
+        	 var check = confirm('해당 배지를 대표배지로 설정하시겠습니까?');
+        	 if(check){
+        		 $.ajax({
+        			 url:"/mypage/change/badge/"+bg_num,
+        			 type:"post",
+        			 success:function(data){
+						alert("변경하였습니다.");
+        			 }
+        		 });
+        	 }else{
+        		 
+        	 }
+        	 
          }
       </script>
 
