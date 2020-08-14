@@ -25,38 +25,38 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ServerApi {
-    @GET("users")
+    @GET("app/users")
     Call<List<User>> getUsers();
 
-    @GET("users/{id}")
+    @GET("app/users/{id}")
     Call<User> getUser(@Path("id") int id);
 
-    @POST("login")
+    @POST("app/login")
     Call<AnLogin> Login(@Body AnLogin login);
 
-    @GET("getLoginInfo/{LoginId}")
+    @GET("app/getLoginInfo/{LoginId}")
     Call<LoginInfo> getLoginInfo(@Path("LoginId") String LoginId);
 
     @GET("app/getGPX/{directory}/{url}")
     Call<ResponseBody> getFile(@Path("directory") String directory, @Path("url") String url);
 
-    @GET("api/ge/{rr_rider}")
+    @GET("app/ge/{rr_rider}")
     Call<List<RidingRecord>> getMyRecord(@Path("rr_rider") String rr_rider);
 
     //라이딩 기록 저장
-    @POST("android/riding/upload")
+    @POST("app/riding/upload")
     Call<RidingRecord> InsertRecord(@Body RidingRecord record);
 
     //라이딩 기록 저장 후 해당 기록 가져오기
-    @GET("android/riding/getrecord")
+    @GET("app/riding/getrecord")
     Call<List<RidingRecord>> getInsertSel();
 
     //태그삽입
-    @POST("android/riding/taginsert")
+    @POST("app/riding/taginsert")
     Call<Tag_Status> tagInsert(@Body Tag_Status tag_status);
 
     //위험지역가져오기
-    @GET("android/riding/danger")
+    @GET("app/riding/danger")
     Call<List<DangerousArea>> getDangerArea();
 
     //라이딩 기록

@@ -68,6 +68,11 @@
         android:name="com.example.testapplication.ui.competitions.CompetitionDetailFragment"
         android:label="경쟁전 상세보기"
         tools:layout="@layout/fragment_competition_detail" />
+    <fragment
+        android:id="@+id/friend_invite"
+        android:name="com.example.testapplication.Friend_invite"
+        android:label="친구초대하기"
+        tools:layout="@layout/fragment_friend_invite" />
 
 
 </navigation>
