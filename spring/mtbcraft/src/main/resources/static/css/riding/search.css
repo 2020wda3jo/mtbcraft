@@ -2,7 +2,7 @@
 
 #mainbox {
 	margin: 0 auto;
-	padding: 0;
+	height: auto;
 }
 
 #mymap {
@@ -76,4 +76,8 @@
 
 .flex div:first-child {
 	margin-right: 30px;
+}
+
+#newfooter {
+	margin-top: 50px;
 }
