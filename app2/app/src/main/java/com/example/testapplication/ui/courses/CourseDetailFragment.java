@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
@@ -28,7 +30,9 @@ import com.example.testapplication.gpx.Gpx;
 import com.example.testapplication.gpx.Track;
 import com.example.testapplication.gpx.TrackPoint;
 import com.example.testapplication.gpx.TrackSegment;
+import com.example.testapplication.net.HttpClient;
 import com.example.testapplication.ui.BaseFragment;
+import com.example.testapplication.ui.riding.FollowStart;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPoint;
@@ -45,6 +49,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +73,7 @@ public class CourseDetailFragment extends BaseFragment {
     private Gpx parsedGpx = null;
     private MapView mapView;
     private MapPolyline polyline = new MapPolyline();
-    private Button share_bt;
+    private Button share_bt, follow_bt, scrap_bt;
     List<Track> tracks;
     private TextView RidingTime, RidingRest, RidingDistance, RidingMax, RidingAvg, RidingGet, RidingAddr, Course_name, CourseRiderName, CourseDate, LikeCnt;
 
@@ -111,8 +116,8 @@ public class CourseDetailFragment extends BaseFragment {
         CourseRiderName = (TextView) view.findViewById(R.id.CourseRiderName);
         CourseDate = (TextView) view.findViewById(R.id.CourseDate);
         LikeCnt = (TextView) view.findViewById(R.id.LikeCnt);
-
-
+        follow_bt = (Button) view.findViewById(R.id.follow_bt);
+        scrap_bt = (Button) view.findViewById(R.id.scrap_bt);
 
         RidingTime.setText(model.my_rec_time.getValue());
         RidingRest.setText(model.my_rec_rest.getValue());
@@ -175,6 +180,7 @@ public class CourseDetailFragment extends BaseFragment {
         };
         uThread.start(); // 작업 Thread 실행
 
+        //공유버튼
         share_bt.setOnClickListener(v -> {
             Intent intent1 = new Intent();
             intent1.setAction(Intent.ACTION_SEND);
@@ -187,10 +193,61 @@ public class CourseDetailFragment extends BaseFragment {
 
         });
 
+        //스크랩 보관함
+        scrap_bt.setOnClickListener(v -> {
+            Log.d("스크랩",rr_num+" "+LoginId);
+            ScrapTask scrap = new ScrapTask();
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("c_num", rr_num);
+            params.put("ss_rider", LoginId);
+            scrap.execute(params);
+            Log.d("따라가기", rr_num+ " "+ LoginId);
+
+        });
+
+        //따라가기
+        follow_bt.setOnClickListener(v->{
+            Intent intent2=new Intent(requireContext(), FollowStart.class);
+            intent2.putExtra("gpx",String.valueOf(model.my_rec_gpx));
+            intent2.putExtra("c_name",String.valueOf(model.my_rec_name));
+            startActivity(intent2);
+
+            mapViewContainer.removeAllViews();
+            Log.d("따라가기", String.valueOf(model.my_rec_gpx.getValue())+ " "+ String.valueOf(model.my_rec_name.getValue()));
+        });
 
     }
 
+    public class ScrapTask extends AsyncTask<Map<String, String>, Integer, String> {
+        @Override
+        protected String doInBackground(Map<String, String>... maps) {
 
+            // Http 요청 준비 작업
+            //URL은 현재 자기 아이피번호를 입력해야합니다.
+            HttpClient.Builder http = new HttpClient.Builder("POST", "/app/riding/coursescrap");
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
 
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
 
+            // 응답 본문 가져오기
+            String body = post.getBody();
+
+            return body;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                Toast.makeText(requireContext(), "스크랩 보관함에 저장되었습니다.", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(requireContext(), "저장에 실패하였습니다", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

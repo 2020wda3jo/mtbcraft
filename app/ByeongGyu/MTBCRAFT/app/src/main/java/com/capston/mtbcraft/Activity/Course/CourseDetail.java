@@ -399,7 +399,6 @@ public class CourseDetail extends AppCompatActivity implements MapView.CurrentLo
             params.put("c_num", c_num);
             params.put("ss_rider", LoginId);
             scrap.execute(params);
-
         });
 
         button2.setOnClickListener(v->{
