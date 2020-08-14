@@ -1,5 +1,4 @@
 package com.example.testapplication.ui.records;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,8 +57,8 @@ public class RecordFragment extends BaseFragment{
                     recyclerView.setLayoutManager(new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                     recyclerView.setAdapter(adapter);
 
-                    }
                 }
+            }
 
             @Override
             public void onFailure(Call<ArrayList<RidingRecord>> call, Throwable t) {

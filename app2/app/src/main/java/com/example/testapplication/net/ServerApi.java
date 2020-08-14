@@ -7,6 +7,7 @@ import com.example.testapplication.dto.LoginInfo;
 
 import com.example.testapplication.dto.RidingRecord;
 
+import com.example.testapplication.dto.ScrapStatus;
 import com.example.testapplication.dto.Tag_Status;
 import com.example.testapplication.dto.User;
 import com.example.testapplication.ui.riding.EndActivity;
@@ -71,4 +72,8 @@ public interface ServerApi {
     @FormUrlEncoded
     @POST("app/recordset/open")
     Call<RidingRecord> setOpen(@FieldMap HashMap<String, Object> param);
+
+    //라이딩 기록
+    @GET("app/riding/scrap/{rr_rider}")
+    Call<ArrayList<ScrapStatus>> getScrap(@Path("rr_rider") String rr_rider);
 }
