@@ -103,7 +103,7 @@ public class AndroidService {
 		return androidMapper.getCompClub(cs_comp);
 	}
 	
-	public List<Badge> getCompBadge(int comp_badge) throws Exception {
+	public Badge getCompBadge(int comp_badge) throws Exception {
 		return androidMapper.getCompBadge(comp_badge);
 	}
 	

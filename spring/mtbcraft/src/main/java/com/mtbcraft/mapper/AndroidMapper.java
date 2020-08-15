@@ -63,7 +63,7 @@ public interface AndroidMapper {
 	public List<CompClub> getCompClub(int cs_comp) throws Exception;
 	
 	//경쟁전 뱃지 가져오기
-	public List<Badge> getCompBadge(int comp_badge) throws Exception;
+	public Badge getCompBadge(int comp_badge) throws Exception;
 	
 	//경쟁전 개인 점수 가져오기
 	public List<CompScore> getCompScore(int comp_num) throws Exception;

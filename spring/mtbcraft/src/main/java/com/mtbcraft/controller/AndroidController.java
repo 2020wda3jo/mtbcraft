@@ -117,7 +117,7 @@ public class AndroidController {
 		}
 	
 
-		@RequestMapping(value = "/android/fileUpload/{dir}/{fileName}", method = RequestMethod.POST)
+		@RequestMapping(value = "fileUpload/{dir}/{fileName}", method = RequestMethod.POST)
 		public String upload(HttpServletRequest request, MultipartFile file1, @PathVariable(value = "dir") String dir,
 				@PathVariable(value="fileName") String fileName) {
 			try {
@@ -309,7 +309,7 @@ public class AndroidController {
 	}
 
 	@RequestMapping("getCompBadge/{comp_badge}")
-	public @ResponseBody List<Badge> getCompBadge ( @PathVariable(value = "comp_badge") int comp_badge) throws Exception {
+	public @ResponseBody Badge getCompBadge ( @PathVariable(value = "comp_badge") int comp_badge) throws Exception {
 		return androidService.getCompBadge(comp_badge);
 	}
 	
@@ -532,7 +532,7 @@ public class AndroidController {
 
 		memberService.memberInsert(member);
 	}
-	
+
 	// 사용자 등록 위험 지역 조회
 	@RequestMapping(value = "danger/{rr_rider}")
 	public @ResponseBody List<DangerousArea> getUserDangerousArea(@PathVariable(value="rr_rider") String rr_rider) throws Exception {
@@ -540,16 +540,7 @@ public class AndroidController {
 	}
 	
 	@RequestMapping(value = "insertDanger")
-	public void insertDanger(HttpServletRequest request) throws Exception{
-		DangerousArea d_area = new DangerousArea();
-		
-		d_area.setDa_rider(request.getParameter("da_rider"));
-		d_area.setDa_addr(request.getParameter("da_addr"));
-		d_area.setDa_content(request.getParameter("da_content"));
-		d_area.setDa_image(request.getParameter("da_image"));
-		d_area.setDa_latitude(request.getParameter("da_latitude"));
-		d_area.setDa_longitude(request.getParameter("da_longitude"));
-		
+	public void insertDanger(@RequestBody DangerousArea d_area) throws Exception{
 		androidService.insertDanger(d_area);
 	}
 
