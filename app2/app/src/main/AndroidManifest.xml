@@ -28,6 +28,9 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="8819eab741cd2e061a5bb0e04dbe8a96" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBDek3jWvi_OJgo33xSeccnaaHxIqIlG_0" />
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"

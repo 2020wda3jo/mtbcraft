@@ -77,6 +77,34 @@
         android:name="com.example.testapplication.CourseScrap"
         android:label="fragment_course_scrap2"
         tools:layout="@layout/fragment_course_scrap2" />
+    <fragment
+        android:id="@+id/nav_mission_view"
+        android:name="com.example.testapplication.ui.missions.MissionViewFragment"
+        android:label="미션"
+        tools:layout="@layout/fragment_mission_view" >
+        <action
+            android:id="@+id/action_nav_mission_view_to_missionDetailFragment"
+            app:destination="@id/missionDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/missionDetailFragment"
+        android:name="com.example.testapplication.ui.missions.MissionDetailFragment"
+        android:label="미션 상세보기"
+        tools:layout="@layout/fragment_mission_detail" />
+    <fragment
+        android:id="@+id/nav_danger_view"
+        android:name="com.example.testapplication.ui.dangers.DangerViewFragment"
+        android:label="위험지역"
+        tools:layout="@layout/fragment_danger_view" >
+        <action
+            android:id="@+id/action_nav_danger_view_to_dangerRegisterFragment"
+            app:destination="@id/dangerRegisterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dangerRegisterFragment"
+        android:name="com.example.testapplication.ui.dangers.DangerRegisterFragment"
+        android:label="위험지역 등록"
+        tools:layout="@layout/fragment_danger_register" />
 
 
 </navigation>

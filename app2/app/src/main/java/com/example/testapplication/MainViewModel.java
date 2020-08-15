@@ -39,4 +39,12 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<String> c_name = new MutableLiveData<>();
     public MutableLiveData<String> comp_point = new MutableLiveData<>();
 
+    //미션
+    public MutableLiveData<String> m_image = new MutableLiveData<>();
+    public MutableLiveData<String> m_content = new MutableLiveData<>();
+    public MutableLiveData<String> m_name = new MutableLiveData<>();
+    public MutableLiveData<String> m_type = new MutableLiveData<>();
+    public MutableLiveData<String> m_ms_score = new MutableLiveData<>();
+    public MutableLiveData<String> m_num = new MutableLiveData<>();
+    public MutableLiveData<String> m_bg_name = new MutableLiveData<>();
 }
