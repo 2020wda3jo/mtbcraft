@@ -30,52 +30,60 @@
                 tools:ignore="MissingConstraints"
                 >
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <ImageView
                         android:id="@+id/imageView5"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="23dp"
                         android:layout_weight="1"
-                        android:src="@android:drawable/sym_def_app_icon" />
+                        android:scaleType="fitXY"
+                        android:src="@android:drawable/sym_def_app_icon"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/Course_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="18dp"
                         android:includeFontPadding="false"
                         android:text="NAME"
                         android:textColor="@android:color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/imageView5"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/CourseRiderName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:includeFontPadding="false"
+                        android:text="C NAME"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="@id/Course_name"
+                        app:layout_constraintTop_toBottomOf="@+id/Course_name" />
 
-                <TextView
-                    android:id="@+id/CourseRiderName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="75dp"
-                    android:includeFontPadding="false"
-                    android:text="C NAME"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/CourseDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="75dp"
-                    android:includeFontPadding="false"
-                    android:text="C DATE"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/CourseDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:includeFontPadding="false"
+                        android:text="C DATE"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="@+id/CourseRiderName"
+                        app:layout_constraintTop_toBottomOf="@+id/CourseRiderName" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <RelativeLayout

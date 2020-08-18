@@ -1,7 +1,6 @@
 package com.example.testapplication.ui.courses;
 
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,24 +12,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
-import com.example.testapplication.net.HttpClient;
 import com.example.testapplication.ui.BaseFragment;
 import com.example.testapplication.ui.recycler.CourseAdapter;
-import com.example.testapplication.ui.recycler.MyReportAdapter;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +31,7 @@ import retrofit2.Response;
 public class CourseViewFragment extends BaseFragment {
     private Call<ArrayList<RidingRecord>> request;
     private List<RidingRecord> items;
+    private Call<List<RidingRecord>> getCourseList;
 
     private RecyclerView recyclerView;
     String LoginId, Nickname, r_image;
@@ -70,6 +63,64 @@ public class CourseViewFragment extends BaseFragment {
         textView2 = view.findViewById(R.id.textView18);
         textView3 = view.findViewById(R.id.textView19);
         textView4 = view.findViewById(R.id.textView20);
+
+        getCourseList = serverApi.getCourseList();
+        getCourseList.enqueue(new Callback<List<RidingRecord>>() {
+            @Override
+            public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
+                List<RidingRecord> body = response.body();
+
+                ArrayList<Integer> likeCount = new ArrayList<Integer>();
+                ArrayList<Integer> highCount = new ArrayList<Integer>();
+                ArrayList<Integer> disCount = new ArrayList<Integer>();
+
+                Log.e("테스트", body.get(1).getRr_rider());
+                for(RidingRecord item: body) {
+                    itemList.add(item);
+
+                    likeCount.add(item.getRr_like());
+                    highCount.add(item.getRr_high());
+                    disCount.add(item.getRr_distance());
+                }
+
+                    Collections.sort(likeCount);
+                    Collections.sort(highCount);
+                    Collections.sort(disCount);
+
+                    Collections.reverse(likeCount);
+                    Collections.reverse(highCount);
+                    Collections.reverse(disCount);
+
+                    for ( int i = 0; i < likeCount.size(); i++){
+                        for ( int j = 0; j < itemList.size(); j++) {
+                            if (likeCount.get(i) == itemList.get(j).getRr_like()){
+                                likeList.add(itemList.get(j));
+                            }
+
+                            if (highCount.get(i) == itemList.get(j).getRr_high()){
+                                highList.add(itemList.get(j));
+                            }
+
+                            if (disCount.get(i) == itemList.get(j).getRr_distance()) {
+                                disList.add(itemList.get(j));
+                            }
+                        }
+                    }
+
+                    courseAdapter = new CourseAdapter(requireContext().getApplicationContext(), itemList, r_image, controller, model);
+                    likeAdapter = new CourseAdapter(requireContext().getApplicationContext(), likeList, r_image, controller, model);
+                    highAdapter = new CourseAdapter(requireContext().getApplicationContext(), highList, r_image, controller, model);
+                    disAdapter = new CourseAdapter(requireContext().getApplicationContext(), disList, r_image, controller, model);
+
+                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                    recyclerView.setAdapter(courseAdapter);
+                }
+
+            @Override
+            public void onFailure(Call<List<RidingRecord>> call, Throwable t) {
+                showServerFailure();
+            }
+        });
 
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -146,91 +197,5 @@ public class CourseViewFragment extends BaseFragment {
             textView3.setTypeface(null, Typeface.NORMAL);
             textView4.setTypeface(null, Typeface.BOLD);
         });
-
-        try{
-            GetTask getTask = new GetTask();
-            getTask.execute();
-        }catch(Exception e){
-
-        }
-    }
-
-    public class GetTask extends AsyncTask<Map<String, String>, Integer, String> {
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) {
-
-            // Http 요청 준비 작업
-            //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/riding/course");
-            // Parameter 를 전송한다.
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-
-            // 응답 본문 가져오기
-            String body = post.getBody();
-
-            return body;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.d("로그: ",s);
-            try{
-                String tempData = s;
-                Gson gson = new Gson();
-                ArrayList<Integer> likeCount = new ArrayList<Integer>();
-                ArrayList<Integer> highCount = new ArrayList<Integer>();
-                ArrayList<Integer> disCount = new ArrayList<Integer>();
-                RidingRecord[] items = gson.fromJson(tempData, RidingRecord[].class);
-
-                for(RidingRecord item: items){
-                    itemList.add(item);
-
-                    likeCount.add(item.getRr_like());
-                    highCount.add(item.getRr_high());
-                    disCount.add(item.getRr_distance());
-                }
-
-                Collections.sort(likeCount);
-                Collections.sort(highCount);
-                Collections.sort(disCount);
-
-                Collections.reverse(likeCount);
-                Collections.reverse(highCount);
-                Collections.reverse(disCount);
-
-                for ( int i = 0; i < likeCount.size(); i++){
-                    for ( int j = 0; j < itemList.size(); j++) {
-                        if (likeCount.get(i) == itemList.get(j).getRr_like()){
-                            likeList.add(itemList.get(j));
-                        }
-
-                        if (highCount.get(i) == itemList.get(j).getRr_high()){
-                            highList.add(itemList.get(j));
-                        }
-
-                        if (disCount.get(i) == itemList.get(j).getRr_distance()) {
-                            disList.add(itemList.get(j));
-                        }
-                    }
-                }
-
-                courseAdapter = new CourseAdapter(requireContext().getApplicationContext(), itemList, r_image, model, controller);
-                likeAdapter = new CourseAdapter(requireContext().getApplicationContext(), likeList, r_image, model, controller);
-                highAdapter = new CourseAdapter(requireContext().getApplicationContext(), highList, r_image, model, controller);
-                disAdapter = new CourseAdapter(requireContext().getApplicationContext(), disList, r_image, model, controller);
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext().getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                recyclerView.setAdapter(courseAdapter);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
     }
 }

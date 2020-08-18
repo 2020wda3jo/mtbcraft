@@ -16,6 +16,16 @@ public class RidingRecord {
     private int rr_comp;
     private int rr_like;
     private String rr_name;
+    private String r_image;
+
+    public String getR_image() {
+        return r_image;
+    }
+
+    public void setR_image(String r_image) {
+        this.r_image = r_image;
+    }
+
     public int getRr_num() {
         return rr_num;
     }

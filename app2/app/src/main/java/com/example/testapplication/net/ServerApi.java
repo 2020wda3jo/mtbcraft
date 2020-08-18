@@ -136,7 +136,10 @@ public interface ServerApi {
             @Path("fileName") String fileName
     );
 
-    //라이딩 기록 저장
+    //위험지역 등록
     @POST("app/insertDanger")
     Call<Void> insertDanger(@Body DangerousArea d_area);
+
+    @GET("app/riding/course")
+    Call<List<RidingRecord>> getCourseList();
 }
