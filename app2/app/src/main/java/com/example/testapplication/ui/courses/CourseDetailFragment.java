@@ -1,17 +1,14 @@
 package com.example.testapplication.ui.courses;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,12 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testapplication.R;
-import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.gpx.GPXParser;
 import com.example.testapplication.gpx.Gpx;
 import com.example.testapplication.gpx.Track;
@@ -33,6 +28,7 @@ import com.example.testapplication.gpx.TrackSegment;
 import com.example.testapplication.net.HttpClient;
 import com.example.testapplication.ui.BaseFragment;
 import com.example.testapplication.ui.riding.FollowStart;
+import com.squareup.picasso.Picasso;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPoint;
@@ -50,10 +46,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CourseDetailFragment extends BaseFragment {
 
@@ -73,6 +65,7 @@ public class CourseDetailFragment extends BaseFragment {
     private Gpx parsedGpx = null;
     private MapView mapView;
     private MapPolyline polyline = new MapPolyline();
+    private ImageView userImage;
     private Button share_bt, follow_bt, scrap_bt;
     List<Track> tracks;
     private TextView RidingTime, RidingRest, RidingDistance, RidingMax, RidingAvg, RidingGet, RidingAddr, Course_name, CourseRiderName, CourseDate, LikeCnt;
@@ -118,6 +111,7 @@ public class CourseDetailFragment extends BaseFragment {
         LikeCnt = (TextView) view.findViewById(R.id.LikeCnt);
         follow_bt = (Button) view.findViewById(R.id.follow_bt);
         scrap_bt = (Button) view.findViewById(R.id.scrap_bt);
+        userImage = (ImageView) view.findViewById(R.id.imageView5);
 
         RidingTime.setText(model.my_rec_time.getValue());
         RidingRest.setText(model.my_rec_rest.getValue());
@@ -130,6 +124,10 @@ public class CourseDetailFragment extends BaseFragment {
         CourseRiderName.setText(model.CourseRider.getValue());
         CourseDate.setText(model.my_rec_date.getValue());
         LikeCnt.setText(String.valueOf(model.like_count.getValue()));
+        Picasso.get().load("http://13.209.229.237:8080/app/getGPX/rider/" + model.CourseR_image.getValue())
+                .into(userImage);
+
+        Log.e("이미지", model.CourseR_image.getValue());
 
 
         Thread uThread = new Thread() {

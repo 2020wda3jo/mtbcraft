@@ -20,6 +20,18 @@ public class App_RidingRecord {
 	private int rr_comp;
 	private int rr_like;
 	private String rr_name;
+	private String rr_tag;
+	private String rr_foname;
+	private String r_image;
+	
+	
+	
+	public String getR_image() {
+		return r_image;
+	}
+	public void setR_image(String r_image) {
+		this.r_image = r_image;
+	}
 	public int getRr_num() {
 		return rr_num;
 	}
@@ -32,11 +44,8 @@ public class App_RidingRecord {
 	public void setRr_rider(String rr_rider) {
 		this.rr_rider = rr_rider;
 	}
-	public String getRr_date() {
-		String str = String.valueOf(rr_date); 
-		int index = str.indexOf(".");
-		String result = str.substring(0,index);
-		return result;
+	public Timestamp getRr_date() {
+		return rr_date;
 	}
 	public void setRr_date(Timestamp rr_date) {
 		this.rr_date = rr_date;
@@ -113,6 +122,20 @@ public class App_RidingRecord {
 	public void setRr_name(String rr_name) {
 		this.rr_name = rr_name;
 	}
+	public String getRr_tag() {
+		return rr_tag;
+	}
+	public void setRr_tag(String rr_tag) {
+		this.rr_tag = rr_tag;
+	}
+	public String getRr_foname() {
+		return rr_foname;
+	}
+	public void setRr_foname(String rr_foname) {
+		this.rr_foname = rr_foname;
+	}
+	
+	
 	
 	
 }

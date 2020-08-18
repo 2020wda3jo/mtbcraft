@@ -88,7 +88,10 @@
 	
 	<!-- 코스보기 -->
 	<select id="getCourse" parameterType="String" resultType="com.mtbcraft.dto.App_RidingRecord">
-		select * from riding_record where rr_open= '1' order by rr_date desc
+		select riding_record.*,rider.r_image from riding_record, rider
+		where rr_open= '1'
+		and rider.R_ID = riding_record.RR_RIDER
+		order by rr_date desc
 	</select>
 	
 	<!-- 코스 상세 보기 -->
