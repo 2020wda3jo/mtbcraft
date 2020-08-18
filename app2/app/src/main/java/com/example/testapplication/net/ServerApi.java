@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -55,16 +56,18 @@ public interface ServerApi {
     Call<List<RidingRecord>> getMyRecord(@Path("rr_rider") String rr_rider);
 
     //라이딩 기록 저장
+    @FormUrlEncoded
     @POST("app/riding/upload")
-    Call<RidingRecord> InsertRecord(@Body RidingRecord record);
+    Call<RidingRecord> InsertRecord(@FieldMap HashMap<String, Object> param);
 
     //라이딩 기록 저장 후 해당 기록 가져오기
     @GET("app/riding/getrecord")
     Call<List<RidingRecord>> getInsertSel();
 
     //태그삽입
+    @FormUrlEncoded
     @POST("app/riding/taginsert")
-    Call<Tag_Status> tagInsert(@Body Tag_Status tag_status);
+    Call<Tag_Status> tagInsert(@FieldMap Map<String, String> param);
 
     //위험지역가져오기
     @GET("app/riding/danger")

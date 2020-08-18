@@ -78,12 +78,52 @@ public class AndroidController {
 
 	// 주행기록 등록(안드로이드)
 	@RequestMapping(value = "riding/upload")
+	// 주소변경예정 @RequestMapping(value = "/android/recordInsert")
 	@ResponseBody
-	public RidingRecord insertriding(@RequestBody RidingRecord record) throws Exception {
-		RidingRecord insert = androidService.insertRecordWithComp(record);
+	public Map<String, String> insertriding(HttpServletRequest request) throws Exception {
+		RidingRecord record = new RidingRecord();
 
-		System.out.println(record.getRr_name());
-		return insert;
+		// 현재날짜 timestamp
+		Date today = new java.util.Date();
+		Timestamp timestamp = new Timestamp(today.getTime());
+
+		record.setRr_rider(request.getParameter("rr_rider"));
+		record.setRr_date(timestamp);
+		record.setRr_distance(Integer.parseInt(request.getParameter("rr_distance")));
+		record.setRr_topspeed(Integer.parseInt(request.getParameter("rr_topspeed")));
+		record.setRr_avgspeed(Integer.parseInt(request.getParameter("rr_avgspeed")));
+		record.setRr_high(Integer.parseInt(request.getParameter("rr_high")));
+		record.setRr_gpx(request.getParameter("rr_gpx"));
+		record.setRr_open(Integer.parseInt(request.getParameter("rr_open")));
+		record.setRr_breaktime(Integer.parseInt(request.getParameter("rr_breaktime")));
+		record.setRr_time(Integer.parseInt(request.getParameter("rr_time")));
+		record.setRr_area(request.getParameter("rr_area"));
+		record.setRr_name(request.getParameter("rr_name"));
+		if ( !request.getParameter("rr_comp").equals("null")) {
+			record.setRr_comp(Integer.parseInt(request.getParameter("rr_comp")));
+			androidService.insertRecordWithComp(record);
+		}
+		else
+			androidService.insertRecord(record);
+		// 안드로이드로부터 받은 데이터
+		System.out.println("rr_rider " + request.getParameter("rr_rider")); // 회원아이디
+		System.out.println("rr_distance " + request.getParameter("rr_distance")); // 오늘날짜
+		System.out.println("rr_topspeed " + request.getParameter("rr_topspeed")); // 소요시간
+		System.out.println("rr_avgspeed " + request.getParameter("rr_avgspeed")); // 이동거리
+		System.out.println("rr_high " + request.getParameter("rr_high")); // 최대속도
+		System.out.println("rr_gpx " + request.getParameter("rr_gpx")); // 평균속도
+		System.out.println("rr_open " + request.getParameter("rr_open")); // 획득고도
+		System.out.println("rr_breaktime " + request.getParameter("rr_breaktime")); // gpx
+		System.out.println("rr_time " + request.getParameter("rr_time")); // 공개여부
+		System.out.println("rr_area " + request.getParameter("rr_area")); // 획득고도
+		System.out.println("rr_name"+request.getParameter("rr_name"));
+		System.out.println("rr_comp "+request.getParameter("rr_comp"));
+
+		// 안드로이드에게 전달하는 데이터
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("data1", request.getParameter("rr_rider"));
+
+		return result;
 	}
 
 	// 주행기록 가져오기
@@ -255,7 +295,7 @@ public class AndroidController {
 	public @ResponseBody List<String> getjoinedComp(@PathVariable(value = "rr_rider") String rr_rider) throws Exception {
 		return androidService.getjoinedComp(rr_rider);
 	}
-	
+
 	// 경쟁전 코스 정보
 	@RequestMapping(value = "getAppCompCourse")
 	public String getAppCompCourse() {
@@ -364,10 +404,20 @@ public class AndroidController {
 	}
 	
 	@RequestMapping(value="riding/taginsert")
-	public Tag_Status  Taginsert(Tag_Status tag) throws Exception {
-		Tag_Status tag_sta = androidService.TagInsert(tag);
+	public Map<String, String>  Taginsert(HttpServletRequest request) throws Exception {
 
-		return tag_sta;
+		System.out.println(request.getParameter("rr_num") + " " + request.getParameter("rr_rider") + " " + request.getParameter("address_dong"));
+
+		App_Tag tag = new App_Tag();
+		tag.setTs_rnum(Integer.parseInt(request.getParameter("rr_num")));
+		tag.setTs_rider(request.getParameter("rr_rider"));
+		tag.setTs_tag(request.getParameter("address_dong"));
+
+		androidService.TagInsert(tag);
+		// 안드로이드에게 전달하는 데이터
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("data1", "성공했쩡");
+		return result;
 	}
 	
 	@RequestMapping(value = "getAllMission/{LoginId}")

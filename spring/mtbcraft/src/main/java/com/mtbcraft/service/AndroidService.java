@@ -173,9 +173,9 @@ public class AndroidService {
 		return androidMapper.getRecord();
 	}
 
-	public Tag_Status TagInsert(Tag_Status tag) {
-		return androidMapper.Taginsert(tag);
-		
+	public void TagInsert(App_Tag tag) {
+		androidMapper.Taginsert(tag);
+
 	}
 	
 	public List<App_Mission> getAllMission(@Param("LoginId") String LoginId) throws Exception{

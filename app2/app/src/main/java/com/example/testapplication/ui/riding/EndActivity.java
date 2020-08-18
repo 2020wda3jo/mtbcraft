@@ -41,7 +41,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -338,7 +340,22 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
                 record.setRr_name(binding.ridingNameinput.getText().toString());
              //   record.setRr_comp(rr_comp);
                 riding_point += Distence;
-                Insert = serverApi.InsertRecord(record);
+
+                HashMap<String, Object> insert = new HashMap<>();
+                insert.put("rr_rider", LoginId);
+                insert.put("rr_distance", String.valueOf(Distence));
+                insert.put("rr_topspeed", String.valueOf(MaxSpeed));
+                insert.put("rr_avgspeed", String.valueOf(AvgSpeed));
+                insert.put("rr_high", String.valueOf(Getgodo));
+                insert.put("rr_gpx", "gpx_" + nowTime + ".gpx");
+                insert.put("rr_open", open);
+                insert.put("rr_breaktime", String.valueOf(RestTime));
+                insert.put("rr_time", String.valueOf(IngTime));
+                insert.put("rr_area", adress_value);
+                insert.put("rr_name", binding.ridingNameinput.getText().toString());
+                insert.put("rr_comp", rr_comp);
+
+                Insert = serverApi.InsertRecord(insert);
                 Insert.enqueue(new Callback<RidingRecord>() {
                     @Override
                     public void onResponse(Call<RidingRecord> call, Response<RidingRecord> response) {
@@ -371,25 +388,28 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
                     @Override
                     public void onFailure(Call<List<RidingRecord>> call, Throwable t) {
-
+                        t.printStackTrace();
                     }
                 });
 
                 Call<Tag_Status> tagInsert;
-                Tag_Status tag = new Tag_Status();
-                tag.setTs_rnum(rr_num);
-                tag.setTs_rider(LoginId);
-                tag.setTs_tag("#"+address_dong);
-                tagInsert = serverApi.tagInsert(tag);
+                Map<String, String> par = new HashMap<String, String>();
+                par.put("rr_num", String.valueOf(rr_num));
+                par.put("rr_rider",LoginId);
+                par.put("address_dong","#"+address_dong);
+
+                tagInsert = serverApi.tagInsert(par);
                 tagInsert.enqueue(new Callback<Tag_Status>() {
                     @Override
                     public void onResponse(Call<Tag_Status> call, Response<Tag_Status> response) {
-                        Log.d("제2의로그", String.valueOf(response.body()));
+                        if(response.code()==200){
+                            Log.d("이거됬어","ㅇㄹㅇㄹㅇ");
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<Tag_Status> call, Throwable t) {
-
+                        t.printStackTrace();
                     }
                 });
 

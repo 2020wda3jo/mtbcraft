@@ -27,7 +27,7 @@ public class SendGPXFile extends AppCompatActivity implements Runnable {
     public void run() {
 
         try {
-            url_address = "http://13.209.229.237:8080/android/fileUpload/gpx/" + fileName;
+            url_address = "http://13.209.229.237:8080/app/fileUpload/gpx/" + fileName;
             Log.e("파일네임", fileName);
             FileInputStream fis = new FileInputStream(filepath + fileName);
             URL url = new URL(url_address);

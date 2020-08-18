@@ -106,7 +106,7 @@ public interface AndroidMapper {
 	
 	public List<RidingRecord> getRecord();
 
-	public Tag_Status Taginsert(Tag_Status tag);
+	public void Taginsert(App_Tag tag);
 	
 	public List<App_Mission> getAllMission(@Param("LoginId") String LoginId) throws Exception;
 	
