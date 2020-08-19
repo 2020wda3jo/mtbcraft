@@ -1,9 +1,13 @@
 package com.example.testapplication.ui.riding;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -14,18 +18,23 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.testapplication.dto.Competition_Status;
+import com.example.testapplication.dto.Mission;
+import com.example.testapplication.dto.Mission_Status;
 import com.example.testapplication.gpx.GpxInfo;
 import com.example.testapplication.R;
 import com.example.testapplication.SendGPXFile;
 import com.example.testapplication.databinding.FragmentRidingEndBinding;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.dto.Tag_Status;
+import com.example.testapplication.net.HttpClient;
 import com.example.testapplication.net.Server;
 import com.example.testapplication.net.ServerApi;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.gson.Gson;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPoint;
@@ -34,12 +43,15 @@ import net.daum.mf.map.api.MapPolyline;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +64,9 @@ import retrofit2.Response;
 public class EndActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
     private FragmentRidingEndBinding binding;
 
+    //레트로핏
+    private ServerApi serverApi = Server.getInstance().getApi();
+
     //스타트 액티비티에서 가져오는 String형변수
     int MaxSpeed=0;
     int AvgSpeed=0;
@@ -59,7 +74,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
     int RestTime=0;
     int IngTime=0;
     int Distence=0;
-    int rr_num = 0;
+    String rr_num = "";
     String rr_rider="";
     String rr_comp="";
     String address_dong="";
@@ -89,8 +104,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
     private LineChart lineChart;
     private Object endActivity;
 
-    //레트로핏
-    private ServerApi serverApi = Server.getInstance().getApi();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,7 +253,6 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
         final String select;
 
         //공개여부 선택
@@ -325,100 +338,97 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         save.setOnClickListener(v -> {
             try{
-                Call<RidingRecord> Insert;
-                RidingRecord record = new RidingRecord();
-                record.setRr_rider(LoginId);
-                record.setRr_distance(Distence);
-                record.setRr_topspeed(MaxSpeed);
-                record.setRr_avgspeed(AvgSpeed);
-                record.setRr_high(Getgodo);
-                record.setRr_gpx("gpx_" + nowTime + ".gpx");
-                record.setRr_open(Integer.parseInt(open));
-                record.setRr_breaktime(RestTime);
-                record.setRr_time(IngTime);
-                record.setRr_area(adress_value);
-                record.setRr_name(binding.ridingNameinput.getText().toString());
-             //   record.setRr_comp(rr_comp);
-                riding_point += Distence;
+                    Call<RidingRecord> Insert;
+                    RidingRecord record = new RidingRecord();
+                    record.setRr_rider(LoginId);
+                    record.setRr_distance(Distence);
+                    record.setRr_topspeed(MaxSpeed);
+                    record.setRr_avgspeed(AvgSpeed);
+                    record.setRr_high(Getgodo);
+                    record.setRr_gpx("gpx_" + nowTime + ".gpx");
+                    record.setRr_open(Integer.parseInt(open));
+                    record.setRr_breaktime(RestTime);
+                    record.setRr_time(IngTime);
+                    record.setRr_area(adress_value);
+                    record.setRr_name(binding.ridingNameinput.getText().toString());
+                    //   record.setRr_comp(rr_comp);
+                    riding_point += Distence;
 
-                HashMap<String, Object> insert = new HashMap<>();
-                insert.put("rr_rider", LoginId);
-                insert.put("rr_distance", String.valueOf(Distence));
-                insert.put("rr_topspeed", String.valueOf(MaxSpeed));
-                insert.put("rr_avgspeed", String.valueOf(AvgSpeed));
-                insert.put("rr_high", String.valueOf(Getgodo));
-                insert.put("rr_gpx", "gpx_" + nowTime + ".gpx");
-                insert.put("rr_open", open);
-                insert.put("rr_breaktime", String.valueOf(RestTime));
-                insert.put("rr_time", String.valueOf(IngTime));
-                insert.put("rr_area", adress_value);
-                insert.put("rr_name", binding.ridingNameinput.getText().toString());
-                insert.put("rr_comp", rr_comp);
+                    HashMap<String, Object> insert = new HashMap<>();
+                    insert.put("rr_rider", LoginId);
+                    insert.put("rr_distance", String.valueOf(Distence));
+                    insert.put("rr_topspeed", String.valueOf(MaxSpeed));
+                    insert.put("rr_avgspeed", String.valueOf(AvgSpeed));
+                    insert.put("rr_high", String.valueOf(Getgodo));
+                    insert.put("rr_gpx", "gpx_" + nowTime + ".gpx");
+                    insert.put("rr_open", open);
+                    insert.put("rr_breaktime", String.valueOf(RestTime));
+                    insert.put("rr_time", String.valueOf(IngTime));
+                    insert.put("rr_area", adress_value);
+                    insert.put("rr_name", binding.ridingNameinput.getText().toString());
+                    insert.put("rr_comp", rr_comp);
 
-                Insert = serverApi.InsertRecord(insert);
-                Insert.enqueue(new Callback<RidingRecord>() {
-                    @Override
-                    public void onResponse(Call<RidingRecord> call, Response<RidingRecord> response) {
-                        if(response.code() == 200){
-                            Log.d("ㅇㄹㅇㄹ","통신됬따");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<RidingRecord> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-
-                Call<List<RidingRecord>> getRecord;
-                getRecord = serverApi.getInsertSel();
-                getRecord.enqueue(new Callback<List<RidingRecord>>() {
-                    @Override
-                    public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
-                        List<RidingRecord> record = response.body();
-                        Log.d("로그찍기", String.valueOf(record));
-                        for(RidingRecord record_num : record){
-                            rr_num = record_num.getRr_num();
+                    Insert = serverApi.InsertRecord(insert);
+                    Insert.enqueue(new Callback<RidingRecord>() {
+                        @Override
+                        public void onResponse(Call<RidingRecord> call, Response<RidingRecord> response) {
+                            if(response.code() == 200){
+                                Log.d("ㅇㄹㅇㄹ","통신됬따");
+                            }
                         }
 
-                        Log.d("GetRecord2", String.valueOf(rr_num));
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<RidingRecord>> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-
-                Call<Tag_Status> tagInsert;
-                Map<String, String> par = new HashMap<String, String>();
-                par.put("rr_num", String.valueOf(rr_num));
-                par.put("rr_rider",LoginId);
-                par.put("address_dong","#"+address_dong);
-
-                tagInsert = serverApi.tagInsert(par);
-                tagInsert.enqueue(new Callback<Tag_Status>() {
-                    @Override
-                    public void onResponse(Call<Tag_Status> call, Response<Tag_Status> response) {
-                        if(response.code()==200){
-                            Log.d("이거됬어","ㅇㄹㅇㄹㅇ");
+                        @Override
+                        public void onFailure(Call<RidingRecord> call, Throwable t) {
+                            t.printStackTrace();
                         }
-                    }
+                    });
 
-                    @Override
-                    public void onFailure(Call<Tag_Status> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+                    Call<List<RidingRecord>> getRecord;
+                    getRecord = serverApi.getInsertSel();
+                    getRecord.enqueue(new Callback<List<RidingRecord>>() {
+                        @Override
+                        public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
+                            List<RidingRecord> record = response.body();
+                            Log.d("로그찍기", String.valueOf(record));
+                            for(RidingRecord record_num : record){
+                                rr_num = String.valueOf(record_num.getRr_num());
+                            }
+
+                            Log.d("GetRecord2", String.valueOf(rr_num));
 
 
-                //new getMissionStatus().execute();
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<RidingRecord>> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+
+                    Call<Tag_Status> tagInsert;
+                    Map<String, String> par = new HashMap<String, String>();
+                    par.put("rr_num", rr_num);
+                    par.put("rr_rider",LoginId);
+                    par.put("address_dong","#"+address_dong);
+
+                    tagInsert = serverApi.tagInsert(par);
+                    tagInsert.enqueue(new Callback<Tag_Status>() {
+                        @Override
+                        public void onResponse(Call<Tag_Status> call, Response<Tag_Status> response) {
+                            if(response.code()==200){
+                                Log.d("이거됬어","ㅇㄹㅇㄹㅇ");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Tag_Status> call, Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
 
 
-
-               /* //경쟁전 관련 업데이트
+                new getMissionStatus().execute();
+                //경쟁전 관련 업데이트
                 if (!rr_comp.equals("null")) {
                     new getCompAllScore().execute();
 
@@ -431,7 +441,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
                     params2.put("r_club", String.valueOf(r_club));
                     params2.put("LoginId", LoginId);
                     updateCompScore.execute(params2);
-                }*/
+                }
 
                 // gpx 파일 보냄
                 SendGPXFile sendObj = new SendGPXFile(getFilesDir().getPath() + "/", "gpx_" + nowTime + ".gpx");
@@ -472,14 +482,14 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
     }
 
-    /*
+
     // 경쟁전 현황 점수, 횟수 업데이트
     public class UpdateCompScore extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateCompScore");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "app/riding/updateCompScore");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -506,7 +516,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getCompAllScore/" + rr_comp);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "app/getCompAllScore/" + rr_comp);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -583,7 +593,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateRank/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "app/updateRank/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -609,7 +619,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getMissionStatus/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "app/getMissionStatus/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -669,7 +679,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getNoClearMission/" + LoginId);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "app/getNoClearMission/" + LoginId);
             // Parameter 를 전송한다.
 
             //Http 요청 전송
@@ -788,8 +798,6 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
                 alert_confirm.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent2 = new Intent(EndActivity.this, SubActivity.class);
-                        startActivity(intent2);
                         finish();
                     }
                 });
@@ -811,7 +819,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/updateMissionStatus/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "app/updateMissionStatus/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -835,7 +843,7 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
         protected synchronized String doInBackground( Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("PUT", "/app/insertMissionCom/");
+            HttpClient.Builder http = new HttpClient.Builder("PUT", "app/insertMissionCom/");
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             //Http 요청 전송
@@ -854,5 +862,5 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
         }
     }
-*/
+
 }
