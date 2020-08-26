@@ -392,12 +392,6 @@ public class StartActivity extends AppCompatActivity
                             mMapView.addPOIItem(mCustomMarker);
                         }
                     }
-
-
-
-                    /*
-
-*/
                 }
 
                 @Override
@@ -407,7 +401,6 @@ public class StartActivity extends AppCompatActivity
             });
 
     }
-
                 private void changeView(int index) {
                     switch (index) {
                         case 0:
@@ -728,36 +721,17 @@ public class StartActivity extends AppCompatActivity
                     gCoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                     try {
                         addr = gCoder.getFromLocation(latitude, lonngitude, 1);
-
                         List<Address> addr2 = gCoder.getFromLocation(latitude, lonngitude, 2);
-                        ;
                         List<Address> addr3 = gCoder.getFromLocation(latitude, lonngitude, 3);
-                        ;
-                        List<Address> addr4 = gCoder.getFromLocation(latitude, lonngitude, 4);
-                        ;
 
                         Address a = addr.get(0);
-
-                        Address b = addr2.get(1);
-                        Address c = addr3.get(2);
-                        Address d = addr4.get(3);
-
-                        String a1 = b.getAddressLine(0);
-                        String a2 = c.getAddressLine(0);
                         address_dong = a.getThoroughfare();
-
-
                         adress_value = a.getAddressLine(0);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    Log.d("지금속도는", String.valueOf(getSpeed));
-
-
                     if (mLastlocation != null) {
-
-
                         /*폴리라인 그리기 */
                         MapPolyline polyline2 = new MapPolyline();
                         polyline.setLineColor(Color.argb(128, 255, 51, 0));
@@ -827,7 +801,7 @@ public class StartActivity extends AppCompatActivity
 
                 @Override
                 public void onProviderEnabled(String provider) {
-// 위치정보 업데이트
+                // 위치정보 업데이트
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions

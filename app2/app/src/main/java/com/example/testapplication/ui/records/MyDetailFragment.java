@@ -202,6 +202,12 @@ public class MyDetailFragment extends BaseFragment implements MapView.CurrentLoc
             });
         }
 
+
+
+
+
+
+
         Thread uThread = new Thread() {
             @Override
             public void run() {

@@ -90,6 +90,11 @@ public interface ServerApi {
     @GET("app/riding/scrap/{rr_rider}")
     Call<ArrayList<ScrapStatus>> getScrap(@Path("rr_rider") String rr_rider);
 
+    //태그 기록
+    @GET("app/record/gettag/{rr_num}")
+    Call<List<Tag_Status>> getTag(@Path("rr_num") String rr_num);
+
+
     //완료한 경쟁전 목록
     @GET("app/competition/{id}")
     Call<List<String>> getJoinedList(@Path("id") String id);

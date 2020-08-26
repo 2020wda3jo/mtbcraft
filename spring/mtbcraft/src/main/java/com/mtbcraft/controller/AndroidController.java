@@ -78,7 +78,6 @@ public class AndroidController {
 
 	// 주행기록 등록(안드로이드)
 	@RequestMapping(value = "riding/upload")
-	// 주소변경예정 @RequestMapping(value = "/android/recordInsert")
 	@ResponseBody
 	public Map<String, String> insertriding(HttpServletRequest request) throws Exception {
 		RidingRecord record = new RidingRecord();
@@ -404,7 +403,8 @@ public class AndroidController {
 	}
 	
 	@RequestMapping(value="riding/taginsert")
-	public Map<String, String>  Taginsert(HttpServletRequest request) throws Exception {
+	@ResponseBody
+	public Map<String, String>  Taginsert(HttpServletRequest request) {
 
 		System.out.println(request.getParameter("rr_num") + " " + request.getParameter("rr_rider") + " " + request.getParameter("address_dong"));
 
@@ -415,7 +415,7 @@ public class AndroidController {
 
 		androidService.TagInsert(tag);
 		// 안드로이드에게 전달하는 데이터
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = new HashMap<>();
 		result.put("data1", "성공했쩡");
 		return result;
 	}

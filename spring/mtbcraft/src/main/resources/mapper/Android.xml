@@ -240,11 +240,7 @@ select ss_rider, rr_rider, rr_date,  rr_name, ss_rnum, rr_avgspeed, rr_distance,
 			#{ts_rider},
 			#{ts_rnum},
 			#{ts_tag}
-		
-		
 		)
-	
-	
 	</insert>
 	
 		<select id="getAllMission" parameterType="String" resultType="com.mtbcraft.dto.App_Mission">

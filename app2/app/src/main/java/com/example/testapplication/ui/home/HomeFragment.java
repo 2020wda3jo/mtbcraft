@@ -129,7 +129,9 @@ public class HomeFragment extends BaseFragment {
 
                             }
                             killlo = (int) (total_dis / 1000.0);
+                            Log.d("메인", String.valueOf(killlo));
                             if (total_dis >= 1000) {
+
                                 main_dis.setText(killlo +"km를 주행하셨어요");
                             }else{
                                 main_dis.setText(total_dis+"m");

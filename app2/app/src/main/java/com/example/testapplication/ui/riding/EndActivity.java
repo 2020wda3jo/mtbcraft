@@ -74,15 +74,12 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
     int RestTime=0;
     int IngTime=0;
     int Distence=0;
-    String rr_num = "";
-    String rr_rider="";
+    int rr_num;
     String rr_comp="";
     String address_dong="";
     //스타트 액티비티에서 가져온 값들을 텍스트로 설정
 
-
     int check, clearCount=0;
-
     MapView mapView;
     //DB로 전송하기 위한 변수
     String open;
@@ -98,13 +95,9 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
 
     //형 변환
     String comp_name, adress_value;
-
     Intent intent;
-
     private LineChart lineChart;
     private Object endActivity;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -373,7 +366,6 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
                         @Override
                         public void onResponse(Call<RidingRecord> call, Response<RidingRecord> response) {
                             if(response.code() == 200){
-                                Log.d("ㅇㄹㅇㄹ","통신됬따");
                             }
                         }
 
@@ -389,14 +381,31 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
                         @Override
                         public void onResponse(Call<List<RidingRecord>> call, Response<List<RidingRecord>> response) {
                             List<RidingRecord> record = response.body();
-                            Log.d("로그찍기", String.valueOf(record));
                             for(RidingRecord record_num : record){
-                                rr_num = String.valueOf(record_num.getRr_num());
+                                rr_num = record_num.getRr_num();
                             }
 
-                            Log.d("GetRecord2", String.valueOf(rr_num));
+                            Call<Tag_Status> tagInsert;
+                            Map<String, String> par = new HashMap<>();
+                            par.put("rr_num", String.valueOf(rr_num));
+                            par.put("rr_rider",LoginId);
+                            par.put("address_dong","#"+address_dong);
 
 
+                            tagInsert = serverApi.tagInsert(par);
+                            tagInsert.enqueue(new Callback<Tag_Status>() {
+                                @Override
+                                public void onResponse(Call<Tag_Status> call, Response<Tag_Status> response) {
+                                    if(response.code()==200){
+
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Tag_Status> call, Throwable t) {
+                                    t.printStackTrace();
+                                }
+                            });
                         }
 
                         @Override
@@ -404,28 +413,6 @@ public class EndActivity extends AppCompatActivity implements MapView.CurrentLoc
                             t.printStackTrace();
                         }
                     });
-
-                    Call<Tag_Status> tagInsert;
-                    Map<String, String> par = new HashMap<String, String>();
-                    par.put("rr_num", rr_num);
-                    par.put("rr_rider",LoginId);
-                    par.put("address_dong","#"+address_dong);
-
-                    tagInsert = serverApi.tagInsert(par);
-                    tagInsert.enqueue(new Callback<Tag_Status>() {
-                        @Override
-                        public void onResponse(Call<Tag_Status> call, Response<Tag_Status> response) {
-                            if(response.code()==200){
-                                Log.d("이거됬어","ㅇㄹㅇㄹㅇ");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Tag_Status> call, Throwable t) {
-                            t.printStackTrace();
-                        }
-                    });
-
 
                 new getMissionStatus().execute();
                 //경쟁전 관련 업데이트
