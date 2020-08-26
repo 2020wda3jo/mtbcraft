@@ -23,6 +23,7 @@ import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,14 +73,18 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
         if(min==0){
             min=00;
         }
+
+        //휴식시간 계산
+        int b_hour, b_min, b_sec = itemList.get(position).getRr_breaktime();
+        b_min = b_sec/60; b_hour = b_min/60; b_sec = b_sec % 60; b_min = b_min % 60;
+
         String hour_s = String.valueOf(hour);
         int des = (itemList.get(position).getRr_distance());
         float km = (float) (des/1000.0);
         String total = String.valueOf(km)+"Km";
 
-        Bitmap user_image = BitmapFactory.decodeFile(new File(mContext.getFilesDir().getPath() + "/" + r_image).getAbsolutePath());
-        testViewHolder.imageView.setImageBitmap(user_image);
-
+        Picasso.get().load("http://13.209.229.237:8080/app/getGPX/rider/" + itemList.get(position).getR_image())
+                .into(testViewHolder.imageView);
         testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
         testViewHolder.c_name.setText(itemList.get(position).getRr_name());
         testViewHolder.c_time.setText(hour_s+":"+min+":"+ sec);
@@ -103,16 +108,20 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
             testViewHolder.webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
+        int finalMin = min;
+        int finalSec = sec;
+        int finalB_min = b_min;
+        int finalB_sec = b_sec;
         testViewHolder.mView.setOnClickListener(v -> {
 
             controller.navigate(R.id.action_nav_course_view_to_nav_course_detail);
 
-            model.my_rec_time.setValue(String.valueOf(itemList.get(position).getRr_time()));
-            model.my_rec_rest.setValue(String.valueOf(itemList.get(position).getRr_breaktime()));
-            model.my_rec_dis.setValue(String.valueOf(itemList.get(position).getRr_distance()));
-            model.my_rec_max.setValue(String.valueOf(itemList.get(position).getRr_topspeed()));
-            model.my_rec_avg.setValue(String.valueOf(itemList.get(position).getRr_avgspeed()));
-            model.my_rec_get.setValue(String.valueOf(itemList.get(position).getRr_high()));
+            model.my_rec_time.setValue(hour_s+"시간 "+ finalMin +"분 "+ finalSec);
+            model.my_rec_rest.setValue(b_hour+"시간 "+ finalB_min +"분 "+ finalB_sec +"초");
+            model.my_rec_dis.setValue(total);
+            model.my_rec_max.setValue(itemList.get(position).getRr_topspeed() +"km/h");
+            model.my_rec_avg.setValue(itemList.get(position).getRr_avgspeed() +"km/h");
+            model.my_rec_get.setValue(itemList.get(position).getRr_high() +"m");
             model.my_rec_adress.setValue(String.valueOf(itemList.get(position).getRr_area()));
             model.my_rec_name.setValue(String.valueOf(itemList.get(position).getRr_name()));
             model.CourseRider.setValue(String.valueOf(itemList.get(position).getRr_rider()));
@@ -121,21 +130,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
             model.my_rec_gpx.setValue(itemList.get(position).getRr_gpx());
             model.CourseR_image.setValue(itemList.get(position).getR_image());
         });
-
-
-
-        /*testViewHolder.mView.setOnClickListener(v -> {
-            Context context = v.getContext();
-            Intent intent = new Intent(v.getContext(), CourseDetail.class);
-            intent.putExtra("c_num",String.valueOf(itemList.get(position).getRr_num()));
-            intent.putExtra("c_distance",itemList.get(position).getRr_distance());
-            intent.putExtra("c_area",itemList.get(position).getRr_area());
-            intent.putExtra("c_gpx",itemList.get(position).getRr_gpx());
-            intent.putExtra("c_name",itemList.get(position).getRr_name());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            v.getContext().startActivity(intent);
-
-        });*/
     }
 
     @Override

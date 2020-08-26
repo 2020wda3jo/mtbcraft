@@ -66,9 +66,5 @@ public class RecordFragment extends BaseFragment{
                 Log.d("안됨","안댐");
             }
         });
-        /* adapter=new MyReportAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(adapter); */
-
     }
 }

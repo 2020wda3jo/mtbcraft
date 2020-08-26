@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.testapplication.MainViewModel;
 import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,6 +76,9 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
         String hour_s = String.valueOf(hour);
 
 
+
+        Picasso.get().load("http://13.209.229.237:8080/app/getGPX/rider/" + model.r_Image.getValue())
+                .into(testViewHolder.my_image);
 
         testViewHolder.my_rec_name.setText(itemList.get(position).getRr_name());
         testViewHolder.my_rec_date.setText(itemList.get(position).getRr_date());

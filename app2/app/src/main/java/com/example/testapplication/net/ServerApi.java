@@ -52,7 +52,7 @@ public interface ServerApi {
     @GET("app/getGPX/{directory}/{url}")
     Call<ResponseBody> getFile(@Path("directory") String directory, @Path("url") String url);
 
-    @GET("app/ge/{rr_rider}")
+    @GET("app/get/{rr_rider}")
     Call<List<RidingRecord>> getMyRecord(@Path("rr_rider") String rr_rider);
 
     //라이딩 기록 저장

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +21,10 @@ import com.example.testapplication.R;
 import com.example.testapplication.dto.RidingRecord;
 import com.example.testapplication.ui.BaseFragment;
 import com.example.testapplication.ui.riding.StartActivity;
+import com.squareup.picasso.Picasso;
 
 
+import java.io.File;
 import java.util.List;
 
 import retrofit2.Call;
@@ -55,24 +59,19 @@ public class HomeFragment extends BaseFragment {
         SharedPreferences auto = requireContext().getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String r_image = auto.getString("r_image", "");
 
+
+
         ridingstart = (ImageView) view.findViewById(R.id.ridingstart);
         mainTime = (TextView) view.findViewById(R.id.main_time);
         mainKm = (TextView) view.findViewById(R.id.main_km);
         rider = (TextView) view.findViewById(R.id.idinfo);
         main_dis = (TextView) view.findViewById(R.id.main_dis);
         rider.setText(model.r_Nickname.getValue()+"님 저희와 함께");
-
-        /* Button b = view.findViewById(R.id.button);
-        b.setOnClickListener(v->{
-            model.CourseName.setValue("영진전문대");
-            controller.navigate(R.id.action_nav_courseview_to_courseDetail);
-        });*/
-
-
         ridingstart.setOnClickListener(v->{
            Intent intent = new Intent(getActivity(), StartActivity.class);
            startActivity(intent);
         });
+
         MyInfo = serverApi.getMyRecord(model.r_Id.getValue());
         MyInfo.enqueue(new Callback<List<RidingRecord>>() {
             @Override
