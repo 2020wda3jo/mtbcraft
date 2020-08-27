@@ -27,7 +27,7 @@ import com.example.testapplication.gpx.TrackPoint;
 import com.example.testapplication.gpx.TrackSegment;
 import com.example.testapplication.net.HttpClient;
 import com.example.testapplication.ui.BaseFragment;
-import com.example.testapplication.ui.riding.FollowStart;
+import com.example.testapplication.ui.riding.StartActivity;
 import com.squareup.picasso.Picasso;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
@@ -205,13 +205,12 @@ public class CourseDetailFragment extends BaseFragment {
 
         //따라가기
         follow_bt.setOnClickListener(v->{
-            Intent intent2=new Intent(requireContext(), FollowStart.class);
-            intent2.putExtra("gpx",String.valueOf(model.my_rec_gpx));
-            intent2.putExtra("c_name",String.valueOf(model.my_rec_name));
+            Intent intent2=new Intent(requireContext(), StartActivity.class);
+            intent2.putExtra("gpx",model.my_rec_gpx.getValue());
+            intent2.putExtra("c_name",model.my_rec_name.getValue());
             startActivity(intent2);
 
             mapViewContainer.removeAllViews();
-            Log.d("따라가기", String.valueOf(model.my_rec_gpx.getValue())+ " "+ String.valueOf(model.my_rec_name.getValue()));
         });
 
     }

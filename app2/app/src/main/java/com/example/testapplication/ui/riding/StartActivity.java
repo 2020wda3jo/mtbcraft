@@ -41,6 +41,11 @@ import com.example.testapplication.R;
 import com.example.testapplication.SoundManager;
 import com.example.testapplication.databinding.ActivityRidingStartBinding;
 import com.example.testapplication.dto.DangerousArea;
+import com.example.testapplication.gpx.GPXParser;
+import com.example.testapplication.gpx.Gpx;
+import com.example.testapplication.gpx.Track;
+import com.example.testapplication.gpx.TrackPoint;
+import com.example.testapplication.gpx.TrackSegment;
 import com.example.testapplication.net.Server;
 import com.example.testapplication.net.ServerApi;
 import com.google.android.material.tabs.TabLayout;
@@ -54,6 +59,13 @@ import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +79,6 @@ public class StartActivity extends AppCompatActivity
     private SoundPool soundPool;
     private SoundManager soundManager;
     private boolean play;
-    private int playSoundId;
     private ActivityRidingStartBinding binding;
     private MapView mMapView;
     private MapPOIItem mCustomMarker;
@@ -76,8 +87,6 @@ public class StartActivity extends AppCompatActivity
     private TextToSpeech textToSpeech;
     private String value;
     private float distance;
-    private JSONArray jarray;
-    private JSONObject jObject;
     private int cnt=0;
 
     private String getDalat, getDalon, getDacon, address_dong;
@@ -89,8 +98,6 @@ public class StartActivity extends AppCompatActivity
     private ArrayList<Double> witch_lon = new ArrayList<>();
     private ArrayList<Double> ele = new ArrayList<>();
     private ArrayList<Float> godoArray = new ArrayList<>();
-    private TextToSpeech tts;
-    private Button sns_sound;
     private String a;
     //형변환용변수
     private String cha_dis = "0", cha_max = "0", cha_avg = "0", adress_value = "";
@@ -108,8 +115,6 @@ public class StartActivity extends AppCompatActivity
     private Thread timeThread = null;
     private Boolean isRunning = true;
     String tel2="";
-    private ArrayList<String> arrayList;
-    private ArrayAdapter<String> arrayAdapter;
     private Spinner spinner;
     private ArrayList<String> list;
     private String number;
@@ -117,12 +122,21 @@ public class StartActivity extends AppCompatActivity
     SpeechRecognizer mRecognizer;
     private SmsManager smsManager;
     private String tel="";
+    private String gpx_name;
+    private String c_name;
 
+    //gpx관련
+    Gpx parsedGpx = null;
+    GPXParser mParser = new GPXParser();
     //레트로핏
     private ServerApi serverApi = Server.getInstance().getApi();
     private Call<List<DangerousArea>> DangerGet;
     private List<DangerousArea> getDanger;
-        // CalloutBalloonAdapter 인터페이스 구현
+
+    public StartActivity() {
+    }
+
+    // CalloutBalloonAdapter 인터페이스 구현
         class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
             private final View mCalloutBalloon;
 
@@ -241,11 +255,6 @@ public class StartActivity extends AppCompatActivity
             }
         });
 
-
-        Intent intentt = new Intent(this.getIntent());
-        intentt.getStringExtra("c_name");
-
-
         soundPool = new SoundPool.Builder().build();
         soundManager = new SoundManager(this, soundPool);
         soundManager.addSound(0, R.raw.sos);
@@ -254,20 +263,17 @@ public class StartActivity extends AppCompatActivity
         Button sns_sound = (Button) findViewById(R.id.sos_sound);
         sns_sound.setOnClickListener(v -> {
             if (!play) {
-                playSoundId = soundManager.playSound(0);
                 play = true;
             } else {
                 soundManager.playSound(0);
                 play = false;
             }
-
         });
 
         timeThread = new Thread(new timeThread());
         timeThread.start();
 
         isRunning = !isRunning;
-        // MapLayout mapLayout = new MapLayout(this);
         mMapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mMapView);
@@ -278,13 +284,84 @@ public class StartActivity extends AppCompatActivity
 
         // 구현한 CalloutBalloonAdapter 등록
         mMapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-        //createCustomMarker(mMapView);
 
-        Button button2 = (Button) findViewById(R.id.endriding);
+        //코스 따라가기 값 가져오기
+        Intent course_get = new Intent(this.getIntent());
+        c_name = course_get.getStringExtra("c_name");
+        gpx_name = course_get.getStringExtra("gpx");
+
+        if(gpx_name == null && c_name == null){
+            binding.flowInfo.setVisibility(View.GONE);
+        }else{
+            binding.flowInfo.setVisibility(View.VISIBLE);
+            binding.couseInfo.setText(c_name);
+            Thread uThread = new Thread() {
+                @Override
+                public void run() {
+
+                    try {
+                        MapPolyline polyline = new MapPolyline();
+                        polyline.setTag(1000);
+                        polyline.setLineColor(Color.argb(255, 0, 74, 196)); // Polyline 컬러 지정.
+                        //서버에 올려둔 이미지 URL
+                        URL url = new URL("http://13.209.229.237:8080/app/getGPX/gpx/"+gpx_name);
+                        //Web에서 이미지 가져온 후 ImageView에 지정할 Bitmap 만들기
+                    /* URLConnection 생성자가 protected로 선언되어 있으므로
+                     개발자가 직접 HttpURLConnection 객체 생성 불가 */
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    /* openConnection()메서드가 리턴하는 urlConnection 객체는
+                    HttpURLConnection의 인스턴스가 될 수 있으므로 캐스팅해서 사용한다*/
+
+                        conn.setDoInput(true); //Server 통신에서 입력 가능한 상태로 만듦
+                        conn.connect(); //연결된 곳에 접속할 때 (connect() 호출해야 실제 통신 가능함)
+
+
+                        InputStream is = conn.getInputStream(); //inputStream 값 가져오기
+                        // InputStream in = getAssets().open("and.gpx");
+                        parsedGpx = mParser.parse(is);
+
+                        if (parsedGpx != null) {
+                            // log stuff
+                            List<Track> tracks = parsedGpx.getTracks();
+                            for (int i = 0; i < tracks.size(); i++) {
+                                Track track = tracks.get(i);
+                                Log.d("track ", i + ":");
+                                List<TrackSegment> segments = track.getTrackSegments();
+                                for (int j = 0; j < segments.size(); j++) {
+                                    TrackSegment segment = segments.get(j);
+
+                                    for (TrackPoint trackPoint : segment.getTrackPoints()) {
+
+                                        polyline.addPoint(MapPoint.mapPointWithGeoCoord(trackPoint.getLatitude(), trackPoint.getLongitude()));
+                                        Log.d("point: lat ", + trackPoint.getLatitude() + ", lon " + trackPoint.getLongitude());
+                                    }
+                                }
+                            }
+                            // Polyline 지도에 올리기.
+                            mMapView.addPolyline(polyline);
+
+                            // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                            MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
+                            int padding = 100; // px
+                            mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+                        } else {
+                            Log.e("error","Error parsing gpx track!");
+                        }
+
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException | XmlPullParserException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            uThread.start();
+        }
+
 
         //이동시간 핸들러
         BaseTime = SystemClock.elapsedRealtime();
-
         RidingTimer.sendEmptyMessage(0);
 
         //send_sms = (Button) findViewById(R.id.help);
@@ -315,7 +392,7 @@ public class StartActivity extends AppCompatActivity
         });
 
 
-        button2.setOnClickListener(v -> {
+        binding.endriding.setOnClickListener(v -> {
             //형변환한거
             if (hap == 0) {
                 /*이동거리가 0이면 라이딩 기록 종료시키면 액티비티 종료 */
@@ -362,7 +439,6 @@ public class StartActivity extends AppCompatActivity
                 locationManager.removeUpdates(this);
             }
         });
-
 
             DangerGet = serverApi.getDangerArea();
             DangerGet.enqueue(new Callback<List<DangerousArea>>() {
@@ -553,12 +629,9 @@ public class StartActivity extends AppCompatActivity
                                     Thread.sleep(10);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            binding.resttime.setText("");
-                                            binding.resttime.setText("00:00:00");
-                                        }
+                                    runOnUiThread(() -> {
+                                        binding.resttime.setText("");
+                                        binding.resttime.setText("00:00:00");
                                     });
                                     return; // 인터럽트 받을 경우 return
                                 }
@@ -740,7 +813,6 @@ public class StartActivity extends AppCompatActivity
 
                         // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
                         MapPointBounds mapPointBounds2 = new MapPointBounds(polyline.getMapPoints());
-                        int padding2 = 50; // px
                         mMapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds2, padding, 2, 3));
 
                         if (getSpeed > maX) {

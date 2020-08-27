@@ -447,6 +447,37 @@
                 android:layout_marginRight="10dp"
                 android:textSize="20dp" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/flow_info"
+            android:layout_width="380dp"
+            android:layout_height="80dp"
+            android:orientation="vertical"
+            android:background="@drawable/subactivity_shape"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="코스이름"
+                android:textSize="25dp"
+                android:textColor="#3e7319"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/couse_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="-10dp"
+                android:gravity="center"
+                android:text="코스이름"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 
@@ -510,15 +541,6 @@
                 android:layout_marginLeft="50dp"
                 android:spinnerMode="dialog"
                 android:layout_weight="1" />
-
-            <!--  <Button
-                  android:id="@+id/help"
-                  android:layout_width="50dp"
-                  android:layout_height="55dp"
-                  android:background="@drawable/help"
-                  tools:ignore="MissingConstraints"
-                  android:onClick="myOnClick"
-                  android:layout_marginLeft="50dp"/>-->
         </LinearLayout>
 
     </GridLayout>

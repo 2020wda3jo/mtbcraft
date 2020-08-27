@@ -27,14 +27,7 @@
         android:id="@+id/map_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/map_view"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_alignParentBottom="true"
-            android:layout_weight="0" />
-    </LinearLayout>
+        android:orientation="vertical"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -373,7 +366,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:padding="10dp">
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

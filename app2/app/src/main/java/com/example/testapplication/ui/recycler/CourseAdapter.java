@@ -116,7 +116,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
 
             controller.navigate(R.id.action_nav_course_view_to_nav_course_detail);
 
-            model.my_rec_time.setValue(hour_s+"시간 "+ finalMin +"분 "+ finalSec);
+            model.my_rec_time.setValue(hour_s+"시간 "+ finalMin +"분 "+ finalSec + "초");
             model.my_rec_rest.setValue(b_hour+"시간 "+ finalB_min +"분 "+ finalB_sec +"초");
             model.my_rec_dis.setValue(total);
             model.my_rec_max.setValue(itemList.get(position).getRr_topspeed() +"km/h");
