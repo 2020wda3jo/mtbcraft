@@ -81,5 +81,10 @@
 	<insert id="postRider_Apply" parameterType="com.mtbcraft.dto.Repair_Apply">
 		INSERT INTO REPAIR_APPLY(RA_NUM, RA_RIDER,RA_SHOP,RA_TYPE,RA_DATE,RA_CONTENT) VALUES (SEQ_RA_NUM.NEXTVAL, #{ra_rider}, #{ra_shop}, #{ra_type}, #{ra_date}, #{ra_content})
 	</insert>
+	
+	<!-- 사용자 정보조회 -->
+	<select id="getRiderInfo" parameterType="String" resultType="com.mtbcraft.dto.Rider">
+		select r_nickname, R_IMAGE from rider where r_id=#{r_id}
+	</select>
 </mapper>
 

@@ -14,6 +14,7 @@ import com.mtbcraft.dto.Goods;
 import com.mtbcraft.dto.Goods_like;
 import com.mtbcraft.dto.Reply;
 import com.mtbcraft.dto.Rider;
+import com.mtbcraft.dto.Saler;
 import com.mtbcraft.dto.Trade_Info;
 
 @Repository("com.mtbcraft.mapper.CommunityMapper")
@@ -105,6 +106,9 @@ public interface CommunityMapper {
 	
 	//거래 완료 업데이트2 - 물품 상태 판매완료 갱신
 	public void updateTradeEnd2(Goods_like gl);
+	
+	//나의 거래 조회
+	public Saler getSalerInfo(String g_rider);
 	
 	//거래 물품 등록
 	public void postGoods(Goods goods);

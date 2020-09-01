@@ -4,7 +4,7 @@
 
 	<link rel="stylesheet" href="/css/community/boardwrite.css">
 	
-	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/community_img.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
 	   <div class="container">
 	     <div class="row no-gutters slider-text align-items-end justify-content-center">
@@ -22,7 +22,7 @@
 			
 				<div class="col-lg-4 sidebar ftco-animate">
 					<div class="sidebar-box clubinfo">
-		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');" th:style="'background-image: url(/imgs/'+${club.cb_image}+');'">
+		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');" th:style="'background-image: url(/data/img/club/'+${club.cb_image}+');'">
 		              </div>
 		              
 		              <h2 th:text="${club.cb_name}">클럽명</h2>

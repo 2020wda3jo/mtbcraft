@@ -11,7 +11,8 @@
 }
 
 .cp_title img{
-	padding-left: 15%;
+	display : block;
+	margin: 0 auto;
 }
 
 
@@ -26,7 +27,7 @@
 	text-align: center;
 }
 .ms_title img{
+	display : block;
+	margin: 0 auto;
 	margin-top: 5%;
-	padding-left: 15%;
-	
 }

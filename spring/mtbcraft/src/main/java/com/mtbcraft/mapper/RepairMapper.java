@@ -8,6 +8,7 @@ import com.mtbcraft.dto.Qna;
 import com.mtbcraft.dto.Repair_Apply;
 import com.mtbcraft.dto.Repair_History;
 import com.mtbcraft.dto.Repair_Shop;
+import com.mtbcraft.dto.Rider;
 
 @Repository("com.mtbcraft.mapper.RepairMapper")
 public interface RepairMapper {
@@ -58,4 +59,7 @@ public interface RepairMapper {
 
 	//사용자 신청 등록
 	public void postRider_Apply(Repair_Apply ra);
+	
+	//사용자 정보조회
+	public Rider getRiderInfo(String r_id);
 }

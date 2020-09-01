@@ -155,6 +155,13 @@
 		update goods set g_status=2 where g_num = #{gl_goods}
 	</update>
 	
+	<!-- 나의 거래 조회 -->
+	<select id="getSalerInfo" parameterType="String" resultType="com.mtbcraft.dto.Saler">
+		select * from (
+			select count(*) sale from GOODS where g_rider=#{g_rider} and g_status=0 ),
+			( select count(*) sold from GOODS where g_rider=#{g_rider} and g_status=2 )
+	</select>
+	
 	<!-- 거래 물품 등록 -->
 	<insert id="postGoods" parameterType="com.mtbcraft.dto.Goods">
 		insert into goods values(SEQ_GOODS_NUM.nextval,#{g_title},#{g_location},#{g_content},#{g_image},#{g_price},0,0,#{g_rider},systimestamp)

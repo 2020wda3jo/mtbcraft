@@ -129,7 +129,7 @@ public class CommunityController {
 		return "community/club/club_main";
 	}
 
-	// 커뮤니티 클럽 게시판 이동
+	// 커뮤니티 클럽 글쓰기 페이지
 	@RequestMapping(value = "/community/club/write/{c_num}", method = RequestMethod.GET)
 	public String comunityBoardWrite(@PathVariable int c_num, Model model) {
 
@@ -417,7 +417,9 @@ public class CommunityController {
 
 	// 중고거래 게시판 이동
 	@RequestMapping(value = "/community/market", method = RequestMethod.GET)
-	public String tradeget(Model model) {
+	public String tradeget(Model model, Principal principal) {
+		
+		model.addAttribute("saler", communityService.getSalerInfo(principal.getName()));
 		
 		List<Goods> goodsList = communityService.getGoodsList();
 		for(int i=0;i<goodsList.size();i++) {
@@ -624,7 +626,7 @@ public class CommunityController {
 	public @ResponseBody byte[] getImage(@PathVariable String place ,@PathVariable String b_file) throws IOException {
 		InputStream in = null;
 	    in = new  BufferedInputStream(new FileInputStream("/home/ec2-user/data/"+place+"/"+b_file));
-	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\woolu\\Desktop\\workspace\\data\\img\\"+place+"\\"+b_file)); 
+	    //in = new  BufferedInputStream(new FileInputStream("C:\\Users\\TACK\\Desktop\\finai_workspace\\data\\"+place+"\\"+b_file)); 
 	    return IOUtils.toByteArray(in);
 	}
 }

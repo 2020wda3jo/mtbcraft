@@ -34,7 +34,7 @@ public class RepairController {
 		}else {
 			model.addAttribute("qnaList", repairService.rider_getQNA(rider));
 			model.addAttribute("applyList", repairService.rider_getRepairApply(rider));
-			model.addAttribute("rider", rider);
+			model.addAttribute("rider", repairService.getRiderInfo(rider));
 			return "repair/main";
 		}
 		

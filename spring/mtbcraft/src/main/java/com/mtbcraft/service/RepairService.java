@@ -12,6 +12,7 @@ import com.mtbcraft.dto.Qna;
 import com.mtbcraft.dto.Repair_Apply;
 import com.mtbcraft.dto.Repair_History;
 import com.mtbcraft.dto.Repair_Shop;
+import com.mtbcraft.dto.Rider;
 import com.mtbcraft.mapper.RepairMapper;
 
 @Service
@@ -100,5 +101,10 @@ public class RepairService {
 	//사용자 신청 등록
 	public void postRider_Apply(Repair_Apply ra) {
 		repairMapper.postRider_Apply(ra);
+	}
+	
+	//사용자 정보조회
+	public Rider getRiderInfo(String r_id) {
+		return repairMapper.getRiderInfo(r_id);
 	}
 }
