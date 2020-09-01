@@ -2,6 +2,7 @@ package com.example.testapplication;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -82,6 +83,50 @@ public class MainActivity extends AppCompatActivity {
 
         Picasso.get().load("http://13.209.229.237:8080/app/getGPX/rider/" + model.r_Image.getValue())
                 .into(userImage);
+
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            menuItem.setChecked(true);
+            drawer.closeDrawers();
+
+            int id = menuItem.getItemId();
+            switch (id) {
+                case R.id.nav_records:
+                    navController.navigate(R.id.action_nav_home_to_nav_records);
+                    break;
+                case R.id.nav_course_view:
+                    navController.navigate(R.id.action_nav_home_to_nav_course_view);
+                    break;
+                case R.id.nav_course_search:
+                    navController.navigate(R.id.action_nav_home_to_nav_course_search);
+                    break;
+                case R.id.nav_course_scrap:
+                    navController.navigate(R.id.action_nav_home_to_nav_course_scrap);
+                    break;
+                case R.id.nav_competition_view:
+                    navController.navigate(R.id.action_nav_home_to_nav_competition_view);
+                    break;
+                case R.id.nav_mission_view:
+                    navController.navigate(R.id.action_nav_home_to_nav_mission_view);
+                    break;
+                case R.id.friend_invite:
+                    Intent friend = new Intent();
+                    friend.setAction(Intent.ACTION_SEND);
+                    friend.setType("text/plain");
+                    friend.putExtra(Intent.EXTRA_SUBJECT, model.r_Nickname.getValue() + "님이 귀하를 초대합니다. 앱 설치하기");
+                    friend.putExtra(Intent.EXTRA_TEXT, "tmarket://details?id=com.capston.mtbcraft");
+
+                    Intent chooser = Intent.createChooser(friend, "초대하기");
+                    startActivity(chooser);
+                    break;
+                case R.id.nav_danger_view:
+                    navController.navigate(R.id.action_nav_home_to_nav_danger_view);
+                    break;
+                case R.id.nav_sett:
+                    navController.navigate(R.id.action_nav_home_to_setting);
+                    break;
+            }
+            return true;
+        });
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);

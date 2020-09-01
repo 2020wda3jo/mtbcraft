@@ -9,7 +9,32 @@
         android:id="@+id/nav_home"
         android:name="com.example.testapplication.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_course_scrap"
+            app:destination="@id/nav_course_scrap" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_course_view"
+            app:destination="@id/nav_course_view" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_records"
+            app:destination="@id/nav_records" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_course_search"
+            app:destination="@id/nav_course_search" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_competition_view"
+            app:destination="@id/nav_competition_view" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_mission_view"
+            app:destination="@id/nav_mission_view" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_danger_view"
+            app:destination="@id/nav_danger_view" />
+        <action
+            android:id="@+id/action_nav_home_to_setting"
+            app:destination="@id/setting" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_records"
@@ -68,16 +93,6 @@
         android:label="경쟁전 상세보기"
         tools:layout="@layout/fragment_competition_detail" />
     <fragment
-        android:id="@+id/friend_invite"
-        android:name="com.example.testapplication.Friend_invite"
-        android:label="친구초대하기"
-        tools:layout="@layout/fragment_friend_invite" />
-    <fragment
-        android:id="@+id/courseScrap"
-        android:name="com.example.testapplication.CourseScrap"
-        android:label="fragment_course_scrap2"
-        tools:layout="@layout/fragment_course_scrap2" />
-    <fragment
         android:id="@+id/nav_mission_view"
         android:name="com.example.testapplication.ui.missions.MissionViewFragment"
         android:label="미션"
@@ -105,6 +120,11 @@
         android:name="com.example.testapplication.ui.dangers.DangerRegisterFragment"
         android:label="위험지역 등록"
         tools:layout="@layout/fragment_danger_register" />
+    <fragment
+        android:id="@+id/setting"
+        android:name="com.example.testapplication.setting.Setting"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
 
 
 </navigation>

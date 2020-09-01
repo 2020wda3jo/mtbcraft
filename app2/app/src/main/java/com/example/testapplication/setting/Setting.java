@@ -1,19 +1,28 @@
-package com.example.testapplication;
+package com.example.testapplication.setting;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.example.testapplication.R;
+import com.example.testapplication.ui.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Friend_invite#newInstance} factory method to
+ * Use the {@link Setting#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Friend_invite extends Fragment {
+public class Setting extends BaseFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +33,7 @@ public class Friend_invite extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Friend_invite() {
+    public Setting() {
         // Required empty public constructor
     }
 
@@ -34,11 +43,11 @@ public class Friend_invite extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Friend_invite.
+     * @return A new instance of fragment setting.
      */
     // TODO: Rename and change types and number of parameters
-    public static Friend_invite newInstance(String param1, String param2) {
-        Friend_invite fragment = new Friend_invite();
+    public static Setting newInstance(String param1, String param2) {
+        Setting fragment = new Setting();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -56,9 +65,33 @@ public class Friend_invite extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Button saveBt;
+        saveBt = (Button) view.findViewById(R.id.save_bt);
+        EditText editText;
+        editText = (EditText) view.findViewById(R.id.phone_num);
+        saveBt.setOnClickListener(v ->{
+            //저장을 하기위해 editor를 이용하여 값을 저장시켜준다.
+            String text = editText.getText().toString(); // 사용자가 입력한 저장할 데이터
+
+
+            SharedPreferences auto = getActivity().getSharedPreferences("auto", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor autoLogin = auto.edit();
+            autoLogin.putString("sosphone", text);
+            autoLogin.commit();
+            getActivity().finish();
+        });
+    }
+
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friend_invite, container, false);
+
+        return inflater.inflate(R.layout.fragment_setting, container, false);
     }
 }

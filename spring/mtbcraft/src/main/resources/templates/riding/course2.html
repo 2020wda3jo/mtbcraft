@@ -36,7 +36,7 @@ display:none;}
 <div id="mainbox">
 	<div id="myInfoBox">
 		<div id="myRecords">
-		<h2>나의 기록</h2>
+		<h2><b>나의 기록</b></h2>
 		<ul>
 			<li class="li_rr" th:each="record : ${ridingrecords}" th:id="${record.rr_num}">
 				<span th:text="${record.rr_area}"></span>
@@ -45,7 +45,7 @@ display:none;}
 		</ul>
 		</div>
 		<div id="myScraps">
-		<h2>나의 스크랩 코스</h2>
+		<h2><b>나의 스크랩 코스</b></h2>
 			<ul>
 				<li class="li_sc" th:each="course : ${scrapcourses}" th:id="${course.rr_num}" >
 					<span th:text="${course.rr_name}">test</span>
