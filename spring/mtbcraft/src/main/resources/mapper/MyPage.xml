@@ -62,5 +62,15 @@
 	<update id="changeRiderBadge" parameterType="com.mtbcraft.dto.Rider">
 		update rider set r_badge=#{badge} where r_id=#{r_id}
 	</update>
+	
+	<!-- 사용자 닉네임, 이미지 조회 -->
+	<select id="getRider" parameterType="String" resultType="com.mtbcraft.dto.Rider">
+		select r_nickname, r_image from rider where r_id=#{r_id}
+	</select>
+	
+	<!-- 리뷰 조회 -->
+	<select id="getReply" parameterType="int" resultType="com.mtbcraft.dto.Reply">
+		select re_content, to_char(re_day, 'YYYY/MM/DD HH24:MI:SS') re_day, r_nickname re_rider, bg_image r_image from reply, rider, badge where re_board=#{re_board} and re_rider=r_id and r_badge=bg_num
+	</select>
 </mapper>
 

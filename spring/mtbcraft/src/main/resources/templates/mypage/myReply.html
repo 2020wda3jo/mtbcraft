@@ -27,9 +27,9 @@
 			
 				<div class="col-lg-4 sidebar ftco-animate">
 					<div class="sidebar-box clubinfo">
-		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');">
+		              <div class="clubimg" style="background-image: url('/imgs/main3.jpg');" th:style="|background-image: url('/data/img/rider/${rider.r_image}');|">
 		              </div>
-		              <h2 th:text="${rider}+'님'">사용자명</h2>
+		              <h2 th:text="${rider.r_nickname}+'님'">사용자명</h2>
 		              <h2>안라하세요!</h2>
 		            </div>
 		            

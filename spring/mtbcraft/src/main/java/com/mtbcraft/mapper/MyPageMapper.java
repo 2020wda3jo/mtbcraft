@@ -45,4 +45,10 @@ public interface MyPageMapper {
 	
 	//대표배지 변경
 	public void changeRiderBadge(Rider rider);
+	
+	//사용자 닉네임, 이미지 조회
+	public Rider getRider(String r_id);
+	
+	//리뷰 조회
+	public List<Reply> getReply(int re_board);
 }

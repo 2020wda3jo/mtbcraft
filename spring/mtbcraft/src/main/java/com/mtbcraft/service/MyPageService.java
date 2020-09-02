@@ -76,4 +76,14 @@ public class MyPageService {
 	public void changeRiderBadge(Rider rider) {
 		myPageMapper.changeRiderBadge(rider);
 	}
+	
+	//사용자 닉네임, 이미지 조회
+	public Rider getRider(String r_id) {
+		return myPageMapper.getRider(r_id);
+	}
+	
+	//리뷰 조회
+	public List<Reply> getReply(int re_board){
+		return myPageMapper.getReply(re_board);
+	}
 }

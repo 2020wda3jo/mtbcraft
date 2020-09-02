@@ -160,7 +160,7 @@
         				</div>
         				
         				<div class="entback">
-        					<a href="#" id="/entertainment/competition">돌아가기</a>
+        					<a href="/entertainment/competition" id="/entertainment/competition">돌아가기</a>
         				</div>
         				
 		         </div>
@@ -170,21 +170,6 @@
 
 	<!-- 코스번호 -->
 	<input type="hidden" id="c_gpx" name="c_gpx" th:value="${comp.c_gpx}">
-	<script>
-		$(".entback a").click(function(){
-			var form = document.createElement("form");
-			form.setAttribute("method", "Post");  
-			form.setAttribute("action", this.id); 
-		  	var hiddenField = document.createElement("input");
-			hiddenField.setAttribute("type", "hidden");
-			hiddenField.setAttribute("name", "rider");
-		    hiddenField.setAttribute("value", $("#hiddenID").val());
-	        form.appendChild(hiddenField);
-	        
-	        document.body.appendChild(form);
-	        form.submit();
-		});
-	</script>
 	<footer th:replace="footer2"></footer>
 	
 	<!-- loader -->

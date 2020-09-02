@@ -37,7 +37,7 @@ public class MypageController {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String rider = userDetails.getUsername();
 		
-		model.addAttribute("rider", myPageService.getUserNickname(rider));
+		model.addAttribute("rider", myPageService.getRider(rider));
 		model.addAttribute("total", myPageService.getUserTotalDistance(rider));
 		
 		return "mypage/myRiding";
@@ -51,7 +51,7 @@ public class MypageController {
 		String rider = userDetails.getUsername();
 		
 		model.addAttribute("list", list);
-		model.addAttribute("rider", rider);
+		model.addAttribute("rider", myPageService.getRider(rider) );
 //		model.addAttribute("badgeList", myPageService.getBadge(rider));
 		model.addAttribute("badgeList",entertainmentService.getBadge(rider));
 		model.addAttribute("cbadgeList",entertainmentService.getCustomBadge(rider));
@@ -84,17 +84,27 @@ public class MypageController {
 	@GetMapping("/mypage/post")
 	public String goMyPost(Principal principal, Model model) {
 		
-		model.addAttribute("rider", myPageService.getUserNickname(principal.getName()) );
+		model.addAttribute("rider", myPageService.getRider(principal.getName()) );
 		model.addAttribute("club", myPageService.getUserClubPost(principal.getName()) );
 		model.addAttribute("sns", myPageService.getUserSNSPost(principal.getName()) );
 		
 		return "mypage/myPost";
 	}
 	
+	@GetMapping("/mypage/post/{b_num}")
+	public String getPostDetail(@PathVariable int b_num, Principal principal, Model model) {
+		
+		model.addAttribute("rider", myPageService.getRider(principal.getName()) );
+		model.addAttribute("board", myPageService.getOriginPost(b_num) );
+		model.addAttribute("replys", myPageService.getReply(b_num) );
+		
+		return "mypage/postDetail";
+	}
+	
 	@GetMapping("/mypage/reply")
 	public String goMyReply(Principal principal, Model model) {
 		
-		model.addAttribute("rider", myPageService.getUserNickname(principal.getName()) );
+		model.addAttribute("rider", myPageService.getRider(principal.getName()) );
 		
 		model.addAttribute("replys", myPageService.getUserReply(principal.getName()) );
 		
