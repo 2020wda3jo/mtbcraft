@@ -58,7 +58,8 @@
 	</div>
 	
 	<div id="box_post_DA">
-		<form id="form_post_DA" action="/dangerousArea" method="post"  enctype="multipart/form-data">
+	
+	<!--	<form id="form_post_DA" action="/dangerousArea" method="post"  enctype="multipart/form-data">
 			<label>위도</label><input type="text" id="DA_Lat" name="da_latitude" size="18">
 			<label>경도</label><input type="text" id="DA_Lon" name="da_longitude" size="18">
 			<label>등록주소</label><input type="text" id="DA_addr" name="da_addr" size="8" required>
@@ -67,7 +68,42 @@
 			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
 		</form>
 		<button type="button" onclick="regDA()">등록신청</button>
-		<button type="button" onclick="cancel_post_DA()">취소</button>
+		<button type="button" onclick="cancel_post_DA()">취소</button>-->
+		<table class="type09">
+				    <thead>
+					    <tr>
+					        <th scope="cols">코스명</th>
+					        <th scope="cols" id="cif_name">짧은 코스</th>
+					    </tr>
+				    </thead>
+				    <tbody>
+				   		 <tr>
+					        <th scope="row">라이딩 일시</th>
+					        <td id="cif_date">716m</td>
+					        <th scope="row">추천수</th>
+					        <td id="cif_like">7</td>
+					    </tr>
+					    <tr>
+					        <th scope="row">전체 거리</th>
+					        <td id="cif_total">23.5km</td>
+					        <th scope="row">평균 속도</th>
+					        <td id="cif_avg">17.2km/h</td>
+					    </tr>
+					    <tr>
+					        <th scope="row">획득 고도</th>
+					        <td id="cif_high">716m</td>
+					        <th scope="row">주행시간</th>
+					        <td id="cif_time">7</td>
+					    </tr>
+					    <tr>
+					        <th scope="row">최고 속도</th>
+					        <td id="cif_top">716m</td>
+					        <th scope="row">휴식시간</th>
+					        <td id="cif_break">7</td>
+					    </tr>
+					    
+			    	</tbody>
+			</table>
 		
 		
 		

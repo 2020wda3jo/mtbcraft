@@ -4,11 +4,13 @@
 <link rel="stylesheet" href="/css/riding/course.css?after"/>
 <link rel="stylesheet" href="/css/riding/main.css?abc"/>
 <!-- 위는 로컬에 적용하는 KEY, 아래는 서버에 적용하는 KEY입니다. 로컬에서는 상단KEY를 쓰고 아래 KEY를 주석처리해주세요.-->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+<!-- form 디자인 -->
+<link href="/css/option/form.css" rel="stylesheet" media="all">
 <STYLE>
 #box_post_DA2 {
 display:none;}
@@ -65,29 +67,122 @@ display:none;}
 	</div>
 	
 	<div id="box_post_DA">
-		<form id="form_post_DA" action="/dangerousArea" method="post"  enctype="multipart/form-data">
-			<label>위도</label><input type="text" id="DA_Lat" name="da_latitude" size="18">
-			<label>경도</label><input type="text" id="DA_Lon" name="da_longitude" size="18">
-			<label>등록주소</label><input type="text" id="DA_addr" name="da_addr" size="8" required>
-			<label>한줄평</label><input type="text" id="DA_content" name="da_content" size="40" required>
-			<label>이미지첨부</label><input type="file" id="file" name="file" accept="image/*">
-			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
-		</form>
-		<button type="button" onclick="regDA()">등록신청</button>
-		<button type="button" onclick="cancel_post_DA()">취소</button>
+            <div class="card card-5" style="padding:50px;">
+                    <form id="form_post_DA" action="/dangerousArea" method="post"  enctype="multipart/form-data">
+                    <input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
+                        <div class="form-row m-b-55">
+                            <div class="name">위도, 경도</div>
+                            <div class="value">
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group-desc">
+                                            <input class="input--style-5 inp" id="DA_Lat" name="da_latitude">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        
+                                        <div class="input-group-desc">
+                                            <input class="input--style-5 inp" type="text" id="DA_Lon" name="da_longitude">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">등록주소</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5 inp" type="text" id="DA_addr" name="da_addr" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">한줄평</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5 inp" type="text" id="DA_content" name="da_content">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row m-b-55">
+                            <div class="name">이미지 첨부</div>
+                            <div class="value">
+                                <div class="row row-refine">
+                                    <div class="col-3">
+                                        <div class="input-group-desc">
+                                            <input type="file" id="file" name="file" accept="image/*">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn--radius-2 btn--red" type="button" onclick="regDA()">등록하기</button>
+                            <button class="btn btn--radius-2 btn--blue" type="button" onclick="cancel_post_DA()">취소</button>
+                        </div>
+                    </form>
+            </div>
 	</div>
 	
 	<div id="box_post_DA2">
-		<form id="form_post_nomtb" action="/nomtbAction" method="post"  enctype="multipart/form-data">
-			<label>위도</label><input type="text" id="no_lot" name="nomtb_lot" size="18">
-			<label>경도</label><input type="text" id="no_lon" name="nomtb_lon" size="18">
-			<label>산 이름</label><input type="text" id="no_addr" name="nomtb_addr" size="8" required>
-			<label>한줄평</label><input type="text" id="no_content" name="nomtb_content" size="40" required>
-			<label>이미지첨부</label><input type="file" id="file" name="file" accept="image/*">
-			<input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
-		</form>
-		<button type="button" onclick="regNomtb()">등록신청</button>
-		<button type="button" onclick="cancel_post_DA()">취소</button>
+
+		<div class="card card-5" style="padding:50px;">
+                    <form id="form_post_nomtb" action="/nomtbAction" method="post"  enctype="multipart/form-data">
+                    <input type="hidden" id="DARider" name="da_rider" th:value="${#authentication.name}">
+                        <div class="form-row m-b-55">
+                            <div class="name">위도, 경도</div>
+                            <div class="value">
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group-desc">
+                                            <input class="input--style-5 inp" id="no_lot" name="nomtb_lot">
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        
+                                        <div class="input-group-desc">
+                                            <input class="input--style-5 inp" type="text" id="no_lon" name="nomtb_lon">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">산이름</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5 inp" type="text" id="no_addr" name="nomtb_addr" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">한줄평</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5 inp" type="text" id="no_content" name="nomtb_content">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row m-b-55">
+                            <div class="name">이미지 첨부</div>
+                            <div class="value">
+                                <div class="row row-refine">
+                                    <div class="col-3">
+                                        <div class="input-group-desc">
+                                            <input type="file" id="file" name="file" accept="image/*">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn--radius-2 btn--red" type="button" onclick="regNomtb()">등록하기</button>
+                            <button class="btn btn--radius-2 btn--blue" type="button" onclick="cancel_post_DA()">취소</button>
+                        </div>
+                    </form>
+            </div>
+            
 	</div>
 	
 	<div class="recom_info" id="recom_info">

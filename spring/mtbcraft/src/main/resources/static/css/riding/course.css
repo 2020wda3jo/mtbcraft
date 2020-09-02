@@ -282,3 +282,20 @@ table.type09 td {
 	font-weight: 700;
 	margin-bottom: 15px;
 }
+
+#box_post_DA {
+	width:69%;
+	border-radius: 3px;
+ 	 background: #fff;
+ 	 float:right;
+	margin-top:20px;
+  
+}
+#box_post_DA2 {
+	width:69%;
+	border-radius: 3px;
+ 	 background: #fff;
+ 	 float:right;
+	margin-top:20px;
+  
+}
