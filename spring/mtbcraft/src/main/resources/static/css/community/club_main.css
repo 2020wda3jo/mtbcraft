@@ -95,15 +95,33 @@ table.type09 tbody tr td:nth-child(4){
 	text-align: center;
 }
 
-.search {
+.bo_se_btn {
 	margin : 0 auto;
-	width: 70%;
-	margin-top: 3%;
+	width:80%;
+	margin-top: 6%;
 }
+.bo_se_btn input {
+	float:left;
+	marign-left:30px;
+	}
 
 .btn {
-	width: 12%;
+	width: 13%;
 	margin: 0;
+}
+.btn_color {
+	background:#f25821;
+	border:solid 1px #f28e6a;
+	border-radius:5px;
+	color:white;
+	margin-left:10px;
+}
+.btn_color2 {
+	background:#00b295;
+	border:solid 1px #73d0c1;
+	border-radius:5px;
+	color:white;
+	margin-left:10px;
 }
 .bar {
 	width: 70%;

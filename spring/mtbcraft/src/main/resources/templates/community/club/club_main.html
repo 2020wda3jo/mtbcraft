@@ -1,9 +1,7 @@
  <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header2"></head>
-
 	<link rel="stylesheet" href="/css/community/club_main.css">
-	
 	<section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/community_img.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
 	   <div class="container">
@@ -71,39 +69,18 @@
 		             	<a href="#">다음</a>
 	             	</div>
 	             	
-	             	<div class="search">
-		             	<input type="text" class="bar">
-		             	<input type="button" class="btn" value="검색">
-		             	<input type="button" class="btn" value="글쓰기">
+	             	<div class="bo_se_btn">
+		             	<input type="text" class="bar" size="">
+		             	<input type="button" class="btn btn_color" value="검색">
+		             	<input type="button" class="btn btn_color2" value="글쓰기">
 	             	</div>
 				</div>
 			</div>
 		</div>
 	</section>
-		
-		
-    <footer th:replace="footer2"></footer>
-  
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
-
-  <script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="/test/js/popper.min.js"></script>
-  <script src="/test/js/bootstrap.min.js"></script>
-  <script src="/test/js/jquery.easing.1.3.js"></script>
-  <script src="/test/js/jquery.waypoints.min.js"></script>
-  <script src="/test/js/jquery.stellar.min.js"></script>
-  <script src="/test/js/owl.carousel.min.js"></script>
-  <script src="/test/js/jquery.magnific-popup.min.js"></script>
-  <script src="/test/js/aos.js"></script>
-  <script src="/test/js/jquery.animateNumber.min.js"></script>
-  <script src="/test/js/bootstrap-datepicker.js"></script>
-  <script src="/test/js/jquery.timepicker.min.js"></script>
-  <script src="/test/js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="/test/js/google-map.js"></script>
-  <script src="/test/js/main.js"></script>
+ss
 
 <script>
 $(".btn").click(function(){
@@ -116,6 +93,4 @@ $(".type09 tbody tr td:nth-child(2)").click(function() {
 	location.href="/community/club/boardGet?b_num=" + this.id;
 });
 </script>
-    
-  </body>
-</html>
+<footer th:replace="footer2"></footer>

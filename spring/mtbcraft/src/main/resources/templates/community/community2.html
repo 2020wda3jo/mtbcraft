@@ -3,9 +3,6 @@
 <head th:replace="header2"></head>
 
 <link rel="stylesheet" href="/css/community/main.css"/>
-
-<input type="hidden" id="hiddenCLUB" th:value="${club}"> 
-
 <section class="hero-wrap hero-wrap-2" style="background-image: url('/test/images/community_img.jpg');" data-stellar-background-ratio="0.5">
 	   <div class="overlay"></div>
 	   <div class="container">
@@ -33,9 +30,14 @@
           <div class="col-md-4 d-flex align-self-stretch ftco-animate text-center">
             <div class="media block-6 services d-block">
               <div class="mm d-flex justify-content-center align-items-center">
-            		<a href="#" id="community/club" class="commtag mm2">
+              	<th:block th:if="${club}">
+            		<a th:href="@{'community/club/'+${club}}" id="community/club" class="commtag mm2">
             			<img alt="" src="/imgs/club.jpg">
             		</a>
+            	</th:block >
+            	<th:block th:unless="${club}">
+            		<script>alert("아직 클럽에 가입하지 않았습니다");</script>
+            	</th:block>
               </div>
               <div class="media-body p-2 mt-3">
                 <h3 class="heading">클럽</h3>
@@ -73,36 +75,7 @@
 			</div>
 		</section>
 		
-    <footer th:replace="footer2"></footer>
-  
+
 	  <!-- loader -->
 	  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-	
-	
-	  <script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
-	  <script src="/test/js/popper.min.js"></script>
-	  <script src="/test/js/bootstrap.min.js"></script>
-	  <script src="/test/js/jquery.easing.1.3.js"></script>
-	  <script src="/test/js/jquery.waypoints.min.js"></script>
-	  <script src="/test/js/jquery.stellar.min.js"></script>
-	  <script src="/test/js/owl.carousel.min.js"></script>
-	  <script src="/test/js/jquery.magnific-popup.min.js"></script>
-	  <script src="/test/js/aos.js"></script>
-	  <script src="/test/js/jquery.animateNumber.min.js"></script>
-	  <script src="/test/js/bootstrap-datepicker.js"></script>
-	  <script src="/test/js/jquery.timepicker.min.js"></script>
-	  <script src="/test/js/scrollax.min.js"></script>
-	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	  <script src="/test/js/google-map.js"></script>
-	  <script src="/test/js/main.js"></script>
-    	<script>
-    		$(".commtag").click(function(){
-    			if($("#hiddenCLUB").val()==0){
-    				location.href = this.id;
-    			}else {
-    				location.href = this.id+"/"+$("#hiddenCLUB").val();
-    			}
-    		});
-    	</script>
-  </body>
-</html>
+	    <footer th:replace="footer2"></footer>
