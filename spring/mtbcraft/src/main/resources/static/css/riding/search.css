@@ -3,6 +3,8 @@
 #mainbox {
 	margin: 0 auto;
 	height: auto;
+	width: 80%;
+	margin-bottom: 200px;
 }
 
 #mymap {
@@ -72,6 +74,7 @@
 }
 .flex {
 	display: flex;
+	justify-content : space-around;
 }
 
 .flex div:first-child {
@@ -111,3 +114,22 @@ table.type09 td {
     vertical-align: top;
     border-bottom: 1px solid #ccc;
 }
+
+.reviewBox {
+	width: 100%;
+}
+
+#postReview .form-control {
+	width: 90%;
+}
+
+.ta_right {
+	text-align: right;
+	width: 91%;
+}
+
+.btnregreview {
+	position: relative;
+	right: auto;
+} 
+

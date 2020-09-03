@@ -101,10 +101,12 @@ function getDA(){
 			    });
 			    
 			    da_makers.push(marker);
-
+				
+				var iwcontent = '<div style="padding:3px; width:150px;">'+data[i].da_content+'</div>';
+				
 			    // 마커에 표시할 인포윈도우를 생성합니다 
 			    var infowindow = new kakao.maps.InfoWindow({
-			        content: data[i].da_content // 인포윈도우에 표시할 내용
+			        content: iwcontent // 인포윈도우에 표시할 내용
 			    });
 
 			    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다

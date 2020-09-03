@@ -169,16 +169,20 @@
 			</ul>
 		</div>
 		
-		<form id="postReview"  action="/riding/review" method="post"  enctype="multipart/form-data">
-			
-			<input class="form-control" type="text" size="50" id="cr_content" name="cr_content" placeholder="리뷰를 작성하세요!">
-			<input type="file" id="cr_images" name="files">
-			<input type="hidden" id="cr_rider" name="cr_rider">
-			<input type="hidden" id="cr_rnum" name="cr_rnum">
-		</form>
-		<button class="btnregreview" type="button" onclick="postReview()">리뷰 등록하기</button>
-		<input type="hidden" id="bt_rr_open">
-		<input type="hidden" id="selected_rr_num">
+		<div class="reviewBox">
+			<form id="postReview"  action="/riding/review" method="post"  enctype="multipart/form-data">
+				
+				<input class="form-control" type="text" size="50" id="cr_content" name="cr_content" placeholder="리뷰를 작성하세요!">
+				<input type="file" id="cr_images" name="files">
+				<input type="hidden" id="cr_rider" name="cr_rider">
+				<input type="hidden" id="cr_rnum" name="cr_rnum">
+			</form>
+			<div class="ta_right">
+				<button class="btnregreview" type="button" onclick="postReview()">리뷰 등록하기</button>
+			</div>
+			<input type="hidden" id="bt_rr_open">
+			<input type="hidden" id="selected_rr_num">
+		</div>
 	</div>
 </div>	
 	
