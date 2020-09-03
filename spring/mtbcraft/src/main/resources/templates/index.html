@@ -5,11 +5,6 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!-- kakaoAPI를 쓰기위한 KEY -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbb047c9e9b46e285f76df6669c00d7f&libraries=services"></script>
-<!-- VISUAL IMAGE -->
-<!-- 
-비주얼 슬라이드 추가 예정
-문구 : We are responsible for your riding
- -->
 <div id="back_img"></div>
 <!-- content 1 -->
 <div th:unless="${#authorization.expr('isAuthenticated()')}">

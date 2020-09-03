@@ -2,15 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="header2"></head>
-<!-- kakaoAPI를 쓰기위한 KEY -->
-<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b139a908cf5a67ae5c093565896a18&libraries=services"></script>
-<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dbb047c9e9b46e285f76df6669c00d7f&libraries=services"></script>
-
-<link rel="stylesheet" href="/css/main/main.css">
-
-
 <section class="home-slider owl-carousel js-fullheight">
 	<div class="slider-item js-fullheight"
 		style="background-image: url(/imgs/visual.jpg);">
@@ -88,7 +79,7 @@
 		</div>
 	</div>
 </section>
-
+<div th:unless="${#authorization.expr('isAuthenticated()')}">
 <section class="ftco-section ftco-counter img" id="section-counter"
 	data-stellar-background-ratio="0.5">
 	<!-- <section class="ftco-section ftco-counter img ftco-no-pt" id="section-counter"> -->
@@ -127,7 +118,6 @@
 	</div>
 </section>
 
-<div th:unless="${#authorization.expr('isAuthenticated()')}">
 	<section id="content1">
 		안녕하세요!<br />산악 라이딩의 재미를 불어넣는 <br />
 		<br /> <span id="f50">MTB CRAFT</span>입니다.
@@ -274,7 +264,7 @@
 	</section>
 </div>
 
-<footer th:replace="footer2"></footer>
+
 
 
 <!-- loader -->
@@ -383,21 +373,4 @@
 	// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 	var repairmap = new kakao.maps.Map(repairmapContainer, repairmapOption);
 </script>
-
-
-
-<script src="/test/js/jquery-migrate-3.0.1.min.js"></script>
-<script src="/test/js/popper.min.js"></script>
-<script src="/test/js/bootstrap.min.js"></script>
-<script src="/test/js/jquery.easing.1.3.js"></script>
-<script src="/test/js/jquery.waypoints.min.js"></script>
-<script src="/test/js/jquery.stellar.min.js"></script>
-<script src="/test/js/owl.carousel.min.js"></script>
-<script src="/test/js/jquery.magnific-popup.min.js"></script>
-<script src="/test/js/aos.js"></script>
-<script src="/test/js/jquery.animateNumber.min.js"></script>
-<script src="/test/js/bootstrap-datepicker.js"></script>
-<script src="/test/js/jquery.timepicker.min.js"></script>
-<script src="/test/js/scrollax.min.js"></script>
-<script src="/test/js/main.js"></script>
-
+<footer th:replace="footer2"></footer>

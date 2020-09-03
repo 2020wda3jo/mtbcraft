@@ -3,15 +3,17 @@
 #select_section {
     margin-top: 30px;
     max-width: 1200px;
+    height:400px;
     position: relative;
     margin: 0 auto;
     padding: 0;
 }
 
 #select_section > p {
-    font-family: 'Nanum Gothic Coding', monospace;
+    font-family: 'Nanum Gothic', sans-serif;
     font-size: 46px;
     text-align: center;
+    color:black;
 }
 
 #m_riding_bt {
@@ -57,7 +59,7 @@
 
 #m_section1 {
     max-width: 900px;
-    margin-top: 100px;
+    margin-top: 130px;
     position: relative;
     boeder: solid 1px red;
     margin: 0 auto;
@@ -65,8 +67,9 @@
 }
 
 #m_section2 {
+	position:relative;
     max-width: 1000px;
-    margin-top: 100px;
+    margin-top: 200px;
     margin: 0 auto;
     padding: 0;
 }
