@@ -85,13 +85,20 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
 
         Picasso.get().load("http://13.209.229.237:8080/app/getGPX/rider/" + itemList.get(position).getR_image())
                 .into(testViewHolder.imageView);
+
+        String substring = itemList.get(position).getRr_date();
+        String sub1 = substring.substring(0,10);
+        String substring2 = itemList.get(position).getRr_date();
+        String sub2 = substring2.substring(11,19);
+
+
         testViewHolder.c_rider_name.setText(itemList.get(position).getRr_rider());
         testViewHolder.c_name.setText(itemList.get(position).getRr_name());
         testViewHolder.c_time.setText(hour_s+":"+min+":"+ sec);
         testViewHolder.c_avg.setText(String.valueOf(itemList.get(position).getRr_avgspeed())+"km");
         testViewHolder.c_getgodo.setText(String.valueOf(itemList.get(position).getRr_high())+"m");
         testViewHolder.c_dis.setText(total);
-        testViewHolder.c_date.setText(itemList.get(position).getRr_date());
+        testViewHolder.c_date.setText(sub1+ " "+sub2);
         testViewHolder.like_count.setText(String.valueOf(itemList.get(position).getRr_like()));
         testViewHolder.webview.loadUrl("http://13.209.229.237:8080/app/riding/course_view/"+itemList.get(position).getRr_num());
         testViewHolder.webview.getSettings().setJavaScriptEnabled(true);
@@ -125,7 +132,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
             model.my_rec_adress.setValue(String.valueOf(itemList.get(position).getRr_area()));
             model.my_rec_name.setValue(String.valueOf(itemList.get(position).getRr_name()));
             model.CourseRider.setValue(String.valueOf(itemList.get(position).getRr_rider()));
-            model.my_rec_date.setValue(String.valueOf(itemList.get(position).getRr_date()));
+            model.my_rec_date.setValue(sub1+ " "+sub2);
             model.like_count.setValue(itemList.get(position).getRr_like());
             model.my_rec_gpx.setValue(itemList.get(position).getRr_gpx());
             model.CourseR_image.setValue(itemList.get(position).getR_image());

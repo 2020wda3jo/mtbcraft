@@ -24,7 +24,9 @@
         android:label="MTBCRAFT"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true">
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="8819eab741cd2e061a5bb0e04dbe8a96" />
@@ -56,7 +58,12 @@
         <activity
             android:name=".ui.riding.EndActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".ui.riding.FollowStart"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.riding.FollowEndActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

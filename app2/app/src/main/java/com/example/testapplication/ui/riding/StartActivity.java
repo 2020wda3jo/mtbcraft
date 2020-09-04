@@ -183,7 +183,7 @@ public class StartActivity extends AppCompatActivity
             try {
                 SmsManager smsManager = SmsManager.getDefault();
                 String sms = "" +
-                        "산에서 다쳤어요! 도와주세요! 제 위치는 " + latitude + ", " + lonngitude + "이고 주소는 " + address_dong + "에요. http://53.92.32.7:8080/app/dangergps/35.896252/128.621814";
+                        "산에서 다쳤어요! 도와주세요! 제 위치는 " + latitude + ", " + lonngitude + "이고 주소는 " + address_dong + "에요. http://13.209.229.237:8080/app/dangergps/+"+latitude+"/"+lonngitude;
                 smsManager.sendTextMessage(number, null, sms, null, null);
                 Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
@@ -222,7 +222,7 @@ public class StartActivity extends AppCompatActivity
                         try {
                             SmsManager smsManager = SmsManager.getDefault();
                             String sms = "" +
-                                    "산에서 다쳤어요! 도와주세요! 제 위치는 " + latitude + ", " + lonngitude + "이고 주소는 " + address_dong + "에요. http://13.209.229.237:8080/app/dangergps/35.896252/128.621814";
+                                    "산에서 다쳤어요! 도와주세요! 제 위치는 " + latitude + ", " + lonngitude + "이고 주소는 " + address_dong + "에요. http://13.209.229.237:8080/app/dangergps/"+latitude+"/"+lonngitude;
                             smsManager.sendTextMessage("010-4752-7613", null, sms, null, null);
                             Toast.makeText(getApplicationContext(), "긴급문자를 전송하였습니다.", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
@@ -959,7 +959,7 @@ public class StartActivity extends AppCompatActivity
                 private RecognitionListener listener = new RecognitionListener() {
                     @Override
                     public void onReadyForSpeech(Bundle params) {
-                        Toast.makeText(getApplicationContext(), "음성인식을 시작합니다.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "음성인식을 시작합니다.", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -1015,7 +1015,7 @@ public class StartActivity extends AppCompatActivity
                                 break;
                         }
 
-                        Toast.makeText(getApplicationContext(), "에러가 발생하였습니다. : " + message, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), "에러가 발생하였습니다. : " + message, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

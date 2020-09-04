@@ -48,7 +48,6 @@ public class RecordFragment extends BaseFragment{
                 if(response.code()==200){
                     items = response.body();
 
-                    Log.d("됬나", String.valueOf(items));
                     for(RidingRecord item: items){
                         itemList.add(item);
                     }

@@ -80,8 +80,15 @@ public class MyReportAdapter extends RecyclerView.Adapter<MyReportAdapter.MyReco
         Picasso.get().load("http://13.209.229.237:8080/app/getGPX/rider/" + model.r_Image.getValue())
                 .into(testViewHolder.my_image);
 
+
+        String substring = itemList.get(position).getRr_date();
+        String sub1 = substring.substring(0,10);
+        String substring2 = itemList.get(position).getRr_date();
+        String sub2 = substring2.substring(11,19);
+
+
         testViewHolder.my_rec_name.setText(itemList.get(position).getRr_name());
-        testViewHolder.my_rec_date.setText(itemList.get(position).getRr_date());
+        testViewHolder.my_rec_date.setText(sub1+" " +sub2);
         testViewHolder.my_rec_adress.setText(itemList.get(position).getRr_area());
         testViewHolder.my_rec_dis.setText(total);
         testViewHolder.my_rec_get.setText(itemList.get(position).getRr_high() +"m");

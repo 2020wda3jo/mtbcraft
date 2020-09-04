@@ -1,5 +1,6 @@
 package com.example.testapplication.ui.competitions;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +30,7 @@ import com.example.testapplication.dto.CompClub;
 import com.example.testapplication.dto.CompScore;
 import com.example.testapplication.dto.Competition;
 import com.example.testapplication.ui.BaseFragment;
+import com.example.testapplication.ui.riding.FollowStart;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ public class CompetitionDetailFragment extends BaseFragment {
     private ArrayList<CompScore> newScoreItemList;
     private RecyclerView compClubRecyclerView, compScoreRecyclerView;
     private String Save_Path;
+    private Button btt;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -71,7 +75,19 @@ public class CompetitionDetailFragment extends BaseFragment {
         badgeImage3 = view.findViewById(R.id.badge_image3);
         compClubRecyclerView = view.findViewById(R.id.compClub_recycle);
         compScoreRecyclerView = view.findViewById(R.id.compScore_recycle);
+        btt = view.findViewById(R.id.compjoin_button);
 
+        btt .setOnClickListener(v->{
+            Intent intent3 = new Intent(v.getContext(), FollowStart.class);
+            intent3.putExtra("comp_num", model.comp_num.getValue());
+            intent3.putExtra("check", 1);
+            intent3.putExtra("comp_gpx", model.comp_course.getValue());
+            intent3.putExtra("c_name", model.r_Id.getValue());
+            intent3.putExtra("comp_name", model.comp_name.getValue());
+            intent3.putExtra("comp_point", "100");
+            intent3.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            v.getContext().startActivity(intent3);
+        });
         compName.setText(model.comp_name.getValue());
         compDay.setText(model.comp_period.getValue());
         compContent.setText(model.comp_content.getValue());
