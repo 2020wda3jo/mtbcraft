@@ -136,6 +136,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseHold
             model.like_count.setValue(itemList.get(position).getRr_like());
             model.my_rec_gpx.setValue(itemList.get(position).getRr_gpx());
             model.CourseR_image.setValue(itemList.get(position).getR_image());
+            model.r_num.setValue(String.valueOf(itemList.get(position).getRr_num()));
         });
     }
 

@@ -6,6 +6,7 @@ import com.example.testapplication.dto.Badge;
 import com.example.testapplication.dto.CompClub;
 import com.example.testapplication.dto.CompScore;
 import com.example.testapplication.dto.Competition;
+import com.example.testapplication.dto.CourseReview;
 import com.example.testapplication.dto.DangerousArea;
 import com.example.testapplication.dto.LoginInfo;
 
@@ -150,4 +151,19 @@ public interface ServerApi {
 
     @GET("app/riding/course")
     Call<List<RidingRecord>> getCourseList();
+
+    @GET("app/getCourseReview/{c_num}")
+    Call<List<CourseReview>> getReviewList(@Path("c_num") String c_num);
+
+    @FormUrlEncoded
+    @POST("app/updateCourseReview")
+    Call<Void> reviewUpdate(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("app/deleteCourseReview")
+    Call<Void> deleteReview(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("app/insertCourseReview")
+    Call<Void> insertReview(@FieldMap HashMap<String, Object> param);
 }

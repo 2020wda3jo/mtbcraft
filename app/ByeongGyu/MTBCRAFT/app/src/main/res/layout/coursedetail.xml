@@ -456,16 +456,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/image_plus" />
 
-                    <Button
-                        android:id="@+id/register_button"
-                        android:layout_width="70dp"
-                        android:layout_height="50dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="18dp"
-                        android:text="등록"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -474,6 +464,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
 
+                    <Button
+                        android:id="@+id/register_button"
+                        android:layout_width="70dp"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="18dp"
+                        android:text="등록" />
                 </androidx.recyclerview.widget.RecyclerView>
 
             </LinearLayout>
