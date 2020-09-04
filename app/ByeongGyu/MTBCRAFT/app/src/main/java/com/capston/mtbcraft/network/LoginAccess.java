@@ -62,7 +62,7 @@ public class LoginAccess extends AppCompatActivity {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
 
-            HttpClient.Builder http = new HttpClient.Builder("POST", "/android/login");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "/app/login");
             Log.d("urlrlrl", String.valueOf(http));
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
@@ -116,7 +116,7 @@ public class LoginAccess extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/android/getClubUser/" + userid);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/app/getClubUser/" + userid);
             //Http 요청 전송
             HttpClient post = http.create();
             post.request();
@@ -149,7 +149,7 @@ public class LoginAccess extends AppCompatActivity {
         protected String doInBackground(Map<String, String>... maps) {
             // Http 요청 준비 작업
             //URL은 현재 자기 아이피번호를 입력해야합니다.
-            HttpClient.Builder http = new HttpClient.Builder("GET", "/android/getLoginInfo/" + userid);
+            HttpClient.Builder http = new HttpClient.Builder("GET", "/getLoginInfo/" + userid);
             //Http 요청 전송
             HttpClient post = http.create();
             post.request();

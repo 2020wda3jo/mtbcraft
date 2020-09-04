@@ -90,6 +90,7 @@ public class CompetitionDetailFragment extends BaseFragment {
         webView.setWebChromeClient(new WebChromeClient());//웹뷰에 크롬 사용 허용//이 부분이 없으면 크롬에서 alert가 뜨지 않음
         webView.setWebViewClient(new WebViewClientClass());//새창열기 없이 웹뷰 내에서 다시 열기//페이지 이동 원활히 하기위해 사용
 
+        Log.d("웨웨웨",model.comp_course.getValue());
 
         getCompBadge = serverApi.getCompBadge(Integer.parseInt(model.comp_badge.getValue()));
         getCompBadge.enqueue(new Callback<Badge>() {
