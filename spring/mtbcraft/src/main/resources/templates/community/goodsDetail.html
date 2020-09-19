@@ -94,10 +94,9 @@ function updateGoodsLike(){
 function buyGoods(){
 	var chk = confirm("구매하시겠습니까?");
 	if(chk){
-		alert("구매한당!");
 		location.href="/community/buyGoods/"+$("#g_num").val();
 	}else {
-		alert("안한당");
+		alert("취소합니다.");
 	}
 }
 

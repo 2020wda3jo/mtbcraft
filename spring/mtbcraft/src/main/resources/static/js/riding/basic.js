@@ -355,10 +355,6 @@ function getRidingRecordByRR_Num(rr_num, mode){
 								  },
 						
 								  series: [{
-								    name: '전체코스',
-								    data: [total_topspeed, total_avgspeed, total_distance, total_high ],
-								    pointPlacement: 'on'
-								  }, {
 								    name: '해당코스',
 								    data: [rr_topspeed, rr_avgspeed, rr_distance, rr_high],
 								    pointPlacement: 'on'
@@ -420,7 +416,6 @@ function getRidingRecordByRR_Num(rr_num, mode){
 							        name: 'Population',
 							        data: [
 							            ['해당코스', rr_time],
-							            ['전체코스', total_time],
 							            ['나의기록', user_time]            
 							        ],
 							        dataLabels: {
