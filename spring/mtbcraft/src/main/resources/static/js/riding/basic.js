@@ -286,6 +286,7 @@ function getRidingRecordByRR_Num(rr_num, mode){
 					$("#cif_like").text(data.rr_like);
 					$('#bt_mode').text("스크랩하기");
 					
+					alert(data.rr_name);
 					var rr_avgspeed,rr_topspeed,rr_distance,rr_high,rr_time,
 					total_avgspeed, total_topspeed,total_distance,total_high,total_time,
 					user_avgspeed, user_topspeed,user_distance,user_high,user_time;
