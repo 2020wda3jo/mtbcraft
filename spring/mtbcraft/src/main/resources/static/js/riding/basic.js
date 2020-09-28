@@ -278,17 +278,13 @@ function getRidingRecordByRR_Num(rr_num, mode){
 			success : function(data) {
 				getReviewsByRR_Num(data.rr_num);
 				$("#chrrnamebtn").hide();
-				alert(mode);
 				if(mode=="course"){
-					$("#tt").text(data.rr_name); 
+					$("#cif_name").text(data.rr_name); 
 					$("#cif_total").text( (parseInt(data.rr_distance)/1000).toString().substring(0,3)+ " km"  ); 
 					$("#cif_avg").text(data.rr_avgspeed +" km/h"); 
 					$("#cif_high").text(data.rr_high+" m"); 
 					$("#cif_like").text(data.rr_like);
 					$('#bt_mode').text("스크랩하기");
-					console.log(data.rr_name);
-					alert(data.rr_name);
-					
 					
 					var rr_avgspeed,rr_topspeed,rr_distance,rr_high,rr_time,
 					total_avgspeed, total_topspeed,total_distance,total_high,total_time,
