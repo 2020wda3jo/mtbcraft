@@ -280,7 +280,7 @@ function getRidingRecordByRR_Num(rr_num, mode){
 				$("#chrrnamebtn").hide();
 				alert(mode);
 				if(mode=="course"){
-					$("#ttt").text(data.rr_name); 
+					$("#cif_name").html(data.rr_name); 
 					$("#cif_total").text( (parseInt(data.rr_distance)/1000).toString().substring(0,3)+ " km"  ); 
 					$("#cif_avg").text(data.rr_avgspeed +" km/h"); 
 					$("#cif_high").text(data.rr_high+" m"); 
