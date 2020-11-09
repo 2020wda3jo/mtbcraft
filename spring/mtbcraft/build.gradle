@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.6.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
+	id 'war'
 }
 
 group = 'com.wda'
@@ -19,6 +20,7 @@ repositories {
 }
 
 dependencies {
+providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	//프로젝트 생성시 기본을오 생성됨
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'

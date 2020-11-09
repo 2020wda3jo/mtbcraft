@@ -35,15 +35,4 @@ public class DataAccessConfig {
       return new SqlSessionTemplate(sqlSessionFactory);
    }
 
-   @Bean
-   @ConfigurationProperties(prefix = "spring.datasource.hikari")
-   public HikariConfig hikariConfig() {
-      return new HikariConfig();
-   }
-
-   @Bean
-   public DataSource dataSource() throws Exception {
-      DataSource dataSource = new HikariDataSource(hikariConfig());
-      return dataSource;
-   }
 }
